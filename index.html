@@ -9,11 +9,20 @@
     <title>Realtime LoRaWAN Simulator</title>
 
     <script type="text/javascript" src="js/vendor/vis-network.min.js"></script>
+    <script type="text/javascript" src="js/custom/utils.js"></script>
     <script type="text/javascript" src="js/custom/index.js"></script>
 </head>
 
-<body onload="draw();">
+<body onload="onload();">
     <h3>Realtime LoRaWAN Simulator</h3>
+
+    <form>
+        <input id="input-file" type="file"/>
+        <br>
+        <label for="input-number">Cantidad de nodos</label>
+        <input id="input-number" type="number" value="10"/>
+    </form>
+    
     <div id="network"></div>    
 </body>
 

@@ -1,112 +1,68 @@
-var nodes, edges, network;
+function onload() {
 
-function draw() {
-    nodes = new vis.DataSet([{
-            id: "1",
-            label: "Gateway 1",
+    var input = document.getElementById("input-file");    
+    input.onchange = function(e) {
+        readFile(e.target.files[0], "csv")
+        .then(result => console.log(result));
+    };
+
+    var nodes = [
+        {
+            id: "gw",
+            label: "Gateway",
             group: "GW",
             x: 0,
             y: 0
-        },
-        {
-            id: "2",
-            label: "End device 1",
-            group: "ED",
-            x: -100,
-            y: -100
-        },
-        {
-            id: "3",
-            label: "End device 2",
-            group: "ED",
-            x: 500,
-            y: -200
-        },
-        {
-            id: "4",
-            label: "End device 3",
-            group: "ED",
-            x: 500,
-            y: 500
-        },
-        {
-            id: "5",
-            label: "End device 4",
-            group: "ED",
-            x: -500,
-            y: 0
-        },
-    ]);
+        }
+    ];
+    var edges = [];
 
-    edges = new vis.DataSet([{
-            id: "1",
-            from: "2",
-            to: "1",
-            arrows: {
-                to: {
-                    enabled: true,
-                    type: "arrow",
-                },
-            }
-        },
-        {
-            id: "2",
-            from: "3",
-            to: "1",
-            arrows: {
-                to: {
-                    enabled: true,
-                    type: "arrow",
-                },
-            }
-        },
-        {
-            id: "3",
-            from: "4",
-            to: "1",
-            arrows: {
-                to: {
-                    enabled: true,
-                    type: "arrow",
-                },
-            }
-        },
-        {
-            id: "4",
-            from: "5",
-            to: "1",
-            arrows: {
-                to: {
-                    enabled: true,
-                    type: "arrow",
-                },
-            }
-        },
-    ]);
+    var N = 100;
 
-    var container = document.getElementById("network");
+    for(var idx = 0; idx < N; idx++){
+        var nodeId = generateRandomString();
+        nodes.push({
+            id: nodeId,
+            //label: `End device ${idx+1}`,
+            group: "ED",
+            x: Math.random()*1000 - 500,
+            y: Math.random()*1000 - 500
+        });
+        edges.push({
+            id: generateRandomString(),
+            from: nodeId,
+            to: "gw",
+            /*
+            arrows: {
+                to: {
+                    enabled: true,
+                    type: "arrow",
+                },
+            }*/
+        });
+    }
+
     var data = {
-        nodes: nodes,
-        edges: edges,
+        nodes: new vis.DataSet(nodes),
+        edges: new vis.DataSet(edges),
     };
     var options = {
-        edges: {
-            smooth: false
-        },
+        edges: { smooth: false },
         physics: false,
-        interaction: {
-            dragNodes: false
-        },
+        interaction: { dragNodes: false },
         groups: {
             ED: {
                 shape: "dot",
+                size: 5,
                 color: "rgb(0,0,250)"
             },
             GW: {
                 shape: "triangle",
+                size: 10,
                 color: "rgb(250,0,0)"
             }
         }
     };
-    network = new vis.Network(container, data, options);
+    var container = document.getElementById("network");
+    var network = new vis.Network(container, data, options);
 }
