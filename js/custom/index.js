@@ -1,44 +1,45 @@
-function onload() {
-
-    var input = document.getElementById("input-file");    
-    input.onchange = function(e) {
-        readFile(e.target.files[0], "csv")
-        .then(result => console.log(result));
-    };
+function update() {
 
     var nodes = [
         {
-            id: "gw",
-            label: "Gateway",
+            id: "gw1",
+            label: "Gateway 1",
             group: "GW",
-            x: 0,
-            y: 0
+            x: -150,
+            y: -10
+        },
+        {
+            id: "gw2",
+            label: "Gateway 2",
+            group: "GW",
+            x: 120,
+            y: 10
         }
     ];
     var edges = [];
 
-    var N = 100;
+    var N = document.getElementById("input-number").value;
 
     for(var idx = 0; idx < N; idx++){
         var nodeId = generateRandomString();
         nodes.push({
             id: nodeId,
-            //label: `End device ${idx+1}`,
+            label: `End device ${idx+1}`,
             group: "ED",
-            x: Math.random()*1000 - 500,
-            y: Math.random()*1000 - 500
+            ...generateRandomPos()
         });
         edges.push({
             id: generateRandomString(),
             from: nodeId,
-            to: "gw",
+            to: Math.random() > 0.5 ? "gw1":"gw2",
             /*
             arrows: {
                 to: {
                     enabled: true,
                     type: "arrow",
                 },
-            }*/
+            }
+            */
         });
     }
 
@@ -47,6 +48,7 @@ function onload() {
         edges: new vis.DataSet(edges),
     };
     var options = {
+        height: "80%",        
         edges: { smooth: false },
         physics: false,
         interaction: { dragNodes: false },
@@ -64,5 +66,17 @@ function onload() {
         }
     };
     var container = document.getElementById("network");
-    var network = new vis.Network(container, data, options);
+    return new vis.Network(container, data, options);
 }
+
+
+var fileInput = document.getElementById("input-file");    
+fileInput.onchange = function(e) {
+    readFile(e.target.files[0], "csv")
+    .then(result => console.log(result));
+};
+var numberInput = document.getElementById("input-number");
+numberInput.onchange = function(e) {
+    update();
+};
+window.onload = update;

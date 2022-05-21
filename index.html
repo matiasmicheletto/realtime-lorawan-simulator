@@ -6,24 +6,24 @@
     <meta name="keywords" content="WASM, JavaScript, LoRaWAN, simulator">
     <meta name="author" content="Matías Micheletto">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Realtime LoRaWAN Simulator</title>
+    <title>Network analyzer</title>
 
     <script type="text/javascript" src="js/vendor/vis-network.min.js"></script>
-    <script type="text/javascript" src="js/custom/utils.js"></script>
-    <script type="text/javascript" src="js/custom/index.js"></script>
+    <script type="text/javascript" src="js/custom/utils.js"></script>    
 </head>
 
-<body onload="onload();">
-    <h3>Realtime LoRaWAN Simulator</h3>
+<body>
+    <h3>Realtime LoRaWAN Analyzer</h3>
 
-    <form>
-        <input id="input-file" type="file"/>
-        <br>
-        <label for="input-number">Cantidad de nodos</label>
-        <input id="input-number" type="number" value="10"/>
-    </form>
+    
+    <input id="input-file" type="file"/>
+    <br>
+    <label for="input-number">Number of nodes</label>
+    <input id="input-number" type="number" value="50"/>
     
     <div id="network"></div>    
+
+    <script type="text/javascript" src="js/custom/index.js"></script>
 </body>
 
 </html>
