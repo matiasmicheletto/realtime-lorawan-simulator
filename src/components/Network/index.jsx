@@ -1,4 +1,12 @@
-function update() {
+import React, { useEffect, useRef } from 'react';
+import { Network } from 'vis-network';
+import { DataSet } from 'vis-data';
+import { generateRandomString, generateRandomPos } from '../../utils';
+import classes from './style.module.css';
+
+const LoRaNetwork = props => {
+
+    const netRef = useRef(null);
 
     var nodes = [
         {
@@ -16,9 +24,10 @@ function update() {
             y: 10
         }
     ];
+    
     var edges = [];
 
-    var N = document.getElementById("input-number").value;
+    var N = 40;
 
     for(var idx = 0; idx < N; idx++){
         var nodeId = generateRandomString();
@@ -44,11 +53,12 @@ function update() {
     }
 
     var data = {
-        nodes: new vis.DataSet(nodes),
-        edges: new vis.DataSet(edges),
+        nodes: new DataSet(nodes),
+        edges: new DataSet(edges),
     };
     var options = {
-        height: "80%",        
+        height: "100%",   
+        width: "100%",
         edges: { smooth: false },
         physics: false,
         interaction: { dragNodes: false },
@@ -65,18 +75,15 @@ function update() {
             }
         }
     };
-    var container = document.getElementById("network");
-    return new vis.Network(container, data, options);
-}
 
+    useEffect(()=>{
+        netRef.current && new Network(netRef.current, data, options);
+    }, [netRef, data, options]);
 
-var fileInput = document.getElementById("input-file");    
-fileInput.onchange = function(e) {
-    readFile(e.target.files[0], "csv")
-    .then(result => console.log(result));
+    return (
+        <div ref={netRef} className={classes.Container}>
+        </div>
+    );
 };
-var numberInput = document.getElementById("input-number");
-numberInput.onchange = function(e) {
-    update();
-};
-window.onload = update;
+
+export default LoRaNetwork;

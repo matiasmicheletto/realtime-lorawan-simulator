@@ -1,4 +1,4 @@
-function csv2Array(data) {    
+export function csv2Array(data) {    
     var array = [];
     var lines = data.split('\n');
     for(var l = 0; l < lines.length; l++)
@@ -6,7 +6,7 @@ function csv2Array(data) {
     return array;
 };
 
-function readFile(file, type){
+export function readFile(file, type){
     return new Promise((resolve, reject) => {
         if(file){            
             var reader = new FileReader();
@@ -28,12 +28,12 @@ function readFile(file, type){
     });
 };
 
-function generateRandomString() {
+export function generateRandomString() {
     var r = Math.random().toString(36).slice(2)+String(Date.now()).slice(-4);
     return r.padStart(16, '0');
 };
 
-function generateRandomPos() {
+export function generateRandomPos() {
     
     function uniform() { 
         return 2*Math.random() - 1;
