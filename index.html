@@ -6,6 +6,9 @@
     <meta name="keywords" content="WASM, JavaScript, LoRaWAN, simulator">
     <meta name="author" content="Matías Micheletto">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="css/style.css">
+    
     <title>Network analyzer</title>
 
     <script type="text/javascript" src="js/vendor/vis-network.min.js"></script>
@@ -13,15 +16,17 @@
 </head>
 
 <body>
-    <h3>Realtime LoRaWAN Analyzer</h3>
 
-    
-    <input id="input-file" type="file"/>
-    <br>
-    <label for="input-number">Number of nodes</label>
-    <input id="input-number" type="number" value="50"/>
-    
-    <div id="network"></div>    
+	<div class="container">
+		<h3>Realtime LoRaWAN Analyzer</h3>
+
+		<input id="input-file" type="file"/>
+		<br>
+		<label for="input-number">Number of nodes</label>
+		<input id="input-number" type="number" value="50"/>
+		
+		<div class="vis-container" id="network"></div>    
+   </div>
 
     <script type="text/javascript" src="js/custom/index.js"></script>
 </body>
