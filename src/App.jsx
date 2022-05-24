@@ -13,7 +13,9 @@ const App = () => (
                 <Navigation/>
                 <Routes>
                     <Route index element={<Views.Home/>}/>
-                    <Route path='/config' element={<Views.Config/>}/>                    
+                    <Route path='/config' element={<Views.Config/>}/>
+                    {/*<Route path='/config' element={<Views.Config/>}/>*/}
+                    <Route path='/visualizer' element={<Views.Visualizer/>}/>
                 </Routes> 
             </BrowserRouter>
     </ThemeProvider>
