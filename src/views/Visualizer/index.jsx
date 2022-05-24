@@ -1,12 +1,12 @@
 import React from 'react';
 import MainView from '../../templates/MainView';
-import Network from '../../components/Network';
+import NetworkViewer from '../../components/NetworkViewer';
 
 const Visualizer = () => {
     return (
         <MainView>
             <h3>Current network</h3>
-            <Network />
+            <NetworkViewer />
         </MainView>
     );
 };

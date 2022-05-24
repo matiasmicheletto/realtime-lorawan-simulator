@@ -1,13 +1,30 @@
 {
   "name": "realtime-lorawan-simulator",
+  "description": "Solving Realtime LoRaWAN Scheduling Problem",
   "private": true,
-  "version": "0.0.1",
+  "version": "1.0.0",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matiasmicheletto/realtime-lorawan-simulator.git"
+  },
+  "keywords": [
+    "LoRaWAN",
+    "Network",
+    "Optimization"
+  ],
+  "author": "Matias Micheletto",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/matiasmicheletto/realtime-lorawan-simulator/issues"
+  },
+  "homepage": "https://github.com/matiasmicheletto/realtime-lorawan-simulator#readme",
   "dependencies": {
+    "lora-network-model": "file:./lora-network-model",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
     "@mui/material": "^5.8.1",
