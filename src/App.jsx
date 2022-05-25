@@ -14,10 +14,7 @@ const App = () => (
                 <BrowserRouter>
                     <Navigation/>
                     <Routes>
-                        <Route index element={<Views.Home/>}/>
-                        <Route path='/config' element={<Views.Config/>}/>
-                        {/*<Route path='/config' element={<Views.Config/>}/>*/}
-                        <Route path='/visualizer' element={<Views.Visualizer/>}/>
+                        <Route index element={<Views.Home/>}/>                        
                     </Routes> 
                 </BrowserRouter>
             </ModelProvider>

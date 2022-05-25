@@ -1,40 +1,76 @@
 
-import { generateRandomString, generateRandomPos } from "./tools";
+import { 
+    generateRandomString, 
+    generateRandomPos, 
+    getRandomDivisor,
+    selectAttributes
+ } from "./tools";
+
+export const defaultNodeAttrs = ["id","label","group","x","y","period"];
+export const defaultLinkAttrs = ["id","from","to"];
+
+export const visNodeAttrs = ["id","label","group","x","y"];
+export const visLinkAttrs = ["id","from","to"];
+
+export const exportNodeAttrs = ["x", "y", "period"];
+export const exportLinkAttrs = ["from","to"];
 
 export default class LoRaWANModel {
-    constructor() {
+    constructor(edNumber, hyperperiod) {
+        this.init(edNumber, hyperperiod);
+    }
+
+    init(edNumber = 50, hyperperiod = 3600) {
         this.enddevices = [];
         this.gateways = [];
         this.links = [];
+        this.edNumber = edNumber;
+        this.hyperperiod = hyperperiod;
 
-
-        //// TEMP ////
-        // Generate random network (2 GW, 40 ED)
+        //// TEMP ////        
         const start = Date.now();
         this.addGateWay(generateRandomPos());
         this.addGateWay(generateRandomPos());
         this.addGateWay(generateRandomPos());
         this.addGateWay(generateRandomPos());
-        for(let i = 0; i < 400; i++) 
-            this.addEndDevice(generateRandomPos(), 100);
+        for(let i = 0; i < this.edNumber; i++)
+            this.addEndDevice(generateRandomPos(), getRandomDivisor(this.hyperperiod));
         console.log(`Generated network in ${Date.now() - start} ms`);
+        console.log(this.enddevices);
     }
 
-    getNodes() {
-        return [...this.enddevices, ...this.gateways];
+    getEndDevices(attrs = defaultNodeAttrs) {
+        return selectAttributes(this.enddevices, attrs);
     }
 
-    getEdges() {
-        return this.links;
+    getGateWays(attrs = defaultNodeAttrs) {
+        return selectAttributes(this.gateways, attrs);
     }
 
-    clearNodes() {
+    getAllNodes(attrs = defaultNodeAttrs) {
+        return selectAttributes([...this.gateways, ...this.enddevices], attrs);
+    }
+
+    getLinks(attrs = defaultLinkAttrs) {
+        return selectAttributes(this.links, attrs);
+    }
+
+    exportModel() {
+        return JSON.stringify({
+            enddevices: this.getEndDevices(exportNodeAttrs),
+            gateways: this.getGateWays(exportNodeAttrs),
+            links: this.getLinks(exportLinkAttrs)
+        });
+    }
+
+    resetModel(edNumber = 50, hyperperiod = 3600) {
         this.enddevices = [];
-    }
-
-    clearEdges() {
+        this.gateways = [];
         this.links = [];
-    }   
+        this.edNumber = edNumber;
+        this.hyperperiod = hyperperiod;
+        this.init();
+    }
 
     getClosestGatewayId(pos) {
         let minDist = Number.MAX_SAFE_INTEGER;
@@ -60,6 +96,7 @@ export default class LoRaWANModel {
             id,
             label: `Gateway ${this.gateways.length+1}`,
             group: "GW",
+            period: null,
             ...pos
         };
         this.gateways.push(newGateWay);
@@ -71,8 +108,8 @@ export default class LoRaWANModel {
             id: generateRandomString(),
             label: `End device ${this.enddevices.length+1}`,
             group: "ED",
+            period,
             ...pos,
-            period
         };
         const link = {
             id: generateRandomString(),

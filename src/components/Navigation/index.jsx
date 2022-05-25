@@ -14,15 +14,6 @@ const Navigation = () => {
                     <Button LinkComponent={Link} to="/" color="inherit">
                         <span style={{fontWeight: path=="home" ? "bold" : "normal"}}>Home</span>
                     </Button>
-                    <Button LinkComponent={Link} to="/config" color="inherit">
-                        <span style={{fontWeight: path=="config" ? "bold" : "normal"}}>Configurator</span>
-                    </Button>
-                    <Button LinkComponent={Link} to="/solver" color="inherit">
-                        <span style={{fontWeight: path=="solver" ? "bold" : "normal"}}>Solver</span>
-                    </Button>
-                    <Button LinkComponent={Link} to="/visualizer" color="inherit">
-                        <span style={{fontWeight: path=="visualizer" ? "bold" : "normal"}}>Visualizer</span>
-                    </Button>
                 </Toolbar>
             </AppBar>
         </Box>

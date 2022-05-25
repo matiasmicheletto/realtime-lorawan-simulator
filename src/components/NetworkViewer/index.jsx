@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useRef } from 'react';
+import { visLinkAttrs, visNodeAttrs } from 'lora-network-model';
 import { Network } from 'vis-network';
 import { DataSet } from 'vis-data';
 import { ModelCtx } from '../../context';
@@ -11,8 +12,8 @@ const LoRaNetwork = () => {
     const model = useContext(ModelCtx);
 
     const data = {
-        nodes: new DataSet(model.getNodes()),
-        edges: new DataSet(model.getEdges()),
+        nodes: new DataSet(model.getAllNodes(visNodeAttrs)),
+        edges: new DataSet(model.getLinks(visLinkAttrs)),
     };
     const options = {
         height: "100%",   
