@@ -5,17 +5,16 @@ periods=[900,900,1800,ones(1,97)*3600];
 eds=6600;
 map_size=1000;
 
-% H = gcd(periods);
 H=1;
-for i=1:length(periods),
-  H=lcm(H,periods(i));
+for i = 1:length(periods),
+  H = lcm(H, periods(i));
 end
 disp(['Hyperperiod ',num2str(H)])
 
 positions=[randi(map_size,[eds,1])-map_size/2, randi(map_size,[eds,1])-map_size/2];
-distances = sqrt(nodes(:,1).^2 + nodes(:,2).^2);
-instances = H./nodes(:,5);
+distances = sqrt(positions(:,1).^2 + positions(:,2).^2);
 selected_periods = periods(randi(100, eds, 1))';
+instances = H./selected_periods;
 
 nodes = [(1:eds)', positions, distances, selected_periods, zeros(eds,2), instances];
 
