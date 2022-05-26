@@ -1,5 +1,5 @@
 import React, {createContext} from 'react';
-import LoRaWANModel from 'lora-network-model/index.js';
+import LoRaWANModel from 'lora-network-model/network-model';
 
 const model = new LoRaWANModel();
 

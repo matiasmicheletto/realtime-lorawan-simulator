@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef } from 'react';
-import { visLinkAttrs, visNodeAttrs } from 'lora-network-model';
+import { visLinkAttrs, visNodeAttrs } from 'lora-network-model/network-model';
 import { Network } from 'vis-network';
 import { DataSet } from 'vis-data';
 import { ModelCtx } from '../../context';

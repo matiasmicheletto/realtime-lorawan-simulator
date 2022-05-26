@@ -1,11 +1,9 @@
 
-import { 
-    generateRandomString, 
-    generateRandomPos, 
-    getRandomDivisor,
-    selectAttributes
- } from "./tools";
+import { generateRandomString } from "../tools/random.mjs";
+import { selectAttributes } from "../tools/structures.mjs";
 
+
+// List of attributes for exporting nodes and links
 export const defaultNodeAttrs = ["id","label","group","x","y","period"];
 export const defaultLinkAttrs = ["id","from","to"];
 
@@ -16,27 +14,10 @@ export const exportNodeAttrs = ["x", "y", "period"];
 export const exportLinkAttrs = ["from","to"];
 
 export default class LoRaWANModel {
-    constructor(edNumber, hyperperiod) {
-        this.init(edNumber, hyperperiod);
-    }
-
-    init(edNumber = 50, hyperperiod = 3600) {
+    constructor() {
         this.enddevices = [];
         this.gateways = [];
         this.links = [];
-        this.edNumber = edNumber;
-        this.hyperperiod = hyperperiod;
-
-        //// TEMP ////        
-        const start = Date.now();
-        this.addGateWay(generateRandomPos());
-        this.addGateWay(generateRandomPos());
-        this.addGateWay(generateRandomPos());
-        this.addGateWay(generateRandomPos());
-        for(let i = 0; i < this.edNumber; i++)
-            this.addEndDevice(generateRandomPos(), getRandomDivisor(this.hyperperiod));
-        console.log(`Generated network in ${Date.now() - start} ms`);
-        console.log(this.enddevices);
     }
 
     getEndDevices(attrs = defaultNodeAttrs) {
@@ -55,21 +36,21 @@ export default class LoRaWANModel {
         return selectAttributes(this.links, attrs);
     }
 
-    exportModel() {
-        return JSON.stringify({
-            enddevices: this.getEndDevices(exportNodeAttrs),
-            gateways: this.getGateWays(exportNodeAttrs),
-            links: this.getLinks(exportLinkAttrs)
-        });
-    }
-
-    resetModel(edNumber = 50, hyperperiod = 3600) {
-        this.enddevices = [];
-        this.gateways = [];
-        this.links = [];
-        this.edNumber = edNumber;
-        this.hyperperiod = hyperperiod;
-        this.init();
+    exportModel(format) {
+        switch(format){
+            case "json":
+                return JSON.stringify({
+                    enddevices: this.getEndDevices(exportNodeAttrs),
+                    gateways: this.getGateWays(exportNodeAttrs),
+                    links: this.getLinks(exportLinkAttrs)
+                });
+            case "csv":
+                return null; // TODO
+            case "matlab": // TODO
+                return null;
+            default: 
+                return null;
+        }
     }
 
     getClosestGatewayId(pos) {
@@ -108,16 +89,42 @@ export default class LoRaWANModel {
             id: generateRandomString(),
             label: `End device ${this.enddevices.length+1}`,
             group: "ED",
+            connected: null,
             period,
             ...pos,
         };
-        const link = {
-            id: generateRandomString(),
-            from: newEndDevice.id,
-            to: this.getClosestGatewayId(pos)
-        };
         this.enddevices.push(newEndDevice);
-        this.links.push(link);
-        return {edId: newEndDevice.id, linkId: link.id};
+        return newEndDevice.id;
+    }
+
+    connectEndDeviceID(edId, gwId) {
+        const edIdx = this.enddevices.findIndex(el => el.id === edId);
+        const gwIdx = this.gateways.findIndex(el => el.id === gwId);
+        if(edIdx >= 0 && gwIdx >= 0){
+            this.enddevices[edIdx].connected = gwId;
+            const newLink = {
+                id: generateRandomString(),
+                from: edId,
+                to: gwId
+            };
+            this.links.push(newLink);
+            return newLink.id;
+        } 
+        return null;
+    }
+
+    connectEndDeviceIdx(edIdx, gwIdx) {
+        this.enddevices[edIdx].connected = this.gateways[gwIdx].id;
+        const newLink = {
+            id: generateRandomString(),
+            from: this.enddevices[edIdx].id,
+            to: this.gateways[gwIdx].id
+        };
+        this.links.push(newLink);
+        return newLink.id;
+    }
+
+    autoConnect() {
+        
     }
 };
