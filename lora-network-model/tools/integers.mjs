@@ -11,8 +11,8 @@ export const gcd = (a, b) => {
 }
 
 // Least common multiple
-const lcm2 = (a, b) => (!a || !b) ? 0 : Math.abs(a * b) / gcd(a, b);
-export const lcm = arr => arr.reduce(lcm2); // Extended for arrays
+export const lcm = (a, b) => (!a || !b) ? 0 : Math.abs(a * b) / gcd(a, b);
+export const lcmArray = arr => arr.reduce(lcm); // Extended for arrays
 
 // Get list of integer divisors of a number
 export const getAllDivisors = n => {

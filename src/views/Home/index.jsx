@@ -10,7 +10,7 @@ const Home = () => {
         <MainView>
             <h3>General scheme</h3>  
             <img src={image} width="100%"/>
-            <h3>Configuration</h3>
+            <h3>Model configuration</h3>
             <ConfigForm />
             <h3>Network topology</h3>
             <NetworkViewer />

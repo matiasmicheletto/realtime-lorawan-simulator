@@ -49,6 +49,10 @@ const ConfigForm = () => {
         setFormat(e.target.value);
     };
 
+    const handleUpdateModel = () => {
+        console.log("Update model");
+    };
+
     return (        
         <div style={styles.form}>
             <Grid container spacing={2} alignItems="center">
@@ -88,18 +92,20 @@ const ConfigForm = () => {
                     </FormControl>
                 </Grid>
             </Grid>
-            <Grid container spacing={2}>
-                <Grid item xs={12}>
+            <Grid container spacing={2} style={{marginTop:"10px"}}>
+                <Grid item xs={6}>
                     <TextField
+                        style={{width: "100%"}}
                         value={edNumber}
                         variant="outlined"
                         type="number"
                         size="small"
-                        label="End Devices number"
+                        label="Number of end devices"
                         inputProps={{min:0}}/>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={6}>
                     <TextField
+                        style={{width: "100%"}} 
                         value={hyp}
                         variant="outlined"
                         type="number"
@@ -107,6 +113,14 @@ const ConfigForm = () => {
                         label="Hyperperiod"
                         inputProps={{min:10}}/>
                 </Grid>
+            </Grid>
+            <Grid container style={{marginTop:"10px"}} justifyContent="flex-end">                
+                <Button
+                    color="primary"
+                    variant="contained"
+                    onClick={handleUpdateModel}>
+                    Update
+                </Button>
             </Grid>
         </div>
     );
