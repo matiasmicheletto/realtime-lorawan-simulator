@@ -23,15 +23,20 @@ const LoRaNetwork = () => {
         physics: false,
         interaction: { dragNodes: false },
         groups: {
-            ED: {
+            NCED: { // Not connected end devices
+                shape: "dot",
+                size: 5,
+                color: "rgb(250,0,0)"
+            },
+            ED: { // Connected end devices
                 shape: "dot",
                 size: 5,
                 color: "rgb(0,0,250)"
             },
-            GW: {
+            GW: { // Gateways
                 shape: "triangle",
                 size: 10,
-                color: "rgb(250,0,0)"
+                color: "rgb(0,250,0)"
             }
         }
     };

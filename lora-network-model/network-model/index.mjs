@@ -1,4 +1,3 @@
-
 import { sortByClosest } from "../tools/geometry.mjs";
 import { lcm } from "../tools/integers.mjs";
 import { generateRandomString } from "../tools/random.mjs";
@@ -9,7 +8,8 @@ import { selectAttributes } from "../tools/structures.mjs";
 export const defaultNodeAttrs = ["id","label","group","x","y","period","sf","connected"];
 export const defaultLinkAttrs = ["id","from","to"];
 
-export const visNodeAttrs = ["id","label","group","x","y"];
+//export const visNodeAttrs = ["id","label","group","x","y"];
+export const visNodeAttrs = ["id","group","x","y"];
 export const visLinkAttrs = ["id","from","to"];
 
 export const exportNodeAttrs = ["x", "y", "period"];
@@ -60,7 +60,7 @@ export default class LoRaWANModel {
         const newGateWay = {
             id: generateRandomString(), // Unique identifier
             label: `Gateway ${this._gateways.length+1}`, // Label for visualization
-            group: "GW", // Group for visualization
+            group: "GW", // Group for visualization (Gateway)
             ...pos // Position of the gateway (x,y)
         };
         this._gateways.push(newGateWay);
@@ -72,7 +72,7 @@ export default class LoRaWANModel {
         const newEndDevice = {
             id: generateRandomString(), // Unique identifier
             label: `End device ${this._enddevices.length+1}`, // Label for visualization
-            group: "ED", // Group for visualization
+            group: "NCED", // Group for visualization (Not connected end device)
             connected: null, // Id of connected gateway
             sf: null, // Spreading factor
             period, // Transmission period of the end device
@@ -83,16 +83,22 @@ export default class LoRaWANModel {
     }
 
     connectEndDeviceIdx(edIdx, gwIdx, sf) {
-        this._enddevices[edIdx].connected = this._gateways[gwIdx].id;
-        this._enddevices[edIdx].sf = sf;
-        const newLink = {
-            id: generateRandomString(),
-            from: this._enddevices[edIdx].id,
-            to: this._gateways[gwIdx].id,
-            sf
-        };
-        this._links.push(newLink);
-        return newLink.id;
+        if(this._enddevices[edIdx].group === "NCED") {
+            this._enddevices[edIdx].connected = this._gateways[gwIdx].id;
+            this._enddevices[edIdx].sf = sf;
+            this._enddevices[edIdx].group = "ED"; // Update group to connected ED
+            const newLink = {
+                id: generateRandomString(),
+                from: this._enddevices[edIdx].id,
+                to: this._gateways[gwIdx].id,
+                sf
+            };
+            this._links.push(newLink);
+            return newLink.id;
+        }else{
+            console.log("Cannot connect to another gateway");
+            return null;
+        }
     }
 
     connectEndDeviceID(edId, gwId, sf) {
@@ -139,7 +145,7 @@ export default class LoRaWANModel {
 
     autoConnect() { // Greedy allocation method
         // Connect end devices to gateways
-        this._gateways.forEach((gw, gwIdx) => { // For each gateway, connect all devices in range
+        for(let gwIdx = 0; gwIdx < this._gateways.length; gwIdx++) { // For each gateway
             const availableSlots = [
                 0, // 0 -- No SF for this period (< 100 Hz^-1)
                 this._hyperperiod, // 1 -- SF7
@@ -149,10 +155,11 @@ export default class LoRaWANModel {
                 this._hyperperiod/16, // 5 -- SF11
                 this._hyperperiod/32, // 6 -- SF12
                 0 // 7 -- No SF for this distance (> 2000 mts)
-            ];            
-            const {x, y} = gw; // Gateway position
+            ];
+            const {x, y} = this._gateways[gwIdx]; // Gateway position
             // Get all free end devices from closest to farthest in the range of 2000 mts
-            const sortedEndDevices = sortByClosest({x, y}, this._enddevices.filter(ed => ed.connected === null), 2000); // Returns distances and indexes
+            const sortedEndDevices = sortByClosest({x, y}, this._enddevices.filter(ed => ed.group === "NCED"), 2000); // Returns distances and indexes
+
             for(let i = 0; i < sortedEndDevices.length; i++){
                 // Get minimal SF for the distance between the end device and the current gateway
                 const minSF = this.getMinSpreadingFactor(sortedEndDevices[i].dist);                
@@ -162,10 +169,10 @@ export default class LoRaWANModel {
                 while(availableSlots[sf] == 0 && sf < maxSF) // If no more available slots for this SF, move to the next
                     sf++;
                 if(sf < maxSF){ // If there are available slots, connect the end device to the gateway
-                    availableSlots[sf] -= 1;                    
+                    availableSlots[sf] -= 1;
                     this.connectEndDeviceIdx(sortedEndDevices[i].idx, gwIdx, sf);
                 }
             }
-        })
+        }
     }
 };

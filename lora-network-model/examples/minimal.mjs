@@ -1,4 +1,4 @@
-import LoRAWANModel from '../network-model/index.mjs';
+import LoRaWANModel from '../network-model/index.mjs';
 import { createEDNetwork } from '../instance-generator/index.mjs';
 import { uniformDist } from '../tools/random.mjs';
 
@@ -12,7 +12,7 @@ const pDist = [97, 1, 0, 2]; // Period distribution of the end devices
 const instance = createEDNetwork(N, H, uniformDist, mapSize, pDist); 
 
 // Create network model with generated end devices
-const model = new LoRAWANModel();
+const model = new LoRaWANModel();
 instance.forEach(ed => {
     model.addEndDevice(ed.position, ed.period);
 });
@@ -26,7 +26,7 @@ model.autoConnect();
 console.timeEnd('Scheduling time');
 
 // Count not connected end devices (non feasible messages)
-const nonFeasibles = model.getEndDevices().filter(node => node.connected === null);
+const nonFeasibles = model.getEndDevices().filter(node => node.group === "NCED");
 
 //console.log(model._enddevices);
 console.log("Not feasibles count:", nonFeasibles.length, `${(nonFeasibles.length/N*100).toFixed(2)} %`);
