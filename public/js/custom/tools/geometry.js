@@ -1,6 +1,6 @@
 const euclideanDistance = (p1, p2) => Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
 
-export const getClosest = (target, positions) => {
+const getClosest = (target, positions) => {
     // Returns the closest element to target from positions
     const closest = {
         dist: Number.MAX_SAFE_INTEGER,
@@ -16,7 +16,7 @@ export const getClosest = (target, positions) => {
     return closest;
 }
 
-export const sortByClosest = (target, positions, limit) => {    
+const sortByClosest = (target, positions, limit) => {    
     // Returns the list of positions sorted by the closest element to target
     return positions.map(el => ({
         dist: euclideanDistance(target, el),        

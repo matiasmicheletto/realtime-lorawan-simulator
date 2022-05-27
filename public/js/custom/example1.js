@@ -1,7 +1,3 @@
-import LoRaWANModel from '../network-model/index.mjs';
-import { createEDNetwork } from '../instance-generator/index.mjs';
-import { uniformDist } from '../tools/random.mjs';
-
 // Parameters
 const N = 500; // Number of end devices (real time periodic messages)
 const mapSize = [1000, 1000]; // Size of the map
@@ -18,8 +14,9 @@ instance.forEach(ed => { // Add each end device to the network model
 });
 
 // Add a pair of gateways
-model.addGateway({x:500, y:0});
-model.addGateway({x:-500, y:0});
+model.addGateway({x:-300, y:100});
+model.addGateway({x:300, y:-100});
+
 
 // Connect end devices to gateways
 console.time('Scheduling time');
@@ -28,10 +25,12 @@ console.timeEnd('Scheduling time');
 
 // Count not connected end devices (non feasible messages)
 const nonFeasibles = model.getEndDevices().filter(node => node.group === "NCED");
-console.log(`Not feasibles count: ${nonFeasibles.length} (${(nonFeasibles.length/N*100).toFixed(2)}) %`);
+const result = `<br>Not feasibles count: ${nonFeasibles.length} (${(nonFeasibles.length/N*100).toFixed(2)}) %<br>`;
+document.write(result);
+console.log(result);
+console.table(nonFeasibles);
 
 const gws = model.getGateways();
 gws.forEach(gw => {
-    console.log(`Gateway ${gw.id} has ${gw.connectedTo.length} end devices`);
+    document.write(`<br>Gateway ${gw.id} has ${gw.connectedTo.length} end devices<br>`);
 });
-

@@ -27,6 +27,13 @@ console.time('Scheduling time');
 model.autoConnect();
 console.timeEnd('Scheduling time');
 
+model.getGateways().forEach(gw => {
+    console.log(`Gateway ${gw.id} has ${gw.connectedTo.length} end devices`);
+});
+
+console.table(model.getEndDevices().filter(node => node.group === "NCED"));
+
+
 export const ModelCtx = createContext();
 
 export const ModelProvider = props => (

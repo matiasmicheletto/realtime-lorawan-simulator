@@ -1,21 +1,15 @@
-import { sortByClosest } from "../tools/geometry.mjs";
-import { lcm } from "../tools/integers.mjs";
-import { generateRandomString } from "../tools/random.mjs";
-import { selectAttributes } from "../tools/structures.mjs";
-
-
 // List of attributes for exporting nodes and links
-export const defaultNodeAttrs = ["id","label","group","x","y","period","sf","connectedTo"];
-export const defaultLinkAttrs = ["id","from","to"];
+const defaultNodeAttrs = ["id","label","group","x","y","period","sf","connectedTo"];
+const defaultLinkAttrs = ["id","from","to"];
 
-//export const visNodeAttrs = ["id","label","group","x","y"];
-export const visNodeAttrs = ["id","group","x","y"];
-export const visLinkAttrs = ["id","from","to"];
+//const visNodeAttrs = ["id","label","group","x","y"];
+const visNodeAttrs = ["id","group","x","y"];
+const visLinkAttrs = ["id","from","to"];
 
-export const exportNodeAttrs = ["x", "y", "period"];
-export const exportLinkAttrs = ["from","to"];
+const exportNodeAttrs = ["x", "y", "period"];
+const exportLinkAttrs = ["from","to"];
 
-export default class LoRaWANModel {
+class LoRaWANModel {
     constructor() {
         this._hyperperiod = 1; // System hyperperiod
         this._enddevices = []; // List of end devices
@@ -98,7 +92,7 @@ export default class LoRaWANModel {
             this._links.push(newLink);
             return newLink.id;
         }else{
-            console.log("Cannot connect to another gateway", edIdx);
+            console.log("Cannot connect to another gateway");
             return null;
         }
     }
