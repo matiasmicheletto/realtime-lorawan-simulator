@@ -105,34 +105,34 @@ export default class LoRaWANModel {
 
     getMinSpreadingFactor(dist) {
         if(dist < 62.5)
-            return 1;
+            return 1; // SF7
         else if(dist < 125)
-            return 2;
+            return 2; // SF8
         else if(dist < 250)
-            return 3;
+            return 3; // SF9
         else if(dist < 500)
-            return 4;
+            return 4; // SF10
         else if(dist < 1000)
-            return 5;
+            return 5; // SF11
         else if(dist < 2000)
-            return 6;
+            return 6; // SF12
         else // No SF for this distance
             return 7;
     }
 
     getMaxSpreadingFactor(period) {
         if(period > 3200)
-            return 6;
+            return 6; // SF12
         else if(period > 1600)
-            return 5;
+            return 5; // SF11
         else if(period > 800)
-            return 4;
+            return 4; // SF10
         else if(period > 400)
-            return 3;
+            return 3; // SF9
         else if(period > 200)
-            return 2;
+            return 2; // SF8
         else if(period > 100)
-            return 1;
+            return 1; // SF7
         else // No SF for this period
             return 0;
     }
@@ -151,20 +151,19 @@ export default class LoRaWANModel {
                 0 // 7 -- No SF for this distance (> 2000 mts)
             ];            
             const {x, y} = gw; // Gateway position
-            // Get all end devices from closest to farthest in the range of 2000 mts
-            const endDevices = sortByClosest({x, y}, this._enddevices, 2000); 
-            for(let i = 0; i < endDevices.length; i++){
+            // Get all free end devices from closest to farthest in the range of 2000 mts
+            const sortedEndDevices = sortByClosest({x, y}, this._enddevices.filter(ed => ed.connected === null), 2000); // Returns distances and indexes
+            for(let i = 0; i < sortedEndDevices.length; i++){
                 // Get minimal SF for the distance between the end device and the current gateway
-                const minSF = this.getMinSpreadingFactor(endDevices[i].dist);                
+                const minSF = this.getMinSpreadingFactor(sortedEndDevices[i].dist);                
                 // Limit SF to the end device min frequency
-                const maxSF = this.getMaxSpreadingFactor(this._enddevices[endDevices[i].idx].period);
-                let sf = minSF;                              
-                while(availableSlots[sf] == 0 && sf < maxSF)
+                const maxSF = this.getMaxSpreadingFactor(this._enddevices[sortedEndDevices[i].idx].period);
+                let sf = minSF; // Greedy method, starts from the min SF
+                while(availableSlots[sf] == 0 && sf < maxSF) // If no more available slots for this SF, move to the next
                     sf++;
-                // If there are available slots, connect the end device to the gateway
-                if(sf < maxSF){
+                if(sf < maxSF){ // If there are available slots, connect the end device to the gateway
                     availableSlots[sf] -= 1;                    
-                    this.connectEndDeviceIdx(endDevices[i].idx, gwIdx, sf);
+                    this.connectEndDeviceIdx(sortedEndDevices[i].idx, gwIdx, sf);
                 }
             }
         })

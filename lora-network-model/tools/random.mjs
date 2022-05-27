@@ -5,36 +5,38 @@ export const generateRandomString = () => {
     return r.padStart(16, '0');
 };
 
-// Uniform distribution U(-1, 1)
-export const uniformDist = () => 2*Math.random() - 1;
+// Uniform distribution U(-0.5, 0.5)
+export const uniformDist = () => Math.random() - 0.5;
 
-// Gauss distribution N(0, 1)
-export const gaussDist = () => {
+// Normal distribution N(u, s^2)
+export const normalDist = (mu = 0, sigma = 1) => {
     // Box-Muller transform
     var u = Math.random();
     var v = Math.random();
-    return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
-}
+    return sigma * Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v) + mu;
+};
 
 // Custom random distribution
 export const randomSelect = data => data[Math.floor(Math.random() * data.length)];
 
 // Random position in x,y plane
-export const generateRandomPos = (dist = uniformDist) => {
+export const generateRandomPos = (ranges = [100, 100], dist = uniformDist) => {
     return {
-        x: dist()*500,
-        y: dist()*500
+        x: dist()*ranges[0],
+        y: dist()*ranges[1]
     };
 };
 
-export const generateRandomDistribution = (data, dist = [100]) => {
-    // This functions returns an array of numbers sampled from "data" with
-    // the distribution passed in "dist"
+export const generateRandomDistribution = (data, prob = [100]) => {
+    // This functions returns an array of numbers sampled from "data" with frequencies
+    // defined by the values passed in "prob". The values of prob[i] represents the 
+    // probability of selecting data[i] if the result of this function is uniformly sampled.
+    // The condition for prob is that sum(prob) = 100.
     let dataDist = [];
-    if(arraySum(dist) === 100){
-        for(let i = 0; i < dist.length; i++)
-            dataDist = dataDist.concat(new Array(dist[i]).fill(data[i]));
+    if(arraySum(prob) === 100){
+        for(let i = 0; i < prob.length; i++)
+            dataDist = dataDist.concat(new Array(prob[i]).fill(data[i]));
         return dataDist;
     } else 
         throw new Error("Wrong distribution");
-}
+};

@@ -1,19 +1,20 @@
 import { 
     generateRandomDistribution,
     generateRandomPos,
-    randomSelect
+    randomSelect,
+    uniformDist
 } from '../tools/random.mjs';
 import { getAllDivisors } from '../tools/integers.mjs';
 
-export const createEDNetwork = (edNumber, hyperperiod) => {
+export const createEDNetwork = (edNumber, hyperperiod, posDistr = uniformDist, mapSize = [100, 100], periodsDistr = [90, 10]) => {
     
     const divisors = getAllDivisors(hyperperiod);
-    const periodsDist = generateRandomDistribution(divisors, [95, 3, 2]);
+    const periodsDist = generateRandomDistribution(divisors, periodsDistr);
 
     const nodes = [];
     for(let i = 0; i < edNumber; i++) {
         nodes.push({
-            position: generateRandomPos(), // TODO: select distribution
+            position: generateRandomPos(mapSize, posDistr),
             period: randomSelect(periodsDist)
         });
     }

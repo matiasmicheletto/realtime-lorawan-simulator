@@ -15,6 +15,7 @@ const LoRaNetwork = () => {
         nodes: new DataSet(model.getAllNodes(visNodeAttrs)),
         edges: new DataSet(model.getLinks(visLinkAttrs)),
     };
+    
     const options = {
         height: "100%",   
         width: "100%",
