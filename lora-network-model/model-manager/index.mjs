@@ -14,7 +14,7 @@ const defaultParameters = {
     mapWidth: 1000, 
     mapHeight: 1000,
     posDistr: "uniform",
-    periodsDistr: [97, 1, 0, 2], // 97% -> 3600, 1% -> 1800, 0% -> 1200, 2% -> 900
+    periodsDistr: "97, 1, 0, 2", // 97% -> 3600, 1% -> 1800, 0% -> 1200, 2% -> 900
     initialGW: 5,
     strategy: "random",
     maxIter: 1000,
@@ -67,7 +67,7 @@ export default class Manager {
             this.H, 
             posDistrFc[this.posDistr], 
             [this.mapWidth, this.mapHeight], 
-            this.periodsDistr
+            this.periodsDistr.split(",").map(p => parseInt(p))
         ); 
 
         this.model = new LoRaWANModel();
