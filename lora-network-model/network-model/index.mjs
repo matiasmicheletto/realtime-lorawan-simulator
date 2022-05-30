@@ -1,11 +1,11 @@
 import { sortByClosest } from "../tools/geometry.mjs";
 import { lcm } from "../tools/integers.mjs";
 import { generateRandomString } from "../tools/random.mjs";
-import { selectAttributes } from "../tools/structures.mjs";
+import { arraySum, selectAttributes } from "../tools/structures.mjs";
 
 
 // List of attributes for exporting nodes and links
-export const defaultNodeAttrs = ["id","label","group","x","y","period","sf","connectedTo"];
+export const defaultNodeAttrs = ["id","label","group","x","y","period","sf","connectedTo", "UF"];
 export const defaultLinkAttrs = ["id","from","to"];
 
 //export const visNodeAttrs = ["id","label","group","x","y"];
@@ -21,6 +21,10 @@ export default class LoRaWANModel {
         this._enddevices = []; // List of end devices
         this._gateways = []; // List of gateways
         this._links = []; // List of connection from end devices to gateways
+    }
+
+    get edNumber() {
+        return this._enddevices.length;
     }
 
     getEndDevices(attrs = defaultNodeAttrs) {
@@ -62,10 +66,27 @@ export default class LoRaWANModel {
             label: `Gateway ${this._gateways.length+1}`, // Label for visualization
             group: "GW", // Group for visualization (Gateway)
             connectedTo: [], // List of connected end devices
+            UF: 0, // Utilization factor
             ...pos // Position of the gateway (x,y)
         };
         this._gateways.push(newGateWay);
         return newGateWay.id;
+    }
+
+    moveGatewayIdx(gwIdx, pos) {
+        if(this._gateways[gwIdx].connectedTo.length === 0){
+            this._gateways[gwIdx].x = pos.x;
+            this._gateways[gwIdx].y = pos.y;
+        }else{
+            console.log("Cannot move a gateway with connected end devices");
+        }
+    }
+
+    moveGatewayId(gwId, pos) {
+        const gwIdx = this._gateways.findIndex(el => el.id === gwId);
+        if(gwIdx >= 0)
+            return this.moveGatewayIdx(gwIdx, pos);
+        return null;
     }
 
     addEndDevice(pos, period) {
@@ -158,6 +179,7 @@ export default class LoRaWANModel {
                 this._hyperperiod/32, // 6 -- SF12
                 0 // 7 -- No SF for this distance (> 2000 mts)
             ];
+            const initialSlots = arraySum(availableSlots);
             const {x, y, id:gwId} = this._gateways[gwIdx]; // Gateway position
             // Get all free end devices from closest to farthest in the range of 2000 mts
             const sortedEndDevices = sortByClosest({x, y}, this._enddevices.filter(ed => ed.group === "NCED"), 2000); // Returns distances and indexes
@@ -174,6 +196,41 @@ export default class LoRaWANModel {
                     this.connectEndDeviceID(sortedEndDevices[i].id, gwId, sf);
                 }
             }
+            // Update UF of the gateway
+            this._gateways[gwIdx].UF = 1 - arraySum(availableSlots)/initialSlots;
         }
+    }
+
+    disconnectEndDevices() { // Delete all connectons
+        this._enddevices.forEach(ed => {
+            ed.connectedTo = null;
+            ed.sf = null;
+            ed.group = "NCED";
+        });
+        this._gateways.forEach(gw => {
+            gw.connectedTo = [];
+            gw.UF = 0;
+        });
+        this._links = [];
+    }
+
+    disconnectGateway(gwIdx) { 
+        // Delete all connections of a single gateway. Disconnected end devices
+        // are not automatically connected to another gateway, unless autoConnect
+        // method is called after removing the current gateway.
+        const gw = this._gateways[gwIdx];
+        gw.connectedTo.forEach(edId => {
+            const edIdx = this._enddevices.findIndex(el => el.id === edId);
+            if(edIdx >= 0) {
+                this._enddevices[edIdx].connectedTo = null;
+                this._enddevices[edIdx].sf = null;
+                this._enddevices[edIdx].group = "NCED";
+                const linkIdx = this._links.findIndex(el => el.from === edId);
+                if(linkIdx >= 0)
+                    this._links.splice(linkIdx, 1);
+            }            
+        });
+        gw.connectedTo = [];
+        gw.UF = 0;
     }
 };

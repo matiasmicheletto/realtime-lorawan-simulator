@@ -1,5 +1,7 @@
 export const arraySum = arr => arr.reduce((a, b) => a + b, 0);
 
+export const arrayAvg = arr => arraySum(arr) / arr.length;
+
 // Get a subset of attributes of an object
 export const selectAttributes = (data, attrs) => data.map(el =>
     attrs.filter(key => key in el).reduce((acc, key) => (acc[key] = el[key], acc), {})

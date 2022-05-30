@@ -25,17 +25,17 @@ const LoRaNetwork = () => {
         groups: {
             NCED: { // Not connected end devices
                 shape: "dot",
-                size: 5,
+                size: 1,
                 color: "rgb(250,0,0)"
             },
             ED: { // Connected end devices
                 shape: "dot",
-                size: 5,
+                size: 1,
                 color: "rgb(0,0,250)"
             },
             GW: { // Gateways
                 shape: "triangle",
-                size: 10,
+                size: 3,
                 color: "rgb(0,250,0)"
             }
         }
