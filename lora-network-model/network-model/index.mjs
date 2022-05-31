@@ -5,7 +5,7 @@ import { arraySum, selectAttributes } from "../tools/structures.mjs";
 
 
 // List of attributes for exporting nodes and links
-export const defaultNodeAttrs = ["id","label","group","x","y","period","sf","connectedTo", "UF"];
+export const defaultNodeAttrs = ["id","label","group","x","y","period","sf","connectedTo","UF","channel"];
 export const defaultLinkAttrs = ["id","from","to"];
 
 //export const visNodeAttrs = ["id","label","group","x","y"];
@@ -21,6 +21,7 @@ export default class LoRaWANModel {
         this._enddevices = []; // List of end devices
         this._gateways = []; // List of gateways
         this._links = []; // List of connection from end devices to gateways
+        this._availableChannels = [...Array(16).keys()]; // Each gateway use a different channel
     }
 
     get edNumber() {
@@ -61,16 +62,22 @@ export default class LoRaWANModel {
     }
 
     addGateway(pos) {        
-        const newGateWay = {
-            id: generateRandomString(), // Unique identifier
-            label: `Gateway ${this._gateways.length+1}`, // Label for visualization
-            group: "GW", // Group for visualization (Gateway)
-            connectedTo: [], // List of connected end devices
-            UF: 0, // Utilization factor
-            ...pos // Position of the gateway (x,y)
-        };
-        this._gateways.push(newGateWay);
-        return newGateWay.id;
+        if(this._availableChannels.length > 0) {
+            const newGateWay = {
+                id: generateRandomString(), // Unique identifier
+                label: `Gateway ${this._gateways.length+1}`, // Label for visualization
+                group: "GW", // Group for visualization (Gateway)
+                connectedTo: [], // List of connected end devices
+                UF: 0, // Utilization factor
+                channel: this._availableChannels.shift(), // Channel used by the gateway
+                ...pos // Position of the gateway (x,y)
+            };
+            this._gateways.push(newGateWay);            
+            return newGateWay.id;
+        } else {
+            console.log("Cannot add a new gateway, no more channels available");
+            return null;
+        }
     }
 
     moveGatewayIdx(gwIdx, pos) {

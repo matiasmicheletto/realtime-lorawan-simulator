@@ -42,7 +42,7 @@ for i=1:length(nodos(:,1)),
 endfor
 
 devices=sortrows(nodos,6);
-MsgToT=sum(devices(:,8))
+MsgToT=sum(devices(:,8));
 %devices=sortrows(devices,4)
 F=find(devices(:,6)<100);
 Fnodes=devices(1:length(F),:);
@@ -51,10 +51,16 @@ Fnodes=devices(1:length(F),:);
 if (length(F)<eds)
   NFnodes=devices(length(F(:,1))+1:eds,:);
 else
-  NFnodes=zeros(1,9);
+  NFnodes=(-1)*ones(1,9);
 end
 
-MsgsT_P=sum(Fnodes(:,9))
+MsgsT_P=sum(Fnodes(:,9));
+MsgSF7=(-1)*ones(1,9);
+MsgSF8=(-1)*ones(1,9);
+MsgSF9=(-1)*ones(1,9);
+MsgSF10=(-1)*ones(1,9);
+MsgSF11=(-1)*ones(1,9);
+MsgSF12=(-1)*ones(1,9);
 
 MsgSF7=Fnodes(1:length(find(Fnodes(:,6)<8)),:);
 %papa=length(find(Fnodes(:,6)>8))
@@ -71,31 +77,31 @@ if (length(find(Fnodes(:,6)>8))>0 && length(find(Fnodes(:,6)<9)>0))
         end
       else
         MsgSF11=Fnodes(length(find(Fnodes(:,6)<11)+1):length(Fnodes(:,6)),:);
-        MsgSF12=zeros(1,9);
+        %MsgSF12=(-1)*ones(1,9);
        end
     else
       MsgSF10=Fnodes(length(find(Fnodes(:,6)<10)+1):length(Fnodes(:,6)),:);
-      MsgSF11=zeros(1,9);
-      MsgSF12=zeros(1,9);
+      %MsgSF11=(-1)*ones(1,9);
+      %MsgSF12=(-1)*ones(1,9);
     end
   else
     MsgSF9=Fnodes(length(find(Fnodes(:,6)<9)+1):length(Fnodes(:,6)),:);
-    MsgSF10=zeros(1,9);
-    MsgSF11=zeros(1,9);
-    MsgSF12=zeros(1,9);
+    %MsgSF10=(-1)*ones(1,9);
+    %MsgSF11=(-1)*ones(1,9);
+    %MsgSF12=(-1)*ones(1,9);
     end
 else
   MsgSF8=Fnodes(length(find(Fnodes(:,6)<8))+1:length(Fnodes(:,6)),:);
-  MsgSF9=zeros(1,9);
-  MsgSF10=zeros(1,9);
-  MsgSF11=zeros(1,9);
-  MsgSF12=zeros(1,9);
+  %MsgSF9=(-1)*ones(1,9);
+  %MsgSF10=(-1)*ones(1,9);
+  %MsgSF11=(-1)*ones(1,9);
+  %MsgSF12=(-1)*ones(1,9);
 end
 
 
 % Factibilidad
 %Acomodo los msgs por SF hasta saturar cada uno. Lo que queda lo sumo a los nodos no factibles.
-final=0
+final=0;
 while(final==0)
   if (sum(MsgSF7(:,8))<=H)
     if (sum(MsgSF8(:,8))<=H/2)
@@ -106,7 +112,7 @@ while(final==0)
                  factibe=1;
                  final=1;
               else
-                factible=0
+                factible=0;
                 i=1;
                 while (sum(MsgSF12(1:i,8))<=H/32)
                   i=i+1;
@@ -114,7 +120,7 @@ while(final==0)
                 MsgSF12(i:length(MsgSF12),6)=MsgSF12(i:length(MsgSF12),6)+88;
                 NFnodes=[MsgSF12(i:length(MsgSF12),:);NFnodes];
                 MsgSF12=MsgSF12(1:i-1,:);
-                final=1 
+                final=1;
               end
             else
    %           if (sum(MsgSF12(:,8))<=112)
@@ -178,16 +184,31 @@ Fnodes(:,2)=Fnodes(:,2)+pos(1)/2;
 Fnodes(:,3)=Fnodes(:,3)+pos(2)/2;
 Fnodes(:,9)=canal;
 
+sobra=find(Fnodes(:,1)<0);
+if (length(sobra)>0)
+  Fnodes=Fnodes(1:length(Fnodes)-length(sobra),:);
+endif
+
+sobra=find(NFnodes(:,1)<0);
+if (length(sobra)<length(NFnodes(:,1)))
+  NFnodes=NFnodes(1:length(NFnodes)-length(sobra),:);
+endif
+  
 NFnodes(:,2)=NFnodes(:,2)+pos(1)/2;
 NFnodes(:,3)=NFnodes(:,3)+pos(2)/2;
-A=[Fnodes;NFnodes];
+if (length(find(NFnodes(:,1)<0))==length(NFnodes(:,1)))
+  A=[Fnodes];
+else
+  A=[Fnodes;NFnodes];
+endif
 SF7=sum(MsgSF7(:,8));
 SF8=sum(MsgSF8(:,8));
 SF9=sum(MsgSF9(:,8));
 SF10=sum(MsgSF10(:,8));
 SF11=sum(MsgSF11(:,8));
 SF12=sum(MsgSF12(:,8));
-NF=sum(NFnodes(:,8))
-scatter(Fnodes(:,2),Fnodes(:,3))  
+NF=sum(NFnodes(:,8));
+
+%scatter(NFnodes(:,2),NFnodes(:,3))  
 
 endfunction

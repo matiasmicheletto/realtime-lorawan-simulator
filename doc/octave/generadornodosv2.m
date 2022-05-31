@@ -1,71 +1,50 @@
 close all; clear all;
-periods=[900,900,1800,ones(1,97)*3600];
+
+periods=[3600,3600,3600,ones(1,97)*3600];
+H=1;
+for i=1:length(periods),
+  H=lcm(H,periods(i));
+endfor
+H
 eds=6600;
 lado=500;
 nodos=[randi(lado,[eds,1]),randi(lado,[eds,1])];
 nodos=nodos-lado/2;
 nodos=[(1:eds)',nodos,sqrt(nodos(:,1).^2+nodos(:,2).^2),periods(randi(100,eds,1))',zeros(eds,2)];
-nodos=[nodos,3600./nodos(:,5)];
+nodos=[nodos,H./nodos(:,5)];
 
+for i=1:length(nodos),
+  if (nodos(i,5)/100>32)
+    nodos(i,7)=12;
+  elseif (nodos(i,5)/100>16)
+    nodos(i,7)=11;
+  elseif (nodos(i,5)/100>8)
+    nodos(i,7)=10;
+  elseif (nodos(i,5)/100>4)
+    nodos(i,7)=9;
+   elseif (nodos(i,5)/100>2)
+    nodos(i,7)=8;
+  elseif (nodos(i,5)/100>1)
+    nodos(i,7)=7;
+  endif 
+endfor  
 scatter(nodos(:,1), nodos(:,2), '.')
 title("Posiciones")
 
 for i=1:length(nodos(:,1)),
-  if (nodos(i,4)<62.5 && nodos(i,5)==900)
-    nodos(i,6)=7;
-    nodos(i,7)=10;
-  elseif (nodos(i,4)<62.5 && nodos(i,5)==1800)
-     nodos(i,6)=7;
-     nodos(i,7)=11;
-  elseif (nodos(i,4)<62.5 && nodos(i,5)==3600)
-    nodos(i,6)=7;
-    nodos(i,7)=12;
-  elseif (nodos(i,4)<125 && nodos(i,5)==900)    
-    nodos(i,6)=8;
-    nodos(i,7)=10;
-  elseif (nodos(i,4)<125 && nodos(i,5)==1800)
-    nodos(i,6)=8;
-    nodos(i,7)=11;
-  elseif (nodos(i,4)<125 && nodos(i,5)==3600)
-    nodos(i,6)=8;
-    nodos(i,7)=12;
-  elseif (nodos(i,4)<250 && nodos(i,5)==900)    
-    nodos(i,6)=9;
-    nodos(i,7)=10;
-  elseif (nodos(i,4)<250 && nodos(i,5)==1800)
-    nodos (i,6)=9;
-    nodos(i,7)=11;
-  elseif (nodos(i,4)<250 && nodos(i,5)==3600)
-    nodos(i,6)=9;
-    nodos(i,7)=12;
-  elseif (nodos(i,4)<500 && nodos(i,5)==900)    
-    nodos(i,6)=10;
-    nodos(i,7)=10;
-  elseif (nodos(i,4)<500 && nodos(i,5)==1800)
-    nodos(i,6)=10;
-    nodos(i,7)=11;
-  elseif (nodos(i,4)<500 && nodos(i,5)==3600)
-    nodos(i,6)=10;
-    nodos(i,7)=12;
-  elseif (nodos(i,4)<1000 && nodos(i,5)==900)    
-    nodos(i,6)=100;
-    nodos(i,7)=100;
-  elseif (nodos(i,4)<1000 && nodos(i,5)==1800)
-    nodos(i,6)=11;
-    nodos(i,7)=11;
-  elseif (nodos(i,4)<1000 && nodos(i,5)==3600)
-    nodos(i,6)=11;
-    nodos(i,7)=12;
-  elseif (nodos(i,4)<2000 && nodos(i,5)==900)    
-    nodos(i,6)=100;
-    nodos(i,7)=100;
-  elseif (nodos(i,4)<2000 && nodos(i,5)==1800)
-    nodos(i,6)=100;
-    nodos(i,7)=100;
-  elseif (nodos(i,4)<2000 && nodos(i,5)==3600)
-    nodos(i,6)=12;
-    nodos(i,7)=12;
-    end
+  if (nodos(i,4)<62.5)
+    nodos(i,6)=min(7,nodos(i,7));
+  elseif (nodos(i,4)<125)% && nodos(i,5)==9000)    
+    nodos(i,6)=min(8,nodos(i,7));
+  elseif (nodos(i,4)<250)% && nodos(i,5)==9000)    
+    nodos(i,6)=min(9,nodos(i,7));
+  elseif (nodos(i,4)<500)% && nodos(i,5)==9000)    
+    nodos(i,6)=min(10,nodos(i,7));
+  elseif (nodos(i,4)<1000)% && nodos(i,5)==9000)    
+    nodos(i,6)=min(11,nodos(i,7));
+  elseif (nodos(i,4)<2000)% && nodos(i,5)==9000)    
+    nodos(i,6)=min(12,nodos(i,7));
+  endif
 endfor
 devices=sortrows(nodos,6);
 MsgToT=sum(devices(:,8))
@@ -122,18 +101,18 @@ end
 %Acomodo los msgs por SF hasta saturar cada uno. Lo que queda lo sumo a los nodos no factibles.
 final=0
 while(final==0)
-  if (sum(MsgSF7(:,8))<=3600)
-    if (sum(MsgSF8(:,8))<=1800)
-      if (sum(MsgSF9(:,8))<=900)
-          if (sum(MsgSF10(:,8))<=450)
-            if (sum(MsgSF11(:,8))<=225)
-              if (sum(MsgSF12(:,8))<=112)
+  if (sum(MsgSF7(:,8))<=H)
+    if (sum(MsgSF8(:,8))<=H/2)
+      if (sum(MsgSF9(:,8))<=H/4)
+          if (sum(MsgSF10(:,8))<=H/8)
+            if (sum(MsgSF11(:,8))<=H/16)
+              if (sum(MsgSF12(:,8))<=H/32)
                  factibe=1;
                  final=1;
               else
                 factible=0
                 i=1;
-                while (sum(MsgSF12(1:i,8))<=112)
+                while (sum(MsgSF12(1:i,8))<=H/32)
                   i=i+1;
                 end
                 MsgSF12(i:length(MsgSF12),6)=MsgSF12(i:length(MsgSF12),6)+88;
@@ -144,7 +123,7 @@ while(final==0)
             else
    %           if (sum(MsgSF12(:,8))<=112)
                 i=1;
-               while (sum(MsgSF11(1:i,8))<=225)
+               while (sum(MsgSF11(1:i,8))<=H/16)
                   i=i+1;
                 end
                 MsgSF11(i:length(MsgSF11),6)=MsgSF11(i:length(MsgSF11),6)+1;
@@ -155,7 +134,7 @@ while(final==0)
           else
   %          if (sum(MsgSF11(:,8))<=250)
               i=1;
-              while (sum(MsgSF10(1:i,8))<=450)
+              while (sum(MsgSF10(1:i,8))<=H/8)
                 i=i+1;
               end
               MsgSF10(i:length(MsgSF10),6)=MsgSF10(i:length(MsgSF10),6)+1;
@@ -166,7 +145,7 @@ while(final==0)
       else
  %       if (sum(MsgSF10(:,8))<=450)
           i=1;
-          while (sum(MsgSF9(1:i,8))<=900)
+          while (sum(MsgSF9(1:i,8))<=H/4)
             i=i+1;
           end
           MsgSF9(i:length(MsgSF9),6)=MsgSF9(i:length(MsgSF9),6)+1;
@@ -177,7 +156,7 @@ while(final==0)
     else
 %       if (sum(MsgSF9(:,8))<=900)
           i=1;
-          while (sum(MsgSF8(1:i,8))<=1800)
+          while (sum(MsgSF8(1:i,8))<=H/2)
             i=i+1;
           end
           MsgSF8(i:length(MsgSF8),6)=MsgSF8(i:length(MsgSF8),6)+1;
@@ -188,7 +167,7 @@ while(final==0)
   else
   %  if (sum(MsgSF8(:,8))<=1800)
       i=1;
-      while (sum(MsgSF7(1:i,8))<=3600)
+      while (sum(MsgSF7(1:i,8))<=H)
         i=i+1;
       end
       MsgSF7(i:length(MsgSF7),6)=MsgSF7(i:length(MsgSF7),6)+1;
@@ -205,6 +184,8 @@ SF10=sum(MsgSF10(:,8))
 SF11=sum(MsgSF11(:,8))
 SF12=sum(MsgSF12(:,8))
 NF=sum(NFnodes(:,8))
+scatter(NFnodes(:,2),NFnodes(:,3),'.r')
+figure
 scatter(NFnodes(:,2),NFnodes(:,3),'.r')
 hold
 scatter(MsgSF7(:,2),MsgSF7(:,3),'x b')
