@@ -16,7 +16,7 @@ const styles = {
         width:"100%"
     },
     form: {
-        border: "1px solid #ccc",
+        border: "1px solid #bbb",
         padding: "10px",
         borderRadius: "5px",
         boxShadow: "3px 3px 10px gray",
@@ -48,14 +48,32 @@ const ConfigForm = () => {
         updateFreq
     } = inputs;
 
-    const handleOpenFile = () => {
+    const handleImportModel = () => {
         fileInputRef.current.click();
     };
 
     const handleLoadFile = e => {
         if(e.target.files?.length > 0)
             readFile(e.target.files[0], format)
-            .then(result => console.log(result));
+            .then(result => model.importModel(result, format)
+                .then(() => 
+                    setInputs(model.getAllParams()
+                ))
+            );
+    };
+
+    const handleExportModel = () => {
+        const data = model.exportModel(format);
+        const extensions = {
+            csv: "csv",
+            json: "json",
+            matlab: "m"
+        };
+        var blob = new Blob([data], { type: 'text/plain' });
+        var a = document.createElement('a');
+        a.download = `NetworkModel.${extensions[format]}`;
+        a.href = window.URL.createObjectURL(blob);
+        a.click();
     };
 
     const handleFormatChange = e => {        
@@ -74,7 +92,7 @@ const ConfigForm = () => {
                         style={styles.button}
                         variant="contained"
                         color="error"
-                        onClick={handleOpenFile}>
+                        onClick={handleImportModel}>
                         Import configuration
                     </Button>
                     <TextField                        
@@ -88,7 +106,7 @@ const ConfigForm = () => {
                         style={styles.button}
                         color="info"
                         variant="contained"
-                        onClick={handleOpenFile}>
+                        onClick={handleExportModel}>
                         Export network
                     </Button>
                 </Grid>
@@ -101,6 +119,7 @@ const ConfigForm = () => {
                             onChange={handleFormatChange}>
                             <MenuItem value="csv">CSV</MenuItem>
                             <MenuItem value="json">JSON</MenuItem>
+                            <MenuItem value="matlab">MATLAB</MenuItem>
                         </Select>
                     </FormControl>
                 </Grid>

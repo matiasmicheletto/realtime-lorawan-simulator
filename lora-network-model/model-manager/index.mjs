@@ -94,6 +94,31 @@ export default class Manager {
         return stats;
     }
 
+    importModel(data, format) {
+        console.log("Importing...", format);
+        console.log(data);
+    }
+
+    exportModel(format) {
+        console.log("Exporting...", format);
+        switch(format) {
+            case "json":
+            {
+                const data = {}; // TODO
+                return JSON.stringify(data);
+            }
+            case "csv":
+            {
+                const data = [[]]; // TODO
+                return data.map(row => row.join(',')).join('\n');
+            }
+            case "matlab":
+                return "Not implemented yet. Use csv for now.";
+            default:
+                return null;
+        }
+    }
+
     run() {
         return new Promise(resolve => {
             setTimeout(() => {

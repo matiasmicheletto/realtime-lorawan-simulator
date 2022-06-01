@@ -4,7 +4,7 @@
 }
 
 .Container > div {
-	border: 1px solid gray;
+	border: 1px solid #bbb;
 	box-shadow: 3px 3px 10px gray;
 	border-radius: 1%;
 }

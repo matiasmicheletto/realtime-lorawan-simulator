@@ -8,12 +8,8 @@ import { arraySum, selectAttributes } from "../tools/structures.mjs";
 export const defaultNodeAttrs = ["id","label","group","x","y","period","sf","connectedTo","UF","channel"];
 export const defaultLinkAttrs = ["id","from","to"];
 
-//export const visNodeAttrs = ["id","label","group","x","y"];
 export const visNodeAttrs = ["id","group","x","y"];
 export const visLinkAttrs = ["id","from","to"];
-
-export const exportNodeAttrs = ["x", "y", "period"];
-export const exportLinkAttrs = ["from","to"];
 
 export default class LoRaWANModel {
     constructor() {
@@ -42,23 +38,6 @@ export default class LoRaWANModel {
 
     getLinks(attrs = defaultLinkAttrs) {
         return selectAttributes(this._links, attrs);
-    }
-
-    exportModel(format) {
-        switch(format){
-            case "json":
-                return JSON.stringify({
-                    enddevices: this.getEndDevices(exportNodeAttrs),
-                    gateways: this.getGateways(exportNodeAttrs),
-                    links: this.getLinks(exportLinkAttrs)
-                });
-            case "csv":
-                return null; // TODO
-            case "matlab": // TODO
-                return null;
-            default: 
-                return null;
-        }
     }
 
     addGateway(pos) {        

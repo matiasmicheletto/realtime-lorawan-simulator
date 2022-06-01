@@ -53,13 +53,13 @@ for it=1:length(GW(:,1)),
         %nodosH=nodosORIG;
         ch=ch+1;
         figure
-        scatter(nodosH(:,2),nodosH(:,3))       
+        %scatter(nodosH(:,2),nodosH(:,3))       
       else
         falta=0
       endif
       if (size(nodosFIN)>=size(nodosORIG))
         figure
-        scatter(nodosH(:,2),nodosH(:,3))
+        %scatter(nodosH(:,2),nodosH(:,3))
         falta=1;
         h=length(GW(:,1))+1;
       endif 
