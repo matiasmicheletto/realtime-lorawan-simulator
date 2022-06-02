@@ -8,7 +8,7 @@ export const gcd = (a, b) => {
         aa = t;
     }
     return aa;
-}
+};
 
 // Least common multiple
 export const lcm = (a, b) => (!a || !b) ? 0 : Math.abs(a * b) / gcd(a, b);
@@ -26,4 +26,6 @@ export const getAllDivisors = n => {
     }
     divs.sort((a, b) => b-a);
     return divs;
-}
+};
+
+export const clamp = (val, min, max) => Math.min(Math.max(val, min), max);

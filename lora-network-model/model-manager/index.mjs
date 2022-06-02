@@ -1,36 +1,32 @@
-import { normalDist, uniformDist, generateRandomPos } from "../tools/random.mjs";
+import { generateRandomPos, generateRandomString } from "../tools/random.mjs";
 import { arrayAvg } from "../tools/structures.mjs";
 import { createEDNetwork } from "../instance-generator/index.mjs";
 import LoRaWANModel from "../network-model/index.mjs";
-
-const posDistrFc = {
-    uniform: uniformDist,
-    normal: normalDist
-};
 
 const defaultParameters = {
     N: 10000,
     H: 3600,
     mapWidth: 1000, 
     mapHeight: 1000,
-    posDistr: "uniform",
+    posDistr: "normal",
     periodsDistr: "97, 1, 0, 2", // 97% -> 3600, 1% -> 1800, 0% -> 1200, 2% -> 900
     initialGW: 5,
     strategy: "random",
     maxIter: 1000,
-    maxRuntime: 60
+    maxRuntime: 60,
+    updateRate: 10
 };
 
 export default class Manager {
     constructor(params = defaultParameters) {
         this.configure(params);
-        this.model = null;
-        this.ready = false;
+        this.status = "Awaiting initialization";
+        this._model = null;
+        this.onChange = () => {};
     }
 
     configure(params) {
         Object.assign(this, params);
-        this.ready = false;
     }
 
     getParam(param) {
@@ -48,43 +44,50 @@ export default class Manager {
             initialGW: this.initialGW,
             strategy: this.strategy,
             maxIter: this.maxIter,
-            maxRuntime: this.maxRuntime
+            maxRuntime: this.maxRuntime,
+            updateRate: this.updateRate
         };
     }
 
     getNetwork(attrs) {
-        return this.model.getAllNodes(attrs);
+        return this._model.getAllNodes(attrs);
     }
 
     initialize() {
         const instance = createEDNetwork(
             this.N, 
             this.H, 
-            posDistrFc[this.posDistr], 
+            this.posDistr, 
             [this.mapWidth, this.mapHeight], 
             this.periodsDistr.split(",").map(p => parseInt(p))
         ); 
 
-        this.model = new LoRaWANModel();
+        this._model = new LoRaWANModel();
         instance.forEach(ed => {
-            this.model.addEndDevice(ed.position, ed.period);
+            this._model.addEndDevice(ed.position, ed.period);
         });
 
         for(let i = 0; i < this.initialGW; i++) 
-        this.model.addGateway(generateRandomPos([this.mapWidth, this.mapHeight]));        
+        this._model.addGateway(generateRandomPos([this.mapWidth, this.mapHeight]));        
 
         const start = Date.now();
-        this.model.autoConnect();
+        this._model.autoConnect();
         const elapsed = Date.now() - start;
         console.log(`Elapsed time: ${elapsed}ms`);
 
-        this.ready = true;
+        this._simulationStep = 0;
+        this.status = "Ready";
+        this.onChange();
     }
 
     getNetworkStats() {
+        const eds = this._model.getEndDevices();
+        const totalCount = eds.length;
+        const notConnectedCount = eds.filter(ed => ed.group === "NCED").length;
         const stats = {
-            ufAvg: arrayAvg(this.model.getGateways().map(gw => gw.UF)),
-            ncEdsCnt: this.model.getEndDevices().filter(ed => ed.group === "NCED").length
+            ufAvg: arrayAvg(this._model.getGateways().map(gw => gw.UF)),
+            notConnectedCount: notConnectedCount,
+            coverage: (1 - notConnectedCount/totalCount)*100
         };
         return stats;
     }
@@ -114,25 +117,39 @@ export default class Manager {
         }
     }
 
-    run() {
-        return new Promise(resolve => {
-            setTimeout(() => {
-                const start = Date.now();
-                for(let i = 0; i < this.maxIter; i++) {
-                    this.model.disconnectEndDevices();
-                    const idx = 0;
-                    const position = generateRandomPos([this.mapWidth, this.mapHeight]);
-                    this.model.moveGatewayIdx(idx, position);
-                    this.model.autoConnect();
-                    if((Date.now() - start)/1000 > this.maxRuntime) break;
-                }
-        
+    _run() {
+        setTimeout(() => {
+            this._model.disconnectEndDevices();
+            this._model.moveGatewayIdx(0, generateRandomPos([this.mapWidth, this.mapHeight]));
+            this._model.autoConnect();
+            
+            this._simulationStep++;
+            
+            if(this._simulationStep % this.updateRate === 0) 
+                this.onChange();
+            if((Date.now() - this._startTime)/1000 > this.maxRuntime)
+                this.status = "Runtime exceeded";
+            if(this._simulationStep > this.maxIter)
+                this.status = "Iterations completed";
+            if(this.status === "running") 
+                this._run();
+            else{
                 const results = {
                     ...this.getNetworkStats(),
-                    elapsed: Date.now() - start
+                    condition: this.status,
+                    elapsed: Date.now() - this._startTime
                 };
-                resolve(results);
-            }, 10);
+                this._returnResults(results);
+            }
+        }, 1);
+    }
+
+    start() {
+        return new Promise(resolve => {
+            this.status = "running";
+            this._startTime = Date.now();
+            this._returnResults = resolve;
+            this._run();
         });
     }
 }

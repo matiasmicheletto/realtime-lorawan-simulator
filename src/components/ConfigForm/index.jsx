@@ -45,7 +45,7 @@ const ConfigForm = () => {
         strategy,
         maxIter,
         maxRuntime,
-        updateFreq
+        updateRate
     } = inputs;
 
     const handleImportModel = () => {
@@ -56,9 +56,7 @@ const ConfigForm = () => {
         if(e.target.files?.length > 0)
             readFile(e.target.files[0], format)
             .then(result => model.importModel(result, format)
-                .then(() => 
-                    setInputs(model.getAllParams()
-                ))
+                .then(() => setInputs(model.getAllParams()))
             );
     };
 
@@ -80,8 +78,16 @@ const ConfigForm = () => {
         setFormat(e.target.value);
     };
 
+    const handleInputChange = e => {
+        const { name, value } = e.target;
+        console.log(name, value);
+        model.configure({ [name]: value });
+        model.initialize();
+        setInputs(prev => ({ ...prev, [name]: value }));
+    }
+
     const runSimulation = () => {
-        model.run().then(results => console.log(results));
+        model.start().then(results => console.log(results));
     };
 
     return (        
@@ -133,6 +139,8 @@ const ConfigForm = () => {
                         type="number"
                         size="small"
                         label="Number of end devices"
+                        name="N"
+                        onChange={handleInputChange}
                         inputProps={{min:0}}/>
                 </Grid>
                 <Grid item xs={6}>
@@ -143,6 +151,8 @@ const ConfigForm = () => {
                         type="number"
                         size="small"
                         label="System hyperperiod"
+                        name="H"
+                        onChange={handleInputChange}
                         inputProps={{min:10}}/>
                 </Grid>
             </Grid>
@@ -155,6 +165,8 @@ const ConfigForm = () => {
                         type="number"
                         size="small"
                         label="Map width (mts)"
+                        name="mapWidth"
+                        onChange={handleInputChange}
                         inputProps={{min:0}}/>
                 </Grid>
                 <Grid item xs={6}>
@@ -165,6 +177,8 @@ const ConfigForm = () => {
                         type="number"
                         size="small"
                         label="Map height (mts)"
+                        name="mapHeight"
+                        onChange={handleInputChange}
                         inputProps={{min:10}}/>
                 </Grid>
             </Grid>
@@ -175,10 +189,12 @@ const ConfigForm = () => {
                         <Select                        
                             labelId="dist-select-label"
                             value={posDistr}
+                            name="posDistr"
+                            onChange={handleInputChange}
                             label="End device dist.">
                             <MenuItem value="uniform">Uniform</MenuItem>
-                            <MenuItem value="gauss">Gaussian</MenuItem>
-                            <MenuItem value="gauss">Clouds</MenuItem>
+                            <MenuItem value="normal">Normal</MenuItem>
+                            <MenuItem value="clouds">Clouds</MenuItem>
                         </Select>
                     </FormControl>
                 </Grid>
@@ -188,7 +204,9 @@ const ConfigForm = () => {
                         value={periodsDistr}
                         variant="outlined"
                         type="text"
-                        label="Period distribution"/>
+                        label="Period distribution"
+                        name="periodsDistr"
+                        onChange={handleInputChange}/>
                 </Grid>
             </Grid>
             <Grid container spacing={2} style={{marginTop:"10px"}}>
@@ -199,6 +217,8 @@ const ConfigForm = () => {
                         variant="outlined"
                         type="number"
                         label="Initial gateway number"
+                        name="initialGW"
+                        onChange={handleInputChange}
                         inputProps={{min:0}}/>
                 </Grid>
                 <Grid item xs={6}>
@@ -207,7 +227,9 @@ const ConfigForm = () => {
                         <Select                        
                             labelId="strat-select-label"
                             value={strategy}
-                            label="Gateway positioning strategy">
+                            label="Gateway positioning strategy"
+                            name="strategy"
+                            onChange={handleInputChange}>
                             <MenuItem value="random">Random</MenuItem>
                             <MenuItem value="strings">Springs</MenuItem>
                         </Select>
@@ -222,6 +244,8 @@ const ConfigForm = () => {
                         variant="outlined"
                         type="number"
                         label="Max. iterations"
+                        name="maxIter"
+                        onChange={handleInputChange}
                         inputProps={{min:0}}/>
                 </Grid>
                 <Grid item xs={4}>
@@ -231,6 +255,8 @@ const ConfigForm = () => {
                         variant="outlined"
                         type="number"
                         label="Max. execution time (s)"
+                        name="maxRuntime"
+                        onChange={handleInputChange}
                         inputProps={{min:0}}/>
                 </Grid>
                 <Grid item xs={4}>
@@ -238,12 +264,14 @@ const ConfigForm = () => {
                         <InputLabel id="vis-select-label">Update chart</InputLabel>
                         <Select                        
                             labelId="vis-select-label"
-                            value={updateFreq}
-                            label="Update chart">
-                            <MenuItem value="1">after each iteration</MenuItem>
-                            <MenuItem value="10">after 10 iterations</MenuItem>
-                            <MenuItem value="1000">after 1000 iterations</MenuItem>
-                            <MenuItem value="end">on finish</MenuItem>
+                            value={updateRate}
+                            label="Update chart"
+                            name="updateRate"
+                            onChange={handleInputChange}>
+                            <MenuItem value={1}>after each iteration</MenuItem>
+                            <MenuItem value={10}>after 10 iterations</MenuItem>
+                            <MenuItem value={1000}>after 1000 iterations</MenuItem>
+                            <MenuItem value={0.1}>on finish</MenuItem>
                         </Select>
                     </FormControl>
                 </Grid>

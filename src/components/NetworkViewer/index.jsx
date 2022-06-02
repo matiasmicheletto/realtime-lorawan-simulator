@@ -21,7 +21,7 @@ const styles = {
 const LoRaNetwork = () => {
 
     const netRef = useRef(null);
-    const model = useContext(ModelCtx);
+    const [updCnt, setUpdCnt] = useState(0);
     const [filters, setFilters] = useState({
         ED: true,
         NCED: true,
@@ -29,6 +29,9 @@ const LoRaNetwork = () => {
         edges: true,
         labels: false
     });
+
+    const model = useContext(ModelCtx);
+    model.onChange = () => setUpdCnt(updCnt + 1);
 
     const attrs = filters.labels ? ["id","group","x","y","connectedTo","label"] : ["id","group","x","y","connectedTo"];
     const nodes = model.getNetwork(attrs).filter(node => 
@@ -69,20 +72,20 @@ const LoRaNetwork = () => {
     };
     useEffect(()=>{
         netRef.current && new Network(netRef.current, networkData, options);
-    }, [netRef, filters]);
+    }, [netRef, filters, updCnt]);
 
     return (
         <Grid container spacing={2} alignItems="center">
             <Grid item xs={3}>
                 <div style={{...styles.container, ...styles.form}}>
-                    <h4 style={{padding:0, margin:0}}>Filtros de visualización</h4>
+                    <h4 style={{padding:0, margin:0}}>Visualization filters</h4>
                     <FormControlLabel
                         control={
                             <Checkbox
                                 checked={filters.ED}
                                 onChange={e => setFilters({...filters, ED: e.target.checked})}/>
                         }
-                        label="ED conectados"
+                        label="Connected ED"
                     />
                     <br />
                     <FormControlLabel
@@ -91,7 +94,7 @@ const LoRaNetwork = () => {
                                 checked={filters.NCED}
                                 onChange={e => setFilters({...filters, NCED: e.target.checked})}/>
                         }
-                        label="ED Desconectados"
+                        label="Disconnected ED"
                     />
                     <br />
                     <FormControlLabel
@@ -109,7 +112,7 @@ const LoRaNetwork = () => {
                                 checked={filters.edges}
                                 onChange={e => setFilters({...filters, edges: e.target.checked})}/>
                         }
-                        label="Enlaces"
+                        label="Links"
                     />
                     <br />
                     <FormControlLabel
@@ -118,7 +121,7 @@ const LoRaNetwork = () => {
                                 checked={filters.labels}
                                 onChange={e => setFilters({...filters, labels: e.target.checked})}/>
                         }
-                        label="Etiquetas"
+                        label="Labels"
                     />
                 </div>
             </Grid>
