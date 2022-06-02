@@ -21,7 +21,7 @@ const columns = [
 const NetworkTable = () => {
 
     const model = useContext(ModelCtx);
-    const rows = model.getAllNodes();
+    const rows = model.getNetwork();
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);

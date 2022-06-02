@@ -18,19 +18,19 @@ const defaultParameters = {
     initialGW: 5,
     strategy: "random",
     maxIter: 1000,
-    maxRuntime: 60,
-    updateFreq: 1
+    maxRuntime: 60
 };
 
 export default class Manager {
-    constructor() {
-        this.configure(defaultParameters);
+    constructor(params = defaultParameters) {
+        this.configure(params);
         this.model = null;
         this.ready = false;
     }
 
     configure(params) {
         Object.assign(this, params);
+        this.ready = false;
     }
 
     getParam(param) {
@@ -48,17 +48,12 @@ export default class Manager {
             initialGW: this.initialGW,
             strategy: this.strategy,
             maxIter: this.maxIter,
-            maxRuntime: this.maxRuntime,
-            updateFreq: this.updateFreq
+            maxRuntime: this.maxRuntime
         };
     }
 
-    getAllNodes(attrs) {
+    getNetwork(attrs) {
         return this.model.getAllNodes(attrs);
-    }
-
-    getLinks(attrs) {
-        return this.model.getLinks(attrs);
     }
 
     initialize() {

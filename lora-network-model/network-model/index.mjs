@@ -8,15 +8,11 @@ import { arraySum, selectAttributes } from "../tools/structures.mjs";
 export const defaultNodeAttrs = ["id","label","group","x","y","period","sf","connectedTo","UF","channel"];
 export const defaultLinkAttrs = ["id","from","to"];
 
-export const visNodeAttrs = ["id","group","x","y"];
-export const visLinkAttrs = ["id","from","to"];
-
 export default class LoRaWANModel {
     constructor() {
         this._hyperperiod = 1; // System hyperperiod
         this._enddevices = []; // List of end devices
         this._gateways = []; // List of gateways
-        this._links = []; // List of connection from end devices to gateways
         this._availableChannels = [...Array(16).keys()]; // Each gateway use a different channel
     }
 
@@ -34,10 +30,6 @@ export default class LoRaWANModel {
 
     getAllNodes(attrs = defaultNodeAttrs) {
         return selectAttributes([...this._gateways, ...this._enddevices], attrs);
-    }
-
-    getLinks(attrs = defaultLinkAttrs) {
-        return selectAttributes(this._links, attrs);
     }
 
     addGateway(pos) {        
@@ -96,17 +88,10 @@ export default class LoRaWANModel {
             this._enddevices[edIdx].sf = sf;
             this._enddevices[edIdx].group = "ED"; // Update group to connected ED
             this._gateways[gwIdx].connectedTo.push(this._enddevices[edIdx].id);
-            const newLink = {
-                id: generateRandomString(),
-                from: this._enddevices[edIdx].id,
-                to: this._gateways[gwIdx].id,
-                sf
-            };
-            this._links.push(newLink);
-            return newLink.id;
+            return true; // Result of connection
         }else{
             console.log("Cannot connect to another gateway", edIdx);
-            return null;
+            return false; // Result of connection
         }
     }
 
@@ -197,7 +182,6 @@ export default class LoRaWANModel {
             gw.connectedTo = [];
             gw.UF = 0;
         });
-        this._links = [];
     }
 
     disconnectGateway(gwIdx) { 
@@ -211,9 +195,6 @@ export default class LoRaWANModel {
                 this._enddevices[edIdx].connectedTo = null;
                 this._enddevices[edIdx].sf = null;
                 this._enddevices[edIdx].group = "NCED";
-                const linkIdx = this._links.findIndex(el => el.from === edId);
-                if(linkIdx >= 0)
-                    this._links.splice(linkIdx, 1);
             }            
         });
         gw.connectedTo = [];
