@@ -8,11 +8,11 @@ const defaultParameters = {
     H: 3600,
     mapWidth: 1000, 
     mapHeight: 1000,
-    posDistr: "normal",
+    posDistr: "uniform",
     periodsDistr: "97, 1, 0, 2", // 97% -> 3600, 1% -> 1800, 0% -> 1200, 2% -> 900
     initialGW: 5,
     strategy: "random",
-    maxIter: 1000,
+    maxIter: 100,
     maxRuntime: 60,
     updateRate: 10
 };
@@ -80,18 +80,6 @@ export default class Manager {
         this.onChange();
     }
 
-    getNetworkStats() {
-        const eds = this._model.getEndDevices();
-        const totalCount = eds.length;
-        const notConnectedCount = eds.filter(ed => ed.group === "NCED").length;
-        const stats = {
-            ufAvg: arrayAvg(this._model.getGateways().map(gw => gw.UF)),
-            notConnectedCount: notConnectedCount,
-            coverage: (1 - notConnectedCount/totalCount)*100
-        };
-        return stats;
-    }
-
     importModel(data, format) {
         console.log("Importing...", format);
         console.log(data);
@@ -119,9 +107,7 @@ export default class Manager {
 
     _run() {
         setTimeout(() => {
-            this._model.disconnectEndDevices();
-            this._model.moveGatewayIdx(0, generateRandomPos([this.mapWidth, this.mapHeight]));
-            this._model.autoConnect();
+            this._model.refactorGW([this.mapWidth, this.mapHeight], "random");
             
             this._simulationStep++;
             
@@ -135,7 +121,7 @@ export default class Manager {
                 this._run();
             else{
                 const results = {
-                    ...this.getNetworkStats(),
+                    ...this._model.getNetworkStats(),
                     condition: this.status,
                     elapsed: Date.now() - this._startTime
                 };

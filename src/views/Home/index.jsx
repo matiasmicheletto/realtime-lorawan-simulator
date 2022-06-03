@@ -11,8 +11,6 @@ const Home = () => {
             <ConfigForm />
             <h3>Network topology</h3>
             <NetworkViewer />
-            <h3>List of network nodes</h3>
-            <NetworkTable />
         </MainView>
     );
 };

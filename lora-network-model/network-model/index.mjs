@@ -1,7 +1,7 @@
 import { sortByClosest } from "../tools/geometry.mjs";
 import { lcm } from "../tools/integers.mjs";
-import { generateRandomString } from "../tools/random.mjs";
-import { arraySum, selectAttributes } from "../tools/structures.mjs";
+import { generateRandomPos, generateRandomString } from "../tools/random.mjs";
+import { arrayAvg, arraySum, selectAttributes } from "../tools/structures.mjs";
 
 
 // List of attributes for exporting nodes and links
@@ -199,5 +199,42 @@ export default class LoRaWANModel {
         });
         gw.connectedTo = [];
         gw.UF = 0;
+    }
+
+    refactorGW(mapDimensions, method = "random") { // Improve the allocation of the end devices
+        const originalCoverage = this.getNetworkCoverage();
+        const originalGWPositions = this._gateways.map(gw => ({x: gw.x, y: gw.y}));
+        this.disconnectEndDevices();
+        if(method === "random"){
+            this._gateways.forEach(gw => {
+                const {x, y} = generateRandomPos(mapDimensions);
+                gw.x = x;
+                gw.y = y;
+            });
+        }
+        this.autoConnect();
+        const newCoverage = this.getNetworkCoverage();
+        if(newCoverage < originalCoverage) { // If the coverage did not improve, revert the changes
+            this.disconnectEndDevices();
+            this._gateways.forEach((gw, i) => {
+                gw.x = originalGWPositions[i].x;
+                gw.y = originalGWPositions[i].y;
+            });
+            this.autoConnect();
+        }else{
+            console.log("Improvement step:", method, "New coverage:", newCoverage);
+        }
+    }
+
+    getNetworkCoverage() { // Percentage of end devices connected to gateways
+        return this._enddevices.filter(ed => ed.group === "ED").length / this._enddevices.length*100;
+    }
+
+    getNetworkStats() {
+        const stats = {
+            ufAvg: arrayAvg(this._gateways.map(gw => gw.UF)),
+            coverage: this.getNetworkCoverage()
+        };
+        return stats;
     }
 };
