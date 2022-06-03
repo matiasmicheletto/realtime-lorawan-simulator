@@ -20,9 +20,9 @@ const defaultParameters = {
 export default class Manager {
     constructor(params = defaultParameters) {
         this.configure(params);
-        this.status = "Awaiting initialization";
+        this.status = "not-initialized";
         this._model = null;
-        this.onChange = () => {};
+        this.onChange = console.log;
     }
 
     configure(params) {
@@ -53,6 +53,13 @@ export default class Manager {
         return this._model.getAllNodes(attrs);
     }
 
+    getResults = () => ({            
+        ...this._model.getNetworkStats(),
+        status: this.status,
+        exitCondition: this.exitCondition,
+        elapsed: this.status === "running" ? Date.now() - this._startTime : 0
+    });
+
     initialize() {
         const instance = createEDNetwork(
             this.N, 
@@ -70,19 +77,51 @@ export default class Manager {
         for(let i = 0; i < this.initialGW; i++) 
         this._model.addGateway(generateRandomPos([this.mapWidth, this.mapHeight]));        
 
-        const start = Date.now();
+        this.startTime = Date.now();
         this._model.autoConnect();
-        const elapsed = Date.now() - start;
-        console.log(`Elapsed time: ${elapsed}ms`);
 
         this._simulationStep = 0;
-        this.status = "Ready";
-        this.onChange();
+        this.status = "ready";
+        this.onChange(this.getResults());
     }
 
     importModel(data, format) {
         console.log("Importing...", format);
         console.log(data);
+        let params = null;
+        switch(format) {
+            case "json": {
+                params = JSON.parse(data);        
+                break;
+            }
+            case "csv": {
+                if(data.lenth === 11 ){
+                    params = {
+                        N: data[0],
+                        H: data[1],
+                        mapWidth: data[2],
+                        mapHeight: data[3],
+                        posDistr: data[4],
+                        periodsDistr: data[5],
+                        initialGW: data[6],
+                        strategy: data[7],
+                        maxIter: data[8],
+                        maxRuntime: data[9],
+                        updateRate: data[10]
+                    };
+                }
+                break;
+            }
+            default: {
+                throw new Error("Unsupported format");
+            }
+        }
+        if(params) {
+            Object.assign(this, params);
+            this.initialize();
+        }else {
+            throw new Error("Invalid data");
+        }
     }
 
     exportModel(format) {
@@ -99,40 +138,41 @@ export default class Manager {
                 return data.map(row => row.join(',')).join('\n');
             }
             case "matlab":
-                return "Not implemented yet. Use csv for now.";
+                return new Error("Not implemented yet. Use csv for now.");
             default:
-                return null;
+                return new Error("Unsupported format");
         }
     }
 
-    _run() {
+    _run() { // Single simulation step (async for updating GUI)
         setTimeout(() => {
-            this._model.refactorGW([this.mapWidth, this.mapHeight], "random");
+            this._model.refactorGW([this.mapWidth, this.mapHeight], this.strategy);
             
             this._simulationStep++;
             
             if(this._simulationStep % this.updateRate === 0) 
-                this.onChange();
-            if((Date.now() - this._startTime)/1000 > this.maxRuntime)
-                this.status = "Runtime exceeded";
-            if(this._simulationStep > this.maxIter)
-                this.status = "Iterations completed";
+                this.onChange(this.getResults());
+            if((Date.now() - this._startTime)/1000 > this.maxRuntime){
+                this.status = "ready";
+                this.exitCondition = "timeout";
+            }
+            if(this._simulationStep > this.maxIter){
+                this.status = "ready";
+                this.exitCondition = "iterations completed";
+            }
             if(this.status === "running") 
                 this._run();
             else{
-                const results = {
-                    ...this._model.getNetworkStats(),
-                    condition: this.status,
-                    elapsed: Date.now() - this._startTime
-                };
-                this._returnResults(results);
+                this.onChange(this.getResults());
+                this._returnResults(this.getResults());
             }
         }, 1);
     }
 
-    start() {
+    start() { // Launch the simulation
         return new Promise(resolve => {
             this.status = "running";
+            this.exitCondition = "";
             this._startTime = Date.now();
             this._returnResults = resolve;
             this._run();

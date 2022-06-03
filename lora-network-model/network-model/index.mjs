@@ -205,13 +205,13 @@ export default class LoRaWANModel {
         const originalCoverage = this.getNetworkCoverage();
         const originalGWPositions = this._gateways.map(gw => ({x: gw.x, y: gw.y}));
         this.disconnectEndDevices();
-        if(method === "random"){
+        //if(method === "random"){
             this._gateways.forEach(gw => {
                 const {x, y} = generateRandomPos(mapDimensions);
                 gw.x = x;
                 gw.y = y;
             });
-        }
+        //}
         this.autoConnect();
         const newCoverage = this.getNetworkCoverage();
         if(newCoverage < originalCoverage) { // If the coverage did not improve, revert the changes

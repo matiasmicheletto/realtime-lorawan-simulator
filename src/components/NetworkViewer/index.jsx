@@ -3,7 +3,6 @@ import { Checkbox, FormControlLabel, Grid } from '@mui/material';
 import { generateRandomString } from 'lora-network-model/tools/random';
 import { Network } from 'vis-network';
 import { DataSet } from 'vis-data';
-import { ModelCtx } from '../../context';
 
 const styles = {
     container: {
@@ -18,10 +17,9 @@ const styles = {
     }
 }
 
-const LoRaNetwork = () => {
+const LoRaNetwork = props => {
 
     const netRef = useRef(null);
-    const [updCnt, setUpdCnt] = useState(0);
     const [filters, setFilters] = useState({
         ED: true,
         NCED: true,
@@ -30,11 +28,8 @@ const LoRaNetwork = () => {
         labels: false
     });
 
-    const model = useContext(ModelCtx);
-    model.onChange = () => setUpdCnt(updCnt + 1);
-
     const attrs = filters.labels ? ["id","group","x","y","connectedTo","label"] : ["id","group","x","y","connectedTo"];
-    const nodes = model.getNetwork(attrs).filter(node => 
+    const nodes = props.model.getNetwork(attrs).filter(node => 
         filters.ED && node.group === "ED" || filters.NCED && node.group === "NCED" || filters.GW && node.group === "GW"
     );
     const edges = nodes.filter(node => node.group === "ED" && filters.edges).map(node => ({
@@ -72,63 +67,65 @@ const LoRaNetwork = () => {
     };
     useEffect(()=>{
         netRef.current && new Network(netRef.current, networkData, options);
-    }, [netRef, filters, updCnt]);
+    }, [netRef, filters, props.update]);
 
     return (
-        <Grid container spacing={2} alignItems="center">
-            <Grid item xs={3}>
-                <div style={{...styles.container, ...styles.form}}>
-                    <h4 style={{padding:0, margin:0}}>Visualization filters</h4>
-                    <FormControlLabel
-                        control={
-                            <Checkbox
-                                checked={filters.ED}
-                                onChange={e => setFilters({...filters, ED: e.target.checked})}/>
-                        }
-                        label="Connected ED"
-                    />
-                    <br />
-                    <FormControlLabel
-                        control={
-                            <Checkbox
-                                checked={filters.NCED}
-                                onChange={e => setFilters({...filters, NCED: e.target.checked})}/>
-                        }
-                        label="Disconnected ED"
-                    />
-                    <br />
-                    <FormControlLabel
-                        control={
-                            <Checkbox
-                                checked={filters.GW}
-                                onChange={e => setFilters({...filters, GW: e.target.checked})}/>
-                        }
-                        label="Gateways"
-                    />
-                    <br />
-                    <FormControlLabel
-                        control={
-                            <Checkbox
-                                checked={filters.edges}
-                                onChange={e => setFilters({...filters, edges: e.target.checked})}/>
-                        }
-                        label="Links"
-                    />
-                    <br />
-                    <FormControlLabel
-                        control={
-                            <Checkbox
-                                checked={filters.labels}
-                                onChange={e => setFilters({...filters, labels: e.target.checked})}/>
-                        }
-                        label="Labels"
-                    />
-                </div>
+        <div style={{marginTop: "20px"}}>
+            <Grid container spacing={2} alignItems="center">
+                <Grid item xs={3}>
+                    <div style={{...styles.container, ...styles.form}}>
+                        <h4 style={{padding:0, margin:0}}>Visualization filters</h4>
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={filters.ED}
+                                    onChange={e => setFilters({...filters, ED: e.target.checked})}/>
+                            }
+                            label="Connected ED"
+                        />
+                        <br />
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={filters.NCED}
+                                    onChange={e => setFilters({...filters, NCED: e.target.checked})}/>
+                            }
+                            label="Disconnected ED"
+                        />
+                        <br />
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={filters.GW}
+                                    onChange={e => setFilters({...filters, GW: e.target.checked})}/>
+                            }
+                            label="Gateways"
+                        />
+                        <br />
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={filters.edges}
+                                    onChange={e => setFilters({...filters, edges: e.target.checked})}/>
+                            }
+                            label="Links"
+                        />
+                        <br />
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={filters.labels}
+                                    onChange={e => setFilters({...filters, labels: e.target.checked})}/>
+                            }
+                            label="Labels"
+                        />
+                    </div>
+                </Grid>
+                <Grid item xs={9}>
+                    <div ref={netRef} style={styles.container}></div>
+                </Grid>
             </Grid>
-            <Grid item xs={9}>
-                <div ref={netRef} style={styles.container}></div>
-            </Grid>
-        </Grid>
+        </div>
     );
 };
 

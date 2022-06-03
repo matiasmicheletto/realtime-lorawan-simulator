@@ -6,8 +6,10 @@ import {
     Select, 
     MenuItem, 
     FormControl, 
-    InputLabel 
+    InputLabel,
+    LinearProgress 
 } from '@mui/material';
+import NetworkViewer from '../NetworkViewer';
 import { ModelCtx } from '../../context';
 import { readFile } from '../../utils';
 
@@ -30,6 +32,8 @@ const ConfigForm = () => {
 
     const fileInputRef = useRef(null);
     const [format, setFormat] = useState("csv");
+    const [loading, setLoading] = useState(false);
+    const [updCnt, setUpdCnt] = useState(0);
 
     const model = useContext(ModelCtx);
 
@@ -48,6 +52,26 @@ const ConfigForm = () => {
         updateRate
     } = inputs;
 
+    const [outputs, setOutputs] = useState({
+        status: "ready", // ready, running, not-initialized
+        exitCondition: "",
+        elapsed: 0,
+        ufAvg: 0,
+        coverage: 0
+    });
+    const {
+        status,
+        exitCondition,
+        elapsed,
+        ufAvg,
+        coverage
+    } = outputs;
+
+    model.onChange = res => {
+        setOutputs(res); 
+        setUpdCnt(updCnt + 1);
+    };
+
     const handleImportModel = () => {
         fileInputRef.current.click();
     };
@@ -55,9 +79,14 @@ const ConfigForm = () => {
     const handleLoadFile = e => {
         if(e.target.files?.length > 0)
             readFile(e.target.files[0], format)
-            .then(result => model.importModel(result, format)
-                .then(() => setInputs(model.getAllParams()))
-            );
+            .then(result => {
+                try{
+                    model.importModel(result, format);
+                    setInputs(model.getAllParams());
+                }catch(e){
+                    console.error(e);
+                }
+            });
     };
 
     const handleExportModel = () => {
@@ -82,12 +111,18 @@ const ConfigForm = () => {
         const { name, value } = e.target;
         console.log(name, value);
         model.configure({ [name]: value });
-        model.initialize();
+        if(["N", "mapWidth", "mapHeight", "posDistr", "initialGW"].includes(name)){ // Only update network for certain parameters
+            model.initialize();
+        }
         setInputs(prev => ({ ...prev, [name]: value }));
     }
 
     const runSimulation = () => {
-        model.start().then(results => console.log(results));
+        setLoading(true);
+        model.start().then(results => {
+            setLoading(false);
+            console.log(results);
+        });
     };
 
     return (        
@@ -270,7 +305,7 @@ const ConfigForm = () => {
                             onChange={handleInputChange}>
                             <MenuItem value={1}>after each iteration</MenuItem>
                             <MenuItem value={10}>after 10 iterations</MenuItem>
-                            <MenuItem value={1000}>after 1000 iterations</MenuItem>
+                            <MenuItem value={100}>after 100 iterations</MenuItem>
                             <MenuItem value={0.1}>on finish</MenuItem>
                         </Select>
                     </FormControl>
@@ -284,6 +319,21 @@ const ConfigForm = () => {
                     Run simulation
                 </Button>
             </Grid>
+            { loading && <LinearProgress style={{marginTop: "20px", marginBottom: "20px"}}/>}
+            
+            <div>
+                <span><b>Status: </b></span> <span style={{color:status==="running" ? "red" : "green"}}>{status}</span>
+                <br />
+                <span><b>Exit condition: </b></span> <span style={{color:exitCondition === "timeout" ? "red" : "green"}}>{exitCondition === "" ? "-" : exitCondition}</span>
+                <br />
+                <span><b>Elapsed time: </b></span> <span>{elapsed === 0 ? "-" : (elapsed/1000).toFixed(2)+" s"}</span>
+                <br />
+                <span><b>Average UF: </b></span> <span>{(ufAvg*100).toFixed(2)} %</span>
+                <br />
+                <span><b>Network coverage: </b></span> <span>{coverage.toFixed(2)} %</span>
+            </div>
+
+            <NetworkViewer model={model} update={updCnt}/>
         </div>
     );
 };
