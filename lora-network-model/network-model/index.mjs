@@ -165,7 +165,7 @@ export default class LoRaWANModel {
                 let sf = minSF; // Greedy method, starts from the min SF
                 while(availableSlots[sf] == 0 && sf < maxSF) // If no more available slots for this SF, move to the next
                     sf++;
-                if(sf < maxSF){ // If there are available slots, connect the end device to the gateway
+                if(availableSlots[sf] > 0 && sf <= maxSF){ // If there are available slots, connect the end device to the gateway
                     availableSlots[sf] -= 1;
                     this.connectEndDeviceID(sortedEndDevices[i].id, gwId, sf);
                 }

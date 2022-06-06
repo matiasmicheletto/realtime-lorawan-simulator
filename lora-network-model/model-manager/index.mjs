@@ -3,7 +3,7 @@ import { createEDNetwork } from "../instance-generator/index.mjs";
 import LoRaWANModel from "../network-model/index.mjs";
 
 const defaultParameters = {
-    N: 5000,
+    N: 10000,
     H: 3600,
     mapWidth: 1000, 
     mapHeight: 1000,
