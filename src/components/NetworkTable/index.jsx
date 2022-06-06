@@ -1,5 +1,5 @@
 import React, {useState, useContext} from 'react';
-import { ModelCtx } from '../../context';
+import { ModelContext } from '../../context';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -20,7 +20,7 @@ const columns = [
 
 const NetworkTable = () => {
 
-    const model = useContext(ModelCtx);
+    const model = useContext(ModelContext);
     const rows = model.getNetwork();
 
     const [page, setPage] = useState(0);

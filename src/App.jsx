@@ -10,15 +10,16 @@ import theme from './themes';
 const App = () => (
     <ThemeProvider theme={theme}>
         <CssBaseline />
-        <LoadingProvider />
-            <ModelProvider>
+        <ModelProvider>
+            <LoadingProvider >
                 <BrowserRouter>
                     <Navigation/>
                     <Routes>
                         <Route index element={<Views.Home/>}/>                        
                     </Routes> 
                 </BrowserRouter>
-            </ModelProvider>
+            </LoadingProvider>
+        </ModelProvider>
     </ThemeProvider>
 );
 

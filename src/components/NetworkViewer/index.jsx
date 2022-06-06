@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Checkbox, FormControlLabel, Grid } from '@mui/material';
+import { Checkbox, FormControlLabel, Grid, Box } from '@mui/material';
 import { generateRandomString } from 'lora-network-model/tools/random';
 import { Network } from 'vis-network';
 import { DataSet } from 'vis-data';
+import { manager, ModelContext } from '../../context';
 
 const styles = {
     container: {
@@ -17,26 +18,72 @@ const styles = {
     }
 }
 
-const LoRaNetwork = props => {
+const nodeGroups = {
+    NCED: { // Not connected end devices
+        shape: "dot",
+        size: 1,
+        color: "rgb(250,0,0)"
+    },
+    ED: { // Connected end devices
+        shape: "dot",
+        size: 1,
+        color: "rgb(0,0,250)"
+    },
+    GW: { // Gateways
+        shape: "triangle",
+        size: 3,
+        color: "rgb(0,250,0)"
+    }
+};
+
+const edgeColors = {
+    SF7: "rgb(150, 0, 0)",
+    SF8: "rgb(0, 150, 0)",
+    SF9: "rgb(0, 0, 150)",
+    SF10: "rgb(150, 150, 0)",
+    SF11: "rgb(0, 150, 150)",
+    SF12: "rgb(150, 0, 150)"
+};
+
+const NetworkViewer = () => {
+
+    const { model } = useContext(ModelContext);
 
     const netRef = useRef(null);
     const [filters, setFilters] = useState({
         ED: true,
         NCED: true,
         GW: true,
-        edges: true,
         labels: false
     });
+    const [edgesFilter, setEdgesFilter] = useState(Object.keys(edgeColors).map(el => true)); // SF7, SF8, SF9, SF10, SF11, SF12
 
-    const attrs = filters.labels ? ["id","group","x","y","connectedTo","label"] : ["id","group","x","y","connectedTo"];
-    const nodes = props.model.getNetwork(attrs).filter(node => 
+    const toggleSingeEdge = (idx, checked) => {
+        let newEdgesFilter = [...edgesFilter];
+        newEdgesFilter[idx] = checked;
+        setEdgesFilter(newEdgesFilter);
+    };
+    const toggleEdges = checked => setEdgesFilter(new Array(6).fill(checked));
+
+    const attrs = filters.labels ? ["id","group","x","y","connectedTo","label","sf"] : ["id","group","x","y","connectedTo","sf"];
+    const nodes = manager.getNetwork(attrs).filter(node => 
         filters.ED && node.group === "ED" || filters.NCED && node.group === "NCED" || filters.GW && node.group === "GW"
     );
-    const edges = nodes.filter(node => node.group === "ED" && filters.edges).map(node => ({
-        id: generateRandomString(),
-        from: node.id,
-        to: node.connectedTo
-    }));
+    const edges = nodes.filter(node => 
+                node.group === "ED" && (
+                    edgesFilter[0] && node.sf === "SF7" ||
+                    edgesFilter[1] && node.sf === "SF8" ||
+                    edgesFilter[2] && node.sf === "SF9" ||
+                    edgesFilter[3] && node.sf === "SF10" ||
+                    edgesFilter[4] && node.sf === "SF11" ||
+                    edgesFilter[5] && node.sf === "SF12"
+                )
+            ).map(node => ({ // A link for each connected ED
+                id: generateRandomString(),
+                from: node.id,
+                to: node.connectedTo,
+                color: edgeColors[node.sf]
+            }));
     const networkData = {
         nodes: new DataSet(nodes),
         edges: new DataSet(edges)
@@ -47,27 +94,11 @@ const LoRaNetwork = props => {
         edges: { smooth: false },
         physics: false,
         interaction: { dragNodes: false },
-        groups: {
-            NCED: { // Not connected end devices
-                shape: "dot",
-                size: 1,
-                color: "rgb(250,0,0)"
-            },
-            ED: { // Connected end devices
-                shape: "dot",
-                size: 1,
-                color: "rgb(0,0,250)"
-            },
-            GW: { // Gateways
-                shape: "triangle",
-                size: 3,
-                color: "rgb(0,250,0)"
-            }
-        }
+        groups: nodeGroups
     };
     useEffect(()=>{
         netRef.current && new Network(netRef.current, networkData, options);
-    }, [netRef, filters, props.update]);
+    }, [netRef, filters, edgesFilter, model]);
 
     return (
         <div style={{marginTop: "20px"}}>
@@ -105,20 +136,38 @@ const LoRaNetwork = props => {
                         <FormControlLabel
                             control={
                                 <Checkbox
-                                    checked={filters.edges}
-                                    onChange={e => setFilters({...filters, edges: e.target.checked})}/>
-                            }
-                            label="Links"
-                        />
-                        <br />
-                        <FormControlLabel
-                            control={
-                                <Checkbox
                                     checked={filters.labels}
                                     onChange={e => setFilters({...filters, labels: e.target.checked})}/>
                             }
                             label="Labels"
                         />
+                        <br />
+                        <div>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={edgesFilter.every(edge => edge)}
+                                        indeterminate={edgesFilter.some(edge => edge) && !edgesFilter.every(edge => edge)}
+                                        onChange={ e => toggleEdges(e.target.checked) } />
+                                }
+                                label="Links"
+                            />
+                            <Box sx={{ display: 'flex', flexDirection: 'column', ml: 3 }}>
+                                {
+                                    Object.keys(edgeColors).map( (sf, index) => (
+                                        <FormControlLabel
+                                            key={index}
+                                            label={sf}
+                                            control={
+                                                <Checkbox 
+                                                    checked={edgesFilter[index]} 
+                                                    onChange={e => toggleSingeEdge(index, e.target.checked)} />
+                                            }
+                                        />
+                                    ))
+                                }    
+                            </Box>
+                        </div>
                     </div>
                 </Grid>
                 <Grid item xs={9}>
@@ -129,4 +178,4 @@ const LoRaNetwork = props => {
     );
 };
 
-export default LoRaNetwork;
+export default NetworkViewer;

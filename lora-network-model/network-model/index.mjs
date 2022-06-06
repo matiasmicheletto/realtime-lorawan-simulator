@@ -8,6 +8,9 @@ import { arrayAvg, arraySum, selectAttributes } from "../tools/structures.mjs";
 export const defaultNodeAttrs = ["id","label","group","x","y","period","sf","connectedTo","UF","channel"];
 export const defaultLinkAttrs = ["id","from","to"];
 
+const sfNames = ["NSF","SF7","SF8","SF9","SF10","SF11","SF12","NSF"];
+
+
 export default class LoRaWANModel {
     constructor() {
         this._hyperperiod = 1; // System hyperperiod
@@ -85,7 +88,7 @@ export default class LoRaWANModel {
     connectEndDeviceIdx(edIdx, gwIdx, sf) {
         if(this._enddevices[edIdx].group === "NCED") {
             this._enddevices[edIdx].connectedTo = this._gateways[gwIdx].id;
-            this._enddevices[edIdx].sf = sf;
+            this._enddevices[edIdx].sf = sfNames[sf];
             this._enddevices[edIdx].group = "ED"; // Update group to connected ED
             this._gateways[gwIdx].connectedTo.push(this._enddevices[edIdx].id);
             return true; // Result of connection

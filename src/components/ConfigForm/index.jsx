@@ -6,11 +6,9 @@ import {
     Select, 
     MenuItem, 
     FormControl, 
-    InputLabel,
-    LinearProgress 
+    InputLabel 
 } from '@mui/material';
-import NetworkViewer from '../NetworkViewer';
-import { ModelCtx } from '../../context';
+import { LoadingContext, manager } from '../../context';
 import { readFile } from '../../utils';
 
 const styles = {
@@ -32,12 +30,10 @@ const ConfigForm = () => {
 
     const fileInputRef = useRef(null);
     const [format, setFormat] = useState("csv");
-    const [loading, setLoading] = useState(false);
-    const [updCnt, setUpdCnt] = useState(0);
 
-    const model = useContext(ModelCtx);
+    const { setLoading } = useContext(LoadingContext);
 
-    const [inputs, setInputs] = useState(model.getAllParams());
+    const [inputs, setInputs] = useState(manager.getAllParams());
     const {
         N,
         H,
@@ -52,26 +48,6 @@ const ConfigForm = () => {
         updateRate
     } = inputs;
 
-    const [outputs, setOutputs] = useState({
-        status: "ready", // ready, running, not-initialized
-        exitCondition: "",
-        elapsed: 0,
-        ufAvg: 0,
-        coverage: 0
-    });
-    const {
-        status,
-        exitCondition,
-        elapsed,
-        ufAvg,
-        coverage
-    } = outputs;
-
-    model.onChange = res => {
-        setOutputs(res); 
-        setUpdCnt(updCnt + 1);
-    };
-
     const handleImportModel = () => {
         fileInputRef.current.click();
     };
@@ -81,8 +57,8 @@ const ConfigForm = () => {
             readFile(e.target.files[0], format)
             .then(result => {
                 try{
-                    model.importModel(result, format);
-                    setInputs(model.getAllParams());
+                    manager.importModel(result, format);
+                    setInputs(manager.getAllParams());
                 }catch(e){
                     console.error(e);
                 }
@@ -90,7 +66,7 @@ const ConfigForm = () => {
     };
 
     const handleExportModel = () => {
-        const data = model.exportModel(format);
+        const data = manager.exportModel(format);
         const extensions = {
             csv: "csv",
             json: "json",
@@ -110,16 +86,16 @@ const ConfigForm = () => {
     const handleInputChange = e => {
         const { name, value } = e.target;
         console.log(name, value);
-        model.configure({ [name]: value });
+        manager.configure({ [name]: value });
         if(["N", "mapWidth", "mapHeight", "posDistr", "initialGW"].includes(name)){ // Only update network for certain parameters
-            model.initialize();
+            manager.initialize();
         }
         setInputs(prev => ({ ...prev, [name]: value }));
     }
 
     const runSimulation = () => {
         setLoading(true);
-        model.start().then(results => {
+        manager.start().then(results => {
             setLoading(false);
             console.log(results);
         });
@@ -321,21 +297,6 @@ const ConfigForm = () => {
                     </Button>
                 </Grid>
             </div>
-            { loading && <LinearProgress style={{marginTop: "20px", marginBottom: "20px"}}/>}
-                
-            <div style={styles.form}>
-                <span><b>Status: </b></span> <span style={{color:status==="running" ? "red" : "green"}}>{status}</span>
-                <br />
-                <span><b>Exit condition: </b></span> <span style={{color:exitCondition === "timeout" ? "red" : "green"}}>{exitCondition === "" ? "-" : exitCondition}</span>
-                <br />
-                <span><b>Elapsed time: </b></span> <span>{elapsed === 0 ? "-" : (elapsed/1000).toFixed(2)+" s"}</span>
-                <br />
-                <span><b>Average UF: </b></span> <span>{(ufAvg*100).toFixed(2)} %</span>
-                <br />
-                <span><b>Network coverage: </b></span> <span>{coverage.toFixed(2)} %</span>
-            </div>
-
-            <NetworkViewer model={model} update={updCnt}/>
         </div>
     );
 };

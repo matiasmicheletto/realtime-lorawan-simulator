@@ -1,10 +1,9 @@
 import { generateRandomPos, generateRandomString } from "../tools/random.mjs";
-import { arrayAvg } from "../tools/structures.mjs";
 import { createEDNetwork } from "../instance-generator/index.mjs";
 import LoRaWANModel from "../network-model/index.mjs";
 
 const defaultParameters = {
-    N: 10000,
+    N: 5000,
     H: 3600,
     mapWidth: 1000, 
     mapHeight: 1000,
@@ -12,7 +11,7 @@ const defaultParameters = {
     periodsDistr: "97, 1, 0, 2", // 97% -> 3600, 1% -> 1800, 0% -> 1200, 2% -> 900
     initialGW: 5,
     strategy: "random",
-    maxIter: 100,
+    maxIter: 50,
     maxRuntime: 60,
     updateRate: 10
 };
@@ -56,6 +55,7 @@ export default class Manager {
     getResults = () => ({            
         ...this._model.getNetworkStats(),
         status: this.status,
+        iteration: this._simulationStep,
         exitCondition: this.exitCondition,
         elapsed: this.status === "running" ? Date.now() - this._startTime : 0
     });
@@ -171,10 +171,12 @@ export default class Manager {
 
     start() { // Launch the simulation
         return new Promise(resolve => {
+            this.onChange(this.getResults());
             this.status = "running";
             this.exitCondition = "";
             this._startTime = Date.now();
             this._returnResults = resolve;
+            this._simulationStep = 0;
             this._run();
         });
     }

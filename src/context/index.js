@@ -1,3 +1,3 @@
-import { ModelProvider, ModelCtx } from "./model";
+import { manager, ModelProvider, ModelContext } from "./model";
 import { LoadingProvider, LoadingContext } from './loading';
-export { ModelProvider, ModelCtx, LoadingContext, LoadingProvider };
+export { manager, ModelProvider, ModelContext, LoadingContext, LoadingProvider };

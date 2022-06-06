@@ -1,13 +1,22 @@
-import React, {createContext} from 'react';
+import React, { useState, createContext, useEffect } from 'react';
 import Manager from 'lora-network-model/model-manager/index.mjs';
 
-const model = new Manager();
-model.initialize();
+export const manager = new Manager();
+manager.initialize();
 
-export const ModelCtx = createContext();
+export const ModelContext = createContext();
 
-export const ModelProvider = props => (
-    <ModelCtx.Provider value={model}>
-        {props.children}
-    </ModelCtx.Provider>
-);
+export const ModelProvider = props => {
+
+    const [model, setModel] = useState(manager.getResults());
+
+    useEffect( () => {
+        manager.onChange = setModel;
+    }, []);
+
+    return (
+        <ModelContext.Provider value={{model, setModel}}>
+            {props.children}
+        </ModelContext.Provider>
+    );
+};
