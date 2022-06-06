@@ -1,16 +1,16 @@
-import { generateRandomPos, generateRandomString } from "../tools/random.mjs";
-import { createEDNetwork } from "../instance-generator/index.mjs";
+import { generateRandomPos } from "../tools/random.mjs";
 import LoRaWANModel from "../network-model/index.mjs";
 
 const defaultParameters = {
-    N: 10000,
+    N: 6500,
     H: 3600,
     mapWidth: 1000, 
     mapHeight: 1000,
     posDistr: "uniform",
     periodsDistr: "97, 1, 0, 2", // 97% -> 3600, 1% -> 1800, 0% -> 1200, 2% -> 900
-    initialGW: 5,
+    initialGW: 4,
     strategy: "random",
+    schedulingBy: "gw",
     maxIter: 50,
     maxRuntime: 60,
     updateRate: 10
@@ -42,6 +42,7 @@ export default class Manager {
             periodsDistr: this.periodsDistr,
             initialGW: this.initialGW,
             strategy: this.strategy,
+            schedulingBy: this.schedulingBy,
             maxIter: this.maxIter,
             maxRuntime: this.maxRuntime,
             updateRate: this.updateRate
@@ -57,27 +58,25 @@ export default class Manager {
         status: this.status,
         iteration: this._simulationStep,
         exitCondition: this.exitCondition,
-        elapsed: this.status === "running" ? Date.now() - this._startTime : 0
+        elapsed: Date.now() - this._startTime
     });
 
     initialize() {
-        const instance = createEDNetwork(
+        this._model = new LoRaWANModel(
             this.N, 
             this.H, 
             this.posDistr, 
             [this.mapWidth, this.mapHeight], 
             this.periodsDistr.split(",").map(p => parseInt(p))
-        ); 
-
-        this._model = new LoRaWANModel();
-        instance.forEach(ed => {
-            this._model.addEndDevice(ed.position, ed.period);
-        });
+        );
 
         for(let i = 0; i < this.initialGW; i++) 
-        this._model.addGateway(generateRandomPos([this.mapWidth, this.mapHeight]));        
+            this._model.addGateway(generateRandomPos([this.mapWidth, this.mapHeight]));        
 
-        this.startTime = Date.now();
+        this._model.setRefactorStepMethod(this.strategy);
+        this._model.setAutoConnectMethod(this.schedulingBy);
+
+        this._startTime = Date.now();
         this._model.autoConnect();
 
         this._simulationStep = 0;
@@ -105,9 +104,10 @@ export default class Manager {
                         periodsDistr: data[5],
                         initialGW: data[6],
                         strategy: data[7],
-                        maxIter: data[8],
-                        maxRuntime: data[9],
-                        updateRate: data[10]
+                        schedulingBy: data[8],
+                        maxIter: data[9],
+                        maxRuntime: data[10],
+                        updateRate: data[11]
                     };
                 }
                 break;
@@ -146,7 +146,7 @@ export default class Manager {
 
     _run() { // Single simulation step (async for updating GUI)
         setTimeout(() => {
-            this._model.refactorGW([this.mapWidth, this.mapHeight], this.strategy);
+            this._model.refactorStep();
             
             this._simulationStep++;
             

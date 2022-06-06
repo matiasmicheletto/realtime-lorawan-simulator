@@ -43,6 +43,7 @@ const ConfigForm = () => {
         periodsDistr,
         initialGW,
         strategy,
+        schedulingBy,
         maxIter,
         maxRuntime,
         updateRate
@@ -153,7 +154,7 @@ const ConfigForm = () => {
                             label="Number of end devices"
                             name="N"
                             onChange={handleInputChange}
-                            inputProps={{min:0}}/>
+                            inputProps={{min:1,max:15000}}/>
                     </Grid>
                     <Grid item xs={6}>
                         <TextField
@@ -165,7 +166,7 @@ const ConfigForm = () => {
                             label="System hyperperiod"
                             name="H"
                             onChange={handleInputChange}
-                            inputProps={{min:10}}/>
+                            inputProps={{min:1, max:10000}}/>
                     </Grid>
                 </Grid>
                 <Grid container spacing={2} style={{marginTop:"10px"}}>
@@ -179,7 +180,7 @@ const ConfigForm = () => {
                             label="Map width (mts)"
                             name="mapWidth"
                             onChange={handleInputChange}
-                            inputProps={{min:0}}/>
+                            inputProps={{min:1,max:10000}}/>
                     </Grid>
                     <Grid item xs={6}>
                         <TextField
@@ -191,7 +192,7 @@ const ConfigForm = () => {
                             label="Map height (mts)"
                             name="mapHeight"
                             onChange={handleInputChange}
-                            inputProps={{min:10}}/>
+                            inputProps={{min:1,max:10000}}/>
                     </Grid>
                 </Grid>
                 <Grid container spacing={2} style={{marginTop:"10px"}}>
@@ -222,7 +223,7 @@ const ConfigForm = () => {
                     </Grid>
                 </Grid>
                 <Grid container spacing={2} style={{marginTop:"10px"}}>
-                    <Grid item xs={6}>
+                    <Grid item xs={4}>
                         <TextField
                             style={{width: "100%"}} 
                             value={initialGW}
@@ -231,9 +232,9 @@ const ConfigForm = () => {
                             label="Initial gateway number"
                             name="initialGW"
                             onChange={handleInputChange}
-                            inputProps={{min:0}}/>
+                            inputProps={{min:1,max:16}}/>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={4}>
                         <FormControl fullWidth>
                             <InputLabel id="strat-select-label">Gateway positioning strategy</InputLabel>
                             <Select                        
@@ -244,6 +245,20 @@ const ConfigForm = () => {
                                 onChange={handleInputChange}>
                                 <MenuItem value="random">Random</MenuItem>
                                 <MenuItem value="strings">Springs</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={4}>
+                        <FormControl fullWidth>
+                            <InputLabel id="strat-select-label">Scheduling method</InputLabel>
+                            <Select                        
+                                labelId="strat-select-label"
+                                value={schedulingBy}
+                                label="Scheduling method"
+                                name="schedulingBy"
+                                onChange={handleInputChange}>
+                                <MenuItem value="gw">By gateway</MenuItem>
+                                <MenuItem value="ed">By end device</MenuItem>
                             </Select>
                         </FormControl>
                     </Grid>
@@ -258,7 +273,7 @@ const ConfigForm = () => {
                             label="Max. iterations"
                             name="maxIter"
                             onChange={handleInputChange}
-                            inputProps={{min:0}}/>
+                            inputProps={{min:1,max:1000}}/>
                     </Grid>
                     <Grid item xs={4}>
                         <TextField
@@ -269,7 +284,7 @@ const ConfigForm = () => {
                             label="Max. execution time (s)"
                             name="maxRuntime"
                             onChange={handleInputChange}
-                            inputProps={{min:0}}/>
+                            inputProps={{min:10,max:300}}/>
                     </Grid>
                     <Grid item xs={4}>
                         <FormControl fullWidth>

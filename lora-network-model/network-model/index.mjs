@@ -1,6 +1,12 @@
+import { 
+    generateRandomDistribution,
+    generateRandomPos,
+    randomSelect,
+    uniformDist, 
+    generateRandomString
+} from '../tools/random.mjs';
+import { getAllDivisors, lcm } from '../tools/integers.mjs';
 import { sortByClosest } from "../tools/geometry.mjs";
-import { lcm } from "../tools/integers.mjs";
-import { generateRandomPos, generateRandomString } from "../tools/random.mjs";
 import { arrayAvg, arraySum, selectAttributes } from "../tools/structures.mjs";
 
 
@@ -10,13 +16,72 @@ export const defaultLinkAttrs = ["id","from","to"];
 
 const sfNames = ["NSF","SF7","SF8","SF9","SF10","SF11","SF12","NSF"];
 
+// Initial available slots for a gateway
+const getSlots = H => [ 
+    0, // 0 -- No SF for this period (< 100 Hz^-1)
+    H, // 1 -- SF7
+    H/2, // 2 -- SF8
+    H/4, // 3 -- SF9
+    H/8, // 4 -- SF10
+    H/16, // 5 -- SF11
+    H/32, // 6 -- SF12
+    0 // 7 -- No SF for this distance (> 2000 mts)
+];
+
+const getMinSpreadingFactor = dist => {
+    if(dist < 62.5)
+        return 1; // SF7
+    else if(dist < 125)
+        return 2; // SF8
+    else if(dist < 250)
+        return 3; // SF9
+    else if(dist < 500)
+        return 4; // SF10
+    else if(dist < 1000)
+        return 5; // SF11
+    else if(dist < 2000)
+        return 6; // SF12
+    else // No SF for this distance
+        return 7;
+};
+
+const getMaxSpreadingFactor = period => {
+    if(period > 3200)
+        return 6; // SF12
+    else if(period > 1600)
+        return 5; // SF11
+    else if(period > 800)
+        return 4; // SF10
+    else if(period > 400)
+        return 3; // SF9
+    else if(period > 200)
+        return 2; // SF8
+    else if(period > 100)
+        return 1; // SF7
+    else // No SF for this period
+        return 0;
+};
 
 export default class LoRaWANModel {
-    constructor() {
-        this._hyperperiod = 1; // System hyperperiod
-        this._enddevices = []; // List of end devices
+    constructor(edNumber, hyperperiod, posDistr = uniformDist, mapSize = [100, 100], periodsDistr = [90, 10]) {
+        this._hyperperiod = hyperperiod; // System hyperperiod
+        this._initialSlots = arraySum(getSlots(this._hyperperiod)); // Initial available slots for a gateway
+
+        this._mapSize = mapSize; // Size of the map
+
         this._gateways = []; // List of gateways
         this._availableChannels = [...Array(16).keys()]; // Each gateway use a different channel
+
+        // Generate end devices
+        this._enddevices = []; // List of end devices
+        const divisors = getAllDivisors(hyperperiod);
+        const periodsDist = generateRandomDistribution(divisors, periodsDistr);
+        for(let i = 0; i < edNumber; i++) 
+            this.addEndDevice(generateRandomPos(this._mapSize, posDistr), randomSelect(periodsDist));
+
+        // Set default strategies
+        this.setAutoConnectMethod("gw");
+        this.setRefactorStepMethod("random");
     }
 
     get edNumber() {
@@ -44,6 +109,7 @@ export default class LoRaWANModel {
                 connectedTo: [], // List of connected end devices
                 UF: 0, // Utilization factor
                 channel: this._availableChannels.shift(), // Channel used by the gateway
+                availableSlots: getSlots(this._hyperperiod), // Available slots for each spreading factor
                 ...pos // Position of the gateway (x,y)
             };
             this._gateways.push(newGateWay);            
@@ -52,6 +118,18 @@ export default class LoRaWANModel {
             console.log("Cannot add a new gateway, no more channels available");
             return null;
         }
+    }
+
+    setAutoConnectMethod(method) {
+        if(method === "gw")
+            this.autoConnect = this._autoConnectGW;
+        if(method === "ed")
+            this.autoConnect = this._autoConnectED;
+    }
+
+    setRefactorStepMethod(method) {
+        if(method === "random")
+            this.refactorStep = this._randomizeGW;
     }
 
     moveGatewayIdx(gwIdx, pos) {
@@ -71,7 +149,6 @@ export default class LoRaWANModel {
     }
 
     addEndDevice(pos, period) {
-        this._hyperperiod = lcm(this._hyperperiod, period); // Update hyperperiod
         const newEndDevice = {
             id: generateRandomString(), // Unique identifier
             label: `End device ${this._enddevices.length+1}`, // Label for visualization
@@ -86,14 +163,15 @@ export default class LoRaWANModel {
     }
 
     connectEndDeviceIdx(edIdx, gwIdx, sf) {
-        if(this._enddevices[edIdx].group === "NCED") {
+        if(this._enddevices[edIdx].group === "NCED" && this._gateways[gwIdx].availableSlots[sf] > 0) {
             this._enddevices[edIdx].connectedTo = this._gateways[gwIdx].id;
             this._enddevices[edIdx].sf = sfNames[sf];
             this._enddevices[edIdx].group = "ED"; // Update group to connected ED
             this._gateways[gwIdx].connectedTo.push(this._enddevices[edIdx].id);
+            this._gateways[gwIdx].availableSlots[sf] -= 1;
             return true; // Result of connection
         }else{
-            console.log("Cannot connect to another gateway", edIdx);
+            //console.log("Cannot connect to gateway", edIdx, gwIdx, sf);
             return false; // Result of connection
         }
     }
@@ -106,73 +184,45 @@ export default class LoRaWANModel {
         return null;
     }
 
-    getMinSpreadingFactor(dist) {
-        if(dist < 62.5)
-            return 1; // SF7
-        else if(dist < 125)
-            return 2; // SF8
-        else if(dist < 250)
-            return 3; // SF9
-        else if(dist < 500)
-            return 4; // SF10
-        else if(dist < 1000)
-            return 5; // SF11
-        else if(dist < 2000)
-            return 6; // SF12
-        else // No SF for this distance
-            return 7;
-    }
-
-    getMaxSpreadingFactor(period) {
-        if(period > 3200)
-            return 6; // SF12
-        else if(period > 1600)
-            return 5; // SF11
-        else if(period > 800)
-            return 4; // SF10
-        else if(period > 400)
-            return 3; // SF9
-        else if(period > 200)
-            return 2; // SF8
-        else if(period > 100)
-            return 1; // SF7
-        else // No SF for this period
-            return 0;
-    }
-
-    autoConnect() { // Greedy allocation method
-        // Connect end devices to gateways
+    _autoConnectGW() { // Connect end devices to gateways
+        // Greedy allocation method, scheduling by gateway
         for(let gwIdx = 0; gwIdx < this._gateways.length; gwIdx++) { // For each gateway
-            const availableSlots = [
-                0, // 0 -- No SF for this period (< 100 Hz^-1)
-                this._hyperperiod, // 1 -- SF7
-                this._hyperperiod/2, // 2 -- SF8
-                this._hyperperiod/4, // 3 -- SF9
-                this._hyperperiod/8, // 4 -- SF10
-                this._hyperperiod/16, // 5 -- SF11
-                this._hyperperiod/32, // 6 -- SF12
-                0 // 7 -- No SF for this distance (> 2000 mts)
-            ];
-            const initialSlots = arraySum(availableSlots);
             const {x, y, id:gwId} = this._gateways[gwIdx]; // Gateway position
             // Get all free end devices from closest to farthest in the range of 2000 mts
             const sortedEndDevices = sortByClosest({x, y}, this._enddevices.filter(ed => ed.group === "NCED"), 2000); // Returns distances and indexes
-            for(let i = 0; i < sortedEndDevices.length; i++){
+            for(let edIdx = 0; edIdx < sortedEndDevices.length; edIdx++){
                 // Get minimal SF for the distance between the end device and the current gateway
-                const minSF = this.getMinSpreadingFactor(sortedEndDevices[i].dist);                
+                const minSF = getMinSpreadingFactor(sortedEndDevices[edIdx].dist);                
                 // Limit SF to the end device min frequency
-                const maxSF = this.getMaxSpreadingFactor(sortedEndDevices[i].period);
+                const maxSF = getMaxSpreadingFactor(sortedEndDevices[edIdx].period);
                 let sf = minSF; // Greedy method, starts from the min SF
-                while(availableSlots[sf] == 0 && sf < maxSF) // If no more available slots for this SF, move to the next
+                while(!this.connectEndDeviceID(sortedEndDevices[edIdx].id, gwId, sf) && sf < maxSF) // Try to connect with the lower SF
                     sf++;
-                if(availableSlots[sf] > 0 && sf <= maxSF){ // If there are available slots, connect the end device to the gateway
-                    availableSlots[sf] -= 1;
-                    this.connectEndDeviceID(sortedEndDevices[i].id, gwId, sf);
-                }
             }
             // Update UF of the gateway
-            this._gateways[gwIdx].UF = 1 - arraySum(availableSlots)/initialSlots;
+            this._gateways[gwIdx].UF = 1 - arraySum(this._gateways[gwIdx].availableSlots)/this._initialSlots;
         }
+    }
+
+    _autoConnectED() { // Connect end devices to gateways
+        // Greedy allocation method, scheduling by end device
+        for(let edIdx = 0; edIdx < this._enddevices.length; edIdx++) { // For each end device
+            const {x, y, id:edId} = this._enddevices[edIdx]; // End device positions
+            const sortedGateways = sortByClosest({x, y}, this._gateways, 2000); // Returns distances and indexes
+            for(let gwIdx = 0; gwIdx < sortedGateways.length; gwIdx++) {
+                // Get minimal SF for the distance between the end device and the current gateway
+                const minSF = getMinSpreadingFactor(sortedGateways[gwIdx].dist);
+                // Limit SF to the end device min frequency
+                const maxSF = getMaxSpreadingFactor(this._enddevices[edIdx].period);
+                let sf = minSF; // Greedy method, starts from the min SF
+                while(!this.connectEndDeviceID(edId, sortedGateways[gwIdx].id, sf) && sf < maxSF) // Try to connect with the lower SF
+                    sf++;
+            }
+        }
+        // Update UF of the gateways
+        this._gateways.forEach(gw => {
+            gw.UF = 1 - arraySum(gw.availableSlots)/this._initialSlots;
+        });
     }
 
     disconnectEndDevices() { // Delete all connectons
@@ -184,6 +234,7 @@ export default class LoRaWANModel {
         this._gateways.forEach(gw => {
             gw.connectedTo = [];
             gw.UF = 0;
+            gw.availableSlots = getSlots(this._hyperperiod);
         });
     }
 
@@ -204,28 +255,26 @@ export default class LoRaWANModel {
         gw.UF = 0;
     }
 
-    refactorGW(mapDimensions, method = "random") { // Improve the allocation of the end devices
+    _randomizeGW() { // Try to improve the network coverage by setting a new random position for each gateway
         const originalCoverage = this.getNetworkCoverage();
         const originalGWPositions = this._gateways.map(gw => ({x: gw.x, y: gw.y}));
         this.disconnectEndDevices();
-        //if(method === "random"){
-            this._gateways.forEach(gw => {
-                const {x, y} = generateRandomPos(mapDimensions);
-                gw.x = x;
-                gw.y = y;
-            });
-        //}
+        this._gateways.forEach(gw => {
+            const {x, y} = generateRandomPos(this._mapSize);
+            gw.x = x;
+            gw.y = y;
+        });
         this.autoConnect();
         const newCoverage = this.getNetworkCoverage();
         if(newCoverage < originalCoverage) { // If the coverage did not improve, revert the changes
             this.disconnectEndDevices();
-            this._gateways.forEach((gw, i) => {
-                gw.x = originalGWPositions[i].x;
-                gw.y = originalGWPositions[i].y;
+            this._gateways.forEach((gw, idx) => {
+                gw.x = originalGWPositions[idx].x;
+                gw.y = originalGWPositions[idx].y;
             });
             this.autoConnect();
         }else{
-            console.log("Improvement step:", method, "New coverage:", newCoverage);
+            console.log("New coverage:", newCoverage);
         }
     }
 
@@ -233,9 +282,13 @@ export default class LoRaWANModel {
         return this._enddevices.filter(ed => ed.group === "ED").length / this._enddevices.length*100;
     }
 
-    getNetworkStats() {
+    getAverageUF() { // Average UF of the gateways
+        return arrayAvg(this._gateways.map(gw => gw.UF));
+    }
+
+    getNetworkStats() { // All stats of the network
         const stats = {
-            ufAvg: arrayAvg(this._gateways.map(gw => gw.UF)),
+            ufAvg: this.getAverageUF(),
             coverage: this.getNetworkCoverage()
         };
         return stats;
