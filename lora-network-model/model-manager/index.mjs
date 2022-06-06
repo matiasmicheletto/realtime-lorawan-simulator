@@ -1,4 +1,5 @@
 import { generateRandomPos } from "../tools/random.mjs";
+import { selectAttributes } from "../tools/structures.mjs";
 import LoRaWANModel from "../network-model/index.mjs";
 
 const defaultParameters = {
@@ -84,7 +85,7 @@ export default class Manager {
         this.onChange(this.getResults());
     }
 
-    importModel(data, format) {
+    importConfig(data, format) {
         console.log("Importing...", format);
         console.log(data);
         let params = null;
@@ -129,13 +130,40 @@ export default class Manager {
         switch(format) {
             case "json":
             {
-                const data = {}; // TODO
+                const data = {
+                    config: this.getAllParams(),
+                    nodes: this._model.getAllNodes()
+                };
                 return JSON.stringify(data);
             }
             case "csv":
             {
-                const data = [[]]; // TODO
-                return data.map(row => row.join(',')).join('\n');
+                const nodes = this._model.getAllNodes();
+                const header = [
+                    "ID",
+                    "Label",
+                    "Group",
+                    "Lat",
+                    "Long",
+                    "Period",
+                    "SF",
+                    "UF",
+                    "Channel",
+                    "Connected to"
+                ];
+                const data = nodes.map(n => [
+                    n.id,
+                    n.label,
+                    n.group,
+                    n.x,
+                    n.y,
+                    n.period,
+                    n.sf,
+                    n.UF,
+                    n.channel,
+                    n.connectedTo
+                ]);
+                return [header, ...data].map(row => row.join(',')).join('\n');
             }
             case "matlab":
                 return new Error("Not implemented yet. Use csv for now.");

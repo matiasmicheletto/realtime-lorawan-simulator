@@ -58,7 +58,7 @@ const ConfigForm = () => {
             readFile(e.target.files[0], format)
             .then(result => {
                 try{
-                    manager.importModel(result, format);
+                    manager.importConfig(result, format);
                     setInputs(manager.getAllParams());
                 }catch(e){
                     console.error(e);
@@ -88,7 +88,7 @@ const ConfigForm = () => {
         const { name, value } = e.target;
         console.log(name, value);
         manager.configure({ [name]: value });
-        if(["N", "mapWidth", "mapHeight", "posDistr", "initialGW"].includes(name)){ // Only update network for certain parameters
+        if(["N", "mapWidth", "mapHeight", "posDistr", "initialGW", "strategy", "schedulingBy"].includes(name)){ // Only update network for certain parameters
             manager.initialize();
         }
         setInputs(prev => ({ ...prev, [name]: value }));

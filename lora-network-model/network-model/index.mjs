@@ -12,7 +12,6 @@ import { arrayAvg, arraySum, selectAttributes } from "../tools/structures.mjs";
 
 // List of attributes for exporting nodes and links
 export const defaultNodeAttrs = ["id","label","group","x","y","period","sf","connectedTo","UF","channel"];
-export const defaultLinkAttrs = ["id","from","to"];
 
 const sfNames = ["NSF","SF7","SF8","SF9","SF10","SF11","SF12","NSF"];
 
@@ -217,6 +216,8 @@ export default class LoRaWANModel {
                 let sf = minSF; // Greedy method, starts from the min SF
                 while(!this.connectEndDeviceID(edId, sortedGateways[gwIdx].id, sf) && sf < maxSF) // Try to connect with the lower SF
                     sf++;
+                if(this._enddevices[edIdx].group === "ED") // If end device was connected, continue with the next end device
+                    break;
             }
         }
         // Update UF of the gateways
@@ -274,7 +275,7 @@ export default class LoRaWANModel {
             });
             this.autoConnect();
         }else{
-            console.log("New coverage:", newCoverage);
+            console.log("New coverage value:", newCoverage);
         }
     }
 
