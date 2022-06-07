@@ -20,7 +20,8 @@ The goal is to determine where to locate the gateways in order to achieve a full
 The javascript library allows to define the initial conditions and add or move gateways to test the resulting coverage. An heuristic method is provided to iteratively minimize the number of gateways and determine their optimal positions.
 
 
-![screenshot](doc/screenshot.png)
+![screenshots](doc/screenshot1.png)
+![screenshots](doc/screenshot2.png)
 
 # Getting started
 

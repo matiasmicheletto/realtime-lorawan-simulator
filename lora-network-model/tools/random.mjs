@@ -23,7 +23,6 @@ export const randomSelect = data => data[Math.floor(Math.random() * data.length)
 
 // Random position generator in x,y plane
 const clouds = Array.from({length: 5}, () => [uniformDist(), uniformDist()]);
-console.log("New clouds positions", clouds);
 export const generateRandomPos = (ranges = [100, 100], dist = "uniform") => {
     if(dist === "uniform")
         return {
@@ -55,5 +54,6 @@ export const generateRandomDistribution = (data, prob = [100]) => {
             dataDist = dataDist.concat(new Array(prob[i]).fill(data[i]));
         return dataDist;
     } else 
-        throw new Error("Wrong distribution");
+        //throw new Error("Wrong distribution");
+        return [];
 };

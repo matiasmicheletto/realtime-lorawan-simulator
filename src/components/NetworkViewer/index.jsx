@@ -37,9 +37,9 @@ const nodeGroups = {
 };
 
 const edgeColors = {
-    SF7: "rgb(150, 0, 0)",
-    SF8: "rgb(0, 150, 0)",
-    SF9: "rgb(0, 0, 150)",
+    SF7: "rgb(0, 0, 150)",
+    SF8: "rgb(150, 0, 0)",
+    SF9: "rgb(0, 150, 0)",
     SF10: "rgb(150, 150, 0)",
     SF11: "rgb(0, 150, 150)",
     SF12: "rgb(150, 0, 150)"

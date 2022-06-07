@@ -1,5 +1,4 @@
 import { generateRandomPos } from "../tools/random.mjs";
-import { selectAttributes } from "../tools/structures.mjs";
 import LoRaWANModel from "../network-model/index.mjs";
 
 const defaultParameters = {
@@ -18,8 +17,11 @@ const defaultParameters = {
 };
 
 export default class Manager {
-    constructor(params = defaultParameters) {
-        this.configure(params);
+    constructor(params) {
+        this.configure({
+            ...defaultParameters,
+            ...params
+        });
         this.status = "not-initialized";
         this._model = null;
         this.onChange = console.log;
@@ -178,8 +180,14 @@ export default class Manager {
             
             this._simulationStep++;
             
-            if(this._simulationStep % this.updateRate === 0) 
-                this.onChange(this.getResults());
+            if(this._simulationStep % this.updateRate === 0){ 
+                const res = this.getResults();
+                if(res.coverage === 100){
+                    this.status = "ready";
+                    this.exitCondition = "reached max. coverage";
+                }
+                this.onChange(res);
+            }
             if((Date.now() - this._startTime)/1000 > this.maxRuntime){
                 this.status = "ready";
                 this.exitCondition = "timeout";
@@ -192,7 +200,7 @@ export default class Manager {
                 this._run();
             else{
                 this.onChange(this.getResults());
-                this._returnResults(this.getResults());
+                this._returnResults(this.getResults()); // To call for resolve
             }
         }, 1);
     }

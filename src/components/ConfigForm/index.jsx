@@ -31,7 +31,7 @@ const ConfigForm = () => {
     const fileInputRef = useRef(null);
     const [format, setFormat] = useState("csv");
 
-    const { setLoading } = useContext(LoadingContext);
+    const { loading, setLoading } = useContext(LoadingContext);
 
     const [inputs, setInputs] = useState(manager.getAllParams());
     const {
@@ -85,21 +85,25 @@ const ConfigForm = () => {
     };
 
     const handleInputChange = e => {
-        const { name, value } = e.target;
-        console.log(name, value);
-        manager.configure({ [name]: value });
-        if(["N", "mapWidth", "mapHeight", "posDistr", "initialGW", "strategy", "schedulingBy"].includes(name)){ // Only update network for certain parameters
-            manager.initialize();
+        if(!loading){
+            const { name, value } = e.target;
+            console.log(name, value);
+            manager.configure({ [name]: value });
+            if(["N", "mapWidth", "mapHeight", "posDistr", "initialGW", "strategy", "schedulingBy", "periodsDistr"].includes(name)){ // Only update network for certain parameters
+                manager.initialize();
+            }
+            setInputs(prev => ({ ...prev, [name]: value }));
         }
-        setInputs(prev => ({ ...prev, [name]: value }));
-    }
+    };
 
     const runSimulation = () => {
-        setLoading(true);
-        manager.start().then(results => {
-            setLoading(false);
-            console.log(results);
-        });
+        if(!loading){
+            setLoading(true);
+            manager.start().then(results => {
+                setLoading(false);
+                console.log(results);
+            });
+        }
     };
 
     return (        
