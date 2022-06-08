@@ -13,7 +13,7 @@ const defaultParameters = {
     schedulingBy: "ed", // Schedule by GW or by ED
     maxIter: 100, // Max iterations to run
     maxRuntime: 60, // Seconds 
-    addGWAfter: 50, // After how many iterations should a new GW be added
+    addGWAfter: 25, // After how many iterations with cov < 80% should a new GW be added
     updateRate: 10, // How often should the model status be updated
 };
 
@@ -188,11 +188,15 @@ export default class Manager {
                 //console.log("Max coverage reached, removing GW");
                 this._suboptimalSteps = 0;
                 this._model.disconnectGateway(0, true);
+                this._model.autoConnect();
             }else{
-                this._suboptimalSteps++;
-                if(this._suboptimalSteps === this.addGWAfter){
-                    this._suboptimalSteps = 0;
-                    this._model.addGateway(generateRandomPos([this.mapWidth, this.mapHeight]));
+                if(res.coverage < 80) {
+                    this._suboptimalSteps++;
+                    if(this._suboptimalSteps === this.addGWAfter){
+                        this._suboptimalSteps = 0;
+                        this._model.addGateway(generateRandomPos([this.mapWidth, this.mapHeight]));
+                        this._model.autoConnect();
+                    }
                 }
             }
 
