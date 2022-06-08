@@ -2,18 +2,19 @@ import { generateRandomPos } from "../tools/random.mjs";
 import LoRaWANModel from "../network-model/index.mjs";
 
 const defaultParameters = {
-    N: 6500,
-    H: 3600,
+    N: 5000, // Number of EDs
+    H: 3600, // Hyperperiod of the system
     mapWidth: 1000, 
     mapHeight: 1000,
-    posDistr: "uniform",
+    posDistr: "uniform", // Distribution of EDs in map
     periodsDistr: "97, 1, 0, 2", // 97% -> 3600, 1% -> 1800, 0% -> 1200, 2% -> 900
-    initialGW: 4,
-    strategy: "random",
-    schedulingBy: "gw",
-    maxIter: 50,
-    maxRuntime: 60,
-    updateRate: 10
+    initialGW: 4, // Number of GW to begin with
+    strategy: "random", // Strategy for moving gateways positions
+    schedulingBy: "ed", // Schedule by GW or by ED
+    maxIter: 100, // Max iterations to run
+    maxRuntime: 60, // Seconds 
+    addGWAfter: 50, // After how many iterations should a new GW be added
+    updateRate: 10, // How often should the model status be updated
 };
 
 export default class Manager {
@@ -48,6 +49,7 @@ export default class Manager {
             schedulingBy: this.schedulingBy,
             maxIter: this.maxIter,
             maxRuntime: this.maxRuntime,
+            addGWAfter: this.addGWAfter,
             updateRate: this.updateRate
         };
     }
@@ -60,6 +62,7 @@ export default class Manager {
         ...this._model.getNetworkStats(),
         status: this.status,
         iteration: this._simulationStep,
+        suboptimalSteps: this._suboptimalSteps,
         exitCondition: this.exitCondition,
         elapsed: Date.now() - this._startTime
     });
@@ -83,6 +86,7 @@ export default class Manager {
         this._model.autoConnect();
 
         this._simulationStep = 0;
+        this._suboptimalSteps = 0;
         this.status = "ready";
         this.onChange(this.getResults());
     }
@@ -109,9 +113,10 @@ export default class Manager {
                         strategy: data[7],
                         schedulingBy: data[8],
                         maxIter: data[9],
-                        maxRuntime: data[10],
-                        updateRate: data[11]
-                    };
+                        addGWAfter: data[10],
+                        maxRuntime: data[11],
+                        updateRate: data[12]
+                    }
                 }
                 break;
             }
@@ -178,16 +183,23 @@ export default class Manager {
         setTimeout(() => {
             this._model.refactorStep();
             
-            this._simulationStep++;
-            
-            if(this._simulationStep % this.updateRate === 0){ 
-                const res = this.getResults();
-                if(res.coverage === 100){
-                    this.status = "ready";
-                    this.exitCondition = "reached max. coverage";
+            const res = this.getResults();
+            if(res.coverage === 100 && this._model._gateways.length > 1) {
+                //console.log("Max coverage reached, removing GW");
+                this._suboptimalSteps = 0;
+                this._model.disconnectGateway(0, true);
+            }else{
+                this._suboptimalSteps++;
+                if(this._suboptimalSteps === this.addGWAfter){
+                    this._suboptimalSteps = 0;
+                    this._model.addGateway(generateRandomPos([this.mapWidth, this.mapHeight]));
                 }
-                this.onChange(res);
             }
+
+            this._simulationStep++;
+            if(this._simulationStep % this.updateRate === 0)
+                this.onChange(res);
+            
             if((Date.now() - this._startTime)/1000 > this.maxRuntime){
                 this.status = "ready";
                 this.exitCondition = "timeout";
@@ -199,7 +211,7 @@ export default class Manager {
             if(this.status === "running") 
                 this._run();
             else{
-                this.onChange(this.getResults());
+                this.onChange(res);
                 this._returnResults(this.getResults()); // To call for resolve
             }
         }, 1);
@@ -213,6 +225,7 @@ export default class Manager {
             this._startTime = Date.now();
             this._returnResults = resolve;
             this._simulationStep = 0;
+            this._suboptimalSteps = 0;
             this._run();
         });
     }

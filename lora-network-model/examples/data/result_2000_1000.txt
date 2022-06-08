@@ -1,0 +1,2 @@
+mapSize,nED,ufAvg,coverage,gwNum,status,iteration,suboptimalSteps,exitCondition,elapsed
+2000,1000,0.075626102292769,53.6,1,ready,501,7,iterations completed,4338

@@ -45,6 +45,7 @@ const ConfigForm = () => {
         strategy,
         schedulingBy,
         maxIter,
+        addGWAfter,
         maxRuntime,
         updateRate
     } = inputs;
@@ -148,7 +149,7 @@ const ConfigForm = () => {
                     </Grid>
                 </Grid>
                 <Grid container spacing={2} style={{marginTop:"10px"}}>
-                    <Grid item xs={6}>
+                    <Grid item xs={12} md={6}>
                         <TextField
                             style={{width: "100%"}}
                             value={N}
@@ -160,7 +161,7 @@ const ConfigForm = () => {
                             onChange={handleInputChange}
                             inputProps={{min:1,max:15000}}/>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={12} md={6}>
                         <TextField
                             style={{width: "100%"}} 
                             value={H}
@@ -174,7 +175,7 @@ const ConfigForm = () => {
                     </Grid>
                 </Grid>
                 <Grid container spacing={2} style={{marginTop:"10px"}}>
-                    <Grid item xs={6}>
+                    <Grid item xs={12} md={6}>
                         <TextField
                             style={{width: "100%"}}
                             value={mapWidth}
@@ -186,7 +187,7 @@ const ConfigForm = () => {
                             onChange={handleInputChange}
                             inputProps={{min:1,max:10000}}/>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={12} md={6}>
                         <TextField
                             style={{width: "100%"}} 
                             value={mapHeight}
@@ -198,9 +199,7 @@ const ConfigForm = () => {
                             onChange={handleInputChange}
                             inputProps={{min:1,max:10000}}/>
                     </Grid>
-                </Grid>
-                <Grid container spacing={2} style={{marginTop:"10px"}}>
-                    <Grid item xs={6}>
+                    <Grid item xs={12} md={6}>
                         <FormControl fullWidth>
                             <InputLabel id="dist-select-label">End devices dist.</InputLabel>
                             <Select                        
@@ -215,7 +214,7 @@ const ConfigForm = () => {
                             </Select>
                         </FormControl>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={12} md={6}>
                         <TextField
                             style={{width: "100%"}}
                             value={periodsDistr}
@@ -227,7 +226,7 @@ const ConfigForm = () => {
                     </Grid>
                 </Grid>
                 <Grid container spacing={2} style={{marginTop:"10px"}}>
-                    <Grid item xs={4}>
+                    <Grid item xs={12} md={4} lg={3}>
                         <TextField
                             style={{width: "100%"}} 
                             value={initialGW}
@@ -238,7 +237,7 @@ const ConfigForm = () => {
                             onChange={handleInputChange}
                             inputProps={{min:1,max:16}}/>
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={12} md={4} lg={3}>
                         <FormControl fullWidth>
                             <InputLabel id="strat-select-label">Gateway positioning strategy</InputLabel>
                             <Select                        
@@ -252,7 +251,23 @@ const ConfigForm = () => {
                             </Select>
                         </FormControl>
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={12} md={4} lg={3}>
+                        <FormControl fullWidth>
+                            <InputLabel id="addgw-select-label">Add GW on low cov.</InputLabel>
+                            <Select                        
+                                labelId="addgw-select-label"
+                                value={addGWAfter}
+                                label="Add GW on low cov."
+                                name="addGWAfter"
+                                onChange={handleInputChange}>
+                                <MenuItem value={25}>after 25 iterations</MenuItem>
+                                <MenuItem value={50}>after 50 iterations</MenuItem>
+                                <MenuItem value={100}>after 100 iterations</MenuItem>
+                                <MenuItem value={1000}>after 100 iterations</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={12} md={4} lg={3}>
                         <FormControl fullWidth>
                             <InputLabel id="strat-select-label">Scheduling method</InputLabel>
                             <Select                        

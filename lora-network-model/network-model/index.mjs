@@ -239,7 +239,7 @@ export default class LoRaWANModel {
         });
     }
 
-    disconnectGateway(gwIdx) { 
+    disconnectGateway(gwIdx, remove = false) { 
         // Delete all connections of a single gateway. Disconnected end devices
         // are not automatically connected to another gateway, unless autoConnect
         // method is called after removing the current gateway.
@@ -254,6 +254,9 @@ export default class LoRaWANModel {
         });
         gw.connectedTo = [];
         gw.UF = 0;
+        this._availableChannels.push(gw.channel)
+        if(remove)
+            this._gateways.splice(gwIdx, 1);
     }
 
     _randomizeGW() { // Try to improve the network coverage by setting a new random position for each gateway
@@ -290,7 +293,9 @@ export default class LoRaWANModel {
     getNetworkStats() { // All stats of the network
         const stats = {
             ufAvg: this.getAverageUF(),
-            coverage: this.getNetworkCoverage()
+            coverage: this.getNetworkCoverage(),
+            //edNum: this._enddevices.length,
+            gwNum: this._gateways.length
         };
         return stats;
     }

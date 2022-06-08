@@ -20,3 +20,17 @@ export const memoize = fn => {
         }
     }
 };
+
+export const objToText = obj => {
+    let text = "";
+    for (let key in obj) {
+        text += `${key},${obj[key]}\n`;
+    }
+    return text;
+}
+
+export const objArrToCsv = arr => {
+    const header = Object.keys(arr[0]);
+    const data = arr.map(el => Object.values(el));
+    return [header, ...data].map(row => row.join(',')).join('\n');
+}
