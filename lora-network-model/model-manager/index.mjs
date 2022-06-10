@@ -187,8 +187,9 @@ export default class Manager {
     _run() { // Single simulation step (async for updating GUI)
         setTimeout(() => {
             this._model.refactorStep();
-            
             const res = this.getResults();
+
+            // Adaptive GW number model
             if(this.adaptiveGWNumber && res.coverage === 100 && this._model._gateways.length > 1) {
                 console.log("Max coverage reached, removing GW");
                 this._suboptimalSteps = 0;
@@ -205,18 +206,26 @@ export default class Manager {
                 }
             }
 
+            // Exit conditions
             this._simulationStep++;
-            if(this._simulationStep % this.updateRate === 0)
-                this.onChange(res);
+            if(this._simulationStep > this.maxIter){
+                this.status = "ready";
+                this.exitCondition = "iterations completed";
+            }else{
+                if(this._simulationStep % this.updateRate === 0)
+                    this.onChange(res);
+            }
             
+            if(res.coverage === 100 && this.strategy === "spring") {
+                this.status = "ready";
+                this.exitCondition = "Max. coverage reached";
+            }
+
             if((Date.now() - this._startTime)/1000 > this.maxRuntime){
                 this.status = "ready";
                 this.exitCondition = "timeout";
             }
-            if(this._simulationStep > this.maxIter){
-                this.status = "ready";
-                this.exitCondition = "iterations completed";
-            }
+            
             if(this.status === "running") 
                 this._run();
             else{

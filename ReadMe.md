@@ -23,6 +23,12 @@ The javascript library allows to define the initial conditions and add or move g
 ![screenshots](doc/screenshot1.png)
 ![screenshots](doc/screenshot2.png)
 
+### Adaptive model
+This strategy allows to minimize the number of Gateways to reach a 100% coverage of the end devices. The model consist on moving the gateways as if they were attracted to not connected end devices.
+
+![screenshots](doc/ScreenCapture.gif)
+
+
 # Getting started
 
 ## Installation

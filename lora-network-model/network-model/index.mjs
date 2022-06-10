@@ -282,7 +282,7 @@ export default class LoRaWANModel {
             });
             this.autoConnect();
         }
-        this._covDiff = originalCoverage - newCoverage;
+        this._covDiff = newCoverage - originalCoverage;
         //console.log("Coverage difference:", this._covDiff);
     }
 
@@ -310,7 +310,7 @@ export default class LoRaWANModel {
         });
         this.autoConnect();
         const newCoverage = this.getNetworkCoverage();
-        this._covDiff = originalCoverage - newCoverage;
+        this._covDiff = newCoverage - originalCoverage;
         //console.log("Coverage difference:", this._covDiff);
     }
 
