@@ -140,6 +140,7 @@ const ConfigForm = () => {
                             <Select                        
                                 value={format}
                                 label="Format"
+                                size="small"
                                 onChange={handleFormatChange}>
                                 <MenuItem value="csv">CSV</MenuItem>
                                 <MenuItem value="json">JSON</MenuItem>
@@ -148,8 +149,9 @@ const ConfigForm = () => {
                         </FormControl>
                     </Grid>
                 </Grid>
+
                 <Grid container spacing={2} style={{marginTop:"10px"}}>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} md={6} lg={3}>
                         <TextField
                             style={{width: "100%"}}
                             value={N}
@@ -161,21 +163,7 @@ const ConfigForm = () => {
                             onChange={handleInputChange}
                             inputProps={{min:1,max:15000}}/>
                     </Grid>
-                    <Grid item xs={12} md={6}>
-                        <TextField
-                            style={{width: "100%"}} 
-                            value={H}
-                            variant="outlined"
-                            type="number"
-                            size="small"
-                            label="System hyperperiod"
-                            name="H"
-                            onChange={handleInputChange}
-                            inputProps={{min:1, max:10000}}/>
-                    </Grid>
-                </Grid>
-                <Grid container spacing={2} style={{marginTop:"10px"}}>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} md={6} lg={3}>
                         <TextField
                             style={{width: "100%"}}
                             value={mapWidth}
@@ -187,7 +175,7 @@ const ConfigForm = () => {
                             onChange={handleInputChange}
                             inputProps={{min:1,max:10000}}/>
                     </Grid>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} md={6} lg={3}>
                         <TextField
                             style={{width: "100%"}} 
                             value={mapHeight}
@@ -199,13 +187,14 @@ const ConfigForm = () => {
                             onChange={handleInputChange}
                             inputProps={{min:1,max:10000}}/>
                     </Grid>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} md={6} lg={3}>
                         <FormControl fullWidth>
                             <InputLabel id="dist-select-label">End devices dist.</InputLabel>
                             <Select                        
                                 labelId="dist-select-label"
                                 value={posDistr}
                                 name="posDistr"
+                                size="small"
                                 onChange={handleInputChange}
                                 label="End device dist.">
                                 <MenuItem value="uniform">Uniform</MenuItem>
@@ -213,6 +202,21 @@ const ConfigForm = () => {
                                 <MenuItem value="clouds">Clouds</MenuItem>
                             </Select>
                         </FormControl>
+                    </Grid>    
+                </Grid>
+
+                <Grid container spacing={2} style={{marginTop:"10px"}}>                    
+                    <Grid item xs={12} md={6}>
+                        <TextField
+                            style={{width: "100%"}} 
+                            value={H}
+                            variant="outlined"
+                            type="number"
+                            label="System hyperperiod"
+                            name="H"
+                            size="small"
+                            onChange={handleInputChange}
+                            inputProps={{min:1, max:10000}}/>
                     </Grid>
                     <Grid item xs={12} md={6}>
                         <TextField
@@ -222,11 +226,12 @@ const ConfigForm = () => {
                             type="text"
                             label="Period distribution"
                             name="periodsDistr"
+                            size="small"
                             onChange={handleInputChange}/>
                     </Grid>
                 </Grid>
                 <Grid container spacing={2} style={{marginTop:"10px"}}>
-                    <Grid item xs={12} md={4} lg={3}>
+                    <Grid item xs={12} md={6} lg={3}>
                         <TextField
                             style={{width: "100%"}} 
                             value={initialGW}
@@ -234,10 +239,11 @@ const ConfigForm = () => {
                             type="number"
                             label="Initial gateway number"
                             name="initialGW"
+                            size="small"
                             onChange={handleInputChange}
                             inputProps={{min:1,max:16}}/>
                     </Grid>
-                    <Grid item xs={12} md={4} lg={3}>
+                    <Grid item xs={12} md={6} lg={3}>
                         <FormControl fullWidth>
                             <InputLabel id="strat-select-label">Gateway positioning strategy</InputLabel>
                             <Select                        
@@ -245,13 +251,14 @@ const ConfigForm = () => {
                                 value={strategy}
                                 label="Gateway positioning strategy"
                                 name="strategy"
+                                size="small"
                                 onChange={handleInputChange}>
                                 <MenuItem value="random">Random</MenuItem>
-                                <MenuItem value="strings">Springs</MenuItem>
+                                <MenuItem value="spring">Springs</MenuItem>
                             </Select>
                         </FormControl>
                     </Grid>
-                    <Grid item xs={12} md={4} lg={3}>
+                    <Grid item xs={12} md={6} lg={3}>
                         <FormControl fullWidth>
                             <InputLabel id="addgw-select-label">Add GW on low cov.</InputLabel>
                             <Select                        
@@ -259,7 +266,9 @@ const ConfigForm = () => {
                                 value={addGWAfter}
                                 label="Add GW on low cov."
                                 name="addGWAfter"
+                                size="small"
                                 onChange={handleInputChange}>
+                                    <MenuItem value={10}>after 10 iterations</MenuItem>
                                 <MenuItem value={25}>after 25 iterations</MenuItem>
                                 <MenuItem value={50}>after 50 iterations</MenuItem>
                                 <MenuItem value={100}>after 100 iterations</MenuItem>
@@ -267,7 +276,7 @@ const ConfigForm = () => {
                             </Select>
                         </FormControl>
                     </Grid>
-                    <Grid item xs={12} md={4} lg={3}>
+                    <Grid item xs={12} md={6} lg={3}>
                         <FormControl fullWidth>
                             <InputLabel id="strat-select-label">Scheduling method</InputLabel>
                             <Select                        
@@ -275,6 +284,7 @@ const ConfigForm = () => {
                                 value={schedulingBy}
                                 label="Scheduling method"
                                 name="schedulingBy"
+                                size="small"
                                 onChange={handleInputChange}>
                                 <MenuItem value="gw">By gateway</MenuItem>
                                 <MenuItem value="ed">By end device</MenuItem>
@@ -291,6 +301,7 @@ const ConfigForm = () => {
                             type="number"
                             label="Max. iterations"
                             name="maxIter"
+                            size="small"
                             onChange={handleInputChange}
                             inputProps={{min:1,max:1000}}/>
                     </Grid>
@@ -302,17 +313,19 @@ const ConfigForm = () => {
                             type="number"
                             label="Max. execution time (s)"
                             name="maxRuntime"
+                            size="small"
                             onChange={handleInputChange}
                             inputProps={{min:10,max:300}}/>
                     </Grid>
                     <Grid item xs={4}>
                         <FormControl fullWidth>
-                            <InputLabel id="vis-select-label">Update chart</InputLabel>
+                            <InputLabel id="vis-select-label">Update GUI</InputLabel>
                             <Select                        
                                 labelId="vis-select-label"
                                 value={updateRate}
-                                label="Update chart"
+                                label="Update GUI"
                                 name="updateRate"
+                                size="small"
                                 onChange={handleInputChange}>
                                 <MenuItem value={1}>after each iteration</MenuItem>
                                 <MenuItem value={10}>after 10 iterations</MenuItem>

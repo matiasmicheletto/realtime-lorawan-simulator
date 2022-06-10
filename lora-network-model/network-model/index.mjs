@@ -5,8 +5,8 @@ import {
     uniformDist, 
     generateRandomString
 } from '../tools/random.mjs';
-import { getAllDivisors, lcm } from '../tools/integers.mjs';
-import { sortByClosest } from "../tools/geometry.mjs";
+import { getAllDivisors, clamp } from '../tools/integers.mjs';
+import { getClosest, sortByClosest } from "../tools/geometry.mjs";
 import { arrayAvg, arraySum, selectAttributes } from "../tools/structures.mjs";
 
 
@@ -81,6 +81,8 @@ export default class LoRaWANModel {
         // Set default strategies
         this.setAutoConnectMethod("gw");
         this.setRefactorStepMethod("random");
+
+        this._covDiff = 0; // Coverage difference on gw positions refactoring
     }
 
     get edNumber() {
@@ -129,6 +131,8 @@ export default class LoRaWANModel {
     setRefactorStepMethod(method) {
         if(method === "random")
             this.refactorStep = this._randomizeGW;
+        if(method === "spring")
+            this.refactorStep = this._springLayout;
     }
 
     moveGatewayIdx(gwIdx, pos) {
@@ -277,9 +281,37 @@ export default class LoRaWANModel {
                 gw.y = originalGWPositions[idx].y;
             });
             this.autoConnect();
-        }else{
-            console.log("New coverage value:", newCoverage);
         }
+        this._covDiff = originalCoverage - newCoverage;
+        //console.log("Coverage difference:", this._covDiff);
+    }
+
+    _springLayout() { // Try to improve the network coverage by setting a new random position for each gateway
+        const originalCoverage = this.getNetworkCoverage();
+        const forces = [];
+        const nced = this._enddevices.filter(ed => ed.group === "NCED");
+        const N = nced.length;
+        for(let i = 0; i < nced.length; i++) {
+            const closest = getClosest(nced[i], this._gateways);
+            const gw = this._gateways[closest.idx];
+            forces.push({
+                gwId: gw.id,
+                x: (nced[i].x - gw.x)/N,
+                y: (nced[i].y - gw.y)/N
+            });
+        }
+        this.disconnectEndDevices();
+        this._gateways.forEach(gw => {
+            const gwForces = forces.filter(f => f.gwId === gw.id);
+            const xForce = arraySum(gwForces.map(f => f.x));
+            const yForce = arraySum(gwForces.map(f => f.y));
+            gw.x += clamp(xForce, -100, 100);
+            gw.y += clamp(yForce, -100, 100);
+        });
+        this.autoConnect();
+        const newCoverage = this.getNetworkCoverage();
+        this._covDiff = originalCoverage - newCoverage;
+        //console.log("Coverage difference:", this._covDiff);
     }
 
     getNetworkCoverage() { // Percentage of end devices connected to gateways
@@ -294,6 +326,7 @@ export default class LoRaWANModel {
         const stats = {
             ufAvg: this.getAverageUF(),
             coverage: this.getNetworkCoverage(),
+            coverageDiff: this._covDiff,
             //edNum: this._enddevices.length,
             gwNum: this._gateways.length
         };

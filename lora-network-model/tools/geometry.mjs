@@ -3,7 +3,7 @@ const euclideanDistance = (p1, p2) => Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.
 export const getClosest = (target, positions) => {
     // Returns the closest element to target from positions
     const closest = {
-        dist: Number.MAX_SAFE_INTEGER,
+        dist: Infinity,
         idx: -1
     };
     for(let i = 0; i < positions.length; i++) {

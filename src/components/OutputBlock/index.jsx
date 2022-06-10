@@ -26,6 +26,7 @@ const OutputBlock = () => {
         elapsed,
         ufAvg,
         coverage,
+        coverageDiff,
         gwNum,
     } = model;
     
@@ -55,7 +56,10 @@ const OutputBlock = () => {
                     <span><b>Network coverage: </b></span> <span>{coverage?.toFixed(2)} %</span>
                 </Grid>
                 <Grid item xs={4}>
-                    <span><b>Steps with cov. &#60; 100%: </b></span> <span>{suboptimalSteps}</span>
+                    <span><b>Coverage improvement: </b></span> <span>{coverageDiff?.toFixed(2)} %</span>
+                </Grid>
+                <Grid item xs={4}>
+                    <span><b>Steps with cov. &#60; 80%: </b></span> <span>{suboptimalSteps}</span>
                 </Grid>
             </Grid>
         </div>

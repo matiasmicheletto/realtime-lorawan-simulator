@@ -2,14 +2,16 @@ import { generateRandomPos } from "../tools/random.mjs";
 import LoRaWANModel from "../network-model/index.mjs";
 
 const defaultParameters = {
-    N: 5000, // Number of EDs
+    N: 6500, // Number of EDs
     H: 3600, // Hyperperiod of the system
     mapWidth: 1000, 
     mapHeight: 1000,
     posDistr: "uniform", // Distribution of EDs in map
     periodsDistr: "97, 1, 0, 2", // 97% -> 3600, 1% -> 1800, 0% -> 1200, 2% -> 900
-    initialGW: 4, // Number of GW to begin with
-    strategy: "random", // Strategy for moving gateways positions
+    initialGW: 1, // Number of GW to begin with
+    adaptiveGWNumber: false, // Remove GW if coverage is 100%
+    minCoverage: 100, // Minimum coverage to add GW
+    strategy: "spring", // Strategy for moving gateways positions
     schedulingBy: "ed", // Schedule by GW or by ED
     maxIter: 100, // Max iterations to run
     maxRuntime: 60, // Seconds 
@@ -45,6 +47,8 @@ export default class Manager {
             posDistr: this.posDistr,
             periodsDistr: this.periodsDistr,
             initialGW: this.initialGW,
+            adaptiveGWNumber: this.adaptiveGWNumber,
+            minCoverage: this.minCoverage,
             strategy: this.strategy,
             schedulingBy: this.schedulingBy,
             maxIter: this.maxIter,
@@ -110,12 +114,13 @@ export default class Manager {
                         posDistr: data[4],
                         periodsDistr: data[5],
                         initialGW: data[6],
-                        strategy: data[7],
-                        schedulingBy: data[8],
-                        maxIter: data[9],
-                        addGWAfter: data[10],
-                        maxRuntime: data[11],
-                        updateRate: data[12]
+                        adaptiveGWNumber: data[7],
+                        strategy: data[8],
+                        schedulingBy: data[9],
+                        maxIter: data[10],
+                        addGWAfter: data[11],
+                        maxRuntime: data[12],
+                        updateRate: data[13]
                     }
                 }
                 break;
@@ -184,13 +189,13 @@ export default class Manager {
             this._model.refactorStep();
             
             const res = this.getResults();
-            if(res.coverage === 100 && this._model._gateways.length > 1) {
-                //console.log("Max coverage reached, removing GW");
+            if(this.adaptiveGWNumber && res.coverage === 100 && this._model._gateways.length > 1) {
+                console.log("Max coverage reached, removing GW");
                 this._suboptimalSteps = 0;
                 this._model.disconnectGateway(0, true);
                 this._model.autoConnect();
             }else{
-                if(res.coverage < 80) {
+                if(res.coverage < this.minCoverage) {
                     this._suboptimalSteps++;
                     if(this._suboptimalSteps === this.addGWAfter){
                         this._suboptimalSteps = 0;
