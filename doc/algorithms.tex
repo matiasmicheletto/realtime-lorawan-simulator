@@ -1,0 +1,44 @@
+\begin{algorithm}[hbt]
+    \KwIn{$NCED$ (not connected end devices) and $GW$ (gateways)}
+	\KwOut{$ED$ (connected end devices) and $NCED$ (not connected end devices)} 
+    \Begin{
+	    \For{each $ed$ in $NCED$}{
+            \For{each $gw$ in sortedByClosest($GW$, $ed$)}{
+                $SF_{min} \gets $getMinSF(distance($gw$, $ed$))\;
+                $SF_{max} \gets $getMaxSF($ed_{period}$)\;
+                $sf \gets SF_{min}$ \;
+                \While{$sf < SF_{max}$ and availableSlots($gw$, $sf$)$ == 0$}{
+                    $sf \gets $getNextSF($sf$)\;
+                }
+                \If{$sf < SF_{max}$}{
+                    connect($ed$, $gw$, $sf$)\;
+                    break \;
+                }
+            }
+        }
+    }
+	\caption{Connect end devices to gateways algorithm}
+	\label{alg:autoconnect}
+\end{algorithm}
+
+
+\begin{algorithm}[hbt]
+    \KwIn{$NCED$ (not connected end devices) and $GW$ (gateways)}
+	\KwOut{$GW$ (gateways with improved positions)} 
+	\Begin{
+	    $N \gets $countElements($NCED$)\;
+    	\For{each $ed_j$ in $NCED$}{
+            $gw_i \gets $getClosestGateway($ed$, $GW$)\;
+            $F_i_x \gets F_i_x + \frac{\left(ed_j_x - gw_i_x\right)}{N}$\;
+            $F_i_y \gets F_i_y + \frac{\left(ed_j_y - gw_i_y\right)}{N}$\;
+        }
+        \For{each $gw_i$ in $GW$}{
+            $gw_i_x \gets gw_i_x + $clamp($F_i_x$)\;
+            $gw_i_y \gets gw_i_y + $clamp($F_i_y$)\;
+        }
+        updateLinks()\;
+        \Return{($GW$)}
+    }
+	\caption{Gateway self positioning algorithm}
+	\label{alg:spring}
+\end{algorithm}

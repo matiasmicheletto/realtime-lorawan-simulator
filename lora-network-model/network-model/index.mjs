@@ -171,7 +171,7 @@ export default class LoRaWANModel {
             this._enddevices[edIdx].sf = sfNames[sf];
             this._enddevices[edIdx].group = "ED"; // Update group to connected ED
             this._gateways[gwIdx].connectedTo.push(this._enddevices[edIdx].id);
-            this._gateways[gwIdx].availableSlots[sf] -= 1;
+            this._gateways[gwIdx].availableSlots[sf] -= 1; // -= this._hyperperiod / this._enddevices[edIdx].period;
             return true; // Result of connection
         }else{
             //console.log("Cannot connect to gateway", edIdx, gwIdx, sf);
