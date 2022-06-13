@@ -2,7 +2,14 @@
 #define TOOLS_H
 
 // Greatest common divisor
-inline int gcd(int a, int b);
+inline int gcd(int a, int b) {    
+    return b == 0 ? a : gcd(b, a % b);
+}
+
+// Least common multiple
+inline int lcm(int a, int b){
+    return a * b / gcd(a, b);
+}
 
 // Select a random element from array
 template <typename T> T randomSelect(const T *array, const int size);
@@ -18,6 +25,6 @@ template <typename T> T randomSelect(const T *array, const double *prob, const i
 double uniformDist();
 
 // Normal distribution generator
-double normalDist(const double mean, const double stdDev);
+double normalDist(const double mean = 0, const double stdDev = 0.2);
 
 #endif

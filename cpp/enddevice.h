@@ -1,17 +1,27 @@
 #ifndef ENDDEVICE_H
 #define ENDDEVICE_H
 
+class Gateway; // Forward declaration
+
 #include "node.h"
 #include "gateway.h"
 
 class EndDevice : public Node {
     private:
-        int period;
+        unsigned int period;
+        unsigned char sf;
+        Gateway *gw;
         
     public: 
-        EndDevice(int x, int y, int period);
+        EndDevice(double x, double y, unsigned int id, unsigned int period);
         ~EndDevice();
-        void connectTo(Gateway *gw);
+
+        void connect(Gateway *gw, unsigned char sf);
+        void disconnect();
+
+        inline unsigned int getPeriod() { return this->period; };
+        inline bool isConnected() { return this->gw != NULL; };
+        inline unsigned char getSF() { return this->sf; };
 };
 
 #endif

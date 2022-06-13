@@ -1,14 +1,15 @@
 #include "node.h"
 
-Node::Node(int x, int y) {
+Node::Node(double x, double y, unsigned int id) {
     this->x = x;
     this->y = y;
+    this->id = id;
 };
 
 Node::~Node() {
 };
 
-void Node::moveTo(int x, int y) {
+void Node::moveTo(double x, double y) {
     this->x = x;
     this->y = y;
 };

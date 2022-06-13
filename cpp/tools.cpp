@@ -2,10 +2,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-inline int gcd(int a, int b) {    
-    return b == 0 ? a : gcd(b, a % b);
-}
-
 template <typename T> T randomSelect(const T *array, const int size) {
     return array[rand() % size];
 }
@@ -25,7 +21,7 @@ double uniformDist() {
     return (double)rand() / (double)RAND_MAX - 0.5;
 }
 
-double normalDist(const double mean = 0, const double stdDev = 0.2) {
+double normalDist(const double mean, const double stdDev) {
     double u1 = uniformDist();
     double u2 = uniformDist();
     double randStdNormal = sqrt(-2.0 * log(u1)) * cos(2.0 * M_PI * u2);

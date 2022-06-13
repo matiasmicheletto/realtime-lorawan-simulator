@@ -5,13 +5,17 @@
 
 class Node {
     private:
-        int x;
-        int y;
+        unsigned int id;
+        double x;
+        double y;
     public:
-        Node(int x, int y);
+        Node(double x, double y, unsigned int id);
         ~Node();
-        void moveTo(int x, int y);
+        
+        void moveTo(double x, double y);
         double distanceTo(Node *node);
+
+        inline unsigned int getId() { return this->id; };
 };
 
 #endif
