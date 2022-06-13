@@ -16,6 +16,8 @@ class Node {
         double distanceTo(Node *node);
 
         inline unsigned int getId() { return this->id; };
+        inline double getX() { return this->x; };
+        inline double getY() { return this->y; };
 };
 
 #endif

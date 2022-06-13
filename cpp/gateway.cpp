@@ -1,9 +1,13 @@
 #include "gateway.h"
 
-Gateway::Gateway(double x, double y, unsigned int id, unsigned int hyperperiod) : Node(x, y, id) {
+Gateway::Gateway(
+        double x, 
+        double y, 
+        unsigned int id, 
+        unsigned int hyperperiod,
+        unsigned char channel) : Node(x, y, id) {
     this->H = hyperperiod;
-    for (int i = 0; i < 16; i++)
-        this->availableChannels[i] = true;
+    this->channel = channel;
     this->resetSlots();
 }
 
@@ -68,7 +72,7 @@ unsigned char Gateway::getMaxSF(unsigned int period) {
         return 0;
 }
 
-bool Gateway::connectTo(EndDevice *ed) {
+bool Gateway::addEndDevice(EndDevice *ed) {
     if (!ed->isConnected()) { // End device can only be connected to a single GW
         // Get min and max SF
         unsigned char sf = getMinSF(this->distanceTo(ed));
@@ -86,7 +90,7 @@ bool Gateway::connectTo(EndDevice *ed) {
     return false;
 }
 
-bool Gateway::disconnectFrom(EndDevice *ed) {
+bool Gateway::removeEndDevice(EndDevice *ed) {
     for (int i = 0; i < this->connectedEDs.size(); i++) {
         if (this->connectedEDs[i] == ed) {
             this->freeSlots(ed->getSF(), ed->getPeriod());

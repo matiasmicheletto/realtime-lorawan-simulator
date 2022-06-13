@@ -22,17 +22,24 @@ class Gateway : public Node {
         vector<EndDevice*> connectedEDs;
         unsigned int H;
         double maxSlots;
-        bool availableChannels[16];
+        unsigned char channel;
         unsigned int availableSlots[6];
 
     public:
-        Gateway(double x, double y, unsigned int id, unsigned int hyperperiod);
+        Gateway(
+            double x, 
+            double y, 
+            unsigned int id, 
+            unsigned int hyperperiod, 
+            unsigned char channel);
         ~Gateway();
 
-        bool connectTo(EndDevice *ed);
-        bool disconnectFrom(EndDevice *ed);
+        bool addEndDevice(EndDevice *ed);
+        bool removeEndDevice(EndDevice *ed);
         void disconnect(); 
         double getUF();
+        inline unsigned char getChannel() { return this->channel; }
+        
 };
 
 #endif

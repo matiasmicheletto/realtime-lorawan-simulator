@@ -13,7 +13,7 @@ int main(int argc, char const *argv[]) {
     LoraNetwork *network = new LoraNetwork();
     network->init(100, 1000, LoraNetwork::UNIFORM, periods, prob);
     
-    network->minimizeGW(100, 10);
+    network->minimizeGW(50, 10);
     network->printStatus();
     
     delete network;
