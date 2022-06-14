@@ -1,16 +1,16 @@
-#include "loranetwork.h"
+#include "networkoptimizer.h"
 
 using namespace std;
 using namespace std::chrono;
 
-LoraNetwork::LoraNetwork() {
+NetworkOptimizer::NetworkOptimizer() {
     this->lastID = 0;
     this->H = 1;
     for(int i = 0; i < 16; i++)
         this->availableChannels[i] = true;
 }
 
-LoraNetwork::~LoraNetwork() {
+NetworkOptimizer::~NetworkOptimizer() {
     for (unsigned int i = 0; i < this->gateways.size(); i++)
         delete this->gateways[i];
     for (unsigned int i = 0; i < this->enddevices.size(); i++) 
@@ -19,12 +19,13 @@ LoraNetwork::~LoraNetwork() {
     this->enddevices.clear();
 }
 
-void LoraNetwork::init(
+void NetworkOptimizer::init(
         unsigned int networkSize, 
         unsigned int mapSize, 
         ED_DIST posDist,
-        unsigned int *periods,
-        double *prob
+        const unsigned int *periods,
+        const double *prob,
+        const int len
     ) {
     this->mapSize = mapSize;
     
@@ -40,22 +41,25 @@ void LoraNetwork::init(
             x = normalDist() * mapSize;
             y = normalDist() * mapSize;
         }
+        if(posDist == CLOUD) { // TODO
+            x = 0;
+            y = 0;
+        }
         // End device period
-        //const int period = randomSelect(periods, prob, 3);
-        const int period = 3600; // TODO
+        unsigned int period = randomSelectProb(periods, prob, len);
         this->H = lcm(this->H, period);
         // Add end device to the network
         this->createEndDevice(x, y, period);
     }
 }
 
-void LoraNetwork::createEndDevice(double x, double y, unsigned int period) {
+void NetworkOptimizer::createEndDevice(double x, double y, unsigned int period) {
     EndDevice *ed = new EndDevice(x, y, this->lastID, period);
     enddevices.push_back(ed);
     this->lastID++;
 }
 
-bool LoraNetwork::removeEndDevice(EndDevice *ed) {
+bool NetworkOptimizer::removeEndDevice(EndDevice *ed) {
     for (unsigned int i = 0; i < this->enddevices.size(); i++) {
         if (this->enddevices[i] == ed) {
             this->enddevices.erase(this->enddevices.begin() + i);
@@ -66,7 +70,7 @@ bool LoraNetwork::removeEndDevice(EndDevice *ed) {
     return false;
 }
 
-bool LoraNetwork::createGateway(double x, double y) {
+bool NetworkOptimizer::createGateway(double x, double y) {
     for(unsigned char channel = 0; channel < 16; channel++){
         if(this->availableChannels[channel]){
             Gateway *gw = new Gateway(x, y, this->lastID, this->H, channel);
@@ -79,7 +83,7 @@ bool LoraNetwork::createGateway(double x, double y) {
     return false;
 }
 
-bool LoraNetwork::removeGateway(Gateway *gw) {
+bool NetworkOptimizer::removeGateway(Gateway *gw) {
     for (unsigned int i = 0; i < this->gateways.size(); i++) {
         if (this->gateways[i] == gw) {
             this->gateways.erase(this->gateways.begin() + i);
@@ -90,7 +94,7 @@ bool LoraNetwork::removeGateway(Gateway *gw) {
     return false;
 }
 
-void LoraNetwork::autoConnect() {
+void NetworkOptimizer::autoConnect() {
     for(int i = 0; i < this->enddevices.size(); i++) {
         // Sort gateways by distance
         sort(this->gateways.begin(), this->gateways.end(), [this, i](Gateway *a, Gateway *b) {
@@ -102,50 +106,16 @@ void LoraNetwork::autoConnect() {
     }
 }
 
-void LoraNetwork::disconnect() {
+void NetworkOptimizer::disconnect() {
     for(int i = 0; i < this->gateways.size(); i++)
         this->gateways[i]->disconnect();
 }
 
-void LoraNetwork::step() {
-    unsigned int nced = 0; // Number of disconnected end devices
-    vector<vector<int>> forces; // Attraction forces for each gateway
-    for (int i = 0; i < this->enddevices.size(); i++) {
-        if (!this->enddevices[i]->isConnected()){
-            nced++; // Count disconnected end device
-            // Sort gateways by distance to get closest
-            sort(this->gateways.begin(), this->gateways.end(), [this, i](Gateway *a, Gateway *b) {
-                return a->distanceTo(this->enddevices[i]) < b->distanceTo(this->enddevices[i]);
-            });
-            // Compute attraction force for closest (this->gateways[0])
-            int id = this->gateways[0]->getId();
-            int x = (int)this->enddevices[i]->getX() - (int)this->gateways[0]->getX();
-            int y = (int)this->enddevices[i]->getY() - (int)this->gateways[0]->getY();
-            forces.push_back(vector<int>{id, x, y});
-        }
-    }
-    // Disconnect all nodes
-    this->disconnect();
-    // Update gateways positions according to forces
-    for(int i = 0; i < this->gateways.size(); i++){
-        // Comoute sum of forces for current gateway
-        double sumX = 0, sumY = 0; 
-        for(int j = 0; j < forces.size(); j++){
-            if(forces[j][0] == this->gateways[i]->getId()){
-                sumX += (double) forces[j][1];
-                sumY += (double) forces[j][2];
-            }
-        }
-        // Compute new positions
-        double newX = this->gateways[i]->getX() + clamp(sumX/(double) nced, -100.0, 100.0);
-        double newY = this->gateways[i]->getY() + clamp(sumY/(double) nced, -100.0, 100.0);
-        this->gateways[i]->moveTo(newX, newY);
-    }
-    // Reconnect network
-    this->autoConnect();
+void NetworkOptimizer::step() {
+    // Override this function in the child class
 }
 
-double LoraNetwork::getEDCoverage() {
+double NetworkOptimizer::getEDCoverage() {
     double coverage = 0;
     for (int i = 0; i < this->enddevices.size(); i++)
         if (this->enddevices[i]->isConnected())
@@ -153,9 +123,12 @@ double LoraNetwork::getEDCoverage() {
     return coverage / (double) this->enddevices.size();
 }
 
-void LoraNetwork::minimizeGW(unsigned int iters,unsigned int timeout) {
+void NetworkOptimizer::minimizeGW(unsigned int iters,unsigned int timeout) {
     steady_clock::time_point begin = steady_clock::now();
 
+    // Remove all gateways and left a single one
+    for(int i = 0; i < this->gateways.size(); i++)
+        this->removeGateway(this->gateways[i]);
     this->createGateway(uniformDist() * mapSize, uniformDist() * mapSize);
     this->autoConnect();
     unsigned int suboptimalSteps = 0;
@@ -170,11 +143,13 @@ void LoraNetwork::minimizeGW(unsigned int iters,unsigned int timeout) {
             break;
 
         // Exit condition: max coverage reached
-        if(this->getEDCoverage() == 1.0)
+        double coverage = this->getEDCoverage();
+        printf("Iteration %d: Coverage %.2f\n", i, coverage);
+        if(coverage > 0.9999)
             break;
         else{
             suboptimalSteps++;
-            if(suboptimalSteps > 10){
+            if(suboptimalSteps > 15){
                 this->createGateway(uniformDist() * mapSize, uniformDist() * mapSize);
                 this->autoConnect();
                 suboptimalSteps = 0;
@@ -183,9 +158,14 @@ void LoraNetwork::minimizeGW(unsigned int iters,unsigned int timeout) {
     }
 }
 
-void LoraNetwork::printStatus() {
+void NetworkOptimizer::printStatus() {
     printf("Network status:\n");
     printf("  Map size: %d\n", this->mapSize);
     printf("  Gateways: %d\n", this->gateways.size());
     printf("  End devices: %d\n", this->enddevices.size());
+    printf("  ED coverage: %f\%\n", this->getEDCoverage()*100);
+    // Print gateways positions
+    printf("Gateways positions:\n");
+    for(int i = 0; i < this->gateways.size(); i++)
+        printf("  #%d: (%f, %f)\n", this->gateways[i]->getId(), this->gateways[i]->getX(), this->gateways[i]->getY());
 }

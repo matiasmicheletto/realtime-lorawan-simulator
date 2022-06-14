@@ -1,21 +1,4 @@
 #include "tools.h"
-#include <stdlib.h>
-#include <math.h>
-
-template <typename T> T randomSelect(const T *array, const int size) {
-    return array[rand() % size];
-}
-
-template <typename T> T randomSelect(const T *array, const double *prob, const int size) {
-    double rnd = (double)rand() / RAND_MAX;
-    double sum = 0;
-    for (int i = 0; i < size; i++) {
-        sum += prob[i];
-        if (rnd < sum)
-            return array[i];
-    }
-    return array[size - 1];
-}
 
 double uniformDist() {
     return (double)rand() / (double)RAND_MAX - 0.5;
