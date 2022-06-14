@@ -35,8 +35,8 @@ void NetworkOptimizerSprings::step() {
                 }
             }
             // Compute new positions
-            double newX = this->gateways[i]->getX() + clamp(sumX/(double) nced, -100.0, 100.0);
-            double newY = this->gateways[i]->getY() + clamp(sumY/(double) nced, -100.0, 100.0);
+            double newX = this->gateways[i]->getX() + mclamp(sumX/(double) nced, -100.0, 100.0);
+            double newY = this->gateways[i]->getY() + mclamp(sumY/(double) nced, -100.0, 100.0);
             this->gateways[i]->moveTo(newX, newY);
         }
         // Reconnect network

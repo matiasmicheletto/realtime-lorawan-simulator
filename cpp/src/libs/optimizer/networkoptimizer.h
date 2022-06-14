@@ -4,10 +4,14 @@
 #include <vector>
 #include <algorithm>
 #include <stdio.h>
+#include <time.h>
 #include <chrono>
-#include "tools.h"
-#include "gateway.h"
-#include "enddevice.h"
+
+#include "../tools.h"
+#include "../random/random.h"
+#include "../random/uniform.h"
+#include "../network/gateway.h"
+#include "../network/enddevice.h"
 
 using namespace std;
 
@@ -39,24 +43,21 @@ class NetworkOptimizer {
     public:
         NetworkOptimizer();
         virtual ~NetworkOptimizer();
-
+        // Types of end devices distribution
         enum ED_DIST {UNIFORM, NORMAL, CLOUD};
+        // Compute the minimun number of gateways to connect all end devices
+        void minimizeGW(unsigned int iters, unsigned int timeout);
+        // Displays 
+        void printStatus();
 
         // Add the end devices with their periods to the map
         void init(
             unsigned int networkSize, 
             unsigned int mapSize, 
-            ED_DIST posDist,
-            const unsigned int *periods,
-            const double *prob,
-            const int len
+            Random *posGenerator,
+            Random *periodGenerator
         );
 
-        // Compute the minimun number of gateways to connect all end devices
-        void minimizeGW(unsigned int iters, unsigned int timeout);
-        
-        // Displays 
-        void printStatus();
 };
 
 #endif

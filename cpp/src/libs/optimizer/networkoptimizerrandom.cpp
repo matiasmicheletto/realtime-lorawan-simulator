@@ -16,8 +16,9 @@ void NetworkOptimizerRandom::step() {
     this->disconnect(); 
     // Randomize positions
     for(int i = 0; i < this->gateways.size(); i++){
-        double newX = uniformDist() * mapSize;
-        double newY = uniformDist() * mapSize;
+        Uniform gwPosGenerator = Uniform(-(double)this->mapSize/2, (double)this->mapSize/2);
+        double newX, newY;
+        gwPosGenerator.setRandom(newX, newY);
         this->gateways[i]->moveTo(newX, newY);
     }
     // Check new coverage

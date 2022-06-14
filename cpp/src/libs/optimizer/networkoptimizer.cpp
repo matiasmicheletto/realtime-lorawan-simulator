@@ -4,6 +4,7 @@ using namespace std;
 using namespace std::chrono;
 
 NetworkOptimizer::NetworkOptimizer() {
+    srand(time(NULL));
     this->lastID = 0;
     this->H = 1;
     for(int i = 0; i < 16; i++)
@@ -22,10 +23,8 @@ NetworkOptimizer::~NetworkOptimizer() {
 void NetworkOptimizer::init(
         unsigned int networkSize, 
         unsigned int mapSize, 
-        ED_DIST posDist,
-        const unsigned int *periods,
-        const double *prob,
-        const int len
+        Random *posGenerator,
+        Random *periodGenerator
     ) {
     this->mapSize = mapSize;
     
@@ -33,20 +32,9 @@ void NetworkOptimizer::init(
     for (unsigned int i = 0; i < networkSize; i++) {
         // End device position
         double x, y;
-        if(posDist == UNIFORM) {
-            x = uniformDist() * mapSize;
-            y = uniformDist() * mapSize;
-        }
-        if(posDist == NORMAL) { // Some eds may fall outside the map
-            x = normalDist() * mapSize;
-            y = normalDist() * mapSize;
-        }
-        if(posDist == CLOUD) { // TODO
-            x = 0;
-            y = 0;
-        }
+        posGenerator->setRandom(x, y);
         // End device period
-        unsigned int period = randomSelectProb(periods, prob, len);
+        unsigned int period = periodGenerator->randomInt();
         this->H = lcm(this->H, period);
         // Add end device to the network
         this->createEndDevice(x, y, period);
@@ -54,6 +42,7 @@ void NetworkOptimizer::init(
 }
 
 void NetworkOptimizer::createEndDevice(double x, double y, unsigned int period) {
+    //printf("Creating end device at (%f, %f) with period %d\n", x, y, period);
     EndDevice *ed = new EndDevice(x, y, this->lastID, period);
     enddevices.push_back(ed);
     this->lastID++;
@@ -129,7 +118,11 @@ void NetworkOptimizer::minimizeGW(unsigned int iters,unsigned int timeout) {
     // Remove all gateways and left a single one
     for(int i = 0; i < this->gateways.size(); i++)
         this->removeGateway(this->gateways[i]);
-    this->createGateway(uniformDist() * mapSize, uniformDist() * mapSize);
+    
+    Uniform gwPosGenerator = Uniform(-(double)this->mapSize/2, (double)this->mapSize/2);
+    double x, y; 
+    gwPosGenerator.setRandom(x, y);
+    this->createGateway(x, y);
     this->autoConnect();
     unsigned int suboptimalSteps = 0;
 
@@ -150,7 +143,8 @@ void NetworkOptimizer::minimizeGW(unsigned int iters,unsigned int timeout) {
         else{
             suboptimalSteps++;
             if(suboptimalSteps > 15){
-                this->createGateway(uniformDist() * mapSize, uniformDist() * mapSize);
+                gwPosGenerator.setRandom(x, y);
+                this->createGateway(x, y);
                 this->autoConnect();
                 suboptimalSteps = 0;
             }
