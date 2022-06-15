@@ -12,13 +12,13 @@ Gateway::Gateway(
 }
 
 Gateway::~Gateway() {
-    
+    this->disconnect();
 }
 
 void Gateway::resetSlots() {
     this->maxSlots = 0;
     for(int i = 0; i < 6; i++){
-        this->availableSlots[i] = this->H/pow(2,i);
+        this->availableSlots[i] = this->H/(int)pow(2,i);
         this->maxSlots += this->availableSlots[i];
     }
 }
@@ -110,8 +110,12 @@ void Gateway::disconnect() {
 }
 
 double Gateway::getUF() { // total available slots / total slots
-    double sum = 0;
+    unsigned int sum = 0;
     for(int i = 0; i < 6; i++)
         sum += this->availableSlots[i];
-    return sum/this->maxSlots;
+    return (double)sum/(double)this->maxSlots;
+}
+
+unsigned int Gateway::connectedEDsCount() {
+    return (unsigned int) this->connectedEDs.size();
 }

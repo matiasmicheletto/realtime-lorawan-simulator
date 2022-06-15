@@ -84,7 +84,7 @@ int main(int argc, char **argv) {
         ->build();
 
     optimizer.run();
-    optimizer.printStatus();
+    optimizer.printStatus("output.txt");
 
     return 0;
 }

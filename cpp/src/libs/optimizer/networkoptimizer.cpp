@@ -64,12 +64,13 @@ NetworkOptimizer::Builder* NetworkOptimizer::Builder::setStepMethod(STEP_METHOD 
 
 NetworkOptimizer NetworkOptimizer::Builder::build(){
     // Period values and probabilities for the end devices
+    this->H = 1; // Initially 1 and will be updated when the periods are generated
     for (unsigned int i = 0; i < this->networkSize; i++) {
         // End device position
         double x, y; 
         this->posGenerator->setRandom(x, y);        
         // End device period
-        unsigned int period = this->periodGenerator->randomInt(); 
+        int period = this->periodGenerator->randomInt(); 
         // Update hyperperiod
         this->H = lcm(this->H, period);
         // Add end device to the network
@@ -257,14 +258,42 @@ void NetworkOptimizer::run() {
     }
 }
 
-void NetworkOptimizer::printStatus() {
-    printf("Network status:\n");
-    printf("  Map size: %d\n", this->mapSize);
-    printf("  Gateways: %ld\n", this->gateways.size());
-    printf("  End devices: %ld\n", this->enddevices.size());
-    printf("  ED coverage: %f\n", this->getEDCoverage()*100);
+void NetworkOptimizer::printStatus(char *filename) {
+
+    FILE *file = fopen(filename, "w");
+    if(file == NULL){
+        printf("Error opening file %s\n", filename);
+        return;
+    }
+    fprintf(file, "Network status:\n");
+    fprintf(file, "  Map size: %d\n", this->mapSize);
+    fprintf(file, "  Gateways: %ld\n", this->gateways.size());
+    fprintf(file, "  End devices: %ld\n", this->enddevices.size());
+    fprintf(file, "  ED coverage: %f\n", this->getEDCoverage()*100);
     // Print gateways positions
-    printf("Gateways positions:\n");
+    fprintf(file, "Gateways positions and channels:\n");
     for(long unsigned int i = 0; i < this->gateways.size(); i++)
-        printf("  #%d: (%f, %f)\n", this->gateways[i]->getId(), this->gateways[i]->getX(), this->gateways[i]->getY());
+        fprintf(file, "  #%d: (%f, %f), channel %d, UF: %f, connected to %d EDs\n", 
+            this->gateways[i]->getId(), 
+            this->gateways[i]->getX(), 
+            this->gateways[i]->getY(),
+            this->gateways[i]->getChannel(),
+            this->gateways[i]->getUF(),
+            this->gateways[i]->connectedEDsCount()
+        );
+
+    // Print end devices positions
+    fprintf(file, "End devices positions and connections:\n");
+    for(long unsigned int i = 0; i < this->enddevices.size(); i++)
+        fprintf(file, "  #%d: (%f, %f), period %d, connected to Gateway #%d (at %f mts.) using SF%d \n", 
+            this->enddevices[i]->getId(), 
+            this->enddevices[i]->getX(), 
+            this->enddevices[i]->getY(),
+            this->enddevices[i]->getPeriod(),
+            this->enddevices[i]->getGatewayId(),
+            this->enddevices[i]->getGWDist(),
+            this->enddevices[i]->getSF()
+        );
+
+    fclose(file);
 }

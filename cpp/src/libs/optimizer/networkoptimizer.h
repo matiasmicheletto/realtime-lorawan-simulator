@@ -3,10 +3,10 @@
 
 #include <vector>
 #include <algorithm>
+#include <chrono>
 #include <stdio.h>
 #include <math.h>
 #include <time.h>
-#include <chrono>
 
 #include "../random/random.h"
 #include "../random/uniform.h"
@@ -32,7 +32,7 @@ class NetworkOptimizer {
 
                 vector<EndDevice*> enddevices; // List of enddevices
                 unsigned int mapSize = 1000; // Size of the map 
-                unsigned int H; // System hyperperiod
+                int H; // System hyperperiod
                 unsigned int lastID; // IDs to identify network nodes
                 unsigned int maxIter = 100; // Maximum number of iterations
                 int timeout = 60; // Timeout in seconds
@@ -50,7 +50,7 @@ class NetworkOptimizer {
         // Compute the minimun number of gateways to connect all end devices
         void run();
         // Display results 
-        void printStatus();
+        void printStatus(char *filename);
 
         template <typename T> 
         static inline T mclamp(T value, T min, T max) {return value < min ? min : (value > max ? max : value);}
@@ -60,7 +60,7 @@ class NetworkOptimizer {
     private: 
         vector<EndDevice*> enddevices; // List of enddevices
         unsigned int mapSize; // Size of the map (required to create new gateways)
-        unsigned int H; // Hyperperiod (is calculated from periods)        
+        int H; // Hyperperiod (is calculated from periods)        
         unsigned int lastID; // IDs to identify network nodes        
 
         // GW management

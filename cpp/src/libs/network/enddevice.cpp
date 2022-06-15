@@ -19,3 +19,11 @@ void EndDevice::disconnect() {
     this->gw = NULL;
     this->sf = 0;
 }
+
+unsigned int EndDevice::getGatewayId() { 
+    return this->gw == NULL ? 0 : this->gw->getId(); 
+}
+
+double EndDevice::getGWDist() {
+    return this->distanceTo(this->gw);
+}

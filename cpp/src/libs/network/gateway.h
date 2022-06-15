@@ -5,6 +5,7 @@ class EndDevice; // Forward declaration
 
 #include <vector>
 #include <math.h>
+
 #include "node.h"
 #include "enddevice.h"
 
@@ -21,7 +22,7 @@ class Gateway : public Node {
 
         vector<EndDevice*> connectedEDs;
         unsigned int H;
-        double maxSlots;
+        unsigned int maxSlots;
         unsigned char channel;
         unsigned int availableSlots[6];
 
@@ -38,6 +39,7 @@ class Gateway : public Node {
         bool removeEndDevice(EndDevice *ed);
         void disconnect(); 
         double getUF();
+        unsigned int connectedEDsCount();
         inline unsigned char getChannel() { return this->channel; }
         
 };
