@@ -4,10 +4,10 @@
 #include <vector>
 #include <algorithm>
 #include <stdio.h>
+#include <math.h>
 #include <time.h>
 #include <chrono>
 
-#include "../tools.h"
 #include "../random/random.h"
 #include "../random/uniform.h"
 #include "../network/gateway.h"
@@ -51,6 +51,11 @@ class NetworkOptimizer {
         void run();
         // Display results 
         void printStatus();
+
+        template <typename T> 
+        static inline T mclamp(T value, T min, T max) {return value < min ? min : (value > max ? max : value);}
+        static inline int gcd(int a, int b) {return b == 0 ? a : gcd(b, a % b);}
+        static inline int lcm(int a, int b){return a * b / gcd(a, b);}
 
     private: 
         vector<EndDevice*> enddevices; // List of enddevices

@@ -4,7 +4,7 @@ OPT 	= -Wall
 TARGET 	= runnable
 LIBSDIR = ./src/libs
 OBJSDIR = ./obj
-OBJ 	= main.o tools.o random.o uniform.o normal.o custom.o clouds.o node.o enddevice.o gateway.o networkoptimizer.o
+OBJ 	= main.o random.o uniform.o normal.o custom.o clouds.o node.o enddevice.o gateway.o networkoptimizer.o
 RM 		= rm -f
 
 .PHONY: all all-before all-after clean clean-custom
@@ -19,8 +19,6 @@ $(TARGET): $(OBJ)
 
 main.o: src/main.cpp
 	$(CPP) $(OPT) -c ./src/main.cpp -o $(OBJSDIR)/main.o 
-tools.o: src/libs/tools.cpp	
-	$(CPP) $(OPT) -c $(LIBSDIR)/tools.cpp -o $(OBJSDIR)/tools.o
 random.o: src/libs/random/random.cpp	
 	$(CPP) $(OPT) -c $(LIBSDIR)/random/random.cpp -o $(OBJSDIR)/random.o
 uniform.o: src/libs/random/uniform.cpp	
