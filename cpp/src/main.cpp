@@ -2,6 +2,12 @@
 #include "libs/random/uniform.h"
 #include "libs/random/custom.h"
 
+#include <string>
+#include <cstring>
+#include <stdio.h>
+
+using namespace std;
+
 /*
 //Ejemplo minimo:
 
@@ -60,11 +66,17 @@ int main(int argc, char **argv) {
 
     checkInputs(argc, argv);
 
+    // Input parameters
     unsigned int mapSize = atoi(argv[1]);
     unsigned int networkSize = atoi(argv[2]);
     unsigned int maxIter = atoi(argv[3]);
     int timeout = atoi(argv[4]);
-    STEP_METHOD alg = (STEP_METHOD) atoi(argv[5]);
+    STEP_METHOD alg = (STEP_METHOD) (atoi(argv[5])-1);
+
+    // Output file
+    char filename[100];
+    string name = "output_" + to_string(mapSize) + "_" + to_string(networkSize) + "_" + to_string(alg+1) + ".txt";
+    strcpy(filename, name.c_str());
 
     Uniform posDist = Uniform(-(double) mapSize/2, (double) mapSize/2);
     CustomDist periodDist = CustomDist::Builder()
@@ -84,7 +96,7 @@ int main(int argc, char **argv) {
         ->build();
 
     optimizer.run();
-    optimizer.printStatus("output.txt");
+    optimizer.printStatus(filename, true);
 
     return 0;
 }

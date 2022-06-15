@@ -15,11 +15,12 @@
 
 using namespace std;
 
-enum STEP_METHOD { RANDOM, SPRINGS };
+enum STEP_METHOD { RANDOM = 0, SPRINGS = 1 };
+enum EXIT_CODE { NOT_RUN = 0, TIMEOUT = 1, MAX_ITER = 2, MAX_COVERAGE = 3, MAX_GW = 4 };
 
 class NetworkOptimizer {
     public:
-        class Builder { // Creates the network of end devices
+        class Builder { // Creates the network of end devices and basic configuration
             public:
                 Builder* setPositionGenerator(Random *posGenerator);
                 Builder* setPeriodGenerator(Random *periodGenerator);
@@ -50,7 +51,7 @@ class NetworkOptimizer {
         // Compute the minimun number of gateways to connect all end devices
         void run();
         // Display results 
-        void printStatus(char *filename);
+        void printStatus(char *filename, bool saveLog);
 
         template <typename T> 
         static inline T mclamp(T value, T min, T max) {return value < min ? min : (value > max ? max : value);}
@@ -75,7 +76,10 @@ class NetworkOptimizer {
 
         // Optimization parameters
         unsigned int maxIter; // Maximum number of iterations
+        unsigned int currentIter; // Current iteration
         int timeout; // Timeout in seconds
+        int elapsed; // Elapsed time in seconds
+        EXIT_CODE exitCode; // Exit code
 
         void step(); // Improve coverage
         void stepSprings(); // Improve coverage by moving GW

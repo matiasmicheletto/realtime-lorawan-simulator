@@ -16,6 +16,9 @@ NetworkOptimizer::NetworkOptimizer(Builder builder) {
 
     for(int i = 0; i < 16; i++)
         this->availableChannels[i] = true;
+
+    this->currentIter = 0;
+    this->elapsed = 0;
 }
 
 NetworkOptimizer::~NetworkOptimizer() {
@@ -91,6 +94,7 @@ bool NetworkOptimizer::createGateway(double x, double y) {
             return true;
         }
     }
+    printf("No more channels available!\n");
     return false;
 }
 
@@ -221,44 +225,55 @@ double NetworkOptimizer::getEDCoverage() {
 void NetworkOptimizer::run() {
     steady_clock::time_point begin = steady_clock::now();
 
-    // Remove all gateways and left a single one
+    this->exitCode = NOT_RUN;
+
+    // Remove all gateways and leave a single one
     for(long unsigned int i = 0; i < this->gateways.size(); i++)
         this->removeGateway(this->gateways[i]);
-    
     Uniform gwPosGenerator = Uniform(-(double)this->mapSize/2, (double)this->mapSize/2);
     double x, y; 
     gwPosGenerator.setRandom(x, y);
     this->createGateway(x, y);
     this->autoConnect();
-    unsigned int suboptimalSteps = 0;
 
+    unsigned int suboptimalSteps = 0;
+    this->currentIter = 0;
     for(unsigned int i = 0; i < this->maxIter; i++){
         this->step();
+        this->currentIter++;
 
         // Exit condition: timeout
         steady_clock::time_point end = steady_clock::now();
-        double elapsed = duration_cast<seconds>(end - begin).count();
-        if(elapsed > this->timeout)
+        this->elapsed = (unsigned int) duration_cast<seconds>(end - begin).count();
+        if(this->elapsed > this->timeout){
+            this->exitCode = TIMEOUT;
             break;
+        }
 
         // Exit condition: max coverage reached
         double coverage = this->getEDCoverage();
         printf("Iteration %d: Coverage %.2f\n", i, coverage);
-        if(coverage > 0.9999)
+        if(coverage > 0.9999){
+            this->exitCode = MAX_COVERAGE;
             break;
-        else{
+        }else{
             suboptimalSteps++;
             if(suboptimalSteps > 15){
                 gwPosGenerator.setRandom(x, y);
-                this->createGateway(x, y);
-                this->autoConnect();
-                suboptimalSteps = 0;
+                if(this->createGateway(x, y)){
+                    this->autoConnect();
+                    suboptimalSteps = 0;
+                }else{
+                    this->exitCode = MAX_GW;
+                    break;
+                }
             }
         }
     }
+    this->exitCode = MAX_ITER;
 }
 
-void NetworkOptimizer::printStatus(char *filename) {
+void NetworkOptimizer::printStatus(char *filename, bool saveLog) {
 
     FILE *file = fopen(filename, "w");
     if(file == NULL){
@@ -296,4 +311,22 @@ void NetworkOptimizer::printStatus(char *filename) {
         );
 
     fclose(file);
+
+    if(saveLog){
+        FILE *logfile = fopen("summary.csv", "a");
+        if(logfile == NULL){
+            printf("Error opening log file.\n");
+            return;
+        }
+        fprintf(logfile, "%d,%ld,%ld,%f,%d,%d,%d\n", 
+            this->mapSize, 
+            this->gateways.size(), 
+            this->enddevices.size(), 
+            this->getEDCoverage()*100,
+            this->elapsed,
+            this->currentIter,
+            (int) this->exitCode
+        );
+        fclose(logfile);
+    }
 }
