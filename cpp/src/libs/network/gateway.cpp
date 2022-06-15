@@ -91,7 +91,7 @@ bool Gateway::addEndDevice(EndDevice *ed) {
 }
 
 bool Gateway::removeEndDevice(EndDevice *ed) {
-    for (int i = 0; i < this->connectedEDs.size(); i++) {
+    for (long unsigned int i = 0; i < this->connectedEDs.size(); i++) {
         if (this->connectedEDs[i] == ed) {
             this->freeSlots(ed->getSF(), ed->getPeriod());
             this->connectedEDs.erase(this->connectedEDs.begin() + i);
@@ -103,7 +103,7 @@ bool Gateway::removeEndDevice(EndDevice *ed) {
 }
 
 void Gateway::disconnect() {
-    for (int i = 0; i < this->connectedEDs.size(); i++)
+    for (long unsigned int i = 0; i < this->connectedEDs.size(); i++)
         this->connectedEDs[i]->disconnect();
     this->connectedEDs.clear();
     this->resetSlots();

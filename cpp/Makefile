@@ -4,7 +4,7 @@ OPT 	= -Wall
 TARGET 	= runnable
 LIBSDIR = ./src/libs
 OBJSDIR = ./obj
-OBJ 	= main.o tools.o random.o uniform.o normal.o custom.o clouds.o node.o enddevice.o gateway.o networkoptimizer.o networkoptimizerrandom.o networkoptimizersprings.o
+OBJ 	= main.o tools.o random.o uniform.o normal.o custom.o clouds.o node.o enddevice.o gateway.o networkoptimizer.o
 RM 		= rm -f
 
 .PHONY: all all-before all-after clean clean-custom
@@ -39,7 +39,3 @@ gateway.o: src/libs/network/gateway.cpp
 	$(CPP) $(OPT) -c $(LIBSDIR)/network/gateway.cpp -o $(OBJSDIR)/gateway.o
 networkoptimizer.o: src/libs/optimizer/networkoptimizer.cpp	
 	$(CPP) $(OPT) -c $(LIBSDIR)/optimizer/networkoptimizer.cpp -o $(OBJSDIR)/networkoptimizer.o
-networkoptimizerrandom.o: src/libs/optimizer/networkoptimizerrandom.cpp	
-	$(CPP) $(OPT) -c $(LIBSDIR)/optimizer/networkoptimizerrandom.cpp -o $(OBJSDIR)/networkoptimizerrandom.o
-networkoptimizersprings.o: src/libs/optimizer/networkoptimizersprings.cpp	
-	$(CPP) $(OPT) -c $(LIBSDIR)/optimizer/networkoptimizersprings.cpp -o $(OBJSDIR)/networkoptimizersprings.o

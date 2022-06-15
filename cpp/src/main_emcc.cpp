@@ -1,14 +1,12 @@
 #include <emscripten/bind.h>
-#include "networkoptimizerrandom.h"
-#include "networkoptimizersprings.h"
+#include "libs/optimizer/networkoptimizer.h"
 
 using namespace emscripten;
 
 EMSCRIPTEN_BINDINGS(my_module) {
-    class_<NetworkOptimizerRandom>("NetworkOptimizerRandom")
+    class_<NetworkOptimizer>("NetworkOptimizer")
         .constructor<>()
-        //.function("init", &NetworkOptimizerRandom::init)
-        .function("minimizeGW", &NetworkOptimizerRandom::minimizeGW)
-        .function("printStatus", &NetworkOptimizerRandom::printStatus)
-    ;
+        .function("run", &NetworkOptimizer::run)
+        .function("printStatus", &NetworkOptimizer::printStatus)
+        ;
 }

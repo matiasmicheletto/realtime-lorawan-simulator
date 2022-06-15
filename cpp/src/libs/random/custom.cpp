@@ -18,7 +18,7 @@ CustomDist::Builder* CustomDist::Builder::addValue(int value, double prob) {
 CustomDist CustomDist::Builder::build() {
     // Check if sum of probs equals 1
     double sum = 0;
-    for (int i = 0; i < probs.size(); i++)
+    for (long unsigned int i = 0; i < probs.size(); i++)
         sum += probs[i];
     if (sum < 0.999) 
         throw "CustomDist probability fc: Sum of probabilities does not equal 1!";
@@ -28,7 +28,7 @@ CustomDist CustomDist::Builder::build() {
 double CustomDist::random() {
     double r = (double)rand() / (double)RAND_MAX;
     double sum = 0.0;
-    for (int i = 0; i < values.size(); i++) {
+    for (long unsigned int i = 0; i < values.size(); i++) {
         sum += probs[i];
         if (r < sum) {
             return values[i];

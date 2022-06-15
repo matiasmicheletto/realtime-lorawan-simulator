@@ -16,13 +16,13 @@ Clouds Clouds::Builder::build() {
 }
 
 void Clouds::setRandom(double &x, double &y) {
-    int centroidIndex = rand() % clds.size();
+    int centroidIndex = rand() % (int) clds.size();
     x = clds[centroidIndex][0].random();
     y = clds[centroidIndex][1].random();
 }
 
 void Clouds::setRandomInt(int &x, int &y) {
-    int centroidIndex = rand() % clds.size();
+    int centroidIndex = rand() % (int) clds.size();
     x = clds[centroidIndex][0].randomInt();
     y = clds[centroidIndex][1].randomInt();
 }
