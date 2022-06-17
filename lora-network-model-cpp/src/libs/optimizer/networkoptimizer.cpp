@@ -20,6 +20,7 @@ NetworkOptimizer::NetworkOptimizer(Builder builder) {
 
     this->currentIter = 0;
     this->elapsed = 0;
+    this->exitCode = NOT_RUN;
 }
 
 NetworkOptimizer::~NetworkOptimizer() {
@@ -56,12 +57,14 @@ NetworkOptimizer::Builder* NetworkOptimizer::Builder::setMaxIter(unsigned int ma
     return this;
 }
 
-NetworkOptimizer::Builder* NetworkOptimizer::Builder::setTimeout(int timeout) {
+NetworkOptimizer::Builder* NetworkOptimizer::Builder::setTimeout(unsigned int timeout) {
     this->timeout = timeout;
     return this;
 }
 
 NetworkOptimizer::Builder* NetworkOptimizer::Builder::setStepMethod(STEP_METHOD stepMethod) {
+    if(stepMethod != RANDOM && stepMethod != SPRINGS)
+        throw "Invalid step method";
     this->stepMethod = stepMethod;
     return this;
 }
@@ -229,9 +232,18 @@ double NetworkOptimizer::getEDCoverage() {
 }
 
 void NetworkOptimizer::run( void (*updateCallback)(vector<Gateway*>*, vector<EndDevice*>*) ) {
-    steady_clock::time_point begin = steady_clock::now();
 
-    this->exitCode = NOT_RUN;
+    #ifdef DEBUG_MODE
+        printf("Configuration:\n");
+        printf("--------------\n");
+        printf("Map size: %d\n", this->mapSize);
+        printf("ED number: %ld\n", this->enddevices.size());
+        printf("Iterations: %d\n", this->maxIter);
+        printf("Timeout: %d\n", this->timeout);
+        printf("Method: %d (0->random, 1->springs)\n\n", (unsigned char)this->stepMethod);
+    #endif
+
+    steady_clock::time_point begin = steady_clock::now();
 
     // Remove all gateways and leave a single one
     for(long unsigned int i = 0; i < this->gateways.size(); i++)
@@ -242,12 +254,12 @@ void NetworkOptimizer::run( void (*updateCallback)(vector<Gateway*>*, vector<End
     this->createGateway(x, y);
     this->autoConnect();
 
+    const unsigned long int timeoutms = (unsigned long int) this->timeout * 1000;
     unsigned int suboptimalSteps = 0;
-    this->currentIter = 0;
-    for(unsigned int i = 0; i < this->maxIter; i++){
+    
+    this->exitCode = MAX_ITER;
+    for(this->currentIter = 0; this->currentIter < this->maxIter; this->currentIter++){
         this->step();
-        
-        this->currentIter++;
 
         if(this->currentIter % this->updatePeriod == 0){
             if(updateCallback != nullptr)
@@ -256,21 +268,21 @@ void NetworkOptimizer::run( void (*updateCallback)(vector<Gateway*>*, vector<End
 
         // Exit condition: timeout
         steady_clock::time_point end = steady_clock::now();
-        this->elapsed = (unsigned int) duration_cast<seconds>(end - begin).count();
-        if(this->elapsed > this->timeout){
+        this->elapsed = (unsigned long int) duration_cast<milliseconds>(end - begin).count();
+        if(this->elapsed > timeoutms){
             this->exitCode = TIMEOUT;
             break;
         }
 
         // Exit condition: max coverage reached
         double coverage = this->getEDCoverage();
-        printf("Iteration %d: Coverage %.2f\n", i, coverage);
+        //printf("Iteration %d: Coverage %.2f\n", i, coverage);
         if(coverage > 0.9999){
             this->exitCode = MAX_COVERAGE;
             break;
         }else{
             suboptimalSteps++;
-            if(suboptimalSteps > 15){
+            if(suboptimalSteps > 20){
                 gwPosGenerator.setRandom(x, y);
                 if(this->createGateway(x, y)){
                     this->autoConnect();
@@ -282,10 +294,12 @@ void NetworkOptimizer::run( void (*updateCallback)(vector<Gateway*>*, vector<End
             }
         }
     }
-    this->exitCode = MAX_ITER;
+
+    if(updateCallback != nullptr)
+        updateCallback(&(this->gateways), &(this->enddevices));
 }
 
-void NetworkOptimizer::printStatus(char *filename, bool saveLog) {
+void NetworkOptimizer::exportFullResults(char *filename) {
 
     FILE *file = fopen(filename, "w");
     if(file == NULL){
@@ -297,8 +311,34 @@ void NetworkOptimizer::printStatus(char *filename, bool saveLog) {
     fprintf(file, "  Gateways: %ld\n", this->gateways.size());
     fprintf(file, "  End devices: %ld\n", this->enddevices.size());
     fprintf(file, "  ED coverage: %f\n", this->getEDCoverage()*100);
+    fprintf(file, "Optimization results:\n");
+    fprintf(file, "  Iterations performed: %d\n", this->currentIter);
+    fprintf(file, "  Elapsed: %lu ms\n", this->elapsed);
+
+    switch (this->exitCode)
+    {
+        case NOT_RUN:
+            fprintf(file, "  Exit code: [%d] Optimization not started\n", this->exitCode);
+            break;
+        case TIMEOUT:
+            fprintf(file, "  Exit code: [%d] Timeout\n", this->exitCode);
+            break;
+        case MAX_COVERAGE:
+            fprintf(file, "  Exit code: [%d] 100%% coverage reached\n", this->exitCode);
+            break;
+        case MAX_ITER:
+            fprintf(file, "  Exit code: [%d] Iterations completed\n", this->exitCode);
+            break;
+        case MAX_GW:
+            fprintf(file, "  Exit code: [%d] Maximum gateways reached\n", this->exitCode);
+            break;
+        default:
+            fprintf(file, "  Exit code: [%d] Unknown code\n", this->exitCode);
+            break;
+    }
+
     // Print gateways positions
-    fprintf(file, "Gateways positions and channels:\n");
+    fprintf(file, "Gateways positions and connections details:\n");
     for(long unsigned int i = 0; i < this->gateways.size(); i++)
         fprintf(file, "  #%d: (%f, %f), channel %d, UF: %f, connected to %d EDs\n", 
             this->gateways[i]->getId(), 
@@ -310,9 +350,9 @@ void NetworkOptimizer::printStatus(char *filename, bool saveLog) {
         );
 
     // Print end devices positions
-    fprintf(file, "End devices positions and connections:\n");
+    fprintf(file, "End devices positions and connection details:\n");
     for(long unsigned int i = 0; i < this->enddevices.size(); i++)
-        fprintf(file, "  #%d: (%f, %f), period %d, connected to Gateway #%d (at %f mts.) using SF%d \n", 
+        fprintf(file, "  #%d: (%f, %f), period %d, connected to Gateway #%d (at %f mts.), using SF%d \n", 
             this->enddevices[i]->getId(), 
             this->enddevices[i]->getX(), 
             this->enddevices[i]->getY(),
@@ -323,22 +363,57 @@ void NetworkOptimizer::printStatus(char *filename, bool saveLog) {
         );
 
     fclose(file);
+}
 
-    if(saveLog){
-        FILE *logfile = fopen("summary.csv", "a");
-        if(logfile == NULL){
-            printf("Error opening log file.\n");
-            return;
-        }
-        fprintf(logfile, "%d,%ld,%ld,%f,%d,%d,%d\n", 
-            this->mapSize, 
-            this->gateways.size(), 
-            this->enddevices.size(), 
-            this->getEDCoverage()*100,
-            this->elapsed,
-            this->currentIter,
-            (int) this->exitCode
-        );
-        fclose(logfile);
+void NetworkOptimizer::appendToLog(char *filename) {
+    FILE *logfile = fopen(filename, "a");
+    if(logfile == NULL){
+        printf("Error opening log file.\n");
+        return;
     }
+    fprintf(logfile, "%d,%ld,%ld,%f,%lu,%d,%d\n", 
+        this->mapSize, 
+        this->gateways.size(), 
+        this->enddevices.size(), 
+        this->getEDCoverage()*100,
+        this->elapsed,
+        this->currentIter,
+        (int) this->exitCode
+    );
+    fclose(logfile);
+}
+
+void NetworkOptimizer::exportNodesCSV(char *filename) {
+    FILE *file = fopen(filename, "w");
+    if(file == NULL){
+        printf("Error opening file %s\n", filename);
+        return;
+    }
+
+    // Print gateways data
+    fprintf(file, "ID,X,Y,Channel,UF,Connected EDs\n");
+    for(long unsigned int i = 0; i < this->gateways.size(); i++)
+        fprintf(file, "%d,%f,%f,%d,%f,%d\n", 
+            this->gateways[i]->getId(), 
+            this->gateways[i]->getX(), 
+            this->gateways[i]->getY(),
+            this->gateways[i]->getChannel(),
+            this->gateways[i]->getUF(),
+            this->gateways[i]->connectedEDsCount()
+        );
+
+    // Print end devices positions
+    fprintf(file, "ID,X,Y,Period,GW ID,Dist. GW,SF\n");
+    for(long unsigned int i = 0; i < this->enddevices.size(); i++)
+        fprintf(file, "%d,%f,%f,%d,%d,%f,%d\n", 
+            this->enddevices[i]->getId(), 
+            this->enddevices[i]->getX(), 
+            this->enddevices[i]->getY(),
+            this->enddevices[i]->getPeriod(),
+            this->enddevices[i]->getGatewayId(),
+            this->enddevices[i]->getGWDist(),
+            this->enddevices[i]->getSF()
+        );
+
+    fclose(file);
 }

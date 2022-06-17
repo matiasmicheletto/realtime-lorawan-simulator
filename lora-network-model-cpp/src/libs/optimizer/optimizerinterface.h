@@ -15,8 +15,8 @@ class OptimizerInterface {
             unsigned int mapSize,
             unsigned int networkSize,
             unsigned int maxIter,
-            int timeout,
-            int alg,
+            unsigned int timeout,
+            unsigned char alg,
             int updatePeriod
         );
         ~OptimizerInterface();

@@ -43,16 +43,11 @@ int main(int argc, char **argv) {
     checkInputs(argc, argv);
 
     // Input parameters
-    unsigned int mapSize = atoi(argv[1]);
-    unsigned int networkSize = atoi(argv[2]);
-    unsigned int maxIter = atoi(argv[3]);
-    int timeout = atoi(argv[4]);
+    unsigned int mapSize = (unsigned int) atoi(argv[1]);
+    unsigned int networkSize = (unsigned int) atoi(argv[2]);
+    unsigned int maxIter = (unsigned int) atoi(argv[3]);
+    unsigned int timeout = (unsigned int) atoi(argv[4]);
     STEP_METHOD alg = (STEP_METHOD) (atoi(argv[5])-1);
-
-    // Output file
-    char filename[100];
-    string name = "output_" + to_string(mapSize) + "_" + to_string(networkSize) + "_" + to_string(alg+1) + ".txt";
-    strcpy(filename, name.c_str());
 
     Uniform posDist = Uniform(-(double) mapSize/2, (double) mapSize/2);
     CustomDist periodDist = CustomDist::Builder()
@@ -69,12 +64,28 @@ int main(int argc, char **argv) {
         ->setMaxIter(maxIter)
         ->setTimeout(timeout)
         ->setStepMethod(alg)
-        ->setUpdatePeriod(5)
         ->build();
 
     optimizer.run();
 
-    optimizer.printStatus(filename, true);
+    // Print results on terminal
+    printf("Results:\n");
+    printf("--------------\n");
+    printf("Iterations: %d\n",optimizer.getIterations());
+    printf("Elapsed: %ld ms\n",optimizer.getElapsed());
+    printf("Coverage: %f %% \n",optimizer.getEDCoverage()*100.0);
+    printf("Exit code: %d\n",(unsigned char)optimizer.getExitCode());
+
+    // Output file name has parameters
+    char outputfilename[100];
+    char csvfilename[100];
+    string name = to_string(mapSize) + "_" + to_string(networkSize) + "_" + to_string(alg+1);
+    strcpy(outputfilename, ("output_"+name+".txt").c_str());
+    strcpy(csvfilename, ("nodes_"+name+".csv").c_str());
+
+    optimizer.exportFullResults(outputfilename);
+    optimizer.exportNodesCSV(csvfilename);
+    optimizer.appendToLog("summary.csv");
     
     return 0;
 }

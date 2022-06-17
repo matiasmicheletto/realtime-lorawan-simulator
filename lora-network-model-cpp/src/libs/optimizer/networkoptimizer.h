@@ -13,6 +13,8 @@
 #include "../network/gateway.h"
 #include "../network/enddevice.h"
 
+#define DEBUG_MODE 1
+
 using namespace std;
 
 enum STEP_METHOD { RANDOM = 0, SPRINGS = 1 };
@@ -27,7 +29,7 @@ class NetworkOptimizer {
                 Builder* setMapSize(unsigned int mapSize);
                 Builder* setNetworkSize(unsigned int networkSize);
                 Builder* setMaxIter(unsigned int maxIter);
-                Builder* setTimeout(int timeout);
+                Builder* setTimeout(unsigned int timeout);
                 Builder* setStepMethod(STEP_METHOD stepMethod);
                 Builder* setUpdatePeriod(int updatePeriod);
                 NetworkOptimizer build(); // Returns the list of end devices
@@ -37,7 +39,7 @@ class NetworkOptimizer {
                 int H; // System hyperperiod
                 unsigned int lastID; // IDs to identify network nodes
                 unsigned int maxIter = 100; // Maximum number of iterations
-                int timeout = 60; // Timeout in seconds
+                unsigned int timeout = 60; // Timeout in seconds
                 STEP_METHOD stepMethod = SPRINGS; // Step method
                 int updatePeriod = 10; // Number of iterations between each update call
             private:
@@ -52,9 +54,20 @@ class NetworkOptimizer {
         
         // Compute the minimun number of gateways to connect all end devices
         void run( void (*updateCallback)(vector<Gateway*>*, vector<EndDevice*>*) = NULL );
+        
         // Display results 
-        void printStatus(char *filename, bool saveLog);
+        void exportFullResults(char *filename);
+        void appendToLog(char *filename);
+        void exportNodesCSV(char *filename);
 
+
+        double getEDCoverage();
+        inline unsigned int getIterations() { return this->currentIter; }
+        inline unsigned long int getElapsed() { return this->elapsed; }
+        inline EXIT_CODE getExitCode() { return this->exitCode; }
+
+
+        // Utils
         template <typename T> 
         static inline T mclamp(T value, T min, T max) {return value < min ? min : (value > max ? max : value);}
         static inline int gcd(int a, int b) {return b == 0 ? a : gcd(b, a % b);}
@@ -79,8 +92,8 @@ class NetworkOptimizer {
         // Optimization parameters
         unsigned int maxIter; // Maximum number of iterations
         unsigned int currentIter; // Current iteration
-        int timeout; // Timeout in seconds
-        int elapsed; // Elapsed time in seconds
+        unsigned int timeout; // Timeout in seconds
+        unsigned long int elapsed; // Elapsed time in milliseconds
         EXIT_CODE exitCode; // Exit code
 
         void step(); // Improve coverage
@@ -89,9 +102,6 @@ class NetworkOptimizer {
 
         STEP_METHOD stepMethod; // Step method
         int updatePeriod; // Number of iterations between each update call
-
-        // Status
-        double getEDCoverage();
 
 };
 

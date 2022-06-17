@@ -5,7 +5,6 @@ class EndDevice; // Forward declaration
 
 #include <vector>
 #include <math.h>
-
 #include "node.h"
 #include "enddevice.h"
 

@@ -1,18 +1,33 @@
 #include "optimizerinterface.h"
 
-EM_JS(void, sendData, (
-        double* x, 
-        double* y, 
-        unsigned int* id, 
-        unsigned char* group,
-        unsigned int* to,
-        unsigned int* from,
-        unsigned char* sf,
-        unsigned int nodeslen,
-        unsigned int edgeslen), {
-    getData(x, y, id, group, from, to, sf, nodeslen, edgeslen);
+// JavaScript side callbacks
+
+EM_JS(void, updateNetwork, (
+    double* x, 
+    double* y, 
+    unsigned int* id, 
+    unsigned char* group,
+    unsigned int* to,
+    unsigned int* from,
+    unsigned char* sf,
+    unsigned int nodeslen,
+    unsigned int edgeslen
+), {
+    // This callback should be defined in the JS side
+    onNetworkUpdate(x, y, id, group, from, to, sf, nodeslen, edgeslen); 
 });
 
+EM_JS(void, updateResults, (
+    unsigned int iters,
+    unsigned long int elapsed,
+    double coverage,
+    unsigned char exitCode
+), {
+    // This callback should be defined in the JS side
+    onResultsUpdate(iters, elapsed, coverage, exitCode); 
+});
+
+// Callback for the optimizer step
 void updateCallback(vector<Gateway*>* gws, vector<EndDevice*>* eds) {
     // Compute number of nodes and edges
     unsigned int gwlen = gws->size();
@@ -55,7 +70,7 @@ void updateCallback(vector<Gateway*>* gws, vector<EndDevice*>* eds) {
         id[i + edlen] = gws->at(i)->getId();
         group[i + edlen] = 2;
     }
-    sendData(x, y, id, group, from, to, sf, nodeslen, edgeslen);
+    updateNetwork(x, y, id, group, from, to, sf, nodeslen, edgeslen);
 }
 
 
@@ -63,8 +78,8 @@ OptimizerInterface::OptimizerInterface(
     unsigned int mapSize,
     unsigned int networkSize,
     unsigned int maxIter,
-    int timeout,
-    int alg,
+    unsigned int timeout,
+    unsigned char alg,
     int updatePeriod) {
     
     Uniform posDist = Uniform(-(double) mapSize/2, (double) mapSize/2);
@@ -81,7 +96,7 @@ OptimizerInterface::OptimizerInterface(
         ->setNetworkSize(networkSize)
         ->setMaxIter(maxIter)
         ->setTimeout(timeout)
-        ->setStepMethod((STEP_METHOD) alg)
+        ->setStepMethod((STEP_METHOD) (alg-1))
         ->setUpdatePeriod(updatePeriod); 
     
     this->opt = new NetworkOptimizer(builder->build());
@@ -93,4 +108,10 @@ OptimizerInterface::~OptimizerInterface() {
 
 void OptimizerInterface::run() {
     this->opt->run(updateCallback);
+    updateResults(
+        this->opt->getIterations(),
+        this->opt->getElapsed(),
+        this->opt->getEDCoverage(),
+        (unsigned char)this->opt->getExitCode()
+    );
 }
