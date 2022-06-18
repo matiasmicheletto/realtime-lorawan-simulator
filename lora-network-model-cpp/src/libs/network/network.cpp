@@ -4,7 +4,7 @@ using namespace std;
 using namespace std::chrono;
 
 Network::Network(Builder builder) {
-    srand(time(NULL));
+    srand((unsigned int) system_clock::now().time_since_epoch().count());
 
     this->enddevices = builder.enddevices;
     this->mapSize = builder.mapSize;
@@ -55,15 +55,10 @@ Network Network::Builder::build(){
             posGenerator = new Uniform(-(double)this->mapSize/2, (double)this->mapSize/2);
             break;
         case NORMAL: // Positions have normal distribution
-            posGenerator = new Normal();
+            posGenerator = new Normal(-(double)this->mapSize/2, (double)this->mapSize/2);
             break;
         case CLOUDS:{ // Positions fall with a uniform distribution of 3 normal distributions 
-            Uniform centroidGenerator(-(double)this->mapSize/2, (double)this->mapSize/2);
-            Clouds::Builder* cloudsBuilder = Clouds::Builder()
-                .addCentroid(centroidGenerator, 0.1)
-                ->addCentroid(centroidGenerator, 0.15)
-                ->addCentroid(centroidGenerator, 0.2);
-            posGenerator = new Clouds(cloudsBuilder->build());
+            posGenerator = new Clouds(-(double)this->mapSize/2, (double)this->mapSize/2, 5);
             break;
         }
         default:

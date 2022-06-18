@@ -4,7 +4,6 @@
 #include <chrono>
 #include <stdio.h>
 #include <string>
-#include <time.h>
 #include "../network/network.h"
 
 #define DEBUG_MODE 1

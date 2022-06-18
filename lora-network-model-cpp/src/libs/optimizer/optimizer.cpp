@@ -13,7 +13,6 @@ const string exitCodes[6] = {
 };
 
 Optimizer::Optimizer(Builder builder) {
-    srand(time(NULL));
 
     // Import parameters from builder
     this->network = builder.network;

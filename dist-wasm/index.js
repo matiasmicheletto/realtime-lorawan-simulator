@@ -3,8 +3,8 @@ const visContainer = document.getElementById("network");
 // Parameters for optimization
 const mapSize = 1000;
 const edNumber= 5000;
-const posDist = 0; // 0:uniform, 1:normal, 2:clouds
-const periodDist = 2; // 0:soft, 1:medium, 2:hard
+const posDist = 2; // 0:uniform, 1:normal, 2:clouds
+const periodDist = 0; // 0:soft, 1:medium, 2:hard
 const maxIter = 100;
 const timeout = 60;
 const algorithm = 2;
@@ -122,6 +122,7 @@ const drawNetwork = () => {
             nodes: new vis.DataSet(it.nodes),
             edges: new vis.DataSet(it.edges),
         };
+        console.log(it.nodes);
         const net = new vis.Network(visContainer, data, visOptions);
     }, 500);
 }

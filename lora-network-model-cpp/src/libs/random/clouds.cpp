@@ -1,25 +1,20 @@
 #include "clouds.h"
 
-Clouds::Clouds(Builder builder) : Random() {
-    this->clds = builder.clds;
+Clouds::Clouds(double min, double max, int numCentroids) : Random() {
+    Uniform uniform(min*.6, max*.6);
+    for (int i = 0; i < numCentroids; i++) {
+        double x, y;
+        uniform.setRandom(x, y);
+        clds.push_back({Normal(min, max, x, 0.15), Normal(min, max, y, 0.15)});
+    }
 }
 
 Clouds::~Clouds() {
-    
-}
-
-Clouds::Builder* Clouds::Builder::addCentroid(Random posGenerator, double stdDev){
-    double x, y;
-    posGenerator.setRandom(x, y);
-    clds.push_back({Normal(x, stdDev), Normal(y, stdDev)});
-    return this;
-}
-
-Clouds Clouds::Builder::build() {
-    return Clouds(*this);
+    clds.clear();
 }
 
 void Clouds::setRandom(double &x, double &y) {
+    // pick a random index for clds
     int centroidIndex = rand() % (int) clds.size();
     x = clds[centroidIndex][0].random();
     y = clds[centroidIndex][1].random();

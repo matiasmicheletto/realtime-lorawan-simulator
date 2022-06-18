@@ -9,12 +9,14 @@
 
 class Normal : public Random {
     public:
-        Normal(double mean = 0, double stdDev = 0.15);
+        Normal(double min, double max, double mean = 0, double stdDev = 0.3);
         double random();
         int randomInt();
         void setRandom(double &x, double &y);
         void setRandomInt(int &x, int &y);
     private:
+        double min;
+        double max;
         double mean;
         double stdDev;
 };

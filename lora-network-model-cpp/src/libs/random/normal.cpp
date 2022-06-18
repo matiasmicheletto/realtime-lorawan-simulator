@@ -1,27 +1,31 @@
 #include "normal.h"
 
-Normal::Normal(double mean, double stdDev) : Random() {
+Normal::Normal(double min, double max, double mean, double stdDev) : Random() {
+    this->min = min;
+    this->max = max;
     this->mean = mean;
     this->stdDev = stdDev;
 }
 
 double Normal::random() {
-    double u1 = (double)rand() / (double)RAND_MAX - 0.5;
-    double u2 = (double)rand() / (double)RAND_MAX - 0.5;
-    double randStdNormal = sqrt(-2.0 * log(u1)) * cos(2.0 * M_PI * u2);
-    return mean + stdDev * randStdNormal;
+    double u = (double)rand() / (double)RAND_MAX;
+    double v = (double)rand() / (double)RAND_MAX;
+    double randStdNormal = sqrt(-2.0 * log(u)) * cos(2.0 * M_PI * v);
+    double scaler = (this->max - this->min) / 2.0;
+    double rnd = this->mean + (this->stdDev * randStdNormal)*scaler;
+    return rnd < this->min ? this->min : (rnd > this->max ? this->max : rnd);
 }
 
 int Normal::randomInt() {
-    return (int)random();
+    return (int)this->random();
 }
 
 void Normal::setRandom(double &x, double &y) {
-    x = random();
-    y = random();
+    x = this->random();
+    y = this->random();
 }
 
 void Normal::setRandomInt(int &x, int &y) {
-    x = randomInt();
-    y = randomInt();
+    x = this->randomInt();
+    y = this->randomInt();
 }
