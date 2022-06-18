@@ -4,6 +4,10 @@ Clouds::Clouds(Builder builder) : Random() {
     this->clds = builder.clds;
 }
 
+Clouds::~Clouds() {
+    
+}
+
 Clouds::Builder* Clouds::Builder::addCentroid(Random posGenerator, double stdDev){
     double x, y;
     posGenerator.setRandom(x, y);

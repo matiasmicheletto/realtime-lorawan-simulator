@@ -4,7 +4,7 @@ OPT 	= -Wall
 TARGET 	= runnable
 LIBSDIR = ./src/libs
 OBJSDIR = ./obj
-OBJ 	= main.o random.o uniform.o normal.o custom.o clouds.o node.o enddevice.o gateway.o networkoptimizer.o
+OBJ 	= main.o random.o uniform.o normal.o custom.o clouds.o node.o enddevice.o gateway.o network.o optimizer.o
 RM 		= rm -f
 
 .PHONY: all all-before all-after clean clean-custom
@@ -35,5 +35,7 @@ enddevice.o: src/libs/network/enddevice.cpp
 	$(CPP) $(OPT) -c $(LIBSDIR)/network/enddevice.cpp -o $(OBJSDIR)/enddevice.o
 gateway.o: src/libs/network/gateway.cpp	
 	$(CPP) $(OPT) -c $(LIBSDIR)/network/gateway.cpp -o $(OBJSDIR)/gateway.o
-networkoptimizer.o: src/libs/optimizer/networkoptimizer.cpp	
-	$(CPP) $(OPT) -c $(LIBSDIR)/optimizer/networkoptimizer.cpp -o $(OBJSDIR)/networkoptimizer.o
+network.o: src/libs/network/network.cpp	
+	$(CPP) $(OPT) -c $(LIBSDIR)/network/network.cpp -o $(OBJSDIR)/network.o
+optimizer.o: src/libs/optimizer/optimizer.cpp	
+	$(CPP) $(OPT) -c $(LIBSDIR)/optimizer/optimizer.cpp -o $(OBJSDIR)/optimizer.o

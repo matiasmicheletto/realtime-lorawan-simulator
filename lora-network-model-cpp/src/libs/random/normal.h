@@ -9,7 +9,7 @@
 
 class Normal : public Random {
     public:
-        Normal(double mean, double stdDev);
+        Normal(double mean = 0, double stdDev = 0.15);
         double random();
         int randomInt();
         void setRandom(double &x, double &y);

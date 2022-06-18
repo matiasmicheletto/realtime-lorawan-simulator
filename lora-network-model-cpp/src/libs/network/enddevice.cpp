@@ -25,5 +25,5 @@ unsigned int EndDevice::getGatewayId() {
 }
 
 double EndDevice::getGWDist() {
-    return this->distanceTo(this->gw);
+    return this->gw == NULL ? __DBL_MAX__ : this->distanceTo(this->gw);
 }

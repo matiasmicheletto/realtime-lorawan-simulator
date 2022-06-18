@@ -1,4 +1,4 @@
-#include "optimizerinterface.h"
+#include "jsinterface.h"
 
 // JavaScript side callbacks
 
@@ -27,9 +27,53 @@ EM_JS(void, updateResults, (
     onResultsUpdate(iters, elapsed, coverage, exitCode); 
 });
 
+JsInterface::JsInterface(
+    unsigned int mapSize,
+    unsigned int networkSize,
+    unsigned char posDist,
+    unsigned char periodDist,
+    unsigned int maxIter,
+    unsigned int timeout,
+    unsigned char alg,
+    unsigned int updatePeriod) {
+
+    Network::Builder *networkBuilder = Network::Builder()
+        .setPositionGenerator((POS_DIST) posDist)
+        ->setPeriodGenerator((PERIOD_DIST) periodDist)
+        ->setMapSize(mapSize)
+        ->setNetworkSize(networkSize);
+    this->network = new Network(networkBuilder->build());
+
+    Optimizer::Builder *builder = Optimizer::Builder()
+        .setNetwork(this->network)
+        ->setMaxIter(maxIter)
+        ->setTimeout(timeout)
+        ->setStepMethod((STEP_METHOD) (alg-1))
+        ->setUpdatePeriod(updatePeriod); 
+    this->optimizer = new Optimizer(builder->build());
+}
+
+JsInterface::~JsInterface() {
+    delete this->network;
+    delete this->optimizer;
+}
+
+void JsInterface::run() {
+    this->optimizer->run(this->progressCallback);
+    updateResults(
+        this->optimizer->getIterations(),
+        this->optimizer->getElapsed(),
+        this->network->getEDCoverage(),
+        (unsigned char)this->optimizer->getExitCode()
+    );
+}
+
 // Callback for the optimizer step
-void updateCallback(vector<Gateway*>* gws, vector<EndDevice*>* eds) {
+void JsInterface::progressCallback(Network *network) {
     // Compute number of nodes and edges
+    vector<Gateway*>* gws = network->getGWs();
+    vector<EndDevice*>* eds = network->getEDs();
+
     unsigned int gwlen = gws->size();
     unsigned int edlen = eds->size();
     unsigned int nodeslen = gwlen + edlen;
@@ -71,47 +115,4 @@ void updateCallback(vector<Gateway*>* gws, vector<EndDevice*>* eds) {
         group[i + edlen] = 2;
     }
     updateNetwork(x, y, id, group, from, to, sf, nodeslen, edgeslen);
-}
-
-
-OptimizerInterface::OptimizerInterface(
-    unsigned int mapSize,
-    unsigned int networkSize,
-    unsigned int maxIter,
-    unsigned int timeout,
-    unsigned char alg,
-    int updatePeriod) {
-    
-    Uniform posDist = Uniform(-(double) mapSize/2, (double) mapSize/2);
-    CustomDist periodDist = CustomDist::Builder()
-        .addValue(3600, 0.97)
-        ->addValue(1800, 0.01)
-        ->addValue(900, 0.02)
-        ->build();
-
-    NetworkOptimizer::Builder *builder = NetworkOptimizer::Builder()
-        .setPositionGenerator(&posDist)
-        ->setPeriodGenerator(&periodDist)
-        ->setMapSize(mapSize)
-        ->setNetworkSize(networkSize)
-        ->setMaxIter(maxIter)
-        ->setTimeout(timeout)
-        ->setStepMethod((STEP_METHOD) (alg-1))
-        ->setUpdatePeriod(updatePeriod); 
-    
-    this->opt = new NetworkOptimizer(builder->build());
-}
-
-OptimizerInterface::~OptimizerInterface() {
-    delete this->opt;
-}
-
-void OptimizerInterface::run() {
-    this->opt->run(updateCallback);
-    updateResults(
-        this->opt->getIterations(),
-        this->opt->getElapsed(),
-        this->opt->getEDCoverage(),
-        (unsigned char)this->opt->getExitCode()
-    );
 }

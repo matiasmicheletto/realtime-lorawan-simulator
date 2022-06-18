@@ -24,6 +24,7 @@ class CustomDist : public Random {
                 std::vector<double> probs;
         };
         CustomDist(Builder builder);
+        ~CustomDist();
         double random();
         int randomInt();
         void setRandom(double &x, double &y);

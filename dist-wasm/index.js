@@ -3,6 +3,8 @@ const visContainer = document.getElementById("network");
 // Parameters for optimization
 const mapSize = 1000;
 const edNumber= 5000;
+const posDist = 0; // 0:uniform, 1:normal, 2:clouds
+const periodDist = 2; // 0:soft, 1:medium, 2:hard
 const maxIter = 100;
 const timeout = 60;
 const algorithm = 2;
@@ -126,9 +128,11 @@ const drawNetwork = () => {
 
 var Module = {
     onRuntimeInitialized: function() {
-        const optimizer = new Module.OptimizerInterface(
+        const optimizer = new Module.JsInterface(
             mapSize,
             edNumber,
+            posDist,
+            periodDist,
             maxIter,
             timeout,
             algorithm,

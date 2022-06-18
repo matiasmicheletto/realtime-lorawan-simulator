@@ -5,9 +5,13 @@ CustomDist::CustomDist(Builder builder) : Random() {
     this->probs = builder.probs;
 }
 
+CustomDist::~CustomDist() {
+    
+}
+
 CustomDist::Builder* CustomDist::Builder::addValue(double value, double prob) {
-    values.push_back(value);
-    probs.push_back(prob);
+    this->values.push_back(value);
+    this->probs.push_back(prob);
     return this;
 }
 
@@ -18,10 +22,12 @@ CustomDist::Builder* CustomDist::Builder::addValue(int value, double prob) {
 CustomDist CustomDist::Builder::build() {
     // Check if sum of probs equals 1
     double sum = 0;
-    for (long unsigned int i = 0; i < probs.size(); i++)
-        sum += probs[i];
-    if (sum < 0.999) 
-        printf("Warning [CustomDist]: Sum of probabilities does not equal 1!");
+    for (long unsigned int i = 0; i < this->probs.size(); i++)
+        sum += this->probs[i];
+    if (sum < 0.999){ 
+        printf("Warning [CustomDist]: Sum of probabilities does not equal 1!\n");
+        printf("Sum of probabilities: %.2f\n", sum);
+    }
     return CustomDist(*this);
 }
 

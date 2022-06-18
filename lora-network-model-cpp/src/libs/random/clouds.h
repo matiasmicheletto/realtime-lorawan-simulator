@@ -23,6 +23,7 @@ class Clouds : public Random {
                 std::vector<std::vector<Normal>> clds;
         };
         Clouds(Builder builder);
+        ~Clouds();
         void setRandom(double &x, double &y);
         void setRandomInt(int &x, int &y);
     private:

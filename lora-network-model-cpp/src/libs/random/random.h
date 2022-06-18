@@ -6,7 +6,7 @@
 class Random {
     public:
         Random();
-        ~Random();
+        virtual ~Random();
         virtual double random();
         virtual int randomInt();
         virtual void setRandom(double &x, double &y);
