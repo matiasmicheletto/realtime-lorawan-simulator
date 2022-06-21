@@ -24,6 +24,7 @@ Optimizer::Optimizer(Builder builder) {
     // Initialize local variables
     this->currentIter = 0;
     this->elapsed = 0;
+    this->nced = this->network->getEDCount();
     this->exitCode = NOT_RUN;
 }
 
@@ -101,36 +102,51 @@ void Optimizer::run( void (*progressCallback)(Network *network) ) {
         }
 
         // Objective function: gw network coverage
-        double coverage = this->network->getEDCoverage();
+        unsigned int newNCED = this->network->getNCEDCount();
+        long int ncedDiff = newNCED - this->nced;
+        this->nced = newNCED;
 
         #ifdef DEBUG_MODE
             printf("\r");
             printf(
-                "Iteration %d (%.2f %%) -- Coverage: %.2f %%", 
+                "Iteration %d (%.2f %%) -- NCED: %u (change: %ld)", 
                 this->currentIter, 
                 this->currentIter/(double)this->maxIter*100, 
-                coverage*100
+                newNCED,
+                ncedDiff
             );
         #endif
 
-        if(coverage > 0.9999){
+        if(newNCED == 0){
             this->exitCode = MAX_COVERAGE;
             break;
         }else{
-            suboptimalSteps++;
-            if(suboptimalSteps > 20){  
-                if(this->network->createGateway()){
-                    suboptimalSteps = 0;
-                }else{
-                    this->exitCode = MAX_GW;
-                    break;
-                }
+            if(ncedDiff < 50)
+                suboptimalSteps++;
+            if(suboptimalSteps > 15){  
+                this->network->createGateway();
+                suboptimalSteps = 0;
             }
         }
     }
 
     if(progressCallback != nullptr)
         progressCallback(this->network);
+}
+
+string Optimizer::getExitCodeName() {
+    switch(this->exitCode){
+        case NOT_RUN:
+            return "Not run";
+        case TIMEOUT:
+            return "Timeout";
+        case MAX_ITER:
+            return "Max. iterations";
+        case MAX_COVERAGE:
+            return "Max. coverage";
+        default:
+            return "Unknown";
+    }
 }
 
 void Optimizer::printResults() {
@@ -167,15 +183,17 @@ void Optimizer::appendToLog(char *filename) {
         printf("Error opening log file.\n");
         return;
     }
-    string name = "Hola";
-    fprintf(logfile, "%d,%d,%d,%.2f,%lu,%d,%d\n", 
+    fprintf(logfile, "%s,%s,%s,%d,%d,%d,%.2f,%lu,%d,%s\n", 
+        this->stepMethod == RANDOM ? "Random" : (this->stepMethod == SPRINGS ? "Springs" : "Unknown"),
+        this->network->getPosDistName().c_str(),
+        this->network->getPeriodDistName().c_str(),
         this->network->getMapSize(), 
         this->network->getGWCount(), 
         this->network->getEDCount(), 
         this->network->getEDCoverage()*100,
         this->elapsed,
         this->currentIter,
-        (int) this->exitCode
+        this->getExitCodeName().c_str()
     );
     fclose(logfile);
 }

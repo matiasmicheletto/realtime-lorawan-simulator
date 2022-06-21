@@ -5,9 +5,11 @@ Gateway::Gateway(
         double y, 
         unsigned int id, 
         unsigned int hyperperiod,
-        unsigned char channel) : Node(x, y, id) {
+        unsigned char channel,
+        unsigned char maxSF) : Node(x, y, id) {
     this->H = hyperperiod;
     this->channel = channel;
+    this->maxSF = maxSF;
     this->resetSlots();
 }
 
@@ -36,6 +38,25 @@ bool Gateway::useSlots(unsigned char sf, unsigned int period){
 void Gateway::freeSlots(unsigned char sf, unsigned int period){
     if(sf >= 7 && sf <= 12)
         this->availableSlots[sf-7] += this->H/period;
+}
+
+double Gateway::getRange() {
+    switch(this->maxSF){
+        case 12:
+            return 2000.0;
+        case 11:
+            return 1000.0;
+        case 10:
+            return 500.0;
+        case 9:
+            return 250.0;
+        case 8:
+            return 125.0;
+        case 7:
+            return 62.5;
+        default: 
+            return 0;
+    }
 }
 
 unsigned char Gateway::getMinSF(double distance) {
@@ -76,8 +97,8 @@ bool Gateway::addEndDevice(EndDevice *ed) {
     if (!ed->isConnected()) { // End device can only be connected to a single GW
         // Get min and max SF
         unsigned char sf = getMinSF(this->distanceTo(ed));
-        unsigned char maxSF = getMaxSF(ed->getPeriod());
-        while(sf <= maxSF){ // Try to connect with minimum SF
+        unsigned char maxSFPeriod = getMaxSF(ed->getPeriod());
+        while(sf <= maxSFPeriod && sf <= this->maxSF){ // Try to connect with minimum SF
             if(this->useSlots(sf, ed->getPeriod())){
                 ed->connect(this, sf);
                 this->connectedEDs.push_back(ed);

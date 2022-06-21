@@ -47,18 +47,20 @@ class Network {
         // Network management
         void autoConnect(); // Given nodes positions and periods, connect them automatically
         void disconnect(); // Disconnect all nodes
-        bool createGateway(double x = 0, double y = 0);
+        void createGateway(double x = 0, double y = 0);
         bool removeGateway(unsigned int id);
         void removeAllGateaways(); // Remove all gateways except 1 and autoconnect
         void stepSprings(); // Improve coverage by moving GW using attraction forces
         void stepRandom(); // Try to improve coverage by randomizing GW positions
         
         // Network information
-        double getEDCoverage();
+        
         void exportNodesCSV(char *filename);
         void printNetworkStatus(FILE *file);
         std::string getPosDistName();
         std::string getPeriodDistName();
+        double getEDCoverage(); // Proportion of connected end devices
+        long unsigned int getNCEDCount(); // Not connected end devices
         inline unsigned int getMapSize() {return this->mapSize;}
         inline unsigned int getEDCount() {return this->enddevices.size();}
         inline unsigned int getGWCount() {return this->gateways.size();}
@@ -82,7 +84,6 @@ class Network {
 
         // GW management
         vector<Gateway*> gateways; // List of gateways (generated on run())
-        bool availableChannels[16]; // List of available channels (limits number of gw)
 };
 
 #endif // NETWORK_H

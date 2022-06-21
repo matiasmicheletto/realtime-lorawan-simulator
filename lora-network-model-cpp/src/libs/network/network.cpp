@@ -12,9 +12,6 @@ Network::Network(Builder builder) {
     this->lastID = builder.lastID;
     this->posDist = builder.posDist;
     this->periodDist = builder.periodDist;
-
-    for(int i = 0; i < 16; i++)
-        this->availableChannels[i] = true;
 }
 
 Network::~Network() {
@@ -79,10 +76,10 @@ Network Network::Builder::build(){
                 ->addValue(900, 0.05);
             break;
         case HARD:
-            distBuilder.addValue(3600, 0.80)
+            distBuilder.addValue(3600, 0.7)
                 ->addValue(1800, 0.1)
-                ->addValue(900, 0.05)
-                ->addValue(600, 0.05);
+                ->addValue(900, 0.1)
+                ->addValue(600, 0.1);
             break;
         default:
             printf("Warning: Network::Builder: Invalid period distribution");
@@ -126,6 +123,25 @@ Network Network::Builder::build(){
 }
 
 void Network::autoConnect() {
+    // Channel allocation for GWs
+    if(this->gateways.size() > 16){ // Perform this check only when total number of GW is greater than 16
+        unsigned int i = 0; // Index for current GW
+        while(i < this->gateways.size()){ // For each gateway
+            double range = this->gateways[i]->getRange(); // Range for current max. SF
+            unsigned int inRangeCounter = 0; // Number of GWs in range with current GW
+            // Count GW in range
+            for(unsigned int j = i; j < this->gateways.size(), inRangeCounter <= 16; j++)
+                if(this->gateways[i]->distanceTo(this->gateways[j]) < range)
+                    inRangeCounter++;
+            if(inRangeCounter > 16) // If current GW has more than 16 neighboors in range, 
+                this->gateways[i]->reduceMaxSF(); // Reduce range of current GW and try again
+            else // Else, go to next GW
+                i++;
+        }
+    }
+
+    /// TODO: channel allocation
+
     for(long unsigned int i = 0; i < this->enddevices.size(); i++) {
         // Sort gateways by distance
         sort(this->gateways.begin(), this->gateways.end(), [this, i](Gateway *a, Gateway *b) {
@@ -142,18 +158,10 @@ void Network::disconnect() {
         this->gateways[i]->disconnect();
 }
 
-bool Network::createGateway(double x, double y) {
-    for(unsigned char channel = 0; channel < 16; channel++){
-        if(this->availableChannels[channel]){
-            Gateway *gw = new Gateway(x, y, this->lastID, this->H, channel);
-            gateways.push_back(gw);
-            this->lastID++;
-            this->availableChannels[channel] = false;
-            return true;
-        }
-    }
-    printf("No more channels available!\n");
-    return false;
+void Network::createGateway(double x, double y) {
+    Gateway *gw = new Gateway(x, y, this->lastID, this->H);
+    gateways.push_back(gw);
+    this->lastID++;
 }
 
 bool Network::removeGateway(unsigned int id) {
@@ -226,9 +234,9 @@ void Network::stepRandom() {
     }
     this->disconnect(); 
     // Randomize positions
+    Uniform gwPosGenerator = Uniform(-(double)this->mapSize/2, (double)this->mapSize/2);
+    double newX, newY;
     for(long unsigned int i = 0; i < this->gateways.size(); i++){
-        Uniform gwPosGenerator = Uniform(-(double)this->mapSize/2, (double)this->mapSize/2);
-        double newX, newY;
         gwPosGenerator.setRandom(newX, newY);
         this->gateways[i]->moveTo(newX, newY);
     }
@@ -254,6 +262,14 @@ double Network::getEDCoverage() {
         if (this->enddevices[i]->isConnected())
             coverage++;
     return coverage / (double) this->enddevices.size();
+}
+
+long unsigned int Network::getNCEDCount() {
+    long unsigned int count = 0;
+    for (long unsigned int i = 0; i < this->enddevices.size(); i++) 
+        if(!this->enddevices[i]->isConnected())
+            count++;
+    return count;
 }
 
 void Network::printNetworkStatus(FILE *file) {
@@ -294,26 +310,26 @@ void Network::printNetworkStatus(FILE *file) {
 string Network::getPosDistName() {
     switch(this->posDist){
         case UNIFORM:
-            return "uniform";
+            return "Uniform";
         case NORMAL:
-            return "normal ";
+            return "Normal ";
         case CLOUDS:
-            return "clouds ";
+            return "Clouds ";
         default:
-            return "unknown";
+            return "Unknown";
     }
 }
 
 string Network::getPeriodDistName() {
     switch(this->periodDist){
         case SOFT:
-            return "soft";
+            return "Soft";
         case MEDIUM:
-            return "medium ";
+            return "Medium";
         case HARD:
-            return "hard   ";
+            return "Hard";
         default:
-            return "unknown";
+            return "Unknown";
     }
 }
 

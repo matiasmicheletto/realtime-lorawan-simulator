@@ -122,7 +122,7 @@ const drawNetwork = () => {
             nodes: new vis.DataSet(it.nodes),
             edges: new vis.DataSet(it.edges),
         };
-        console.log(it.nodes);
+        //console.log(it.nodes);
         const net = new vis.Network(visContainer, data, visOptions);
     }, 500);
 }

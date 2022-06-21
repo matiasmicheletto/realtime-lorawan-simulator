@@ -13,6 +13,7 @@ class Node {
         ~Node();
         
         void moveTo(double x, double y);
+        double distanceTo(double x, double y);
         double distanceTo(Node *node);
 
         inline unsigned int getId() { return this->id; };

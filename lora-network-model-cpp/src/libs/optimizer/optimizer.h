@@ -11,7 +11,7 @@
 using namespace std;
 
 enum STEP_METHOD { RANDOM = 0, SPRINGS = 1 };
-enum EXIT_CODE { NOT_RUN = 0, TIMEOUT = 1, MAX_ITER = 2, MAX_COVERAGE = 3, MAX_GW = 4 };
+enum EXIT_CODE { NOT_RUN = 0, TIMEOUT = 1, MAX_ITER = 2, MAX_COVERAGE = 3};
 
 class Optimizer {
     public:
@@ -41,6 +41,7 @@ class Optimizer {
         void printResults();
         void exportFullResults(char *filename);
         void appendToLog(char *filename);
+        string getExitCodeName();
 
         inline unsigned int getIterations() { return this->currentIter; }
         inline unsigned long int getElapsed() { return this->elapsed; }
@@ -58,6 +59,7 @@ class Optimizer {
         // Optimization parameters
         unsigned int maxIter; // Maximum number of iterations
         unsigned int currentIter; // Current iteration
+        unsigned int nced; // Not connected end devices computed on last iteration
         unsigned int timeout; // Timeout in seconds
         unsigned long int elapsed; // Elapsed time in milliseconds
         STEP_METHOD stepMethod; // Step method
