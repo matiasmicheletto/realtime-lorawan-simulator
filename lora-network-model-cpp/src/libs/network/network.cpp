@@ -14,6 +14,71 @@ Network::Network(Builder builder) {
     this->periodDist = builder.periodDist;
 }
 
+Network::Network(char* filename) {
+    // Format: 
+    // id,x,y,dist,period,?,?,?\n
+
+    FILE *file = fopen(filename, "r");
+    if (file == NULL) {
+        printf("Error opening file csv file\n");
+        exit(1);
+    }
+    this->H = 1;
+    this->posDist = EXT_POS;
+    this->periodDist = EXT_PER;
+    this->lastID = 0;
+    double minMapSize = 0.0;
+    double maxMapSize = 0.0;
+    char line[LINE_BUFFER_SIZE];
+    while ( fgets(line, LINE_BUFFER_SIZE, file) != NULL ) {
+        int col = 0;
+        char* token;
+        double x, y;
+        int period;
+        for (token = strtok(line, ","); token != NULL && col < FILE_COLS; col++, token=strtok(NULL, ",")){
+            switch (col){
+                case 1:
+                    x = atof(token);
+                    if(x > maxMapSize)
+                        maxMapSize = x;
+                    if(x < minMapSize)
+                        minMapSize = x;
+                    break;
+                case 2:
+                    y = atof(token);
+                    if(y > maxMapSize)
+                        maxMapSize = y;
+                    if(y < minMapSize)
+                        minMapSize = y;
+                    break;
+                case 4:
+                    period = atoi(token);
+                    break;
+                default:
+                    break;
+            }
+        }
+        this->H = lcm(this->H, period);
+        if(col == FILE_COLS){
+            this->H = lcm(this->H, period);
+            // Add end device to the network
+            EndDevice *ed = new EndDevice(x, y, this->lastID, period);
+            this->enddevices.push_back(ed);
+            this->lastID++;
+        }
+    }
+    fclose(file);
+    this->mapSize = maxMapSize - minMapSize;
+    #ifdef DEBUG_MODE
+        printf("-----------------------------------\n");
+        printf("Configuration file loaded\n");
+        printf("End devices: %d\n", this->lastID);
+        printf("System hyperperiod: %d\n", this->H);
+        printf("Map size: %d\n", this->mapSize);
+        printf("-----------------------------------\n");
+    #endif
+}
+
 Network::~Network() {
     for (unsigned int i = 0; i < this->gateways.size(); i++)
         delete this->gateways[i];
@@ -109,8 +174,8 @@ Network Network::Builder::build(){
         printf("Network configuration:\n");
         printf("Map size: %d\n", this->mapSize);
         printf("End devices: %ld\n", this->enddevices.size());
-        printf("ED position generator: %d (0->uniform, 1->normal, 2->clouds)\n", (int) this->posDist);
-        printf("ED period generator: %d (0->soft, 1->medium, 2->hard)\n", (int) this->periodDist);
+        printf("ED position generator: %s\n", Network::getPosDistName(this->posDist).c_str());
+        printf("ED period generator: %s\n", Network::getPeriodDistName(this->periodDist).c_str());
         printf("System hyperperiod: %d\n", this->H);
         printf("--------------------------------\n\n");
     #endif
@@ -123,33 +188,16 @@ Network Network::Builder::build(){
 }
 
 void Network::autoConnect() {
-    // Channel allocation for GWs
-    if(this->gateways.size() > 16){ // Perform this check only when total number of GW is greater than 16
-        unsigned int i = 0; // Index for current GW
-        while(i < this->gateways.size()){ // For each gateway
-            double range = this->gateways[i]->getRange(); // Range for current max. SF
-            unsigned int inRangeCounter = 0; // Number of GWs in range with current GW
-            // Count GW in range
-            for(unsigned int j = i; j < this->gateways.size(), inRangeCounter <= 16; j++)
-                if(this->gateways[i]->distanceTo(this->gateways[j]) < range)
-                    inRangeCounter++;
-            if(inRangeCounter > 16) // If current GW has more than 16 neighboors in range, 
-                this->gateways[i]->reduceMaxSF(); // Reduce range of current GW and try again
-            else // Else, go to next GW
-                i++;
-        }
-    }
-
-    /// TODO: channel allocation
-
     for(long unsigned int i = 0; i < this->enddevices.size(); i++) {
-        // Sort gateways by distance
-        sort(this->gateways.begin(), this->gateways.end(), [this, i](Gateway *a, Gateway *b) {
-            return a->distanceTo(this->enddevices[i]) < b->distanceTo(this->enddevices[i]);
-        });
-        for(long unsigned int j = 0; j < this->gateways.size(); j++)
-            if(this->gateways[j]->addEndDevice(this->enddevices[i]))
-                break;
+        if(!this->enddevices[i]->isConnected()){
+            // Sort gateways by distance
+            sort(this->gateways.begin(), this->gateways.end(), [this, i](Gateway *a, Gateway *b) {
+                return a->distanceTo(this->enddevices[i]) < b->distanceTo(this->enddevices[i]);
+            });
+            for(long unsigned int j = 0; j < this->gateways.size(); j++)
+                if(this->gateways[j]->addEndDevice(this->enddevices[i]))
+                    break;
+        }
     }
 }
 
@@ -223,7 +271,6 @@ void Network::stepSprings() {
 }
 
 void Network::stepRandom() {
-    //printf("Network::stepRandom()\n");
     double originalCoverage = this->getEDCoverage();
     // Save original positions
     vector<vector<double>> originalPositions;
@@ -239,6 +286,47 @@ void Network::stepRandom() {
     for(long unsigned int i = 0; i < this->gateways.size(); i++){
         gwPosGenerator.setRandom(newX, newY);
         this->gateways[i]->moveTo(newX, newY);
+    }
+    // Check new coverage
+    this->autoConnect();
+    double newCoverage = this->getEDCoverage();
+    if(newCoverage < originalCoverage){ // If coverage did not improve
+        this->disconnect();
+        // Restore original positions
+        for(long unsigned int i = 0; i < this->gateways.size(); i++){
+            double x = originalPositions[i][0];
+            double y = originalPositions[i][1];
+            this->gateways[i]->moveTo(x, y);
+        }
+        originalPositions.clear();
+        this->autoConnect();
+    }
+}
+
+void Network::stepRandomPreserve() {
+    double originalCoverage = this->getEDCoverage();
+    // Save original positions and find the GW with greater UF
+    vector<vector<double>> originalPositions;
+    double maxUF = 0;
+    long unsigned int maxUFIndex = 0;
+    for(long unsigned int i = 0; i < this->gateways.size(); i++){
+        double x = this->gateways[i]->getX();
+        double y = this->gateways[i]->getY();
+        originalPositions.push_back(vector<double>{x, y});
+        if(this->gateways[i]->getUF() > maxUF){
+            maxUF = this->gateways[i]->getUF();
+            maxUFIndex = i;
+        }
+    }
+    // Disconnect all GWs except the one with greater UF and randomize positions
+    Uniform gwPosGenerator = Uniform(-(double)this->mapSize/2, (double)this->mapSize/2);
+    double newX, newY;
+    for(long unsigned int i = 0; i < this->gateways.size(); i++){
+        if(i != maxUFIndex){
+            gwPosGenerator.setRandom(newX, newY);
+            this->gateways[i]->disconnect();
+            this->gateways[i]->moveTo(newX, newY);
+        }
     }
     // Check new coverage
     this->autoConnect();
@@ -278,8 +366,8 @@ void Network::printNetworkStatus(FILE *file) {
     fprintf(file, "Network status:\n");
     fprintf(file, "  Map size: %d\n", this->mapSize);
     fprintf(file, "  End devices: %ld\n", this->enddevices.size());
-    fprintf(file, "  Pos. distr.: %s\n", this->getPosDistName().c_str());
-    fprintf(file, "  Period dist.: %s\n", this->getPeriodDistName().c_str());
+    fprintf(file, "  Pos. distr.: %s\n", this->getPosDistName(this->posDist).c_str());
+    fprintf(file, "  Period dist.: %s\n", this->getPeriodDistName(this->periodDist).c_str());
     fprintf(file, "  Gateways: %ld\n", this->gateways.size());
     fprintf(file, "  ED coverage: %.2f %%\n", this->getEDCoverage()*100);
     // Print gateways positions
@@ -295,42 +383,65 @@ void Network::printNetworkStatus(FILE *file) {
         );
     // Print end devices positions
     fprintf(file, "End devices positions and connection details:\n");
-    for(unsigned int i = 0; i < this->enddevices.size(); i++)
-        fprintf(file, "  #%d: (%.2f, %.2f), period %d, connected to Gateway #%d (at %.2f mts.), using SF%d \n", 
-            this->enddevices[i]->getId(), 
-            this->enddevices[i]->getX(), 
-            this->enddevices[i]->getY(),
-            this->enddevices[i]->getPeriod(),
-            this->enddevices[i]->getGatewayId(),
-            this->enddevices[i]->getGWDist(),
-            this->enddevices[i]->getSF()
-        );
+    for(unsigned int i = 0; i < this->enddevices.size(); i++){
+        if(this->enddevices[i]->isConnected())
+            fprintf(file, "  #%d: (%.2f, %.2f), period %d, connected to Gateway #%d (at %.2f mts.), using SF%d \n", 
+                this->enddevices[i]->getId(), 
+                this->enddevices[i]->getX(), 
+                this->enddevices[i]->getY(),
+                this->enddevices[i]->getPeriod(),
+                this->enddevices[i]->getGatewayId(),
+                this->enddevices[i]->getGWDist(),
+                this->enddevices[i]->getSF()
+            );
+        else
+            fprintf(file, "  #%d: (%.2f, %.2f), period %d, not connected\n", 
+                this->enddevices[i]->getId(), 
+                this->enddevices[i]->getX(), 
+                this->enddevices[i]->getY(),
+                this->enddevices[i]->getPeriod()
+            );
+    }
 }
 
-string Network::getPosDistName() {
-    switch(this->posDist){
+// static
+string Network::getPosDistName(POS_DIST posDist) {
+    switch(posDist){
         case UNIFORM:
             return "Uniform";
         case NORMAL:
-            return "Normal ";
+            return "Normal";
         case CLOUDS:
-            return "Clouds ";
+            return "Clouds";
+        case EXT_POS:
+            return "External";
         default:
             return "Unknown";
     }
 }
 
-string Network::getPeriodDistName() {
-    switch(this->periodDist){
+string Network::getPosDistName() {
+    return this->getPosDistName(this->posDist);
+}
+
+// static
+string Network::getPeriodDistName(PERIOD_DIST periodDist) {
+    switch(periodDist){
         case SOFT:
             return "Soft";
         case MEDIUM:
             return "Medium";
         case HARD:
             return "Hard";
+        case EXT_PER: 
+            return "External";
         default:
             return "Unknown";
     }
+}
+
+string Network::getPeriodDistName() {
+    return this->getPeriodDistName(this->periodDist);
 }
 
 void Network::exportNodesCSV(char *filename) {

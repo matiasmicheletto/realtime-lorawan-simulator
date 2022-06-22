@@ -63,7 +63,7 @@ Optimizer Optimizer::Builder::build(){
         printf("Optimizer configuration:\n");
         printf("  Iterations: %d\n", this->maxIter);
         printf("  Timeout: %d\n", this->timeout);
-        printf("  Method: %d (0->random, 1->springs)\n", (unsigned char)this->stepMethod);
+        printf("  Method: %s\n", Optimizer::getStepMethodName(this->stepMethod).c_str());
         printf("--------------------------------\n\n");
     #endif
 
@@ -85,10 +85,19 @@ void Optimizer::run( void (*progressCallback)(Network *network) ) {
     this->exitCode = MAX_ITER;
     for(this->currentIter = 0; this->currentIter < this->maxIter; this->currentIter++){
         
-        if(this->stepMethod == RANDOM)
-            this->network->stepRandom();
-        if(this->stepMethod == SPRINGS)
-            this->network->stepSprings();
+        switch (this->stepMethod) {
+            case SPRINGS:
+                this->network->stepSprings();
+                break;
+            case RANDOM:
+                this->network->stepRandom();
+                break;
+            case RANDOM_PRESERVE:
+                this->network->stepRandomPreserve();
+                break;
+            default:
+                break;
+        }
 
         if((this->currentIter % this->updatePeriod == 0) && progressCallback != nullptr)
             progressCallback(this->network);
@@ -134,8 +143,8 @@ void Optimizer::run( void (*progressCallback)(Network *network) ) {
         progressCallback(this->network);
 }
 
-string Optimizer::getExitCodeName() {
-    switch(this->exitCode){
+string Optimizer::getExitCodeName(EXIT_CODE exitCode) {
+    switch(exitCode){
         case NOT_RUN:
             return "Not run";
         case TIMEOUT:
@@ -147,6 +156,27 @@ string Optimizer::getExitCodeName() {
         default:
             return "Unknown";
     }
+}
+
+string Optimizer::getExitCodeName() {
+    return this->getExitCodeName(this->exitCode);
+}
+
+string Optimizer::getStepMethodName(STEP_METHOD stepMethod) {
+    switch(stepMethod){
+        case SPRINGS:
+            return "Springs";
+        case RANDOM:
+            return "Random";
+        case RANDOM_PRESERVE:
+            return "Random (preserve)";
+        default:
+            return "Unknown";
+    }
+}
+
+string Optimizer::getStepMethodName() {
+    return this->getStepMethodName(this->stepMethod);
 }
 
 void Optimizer::printResults() {
@@ -168,7 +198,7 @@ void Optimizer::exportFullResults(char *filename) {
         return;
     }
     fprintf(file, "Optimization results:\n");
-    fprintf(file, "  Network improve method: %s\n", this->stepMethod == RANDOM ? "Random" : (this->stepMethod == SPRINGS ? "Springs" : "Unknown"));
+    fprintf(file, "  Network improve method: %s\n", this->getStepMethodName().c_str());
     fprintf(file, "  Iterations performed: %d\n", this->currentIter);
     fprintf(file, "  Elapsed: %lu ms\n", this->elapsed);
     fprintf(file, exitCodes[this->exitCode].c_str(), this->exitCode);
@@ -184,7 +214,7 @@ void Optimizer::appendToLog(char *filename) {
         return;
     }
     fprintf(logfile, "%s,%s,%s,%d,%d,%d,%.2f,%lu,%d,%s\n", 
-        this->stepMethod == RANDOM ? "Random" : (this->stepMethod == SPRINGS ? "Springs" : "Unknown"),
+        this->getStepMethodName().c_str(),
         this->network->getPosDistName().c_str(),
         this->network->getPeriodDistName().c_str(),
         this->network->getMapSize(), 

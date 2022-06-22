@@ -10,7 +10,7 @@
 
 using namespace std;
 
-enum STEP_METHOD { RANDOM = 0, SPRINGS = 1 };
+enum STEP_METHOD { SPRINGS = 0, RANDOM = 1, RANDOM_PRESERVE = 2 };
 enum EXIT_CODE { NOT_RUN = 0, TIMEOUT = 1, MAX_ITER = 2, MAX_COVERAGE = 3};
 
 class Optimizer {
@@ -41,7 +41,10 @@ class Optimizer {
         void printResults();
         void exportFullResults(char *filename);
         void appendToLog(char *filename);
+        static string getExitCodeName(EXIT_CODE exitCode);
         string getExitCodeName();
+        static string getStepMethodName(STEP_METHOD stepMethod);
+        string getStepMethodName();
 
         inline unsigned int getIterations() { return this->currentIter; }
         inline unsigned long int getElapsed() { return this->elapsed; }

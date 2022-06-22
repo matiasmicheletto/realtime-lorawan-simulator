@@ -1,12 +1,15 @@
 #ifndef NETWORK_H
 #define NETWORK_H
 
+
 #include <vector>
 #include <algorithm>
 #include <string>
+#include <cstring>
 #include <chrono>
 #include <time.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "../random/random.h"
 #include "../random/uniform.h"
@@ -17,9 +20,13 @@
 #include "../network/enddevice.h"
 
 #define DEBUG_MODE 1
+#define LINE_BUFFER_SIZE 256 // Line buffer for input file
+#define FILE_COLS 9 // Number of columns of input file
 
-enum POS_DIST { UNIFORM = 0, NORMAL = 1, CLOUDS = 2 };
-enum PERIOD_DIST { SOFT = 0, MEDIUM = 1, HARD = 2 };
+enum POS_DIST { UNIFORM = 0, NORMAL = 1, CLOUDS = 2, EXT_POS = 3 };
+enum PERIOD_DIST { SOFT = 0, MEDIUM = 1, HARD = 2, EXT_PER = 3 };
+
+using namespace std;
 
 class Network {
     public:
@@ -34,7 +41,7 @@ class Network {
                 unsigned int mapSize = 1000; // Size of the map 
                 int H; // System hyperperiod
                 unsigned int lastID; // IDs to identify network nodes
-                std::vector<EndDevice*> enddevices; // List of enddevices
+                vector<EndDevice*> enddevices; // List of enddevices
                 POS_DIST posDist = UNIFORM; // Distribution of positions
                 PERIOD_DIST periodDist = SOFT; // Distribution of periods
             private:
@@ -42,6 +49,7 @@ class Network {
         };
 
         Network(Builder builder);
+        Network(char* filename);
         ~Network();
         
         // Network management
@@ -52,13 +60,17 @@ class Network {
         void removeAllGateaways(); // Remove all gateways except 1 and autoconnect
         void stepSprings(); // Improve coverage by moving GW using attraction forces
         void stepRandom(); // Try to improve coverage by randomizing GW positions
+        void stepRandomPreserve(); // Fixing GW positions when high UF reached
         
         // Network information
         
         void exportNodesCSV(char *filename);
         void printNetworkStatus(FILE *file);
-        std::string getPosDistName();
-        std::string getPeriodDistName();
+        
+        static string getPosDistName(POS_DIST posDist);
+        string getPosDistName();
+        static string getPeriodDistName(PERIOD_DIST periodDist);
+        string getPeriodDistName();
         double getEDCoverage(); // Proportion of connected end devices
         long unsigned int getNCEDCount(); // Not connected end devices
         inline unsigned int getMapSize() {return this->mapSize;}

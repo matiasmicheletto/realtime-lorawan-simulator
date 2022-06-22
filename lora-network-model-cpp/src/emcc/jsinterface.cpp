@@ -48,7 +48,7 @@ JsInterface::JsInterface(
         .setNetwork(this->network)
         ->setMaxIter(maxIter)
         ->setTimeout(timeout)
-        ->setStepMethod((STEP_METHOD) (alg-1))
+        ->setStepMethod((STEP_METHOD) alg)
         ->setUpdatePeriod(updatePeriod); 
     this->optimizer = new Optimizer(builder->build());
 }
