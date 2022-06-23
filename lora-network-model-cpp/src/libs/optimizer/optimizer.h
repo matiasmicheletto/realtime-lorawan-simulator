@@ -6,8 +6,6 @@
 #include <string>
 #include "../network/network.h"
 
-#define DEBUG_MODE 1
-
 using namespace std;
 
 enum STEP_METHOD { SPRINGS = 0, RANDOM = 1, RANDOM_PRESERVE = 2 };

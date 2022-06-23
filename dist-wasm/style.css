@@ -8,9 +8,6 @@ body {
 
 .vis-container {
 	margin: 5px;	
-}
-
-.vis-container > div {
 	border: 1px solid gray;
 	box-shadow: 3px 3px 10px gray;
 	border-radius: 1%;

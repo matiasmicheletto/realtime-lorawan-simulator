@@ -3,6 +3,7 @@
 
 
 #include <vector>
+#include <list>
 #include <algorithm>
 #include <string>
 #include <cstring>
@@ -19,7 +20,7 @@
 #include "../network/gateway.h"
 #include "../network/enddevice.h"
 
-#define DEBUG_MODE 1
+//#define DEBUG_MODE 1
 #define LINE_BUFFER_SIZE 256 // Line buffer for input file
 #define FILE_COLS 9 // Number of columns of input file
 
@@ -58,15 +59,16 @@ class Network {
         void createGateway(double x = 0, double y = 0);
         bool removeGateway(unsigned int id);
         void removeAllGateaways(); // Remove all gateways except 1 and autoconnect
+        int configureGWChannels();
         void stepSprings(); // Improve coverage by moving GW using attraction forces
         void stepRandom(); // Try to improve coverage by randomizing GW positions
         void stepRandomPreserve(); // Fixing GW positions when high UF reached
         
         // Network information
-        
         void exportNodesCSV(char *filename);
         void printNetworkStatus(FILE *file);
         
+        // Getters
         static string getPosDistName(POS_DIST posDist);
         string getPosDistName();
         static string getPeriodDistName(PERIOD_DIST periodDist);

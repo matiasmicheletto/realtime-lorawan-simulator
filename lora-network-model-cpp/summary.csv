@@ -1,0 +1,4 @@
+Random,Uniform,Soft,1000,7,8000,100.00,914,81,Max. coverage
+Random,Uniform,Soft,1000,7,8000,100.00,1112,92,Max. coverage
+Random,Uniform,Soft,1000,8,8000,100.00,1248,94,Max. coverage
+Random,Uniform,Soft,1000,8,8000,99.49,1664,100,Max. iterations

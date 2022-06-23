@@ -20,11 +20,13 @@ EM_JS(void, updateNetwork, (
 EM_JS(void, updateResults, (
     unsigned int iters,
     unsigned long int elapsed,
+    unsigned char exitCode,
+    unsigned int gws,
     double coverage,
-    unsigned char exitCode
+    int channels
 ), {
     // This callback should be defined in the JS side
-    onResultsUpdate(iters, elapsed, coverage, exitCode); 
+    onResultsUpdate(iters, elapsed, exitCode, gws, coverage, channels); 
 });
 
 JsInterface::JsInterface(
@@ -60,11 +62,14 @@ JsInterface::~JsInterface() {
 
 void JsInterface::run() {
     this->optimizer->run(this->progressCallback);
+    int channels = this->network->configureGWChannels();
     updateResults(
         this->optimizer->getIterations(),
         this->optimizer->getElapsed(),
+        (unsigned char)this->optimizer->getExitCode(),
+        this->network->getGWCount(),
         this->network->getEDCoverage(),
-        (unsigned char)this->optimizer->getExitCode()
+        channels
     );
 }
 
@@ -82,11 +87,12 @@ void JsInterface::progressCallback(Network *network) {
         if(eds->at(i)->isConnected())
             edgeslen++;
     
-    // Allocate memory for arrays
+    // Allocate memory for node arrays
     double *x = (double*) malloc(sizeof(double) * nodeslen);
     double *y = (double*) malloc(sizeof(double) * nodeslen);
     unsigned int *id = (unsigned int*) malloc(sizeof(unsigned int) * nodeslen);
     unsigned char *group = (unsigned char*) malloc(sizeof(unsigned char) * nodeslen);
+    // Allocate memory for edge arrays
     unsigned int *from = (unsigned int*) malloc(sizeof(unsigned int) * edgeslen);
     unsigned int *to = (unsigned int*) malloc(sizeof(unsigned int) * edgeslen);
     unsigned char *sf = (unsigned char*) malloc(sizeof(unsigned char) * edgeslen);

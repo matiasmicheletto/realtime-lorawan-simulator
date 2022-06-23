@@ -7,18 +7,22 @@ const posDist = 0; // 0:uniform, 1:normal, 2:clouds
 const periodDist = 0; // 0:soft, 1:medium, 2:hard
 const maxIter = 100;
 const timeout = 60;
-const algorithm = 2; // 0:springs, 1:random, 2:random preserve
-const updateRate = 10;
+const algorithm = 0; // 0:springs, 1:random, 2:random preserve
+const updateRate = 1; // Update results every "updateRate" iterations
 
 // Constants
-const groups = ["NCED", "ED", "GW"];
+const nodeColors = {
+    0: "rgb(250,0,0)",
+    1: "rgb(0,0,250)",
+    2: "rgb(0,250,0)"
+};
 const edgeColors = {
-    7: "rgb(0, 0, 150)",
-    8: "rgb(150, 0, 0)",
-    9: "rgb(0, 150, 0)",
-    10: "rgb(150, 150, 0)",
-    11: "rgb(0, 150, 150)",
-    12: "rgb(150, 0, 150)"
+    7: "rgb(0, 0, 150, .7)",
+    8: "rgb(150, 0, 0, .6)",
+    9: "rgb(0, 150, 0, .5)",
+    10: "rgb(150, 150, 0, .5)",
+    11: "rgb(0, 150, 150, .4)",
+    12: "rgb(150, 0, 150, .3)"
 };
 const exitCodes = [
     "Optimization not started",
@@ -27,32 +31,12 @@ const exitCodes = [
     "100% Coverage reached",
     "Maximum gateways reached"
 ];
-const visOptions = {
-    height: "100%",   
-    width: "100%",
-    edges: { smooth: false },
-    physics: false,
-    interaction: { dragNodes: false },
-    groups: {
-        NCED: { // Not connected end devices
-            shape: "dot",
-            size: 1,
-            color: "rgb(250,0,0)"
-        },
-        ED: { // Connected end devices
-            shape: "dot",
-            size: 1,
-            color: "rgb(0,0,250)"
-        },
-        GW: { // Gateways
-            shape: "triangle",
-            size: 3,
-            color: "rgb(0,250,0)"
-        }
-    }
-};
 
 const frames = [];
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+canvas.width = mapSize;
+canvas.height = mapSize;
 
 // Callback for optimization steps
 const onNetworkUpdate = (x, y, id, group, from, to, sf, nodeslen, edgeslen) => {
@@ -78,12 +62,12 @@ const onNetworkUpdate = (x, y, id, group, from, to, sf, nodeslen, edgeslen) => {
     var edges = [];
 
     for(var i = 0; i < nodeslen; i++) {
-        nodes.push({
-            id: idArray[i],
-            x: xArray[i],
-            y: yArray[i],
-            group: groups[groupArray[i]]
-        });
+        //console.log(i, idArray[i]);
+        nodes[idArray[i]] = {
+            x: xArray[i]+mapSize/2,
+            y: yArray[i]+mapSize/2,
+            group: groupArray[i]
+        };
     }
     for(var i = 0; i < edgeslen; i++) {
         edges.push({
@@ -94,7 +78,8 @@ const onNetworkUpdate = (x, y, id, group, from, to, sf, nodeslen, edgeslen) => {
     }
 
     frames.push({nodes,edges});
-    drawNetwork();
+    if(frames.length === 1)
+        drawNetwork();
 
     Module._free(x);
     Module._free(y);
@@ -106,25 +91,39 @@ const onNetworkUpdate = (x, y, id, group, from, to, sf, nodeslen, edgeslen) => {
 }
 
 // Callback for optimization finish
-const onResultsUpdate = (iters, elapsed, coverage, exitCode) => {
+const onResultsUpdate = (iters, elapsed, exitCode, gws, coverage, channels) => {
     console.log("Optimization finished");
+    console.log("Number of gateways:", gws)
     console.log("Iterations:",iters);
+    console.log("Exit condition:", exitCodes[exitCode]);
     console.log("Elapsed:", elapsed);
     console.log("Coverage:", coverage*100);
-    console.log("Exit condition:", exitCodes[exitCode]);
+    console.log("Channels:", channels);
 }
 
 // Update chart
 const drawNetwork = () => {
     setTimeout(() => {
-        const it = frames.shift();
-        const data = {
-            nodes: new vis.DataSet(it.nodes),
-            edges: new vis.DataSet(it.edges),
-        };
-        //console.log(it.nodes);
-        const net = new vis.Network(visContainer, data, visOptions);
-    }, 500);
+        const iter = frames.shift();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for(var node of iter.nodes) {
+            ctx.beginPath();
+            ctx.fillRect(node.x, node.y, 1, 1);
+            ctx.fillStyle = nodeColors[node.group];
+            ctx.fill();
+        }
+        for(var edge of iter.edges) {
+            const fromNode = iter.nodes[edge.from];
+            const toNode = iter.nodes[edge.to];
+            ctx.beginPath();
+            ctx.moveTo(fromNode.x, fromNode.y);
+            ctx.lineTo(toNode.x, toNode.y);
+            ctx.strokeStyle = edge.color;
+            ctx.stroke();
+        }
+        if(frames.length > 0)
+            drawNetwork();
+    },100);
 }
 
 var Module = {

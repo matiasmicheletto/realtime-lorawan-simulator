@@ -188,6 +188,7 @@ Network Network::Builder::build(){
 }
 
 void Network::autoConnect() {
+    //Alternative --> for_each(this->enddevices.begin(),this->enddevices.end(),[this](EndDevice *ed) {
     for(long unsigned int i = 0; i < this->enddevices.size(); i++) {
         if(!this->enddevices[i]->isConnected()){
             // Sort gateways by distance
@@ -480,4 +481,38 @@ void Network::exportNodesCSV(char *filename) {
     }
 
     fclose(file);
+}
+
+int Network::configureGWChannels() {
+    // Compute chromatic number to determine minimum number of channels
+    
+    // Reset all channels
+    for(long unsigned int i = 0; i < this->gateways.size(); i++)
+        this->gateways[i]->setChannel(0);
+    // Compute chromatic number
+    int minChannels = 1;
+    list<int> usedChannels;
+    for(long unsigned int i = 1; i < this->gateways.size(); i++){ // Start from 1 to avoid GW 0
+        // Get a list of channels used by the neighbors of the current gateway
+        usedChannels.clear();
+        for(long unsigned int j = 0; j < this->gateways.size(); j++){
+            if(i == j) continue; // Skip current gateway
+            double range = this->gateways[i]->getRange()+this->gateways[j]->getRange();
+            if(this->gateways[i]->distanceTo(this->gateways[j]) <= range) // If i and j are neighbors
+                usedChannels.push_back(this->gateways[j]->getChannel()); // Add channel of j to the list
+        }
+        // Traverse the list of used channels and find the minimum available
+        int minAvailableChannel = 0;
+        for(unsigned long int j = 0; j < this->gateways.size(); j++){
+            if(find(usedChannels.begin(), usedChannels.end(), j) == usedChannels.end()){
+                minAvailableChannel = j;
+                break;
+            }
+        }
+        this->gateways[i]->setChannel(minAvailableChannel);
+        // Update minimum number of channels
+        if(minAvailableChannel > minChannels)
+            minChannels = minAvailableChannel;
+    }
+    return minChannels;
 }

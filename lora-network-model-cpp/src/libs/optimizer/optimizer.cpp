@@ -112,10 +112,10 @@ void Optimizer::run( void (*progressCallback)(Network *network) ) {
 
         // Objective function: gw network coverage
         unsigned int newNCED = this->network->getNCEDCount();
-        long int ncedDiff = newNCED - this->nced;
+        long int ncedDiff = this->nced - newNCED;
         this->nced = newNCED;
 
-        #ifdef DEBUG_MODE
+        #ifdef DEBUG_MODE 
             printf("\r");
             printf(
                 "Iteration %d (%.2f %%) -- NCED: %u (change: %ld)", 
@@ -130,9 +130,9 @@ void Optimizer::run( void (*progressCallback)(Network *network) ) {
             this->exitCode = MAX_COVERAGE;
             break;
         }else{
-            if(ncedDiff < 50)
+            if(ncedDiff < 10) // Less than 10 new connected nodes
                 suboptimalSteps++;
-            if(suboptimalSteps > 15){  
+            if(suboptimalSteps > 10){  
                 this->network->createGateway();
                 suboptimalSteps = 0;
             }
