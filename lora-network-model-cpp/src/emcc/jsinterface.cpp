@@ -62,14 +62,13 @@ JsInterface::~JsInterface() {
 
 void JsInterface::run() {
     this->optimizer->run(this->progressCallback);
-    int channels = this->network->configureGWChannels();
     updateResults(
         this->optimizer->getIterations(),
         this->optimizer->getElapsed(),
         (unsigned char)this->optimizer->getExitCode(),
         this->network->getGWCount(),
         this->network->getEDCoverage(),
-        channels
+        this->network->getMinChannels()
     );
 }
 

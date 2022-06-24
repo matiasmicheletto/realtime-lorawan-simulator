@@ -172,11 +172,11 @@ Network Network::Builder::build(){
     #ifdef DEBUG_MODE
         printf("--------------------------------\n");
         printf("Network configuration:\n");
-        printf("Map size: %d\n", this->mapSize);
-        printf("End devices: %ld\n", this->enddevices.size());
-        printf("ED position generator: %s\n", Network::getPosDistName(this->posDist).c_str());
-        printf("ED period generator: %s\n", Network::getPeriodDistName(this->periodDist).c_str());
-        printf("System hyperperiod: %d\n", this->H);
+        printf("  Map size: %d\n", this->mapSize);
+        printf("  End devices: %ld\n", this->enddevices.size());
+        printf("  ED position generator: %s\n", Network::getPosDistName(this->posDist).c_str());
+        printf("  ED period generator: %s\n", Network::getPeriodDistName(this->periodDist).c_str());
+        printf("  System hyperperiod: %d\n", this->H);
         printf("--------------------------------\n\n");
     #endif
 
@@ -371,6 +371,7 @@ void Network::printNetworkStatus(FILE *file) {
     fprintf(file, "  Period dist.: %s\n", this->getPeriodDistName(this->periodDist).c_str());
     fprintf(file, "  Gateways: %ld\n", this->gateways.size());
     fprintf(file, "  ED coverage: %.2f %%\n", this->getEDCoverage()*100);
+    fprintf(file, "  Used channels: %d\n", this->minChannels);
     // Print gateways positions
     fprintf(file, "Gateways positions and connections details:\n");
     for(unsigned int i = 0; i < this->gateways.size(); i++)
@@ -483,14 +484,14 @@ void Network::exportNodesCSV(char *filename) {
     fclose(file);
 }
 
-int Network::configureGWChannels() {
+void Network::configureGWChannels() {
     // Compute chromatic number to determine minimum number of channels
     
     // Reset all channels
     for(long unsigned int i = 0; i < this->gateways.size(); i++)
         this->gateways[i]->setChannel(0);
     // Compute chromatic number
-    int minChannels = 1;
+    this->minChannels = 1;
     list<int> usedChannels;
     for(long unsigned int i = 1; i < this->gateways.size(); i++){ // Start from 1 to avoid GW 0
         // Get a list of channels used by the neighbors of the current gateway
@@ -511,8 +512,7 @@ int Network::configureGWChannels() {
         }
         this->gateways[i]->setChannel(minAvailableChannel);
         // Update minimum number of channels
-        if(minAvailableChannel > minChannels)
-            minChannels = minAvailableChannel;
+        if(minAvailableChannel > this->minChannels)
+            this->minChannels = minAvailableChannel;
     }
-    return minChannels;
 }

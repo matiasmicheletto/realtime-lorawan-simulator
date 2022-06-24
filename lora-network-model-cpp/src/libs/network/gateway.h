@@ -18,7 +18,7 @@ class Gateway : public Node {
             unsigned int id, 
             unsigned int hyperperiod, 
             unsigned char channel = 0,
-            unsigned char maxSF = 10);
+            unsigned char maxSF = 12);
         ~Gateway();
 
         bool addEndDevice(EndDevice *ed); // Try to connect an end device

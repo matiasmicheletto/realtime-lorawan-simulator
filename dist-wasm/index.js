@@ -1,14 +1,14 @@
 const visContainer = document.getElementById("network");
 
 // Parameters for optimization
-const mapSize = 1000;
-const edNumber= 5000;
+const mapSize = 4000;
+const edNumber= 10000;
 const posDist = 0; // 0:uniform, 1:normal, 2:clouds
 const periodDist = 0; // 0:soft, 1:medium, 2:hard
-const maxIter = 100;
+const maxIter = 300;
 const timeout = 60;
 const algorithm = 0; // 0:springs, 1:random, 2:random preserve
-const updateRate = 1; // Update results every "updateRate" iterations
+const updateRate = 10; // Update results every "updateRate" iterations
 
 // Constants
 const nodeColors = {
@@ -35,8 +35,9 @@ const exitCodes = [
 const frames = [];
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
-canvas.width = mapSize;
-canvas.height = mapSize;
+const scale = mapSize/1000;
+canvas.width = mapSize/scale;
+canvas.height = mapSize/scale;
 
 // Callback for optimization steps
 const onNetworkUpdate = (x, y, id, group, from, to, sf, nodeslen, edgeslen) => {
@@ -64,8 +65,8 @@ const onNetworkUpdate = (x, y, id, group, from, to, sf, nodeslen, edgeslen) => {
     for(var i = 0; i < nodeslen; i++) {
         //console.log(i, idArray[i]);
         nodes[idArray[i]] = {
-            x: xArray[i]+mapSize/2,
-            y: yArray[i]+mapSize/2,
+            x: (xArray[i]+mapSize/2)/scale,
+            y: (yArray[i]+mapSize/2)/scale,
             group: groupArray[i]
         };
     }

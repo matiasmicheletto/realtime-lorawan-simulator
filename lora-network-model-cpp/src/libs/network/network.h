@@ -20,7 +20,7 @@
 #include "../network/gateway.h"
 #include "../network/enddevice.h"
 
-//#define DEBUG_MODE 1
+#define DEBUG_MODE 1
 #define LINE_BUFFER_SIZE 256 // Line buffer for input file
 #define FILE_COLS 9 // Number of columns of input file
 
@@ -59,7 +59,7 @@ class Network {
         void createGateway(double x = 0, double y = 0);
         bool removeGateway(unsigned int id);
         void removeAllGateaways(); // Remove all gateways except 1 and autoconnect
-        int configureGWChannels();
+        void configureGWChannels(); // Assign channels to gateways minimizing the number of channels
         void stepSprings(); // Improve coverage by moving GW using attraction forces
         void stepRandom(); // Try to improve coverage by randomizing GW positions
         void stepRandomPreserve(); // Fixing GW positions when high UF reached
@@ -78,6 +78,7 @@ class Network {
         inline unsigned int getMapSize() {return this->mapSize;}
         inline unsigned int getEDCount() {return this->enddevices.size();}
         inline unsigned int getGWCount() {return this->gateways.size();}
+        inline int getMinChannels() {return this->minChannels;}
         inline vector<EndDevice*>* getEDs() {return &(this->enddevices);}
         inline vector<Gateway*>* getGWs() {return &(this->gateways);}
         
@@ -98,6 +99,7 @@ class Network {
 
         // GW management
         vector<Gateway*> gateways; // List of gateways (generated on run())
+        int minChannels = 0; // Minimum number of channels for GWs
 };
 
 #endif // NETWORK_H

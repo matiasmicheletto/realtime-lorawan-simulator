@@ -115,7 +115,7 @@ void Optimizer::run( void (*progressCallback)(Network *network) ) {
         long int ncedDiff = this->nced - newNCED;
         this->nced = newNCED;
 
-        #ifdef DEBUG_MODE 
+        #if defined(DEBUG_MODE) && !defined(EMSCRIPTEN)
             printf("\r");
             printf(
                 "Iteration %d (%.2f %%) -- NCED: %u (change: %ld)", 
@@ -138,6 +138,9 @@ void Optimizer::run( void (*progressCallback)(Network *network) ) {
             }
         }
     }
+
+    // Apply coloring algorithm to graph of gateways
+    this->network->configureGWChannels();
 
     if(progressCallback != nullptr)
         progressCallback(this->network);
@@ -185,6 +188,7 @@ void Optimizer::printResults() {
     printf("  Iterations: %d\n",this->currentIter);
     printf("  Elapsed: %ld ms\n",this->elapsed);
     printf("  Gateways: %d\n",this->network->getGWCount());
+    printf("  Used channels: %d\n",this->network->getMinChannels());
     printf("  Coverage: %.2f %% \n",this->network->getEDCoverage()*100.0);
     printf(exitCodes[this->exitCode].c_str(),this->exitCode);
     printf("\n------------------------\n\n");

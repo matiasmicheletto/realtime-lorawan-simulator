@@ -38,9 +38,6 @@ int main(int argc, char **argv) {
     // Run optimization
     optimizer.run();
 
-    // Apply coloring algorithm to graph of gateways
-    network.configureGWChannels();
-
     // Print and export results
     optimizer.printResults();
 
