@@ -1,14 +1,15 @@
 const visContainer = document.getElementById("network");
 
-// Parameters for optimization
-const mapSize = 4000;
-const edNumber= 10000;
+// Default parameters for optimization
+const mapSize = 2000;
+const edNumber= 40000;
+const maxSF = 10;
 const posDist = 0; // 0:uniform, 1:normal, 2:clouds
 const periodDist = 0; // 0:soft, 1:medium, 2:hard
-const maxIter = 300;
-const timeout = 60;
-const algorithm = 0; // 0:springs, 1:random, 2:random preserve
-const updateRate = 10; // Update results every "updateRate" iterations
+const maxIter = 1000;
+const timeout = 300;
+const algorithm = 0; // 0:springs, 1:random
+const updateRate = 20; // Update results every "updateRate" iterations
 
 // Constants
 const nodeColors = {
@@ -24,13 +25,6 @@ const edgeColors = {
     11: "rgb(0, 150, 150, .4)",
     12: "rgb(150, 0, 150, .3)"
 };
-const exitCodes = [
-    "Optimization not started",
-    "Timeout",
-    "Iterations completed",
-    "100% Coverage reached",
-    "Maximum gateways reached"
-];
 
 const frames = [];
 const canvas = document.getElementById("canvas");
@@ -93,6 +87,15 @@ const onNetworkUpdate = (x, y, id, group, from, to, sf, nodeslen, edgeslen) => {
 
 // Callback for optimization finish
 const onResultsUpdate = (iters, elapsed, exitCode, gws, coverage, channels) => {
+
+    const exitCodes = [
+        "Optimization not started",
+        "Timeout",
+        "Iterations completed",
+        "100% Coverage reached",
+        "Maximum gateways reached"
+    ];
+    
     console.log("Optimization finished");
     console.log("Number of gateways:", gws)
     console.log("Iterations:",iters);
@@ -108,10 +111,8 @@ const drawNetwork = () => {
         const iter = frames.shift();
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         for(var node of iter.nodes) {
-            ctx.beginPath();
-            ctx.fillRect(node.x, node.y, 1, 1);
             ctx.fillStyle = nodeColors[node.group];
-            ctx.fill();
+            ctx.fillRect(node.x, node.y, 1, 1);
         }
         for(var edge of iter.edges) {
             const fromNode = iter.nodes[edge.from];
@@ -132,6 +133,7 @@ var Module = {
         const optimizer = new Module.JsInterface(
             mapSize,
             edNumber,
+            maxSF,
             posDist,
             periodDist,
             maxIter,

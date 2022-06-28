@@ -9,6 +9,7 @@ Network::Network(Builder builder) {
     this->enddevices = builder.enddevices;
     this->mapSize = builder.mapSize;
     this->H = builder.H;
+    this->maxSF = builder.maxSF;
     this->lastID = builder.lastID;
     this->posDist = builder.posDist;
     this->periodDist = builder.periodDist;
@@ -108,6 +109,11 @@ Network::Builder* Network::Builder::setNetworkSize(unsigned int networkSize) {
     return this;
 }
 
+Network::Builder* Network::Builder::setMaxSF(unsigned char maxSF) {
+    this->maxSF = maxSF;
+    return this;
+}
+
 Network Network::Builder::build(){
 
     Random* posGenerator;
@@ -174,6 +180,7 @@ Network Network::Builder::build(){
         printf("Network configuration:\n");
         printf("  Map size: %d\n", this->mapSize);
         printf("  End devices: %ld\n", this->enddevices.size());
+        printf("  Max. SF: SF%d\n", this->maxSF);
         printf("  ED position generator: %s\n", Network::getPosDistName(this->posDist).c_str());
         printf("  ED period generator: %s\n", Network::getPeriodDistName(this->periodDist).c_str());
         printf("  System hyperperiod: %d\n", this->H);
@@ -188,15 +195,14 @@ Network Network::Builder::build(){
 }
 
 void Network::autoConnect() {
-    //Alternative --> for_each(this->enddevices.begin(),this->enddevices.end(),[this](EndDevice *ed) {
     for(long unsigned int i = 0; i < this->enddevices.size(); i++) {
-        if(!this->enddevices[i]->isConnected()){
+        if(!this->enddevices.at(i)->isConnected()){
             // Sort gateways by distance
             sort(this->gateways.begin(), this->gateways.end(), [this, i](Gateway *a, Gateway *b) {
-                return a->distanceTo(this->enddevices[i]) < b->distanceTo(this->enddevices[i]);
+                return a->distanceTo(this->enddevices.at(i)) < b->distanceTo(this->enddevices.at(i));
             });
             for(long unsigned int j = 0; j < this->gateways.size(); j++)
-                if(this->gateways[j]->addEndDevice(this->enddevices[i]))
+                if(this->gateways.at(j)->addEndDevice(this->enddevices.at(i)))
                     break;
         }
     }
@@ -208,7 +214,7 @@ void Network::disconnect() {
 }
 
 void Network::createGateway(double x, double y) {
-    Gateway *gw = new Gateway(x, y, this->lastID, this->H);
+    Gateway *gw = new Gateway(x, y, this->lastID, this->H, 0, this->maxSF);
     gateways.push_back(gw);
     this->lastID++;
 }
@@ -287,47 +293,6 @@ void Network::stepRandom() {
     for(long unsigned int i = 0; i < this->gateways.size(); i++){
         gwPosGenerator.setRandom(newX, newY);
         this->gateways[i]->moveTo(newX, newY);
-    }
-    // Check new coverage
-    this->autoConnect();
-    double newCoverage = this->getEDCoverage();
-    if(newCoverage < originalCoverage){ // If coverage did not improve
-        this->disconnect();
-        // Restore original positions
-        for(long unsigned int i = 0; i < this->gateways.size(); i++){
-            double x = originalPositions[i][0];
-            double y = originalPositions[i][1];
-            this->gateways[i]->moveTo(x, y);
-        }
-        originalPositions.clear();
-        this->autoConnect();
-    }
-}
-
-void Network::stepRandomPreserve() {
-    double originalCoverage = this->getEDCoverage();
-    // Save original positions and find the GW with greater UF
-    vector<vector<double>> originalPositions;
-    double maxUF = 0;
-    long unsigned int maxUFIndex = 0;
-    for(long unsigned int i = 0; i < this->gateways.size(); i++){
-        double x = this->gateways[i]->getX();
-        double y = this->gateways[i]->getY();
-        originalPositions.push_back(vector<double>{x, y});
-        if(this->gateways[i]->getUF() > maxUF){
-            maxUF = this->gateways[i]->getUF();
-            maxUFIndex = i;
-        }
-    }
-    // Disconnect all GWs except the one with greater UF and randomize positions
-    Uniform gwPosGenerator = Uniform(-(double)this->mapSize/2, (double)this->mapSize/2);
-    double newX, newY;
-    for(long unsigned int i = 0; i < this->gateways.size(); i++){
-        if(i != maxUFIndex){
-            gwPosGenerator.setRandom(newX, newY);
-            this->gateways[i]->disconnect();
-            this->gateways[i]->moveTo(newX, newY);
-        }
     }
     // Check new coverage
     this->autoConnect();

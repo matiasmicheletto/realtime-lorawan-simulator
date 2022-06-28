@@ -6,9 +6,8 @@ using namespace std::chrono;
 const string exitCodes[6] = {
     "  Exit code [%d]: Optimization not started\n",
     "  Exit code [%d]: Timeout\n",
-    "  Exit code [%d]: 100%% coverage reached\n",
     "  Exit code [%d]: Iterations completed\n",
-    "  Exit code [%d]: Maximum gateways reached\n",
+    "  Exit code [%d]: 100%% coverage reached\n",
     "  Exit code [%d]: Unknown code\n",
 };
 
@@ -24,7 +23,7 @@ Optimizer::Optimizer(Builder builder) {
     // Initialize local variables
     this->currentIter = 0;
     this->elapsed = 0;
-    this->nced = this->network->getEDCount();
+    this->coverage = this->network->getEDCoverage();
     this->exitCode = NOT_RUN;
 }
 
@@ -78,11 +77,24 @@ void Optimizer::run( void (*progressCallback)(Network *network) ) {
     // Begin with only one gateway
     this->network->removeAllGateaways(); 
     this->network->createGateway();
+    const unsigned int mapsize = this->network->getMapSize();
+    Uniform random( -(double)mapsize/2, (double)mapsize/2);
 
-    const unsigned long int timeoutms = (unsigned long int) this->timeout * 1000;
-    unsigned int suboptimalSteps = 0;
-    
     this->exitCode = MAX_ITER;
+    const unsigned long int timeoutms = (unsigned long int) this->timeout * 1000;
+    
+    unsigned int noProgressStepCounter = 0; // Number of iterations without significative progress
+    const double progressThres = 0.05; // Increase in coverage to be considered as progress
+    const unsigned int addGWAfter = 10; // Number of iterations without progress after which a new gateway is added
+
+    #ifdef DEBUG_MODE
+        printf("--------------------------------\n");
+        printf("Optimizer started:\n");
+        printf("  Progress thresshold: %f\n", progressThres);
+        printf("  Add gateway after: %d steps with no progress\n", addGWAfter);
+        printf("--------------------------------\n\n");
+    #endif
+    
     for(this->currentIter = 0; this->currentIter < this->maxIter; this->currentIter++){
         
         switch (this->stepMethod) {
@@ -91,9 +103,6 @@ void Optimizer::run( void (*progressCallback)(Network *network) ) {
                 break;
             case RANDOM:
                 this->network->stepRandom();
-                break;
-            case RANDOM_PRESERVE:
-                this->network->stepRandomPreserve();
                 break;
             default:
                 break;
@@ -111,30 +120,35 @@ void Optimizer::run( void (*progressCallback)(Network *network) ) {
         }
 
         // Objective function: gw network coverage
-        unsigned int newNCED = this->network->getNCEDCount();
-        long int ncedDiff = this->nced - newNCED;
-        this->nced = newNCED;
+        double newCoverage = this->network->getEDCoverage();
+        double coverageDiff = newCoverage - this->coverage;
+        this->coverage = newCoverage;
 
         #if defined(DEBUG_MODE) && !defined(EMSCRIPTEN)
             printf("\r");
             printf(
-                "Iteration %d (%.2f %%) -- NCED: %u (change: %ld)", 
+                "Iteration %d (%.2f %%) -- coverage: %f %% (change: %f %%)", 
                 this->currentIter, 
                 this->currentIter/(double)this->maxIter*100, 
-                newNCED,
-                ncedDiff
+                newCoverage*100,
+                coverageDiff*100
             );
         #endif
 
-        if(newNCED == 0){
+        if(newCoverage > 0.9999){ // If not connected EDs is 0, then max coverage reached
             this->exitCode = MAX_COVERAGE;
             break;
         }else{
-            if(ncedDiff < 10) // Less than 10 new connected nodes
-                suboptimalSteps++;
-            if(suboptimalSteps > 10){  
-                this->network->createGateway();
-                suboptimalSteps = 0;
+            if(coverageDiff < progressThres) // Less than 10 new connected nodes
+                noProgressStepCounter++;
+            if(noProgressStepCounter > addGWAfter){  
+                double x,y;
+                random.setRandom(x, y);
+                this->network->createGateway(x, y);
+                noProgressStepCounter = 0;
+                #ifdef DEBUG_MODE
+                    printf("New gateway added at (%f, %f)\n", x, y);
+                #endif
             }
         }
     }
@@ -171,8 +185,6 @@ string Optimizer::getStepMethodName(STEP_METHOD stepMethod) {
             return "Springs";
         case RANDOM:
             return "Random";
-        case RANDOM_PRESERVE:
-            return "Random (preserve)";
         default:
             return "Unknown";
     }
@@ -212,22 +224,32 @@ void Optimizer::exportFullResults(char *filename) {
 }
 
 void Optimizer::appendToLog(char *filename) {
+
+    FILE *file = fopen(filename, "r");
+    bool printHeader = file == NULL;
+
     FILE *logfile = fopen(filename, "a");
     if(logfile == NULL){
         printf("Error opening log file.\n");
         return;
     }
-    fprintf(logfile, "%s,%s,%s,%d,%d,%d,%.2f,%lu,%d,%s\n", 
+    if(printHeader)
+        fprintf(logfile, "Method,Pos. distr.,Period distr., Map size, ED, Max. SF, GW, Channels, Coverage, Elapsed, Iters, Exit cond.\n");
+    
+    fprintf(logfile, "%s,%s,%s,%d,%d,%d,%d,%d,%.2f,%lu,%d,%s\n", 
         this->getStepMethodName().c_str(),
         this->network->getPosDistName().c_str(),
         this->network->getPeriodDistName().c_str(),
         this->network->getMapSize(), 
-        this->network->getGWCount(), 
         this->network->getEDCount(), 
+        this->network->getMaxSF(),
+        this->network->getGWCount(), 
+        this->network->getMinChannels(),
         this->network->getEDCoverage()*100,
         this->elapsed,
         this->currentIter,
         this->getExitCodeName().c_str()
     );
+    
     fclose(logfile);
 }

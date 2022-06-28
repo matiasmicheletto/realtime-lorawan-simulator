@@ -32,6 +32,7 @@ EM_JS(void, updateResults, (
 JsInterface::JsInterface(
     unsigned int mapSize,
     unsigned int networkSize,
+    unsigned char maxSF,
     unsigned char posDist,
     unsigned char periodDist,
     unsigned int maxIter,
@@ -43,7 +44,8 @@ JsInterface::JsInterface(
         .setPositionGenerator((POS_DIST) posDist)
         ->setPeriodGenerator((PERIOD_DIST) periodDist)
         ->setMapSize(mapSize)
-        ->setNetworkSize(networkSize);
+        ->setNetworkSize(networkSize)
+        ->setMaxSF(maxSF);
     this->network = new Network(networkBuilder->build());
 
     Optimizer::Builder *builder = Optimizer::Builder()

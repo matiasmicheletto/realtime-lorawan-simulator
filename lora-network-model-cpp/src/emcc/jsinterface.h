@@ -14,6 +14,7 @@ class JsInterface {
         JsInterface(
             unsigned int mapSize,
             unsigned int networkSize,
+            unsigned char maxSF,
             unsigned char posDist,
             unsigned char periodDist,
             unsigned int maxIter,

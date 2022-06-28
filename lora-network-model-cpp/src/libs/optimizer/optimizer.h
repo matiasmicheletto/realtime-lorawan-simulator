@@ -5,10 +5,11 @@
 #include <stdio.h>
 #include <string>
 #include "../network/network.h"
+#include "../random/uniform.h"
 
 using namespace std;
 
-enum STEP_METHOD { SPRINGS = 0, RANDOM = 1, RANDOM_PRESERVE = 2 };
+enum STEP_METHOD { SPRINGS = 0, RANDOM = 1 };
 enum EXIT_CODE { NOT_RUN = 0, TIMEOUT = 1, MAX_ITER = 2, MAX_COVERAGE = 3};
 
 class Optimizer {
@@ -60,7 +61,7 @@ class Optimizer {
         // Optimization parameters
         unsigned int maxIter; // Maximum number of iterations
         unsigned int currentIter; // Current iteration
-        unsigned int nced; // Not connected end devices computed on last iteration
+        double coverage; // Not connected end devices computed on last iteration
         unsigned int timeout; // Timeout in seconds
         unsigned long int elapsed; // Elapsed time in milliseconds
         STEP_METHOD stepMethod; // Step method

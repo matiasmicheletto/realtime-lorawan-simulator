@@ -8,6 +8,7 @@
 #include <string>
 #include <cstring>
 #include <chrono>
+#include <thread>
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -37,10 +38,12 @@ class Network {
                 Builder* setPeriodGenerator(PERIOD_DIST periodDist);
                 Builder* setMapSize(unsigned int mapSize);
                 Builder* setNetworkSize(unsigned int networkSize);
+                Builder* setMaxSF(unsigned char maxSF);
                 Network build(); // Returns the list of end devices
 
                 unsigned int mapSize = 1000; // Size of the map 
                 int H; // System hyperperiod
+                unsigned char maxSF = 12; // Maximum spreading factor
                 unsigned int lastID; // IDs to identify network nodes
                 vector<EndDevice*> enddevices; // List of enddevices
                 POS_DIST posDist = UNIFORM; // Distribution of positions
@@ -62,7 +65,6 @@ class Network {
         void configureGWChannels(); // Assign channels to gateways minimizing the number of channels
         void stepSprings(); // Improve coverage by moving GW using attraction forces
         void stepRandom(); // Try to improve coverage by randomizing GW positions
-        void stepRandomPreserve(); // Fixing GW positions when high UF reached
         
         // Network information
         void exportNodesCSV(char *filename);
@@ -78,6 +80,7 @@ class Network {
         inline unsigned int getMapSize() {return this->mapSize;}
         inline unsigned int getEDCount() {return this->enddevices.size();}
         inline unsigned int getGWCount() {return this->gateways.size();}
+        inline unsigned char getMaxSF() {return this->maxSF;}
         inline int getMinChannels() {return this->minChannels;}
         inline vector<EndDevice*>* getEDs() {return &(this->enddevices);}
         inline vector<Gateway*>* getGWs() {return &(this->gateways);}
@@ -93,6 +96,7 @@ class Network {
         unsigned int mapSize; // Size of the map (required to create new gateways)
         int H; // Hyperperiod (is calculated from periods)        
         unsigned int lastID; // IDs to identify network nodes        
+        unsigned char maxSF; // Maximum spreading factor (used to create new gateways)
 
         POS_DIST posDist; // Distribution used for ED positions
         PERIOD_DIST periodDist; // Distribution used for ED periods
