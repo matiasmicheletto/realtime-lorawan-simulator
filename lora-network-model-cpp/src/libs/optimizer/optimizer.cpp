@@ -23,7 +23,8 @@ Optimizer::Optimizer(Builder builder) {
     // Initialize local variables
     this->currentIter = 0;
     this->elapsed = 0;
-    this->coverage = this->network->getEDCoverage();
+    //this->coverage = this->network->getEDCoverage();
+    this->nced = this->network->getNCEDCount();
     this->exitCode = NOT_RUN;
 }
 
@@ -74,23 +75,29 @@ void Optimizer::run( void (*progressCallback)(Network *network) ) {
 
     steady_clock::time_point begin = steady_clock::now();
 
-    // Begin with only one gateway
-    this->network->removeAllGateaways(); 
-    this->network->createGateway();
     const unsigned int mapsize = this->network->getMapSize();
+    this->network->removeAllGateaways(); 
+    // Grid initialization (one gw per 10000 ed)
+    const unsigned int gridSide = floor(sqrt((double)this->network->getEDCount()/10000.0));
+    double step = (double)mapsize/(double)gridSide;
+    for(double x = -mapsize; x <= mapsize; x+=step)
+        for(double y = -mapsize; y <= mapsize; y+=step)
+            this->network->createGateway(x, y);
+
+    
     Uniform random( -(double)mapsize/2, (double)mapsize/2);
 
     this->exitCode = MAX_ITER;
     const unsigned long int timeoutms = (unsigned long int) this->timeout * 1000;
     
     unsigned int noProgressStepCounter = 0; // Number of iterations without significative progress
-    const double progressThres = 0.05; // Increase in coverage to be considered as progress
+    const long int progressThres = this->network->getEDCount()/1000; // New connected devices number to be considered as progress
     const unsigned int addGWAfter = 10; // Number of iterations without progress after which a new gateway is added
 
     #ifdef DEBUG_MODE
         printf("--------------------------------\n");
         printf("Optimizer started:\n");
-        printf("  Progress thresshold: %f\n", progressThres);
+        printf("  Progress thresshold: %ld\n", progressThres);
         printf("  Add gateway after: %d steps with no progress\n", addGWAfter);
         printf("--------------------------------\n\n");
     #endif
@@ -120,26 +127,30 @@ void Optimizer::run( void (*progressCallback)(Network *network) ) {
         }
 
         // Objective function: gw network coverage
-        double newCoverage = this->network->getEDCoverage();
-        double coverageDiff = newCoverage - this->coverage;
-        this->coverage = newCoverage;
+        //double newCoverage = this->network->getEDCoverage();
+        //double coverageDiff = newCoverage - this->coverage;
+        //this->coverage = newCoverage;
+
+        unsigned int newNCED = this->network->getNCEDCount();
+        long int ncedDiff =  (long int) this->nced - (long int) newNCED;
+        this->nced = newNCED;
 
         #if defined(DEBUG_MODE) && !defined(EMSCRIPTEN)
             printf("\r");
             printf(
-                "Iteration %d (%.2f %%) -- coverage: %f %% (change: %f %%)", 
+                "Iteration %d (%.2f %%) -- not connected: %d (change: %ld)", 
                 this->currentIter, 
                 this->currentIter/(double)this->maxIter*100, 
-                newCoverage*100,
-                coverageDiff*100
+                newNCED,
+                ncedDiff
             );
         #endif
 
-        if(newCoverage > 0.9999){ // If not connected EDs is 0, then max coverage reached
+        if(newNCED == 0){ // If not connected EDs is 0, then max coverage reached
             this->exitCode = MAX_COVERAGE;
             break;
         }else{
-            if(coverageDiff < progressThres) // Less than 10 new connected nodes
+            if(ncedDiff < progressThres) // Less than 10 new connected nodes
                 noProgressStepCounter++;
             if(noProgressStepCounter > addGWAfter){  
                 double x,y;
@@ -250,6 +261,6 @@ void Optimizer::appendToLog(char *filename) {
         this->currentIter,
         this->getExitCodeName().c_str()
     );
-    
+
     fclose(logfile);
 }

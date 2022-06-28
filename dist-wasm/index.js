@@ -1,16 +1,3 @@
-const visContainer = document.getElementById("network");
-
-// Default parameters for optimization
-const mapSize = 2000;
-const edNumber= 40000;
-const maxSF = 10;
-const posDist = 0; // 0:uniform, 1:normal, 2:clouds
-const periodDist = 0; // 0:soft, 1:medium, 2:hard
-const maxIter = 1000;
-const timeout = 300;
-const algorithm = 0; // 0:springs, 1:random
-const updateRate = 20; // Update results every "updateRate" iterations
-
 // Constants
 const nodeColors = {
     0: "rgb(250,0,0)",
@@ -27,8 +14,22 @@ const edgeColors = {
 };
 
 const frames = [];
+let currentFrame = 0;
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
+
+
+// Default parameters for optimization
+const mapSize = 2000;
+const edNumber= 40000;
+const maxSF = 10;
+const posDist = 0; // 0:uniform, 1:normal, 2:clouds
+const periodDist = 0; // 0:soft, 1:medium, 2:hard
+const maxIter = 1000;
+const timeout = 300;
+const algorithm = 0; // 0:springs, 1:random
+const updateRate = 50; // Update results every "updateRate" iterations
+
 const scale = mapSize/1000;
 canvas.width = mapSize/scale;
 canvas.height = mapSize/scale;
@@ -92,23 +93,22 @@ const onResultsUpdate = (iters, elapsed, exitCode, gws, coverage, channels) => {
         "Optimization not started",
         "Timeout",
         "Iterations completed",
-        "100% Coverage reached",
-        "Maximum gateways reached"
+        "100% Coverage reached"
     ];
     
     console.log("Optimization finished");
-    console.log("Number of gateways:", gws)
+    console.log("Coverage:", coverage*100);
+    console.log("Number of gateways:", gws);
+    console.log("Channels:", channels);
     console.log("Iterations:",iters);
     console.log("Exit condition:", exitCodes[exitCode]);
-    console.log("Elapsed:", elapsed);
-    console.log("Coverage:", coverage*100);
-    console.log("Channels:", channels);
+    console.log("Elapsed:", elapsed, "ms");
 }
 
 // Update chart
 const drawNetwork = () => {
     setTimeout(() => {
-        const iter = frames.shift();
+        const iter = frames[currentFrame];
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         for(var node of iter.nodes) {
             ctx.fillStyle = nodeColors[node.group];
@@ -123,7 +123,8 @@ const drawNetwork = () => {
             ctx.strokeStyle = edge.color;
             ctx.stroke();
         }
-        if(frames.length > 0)
+        currentFrame++;
+        if(currentFrame < frames.length)
             drawNetwork();
     },100);
 }
@@ -143,4 +144,10 @@ var Module = {
         );
         optimizer.run();
     }
+}
+
+const repeatBtn = document.getElementById("repeatBtn");
+repeatBtn.onclick = () => {
+    currentFrame = 0;
+    drawNetwork();
 }
