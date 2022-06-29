@@ -1,8 +1,0 @@
-Method,Pos. distr.,Period distr., Map size, ED, Max. SF, GW, Channels, Coverage, Elapsed, Iters, Exit cond.
-Springs,Uniform,Soft,2000,40000,10,28,10,100.00,131624,355,Max. coverage
-Springs,Uniform,Soft,1000,10000,10,8,6,100.00,2166,124,Max. coverage
-Springs,Uniform,Soft,1000,10000,10,7,6,100.00,1621,131,Max. coverage
-Springs,Uniform,Soft,2000,40000,10,32,11,100.00,189186,423,Max. coverage
-Springs,Uniform,Soft,2000,40000,10,30,10,100.00,110272,148,Max. coverage
-Springs,Uniform,Soft,2000,40000,10,25,9,100.00,6831,10,Max. coverage
-Springs,Uniform,Soft,4000,160000,10,82,9,89.01,311673,22,Timeout

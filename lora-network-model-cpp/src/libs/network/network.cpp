@@ -137,20 +137,22 @@ Network Network::Builder::build(){
     CustomDist::Builder distBuilder = CustomDist::Builder();
     switch (this->periodDist){
         case SOFT:
-            distBuilder.addValue(3600, 0.97)
+            distBuilder.addValue(16000, 0.25)
+                ->addValue(8000, 0.25)
+                ->addValue(4000, 0.25)
+                ->addValue(3200, 0.25);
+
+            break;
+        case MEDIUM:
+		    distBuilder.addValue(3600, 0.97)
                 ->addValue(1800, 0.01)
                 ->addValue(900, 0.02);
             break;
-        case MEDIUM:
-            distBuilder.addValue(3600, 0.9)
-                ->addValue(1800, 0.05)
-                ->addValue(900, 0.05);
-            break;
         case HARD:
-            distBuilder.addValue(3600, 0.7)
-                ->addValue(1800, 0.1)
-                ->addValue(900, 0.1)
-                ->addValue(600, 0.1);
+            distBuilder.addValue(1600, 0.25)
+                ->addValue(800, 0.25)
+                ->addValue(400, 0.25)
+                ->addValue(320, 0.25);
             break;
         default:
             printf("Warning: Network::Builder: Invalid period distribution");

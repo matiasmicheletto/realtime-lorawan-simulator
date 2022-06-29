@@ -77,12 +77,16 @@ void Optimizer::run( void (*progressCallback)(Network *network) ) {
 
     const unsigned int mapsize = this->network->getMapSize();
     this->network->removeAllGateaways(); 
+    this->network->createGateway();
+    
     // Grid initialization (one gw per 10000 ed)
+    /*
     const unsigned int gridSide = floor(sqrt((double)this->network->getEDCount()/10000.0));
     double step = (double)mapsize/(double)gridSide;
     for(double x = -mapsize; x <= mapsize; x+=step)
         for(double y = -mapsize; y <= mapsize; y+=step)
             this->network->createGateway(x, y);
+    */
 
     
     Uniform random( -(double)mapsize/2, (double)mapsize/2);

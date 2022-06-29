@@ -21,14 +21,14 @@ const ctx = canvas.getContext("2d");
 
 // Default parameters for optimization
 const mapSize = 2000;
-const edNumber= 40000;
+const edNumber= 50;
 const maxSF = 10;
 const posDist = 0; // 0:uniform, 1:normal, 2:clouds
 const periodDist = 0; // 0:soft, 1:medium, 2:hard
 const maxIter = 1000;
 const timeout = 300;
-const algorithm = 0; // 0:springs, 1:random
-const updateRate = 50; // Update results every "updateRate" iterations
+const algorithm = 1; // 0:springs, 1:random
+const updateRate = 1; // Update results every "updateRate" iterations
 
 const scale = mapSize/1000;
 canvas.width = mapSize/scale;
