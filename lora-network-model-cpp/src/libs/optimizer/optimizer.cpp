@@ -77,31 +77,33 @@ void Optimizer::run( void (*progressCallback)(Network *network) ) {
 
     const unsigned int mapsize = this->network->getMapSize();
     this->network->removeAllGateaways(); 
-    this->network->createGateway();
     
-    // Grid initialization (one gw per 10000 ed)
-    /*
-    const unsigned int gridSide = floor(sqrt((double)this->network->getEDCount()/10000.0));
-    double step = (double)mapsize/(double)gridSide;
-    for(double x = -mapsize; x <= mapsize; x+=step)
-        for(double y = -mapsize; y <= mapsize; y+=step)
-            this->network->createGateway(x, y);
-    */
-
-    
+    // Random initialization (1 gw per 2500 ed)
     Uniform random( -(double)mapsize/2, (double)mapsize/2);
+    double x, y;
+    const unsigned int initialGW = ceil((double) this->network->getEDCount() / 2500.0);
+    if(initialGW > 0) {
+        for(unsigned int i = 0; i < initialGW; i++) {
+            random.setRandom(x, y);
+            this->network->createGateway(x, y);    
+        }
+    }else 
+        this->network->createGateway(0, 0);
+    
+    
 
     this->exitCode = MAX_ITER;
     const unsigned long int timeoutms = (unsigned long int) this->timeout * 1000;
     
     unsigned int noProgressStepCounter = 0; // Number of iterations without significative progress
-    const long int progressThres = this->network->getEDCount()/1000; // New connected devices number to be considered as progress
+    const long int progressThres = 1 + this->network->getEDCount()/1000; // New connected devices number to be considered as progress
     const unsigned int addGWAfter = 10; // Number of iterations without progress after which a new gateway is added
 
     #ifdef DEBUG_MODE
         printf("--------------------------------\n");
         printf("Optimizer started:\n");
-        printf("  Progress thresshold: %ld\n", progressThres);
+        printf("  Initial GW number: %d (at random positions)\n", initialGW);
+        printf("  Progress thresshold: %ld (min. new connected EDs per iteration)\n", progressThres);
         printf("  Add gateway after: %d steps with no progress\n", addGWAfter);
         printf("--------------------------------\n\n");
     #endif
@@ -157,8 +159,7 @@ void Optimizer::run( void (*progressCallback)(Network *network) ) {
             if(ncedDiff < progressThres) // Less than 10 new connected nodes
                 noProgressStepCounter++;
             if(noProgressStepCounter > addGWAfter){  
-                double x,y;
-                random.setRandom(x, y);
+                random.setRandom(x, y); // x, and y are declared at initialization
                 this->network->createGateway(x, y);
                 noProgressStepCounter = 0;
                 #ifdef DEBUG_MODE

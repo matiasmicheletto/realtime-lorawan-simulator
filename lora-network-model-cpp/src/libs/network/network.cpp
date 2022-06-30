@@ -239,44 +239,51 @@ void Network::removeAllGateaways() {
 }
 
 void Network::stepSprings() {
-    //printf("Network::stepSprings()\n");
-    unsigned int nced = 0; // Number of disconnected end devices
-    vector<vector<int>> forces; // Attraction forces for each gateway
+    struct force {
+        double x = 0;
+        double y = 0;
+    };
+    vector<force> forces(this->gateways.size()); // Forces for each gateway
+    const long unsigned int nced = this->getNCEDCount();
+    const long unsigned int ted = this->getEDCount();
     for (long unsigned int i = 0; i < this->enddevices.size(); i++) {
-        if (!this->enddevices[i]->isConnected()){
-            nced++; // Count disconnected end device
-            // Sort gateways by distance to get closest
-            sort(this->gateways.begin(), this->gateways.end(), [this, i](Gateway *a, Gateway *b) {
-                return a->distanceTo(this->enddevices[i]) < b->distanceTo(this->enddevices[i]);
-            });
-            // Compute attraction force for closest (this->gateways[0])
-            int id = this->gateways[0]->getId();
-            int x = (int)this->enddevices[i]->getX() - (int)this->gateways[0]->getX();
-            int y = (int)this->enddevices[i]->getY() - (int)this->gateways[0]->getY();
-            forces.push_back(vector<int>{id, x, y});
-        }
-    }
-    if(nced != 0){
-        // Disconnect all nodes
-        this->disconnect();
-        // Update gateways positions according to forces
-        for(long unsigned int i = 0; i < this->gateways.size(); i++){
-            // Comoute sum of forces for current gateway
-            double sumX = 0, sumY = 0; 
-            for(long unsigned int j = 0; j < forces.size(); j++){
-                if(forces[j][0] == (int) this->gateways[i]->getId()){
-                    sumX += (double) forces[j][1];
-                    sumY += (double) forces[j][2];
+        if(this->enddevices[i]->isConnected()){ // Weak attraction force to stabilize gateways in the middle of its end devices
+            // Get ID of connected GW
+            unsigned int gwID = this->enddevices[i]->getGatewayId();
+            // Get index of GW in the vector
+            long unsigned int connectedGW = 0;
+            for(long unsigned int j = 0; j < this->gateways.size(); j++)
+                if(this->gateways[j]->getId() == gwID)
+                    connectedGW = j;
+            forces[connectedGW].x += (this->enddevices[i]->getX() - this->gateways[connectedGW]->getX())/(double)ted;
+            forces[connectedGW].y += (this->enddevices[i]->getY() - this->gateways[connectedGW]->getY())/(double)ted;
+        } else { // Strong attraction force to move gateways close to not connected end devices
+            // Get closest gateway
+            long unsigned int closestGW = 0;
+            double minDist = this->gateways[0]->distanceTo(this->enddevices[i]);
+            for (long unsigned int j = 1; j < this->gateways.size(); j++) {
+                double dist = this->gateways[j]->distanceTo(this->enddevices[i]);
+                if (dist < minDist) {
+                    minDist = dist;
+                    closestGW = j;
                 }
             }
-            // Compute new positions
-            double newX = this->gateways[i]->getX() + mclamp(sumX/(double) nced, -100.0, 100.0);
-            double newY = this->gateways[i]->getY() + mclamp(sumY/(double) nced, -100.0, 100.0);
-            this->gateways[i]->moveTo(newX, newY);
+            // Add attraction force for closest gw
+            forces[closestGW].x += (this->enddevices[i]->getX() - this->gateways[closestGW]->getX())/(double)nced;
+            forces[closestGW].y += (this->enddevices[i]->getY() - this->gateways[closestGW]->getY())/(double)nced;
         }
-        // Reconnect network
-        this->autoConnect();
     }
+    
+    // Disconnect all nodes
+    this->disconnect();
+    // Update gateways positions according to forces
+    for (long unsigned int i = 0; i < this->gateways.size(); i++) {
+        double newX = this->gateways[i]->getX() + mclamp(forces[i].x, -100.0, 100.0);
+        double newY = this->gateways[i]->getY() + mclamp(forces[i].y, -100.0, 100.0);
+        this->gateways[i]->moveTo(newX, newY);
+    }
+    // Reconnect network
+    this->autoConnect();
 }
 
 void Network::stepRandom() {

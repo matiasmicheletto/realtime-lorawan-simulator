@@ -28,9 +28,9 @@
                 <option value="7">SF7</option>
                 <option value="8">SF8</option>
                 <option value="9">SF9</option>
-                <option value="10">SF10</option>
+                <option value="10" selected>SF10</option>
                 <option value="11">SF11</option>
-                <option value="12" selected>SF12</option>
+                <option value="12">SF12</option>
             </select><br>
 
             <label for="posDist">Pos. distribution:</label>
@@ -48,10 +48,10 @@
             </select><br>
 
             <label for="maxIter">Max. iterations:</label>
-            <input type="number" id="maxIter" name="maxIter" value="100"/><br>
+            <input type="number" id="maxIter" name="maxIter" value="1000"/><br>
 
             <label for="timout">Timout:</label>
-            <input type="number" id="timeout" name="timout" value="60" /><br>
+            <input type="number" id="timeout" name="timout" value="300" /><br>
 
             <label for="algorithm">Step Algorithm:</label>
             <select id="algorithm" name="algorithm">
@@ -69,14 +69,16 @@
             </select><br>
         </form>
 
-        <button id="runBtn">
-            Run
-        </button>
-        <button id="repeatBtn">
-            Repeat animation
-        </button>
+        <div class="control-container">
+            <button id="runBtn">
+                Run
+            </button>
+            <button id="repeatBtn">
+                Repeat animation
+            </button>
+        </div>
 
-        <canvas  class="vis-container" id="canvas"></canvas>
+        <canvas class="canvas" id="canvas"></canvas>
    </div>
 
     <script type="text/javascript" src="index.js"></script>

@@ -13,30 +13,21 @@ const edgeColors = {
     12: "rgb(150, 0, 150, .3)"
 };
 
-const frames = [];
-let currentFrame = 0;
+
 const canvas = document.getElementById("canvas");
+const runBtn = document.getElementById("runBtn");
+const repeatBtn = document.getElementById("repeatBtn");
+
+var frames = [];
+var currentFrame = 0;
 const ctx = canvas.getContext("2d");
-
-
-// Default parameters for optimization
-const mapSize = 2000;
-const edNumber= 50;
-const maxSF = 10;
-const posDist = 0; // 0:uniform, 1:normal, 2:clouds
-const periodDist = 0; // 0:soft, 1:medium, 2:hard
-const maxIter = 1000;
-const timeout = 300;
-const algorithm = 1; // 0:springs, 1:random
-const updateRate = 1; // Update results every "updateRate" iterations
-
-const scale = mapSize/1000;
-canvas.width = mapSize/scale;
-canvas.height = mapSize/scale;
+canvas.width = window.innerWidth;
+canvas.height = canvas.width;
+var scale = 1;
 
 // Callback for optimization steps
 const onNetworkUpdate = (x, y, id, group, from, to, sf, nodeslen, edgeslen) => {
-    
+
     var xBuffer = Module.HEAPF64.subarray(x / 8, (x + nodeslen * 8) / 8);
     var yBuffer = Module.HEAPF64.subarray(y / 8, (y + nodeslen * 8) / 8);
     var idBuffer = Module.HEAPU32.subarray(id / 4, (id + nodeslen * 4) / 4);
@@ -60,8 +51,8 @@ const onNetworkUpdate = (x, y, id, group, from, to, sf, nodeslen, edgeslen) => {
     for(var i = 0; i < nodeslen; i++) {
         //console.log(i, idArray[i]);
         nodes[idArray[i]] = {
-            x: (xArray[i]+mapSize/2)/scale,
-            y: (yArray[i]+mapSize/2)/scale,
+            x: (xArray[i]+mapSize/2),
+            y: (yArray[i]+mapSize/2),
             group: groupArray[i]
         };
     }
@@ -74,7 +65,7 @@ const onNetworkUpdate = (x, y, id, group, from, to, sf, nodeslen, edgeslen) => {
     }
 
     frames.push({nodes,edges});
-    if(frames.length === 1)
+    if(frames.length == 1)
         drawNetwork();
 
     Module._free(x);
@@ -88,14 +79,12 @@ const onNetworkUpdate = (x, y, id, group, from, to, sf, nodeslen, edgeslen) => {
 
 // Callback for optimization finish
 const onResultsUpdate = (iters, elapsed, exitCode, gws, coverage, channels) => {
-
     const exitCodes = [
         "Optimization not started",
         "Timeout",
         "Iterations completed",
         "100% Coverage reached"
     ];
-    
     console.log("Optimization finished");
     console.log("Coverage:", coverage*100);
     console.log("Number of gateways:", gws);
@@ -103,34 +92,61 @@ const onResultsUpdate = (iters, elapsed, exitCode, gws, coverage, channels) => {
     console.log("Iterations:",iters);
     console.log("Exit condition:", exitCodes[exitCode]);
     console.log("Elapsed:", elapsed, "ms");
+    runBtn.disabled = false;
 }
 
 // Update chart
 const drawNetwork = () => {
-    setTimeout(() => {
-        const iter = frames[currentFrame];
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        for(var node of iter.nodes) {
-            ctx.fillStyle = nodeColors[node.group];
-            ctx.fillRect(node.x, node.y, 1, 1);
-        }
-        for(var edge of iter.edges) {
-            const fromNode = iter.nodes[edge.from];
-            const toNode = iter.nodes[edge.to];
-            ctx.beginPath();
-            ctx.moveTo(fromNode.x, fromNode.y);
-            ctx.lineTo(toNode.x, toNode.y);
-            ctx.strokeStyle = edge.color;
-            ctx.stroke();
-        }
+    const iter = frames[currentFrame];
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    for(var node of iter.nodes) {
+        ctx.fillStyle = nodeColors[node.group];
+        ctx.fillRect(node.x*scale, node.y*scale, 1, 1);
+    }
+
+    for(var edge of iter.edges) {
+        const fromNode = iter.nodes[edge.from];
+        const toNode = iter.nodes[edge.to];
+        ctx.beginPath();
+        ctx.moveTo(fromNode.x*scale, fromNode.y*scale);
+        ctx.lineTo(toNode.x*scale, toNode.y*scale);
+        ctx.strokeStyle = edge.color;
+        ctx.stroke();
+    }
+    
+    if(currentFrame < frames.length-1){
         currentFrame++;
-        if(currentFrame < frames.length)
-            drawNetwork();
-    },100);
+        setTimeout(drawNetwork, 100);
+    }else 
+        repeatBtn.disabled = false;
 }
 
+var optimizerReady = false;
 var Module = {
     onRuntimeInitialized: function() {
+        optimizerReady = true;
+    }
+}
+
+runBtn.onclick = () => {
+    runBtn.disabled = true;
+    mapSize = parseInt(document.getElementById("mapSize").value);
+    const edNumber= parseInt(document.getElementById("edNumber").value);
+    const maxSF = parseInt(document.getElementById("maxSF").value);
+    const posDist = parseInt(document.getElementById("posDist").value);
+    const periodDist = parseInt(document.getElementById("periodDist").value);
+    const maxIter = parseInt(document.getElementById("maxIter").value);
+    const timeout = parseInt(document.getElementById("timeout").value);
+    const algorithm = parseInt(document.getElementById("algorithm").value);
+    const updateRate = parseInt(document.getElementById("updateRate").value);
+    
+    scale = canvas.width/mapSize;
+    frames = [];
+    currentFrame = 0;
+
+    if(optimizerReady) {
+        runBtn.disabled = true;
         const optimizer = new Module.JsInterface(
             mapSize,
             edNumber,
@@ -146,8 +162,15 @@ var Module = {
     }
 }
 
-const repeatBtn = document.getElementById("repeatBtn");
 repeatBtn.onclick = () => {
+    repeatBtn.disabled = true;
     currentFrame = 0;
+    drawNetwork();
+}
+
+window.onresize = () => {
+    canvas.width = window.innerWidth;
+    canvas.height = canvas.width;
+    scale = canvas.width/mapSize;
     drawNetwork();
 }

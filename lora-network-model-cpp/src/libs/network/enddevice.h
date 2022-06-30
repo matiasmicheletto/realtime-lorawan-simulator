@@ -22,6 +22,7 @@ class EndDevice : public Node {
         inline unsigned int getPeriod() { return this->period; };
         inline bool isConnected() { return this->gw != NULL; };
         inline unsigned char getSF() { return this->sf; };
+        inline Gateway *getGateway() { return this->gw; };
         unsigned int getGatewayId();
         double getGWDist();
 };
