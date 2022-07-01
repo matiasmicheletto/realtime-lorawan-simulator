@@ -78,19 +78,37 @@ void Optimizer::run( void (*progressCallback)(Network *network) ) {
     const unsigned int mapsize = this->network->getMapSize();
     this->network->removeAllGateaways(); 
     
-    // Random initialization (1 gw per 2500 ed)
+    
+    // Estimate initial gw number
     Uniform random( -(double)mapsize/2, (double)mapsize/2);
-    double x, y;
-    const unsigned int initialGW = ceil((double) this->network->getEDCount() / 2500.0);
-    if(initialGW > 0) {
-        for(unsigned int i = 0; i < initialGW; i++) {
+    double x, y;    
+    int incr = 1; // Number of gw to add on each iteration
+    int limit = 10; // Number of iterations before incrementing the number of gw to add
+    int gwNum = 1; // Initial number of gws    
+    long unsigned int nced = this->network->getNCEDCount(); // Number of end devices
+    while(nced > 0) {        
+        this->network->disconnect();
+        for(int i = 0; i < incr; i++){
             random.setRandom(x, y);
-            this->network->createGateway(x, y);    
+            this->network->createGateway(x, y);
         }
-    }else 
-        this->network->createGateway(0, 0);
-    
-    
+        this->network->autoConnect();
+        nced = this->network->getNCEDCount();        
+        if(nced > 0){
+            gwNum = (int) this->network->getGWCount();
+            if(gwNum == limit){
+                incr *= 10;
+                limit *= 10;
+            }
+        }
+    }
+
+    // Add initial number of gw
+    this->network->removeAllGateaways();
+    for(int i = 0; i < gwNum; i++){
+        random.setRandom(x, y);
+        this->network->createGateway(x, y);
+    }
 
     this->exitCode = MAX_ITER;
     const unsigned long int timeoutms = (unsigned long int) this->timeout * 1000;
@@ -100,9 +118,9 @@ void Optimizer::run( void (*progressCallback)(Network *network) ) {
     const unsigned int addGWAfter = 10; // Number of iterations without progress after which a new gateway is added
 
     #ifdef DEBUG_MODE
-        printf("--------------------------------\n");
-        printf("Optimizer started:\n");
-        printf("  Initial GW number: %d (at random positions)\n", initialGW);
+        printf("--------------------------------\n\n");
+        printf("Optimizer started:\n");        
+        printf("  Initial number of GW: %d\n", gwNum);
         printf("  Progress thresshold: %ld (min. new connected EDs per iteration)\n", progressThres);
         printf("  Add gateway after: %d steps with no progress\n", addGWAfter);
         printf("--------------------------------\n\n");
@@ -156,9 +174,11 @@ void Optimizer::run( void (*progressCallback)(Network *network) ) {
             this->exitCode = MAX_COVERAGE;
             break;
         }else{
-            if(ncedDiff < progressThres) // Less than 10 new connected nodes
+            if(ncedDiff < progressThres)
                 noProgressStepCounter++;
             if(noProgressStepCounter > addGWAfter){  
+                // Determine number of gw to add
+                
                 random.setRandom(x, y); // x, and y are declared at initialization
                 this->network->createGateway(x, y);
                 noProgressStepCounter = 0;
@@ -217,13 +237,13 @@ void Optimizer::printResults() {
     printf("  Elapsed: %ld ms\n",this->elapsed);
     printf("  Gateways: %d\n",this->network->getGWCount());
     printf("  Used channels: %d\n",this->network->getMinChannels());
+    printf("  Average utilization factor: %f\n",this->network->getAvgUF());
     printf("  Coverage: %.2f %% \n",this->network->getEDCoverage()*100.0);
     printf(exitCodes[this->exitCode].c_str(),this->exitCode);
     printf("\n------------------------\n\n");
 }
 
 void Optimizer::exportFullResults(char *filename) {
-
     FILE *file = fopen(filename, "w");
     if(file == NULL){
         printf("Error opening file %s\n", filename);
@@ -250,18 +270,23 @@ void Optimizer::appendToLog(char *filename) {
         return;
     }
     if(printHeader)
-        fprintf(logfile, "Method,Pos. distr.,Period distr., Map size, ED, Max. SF, GW, Channels, Coverage, Elapsed, Iters, Exit cond.\n");
+        fprintf(logfile, "Method,Pos. distr.,Period distr., Map size, ED, Dens, Max. SF, GW, Channels, Coverage, Avg. UF, Elapsed, Iters, Exit cond.\n");
     
-    fprintf(logfile, "%s,%s,%s,%d,%d,%d,%d,%d,%.2f,%lu,%d,%s\n", 
+    const unsigned int mapSize = this->network->getMapSize();
+    const unsigned int netSize = this->network->getEDCount();
+
+    fprintf(logfile, "%s,%s,%s,%d,%d,%.2f,%d,%d,%d,%.2f,%.2f,%lu,%d,%s\n", 
         this->getStepMethodName().c_str(),
         this->network->getPosDistName().c_str(),
         this->network->getPeriodDistName().c_str(),
-        this->network->getMapSize(), 
-        this->network->getEDCount(), 
+        mapSize, 
+        netSize, 
+        (double) netSize / (double) mapSize / (double) mapSize,
         this->network->getMaxSF(),
         this->network->getGWCount(), 
         this->network->getMinChannels(),
         this->network->getEDCoverage()*100,
+        this->network->getAvgUF(),
         this->elapsed,
         this->currentIter,
         this->getExitCodeName().c_str()

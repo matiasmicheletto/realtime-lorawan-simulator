@@ -335,21 +335,30 @@ long unsigned int Network::getNCEDCount() {
     return count;
 }
 
+double Network::getAvgUF() {
+    double avgUF = 0;
+    for (long unsigned int i = 0; i < this->gateways.size(); i++)
+        avgUF += this->gateways[i]->getUF();
+    return avgUF / (double) this->gateways.size();
+}
+
 void Network::printNetworkStatus(FILE *file) {
 
     // Print status
     fprintf(file, "Network status:\n");
     fprintf(file, "  Map size: %d\n", this->mapSize);
     fprintf(file, "  End devices: %ld\n", this->enddevices.size());
+    fprintf(file, "  End devices density: %.2f\n", (double) this->enddevices.size() / (double) this->mapSize / (double) this->mapSize);
     fprintf(file, "  Pos. distr.: %s\n", this->getPosDistName(this->posDist).c_str());
     fprintf(file, "  Period dist.: %s\n", this->getPeriodDistName(this->periodDist).c_str());
     fprintf(file, "  Gateways: %ld\n", this->gateways.size());
+    fprintf(file, "  Average UF: %.2f\n", this->getAvgUF());
     fprintf(file, "  ED coverage: %.2f %%\n", this->getEDCoverage()*100);
     fprintf(file, "  Used channels: %d\n", this->minChannels);
     // Print gateways positions
     fprintf(file, "Gateways positions and connections details:\n");
-    for(unsigned int i = 0; i < this->gateways.size(); i++)
-        fprintf(file, "  #%d: (%.2f, %.2f), channel %d, UF: %.2f, connected to %d EDs\n", 
+    for(unsigned int i = 0; i < this->gateways.size(); i++){
+        fprintf(file, "  #%d: (%.2f, %.2f), channel %d, UF: %.2f, connected to %d EDs. ", 
             this->gateways[i]->getId(), 
             this->gateways[i]->getX(), 
             this->gateways[i]->getY(),
@@ -357,6 +366,12 @@ void Network::printNetworkStatus(FILE *file) {
             this->gateways[i]->getUF(),
             this->gateways[i]->connectedEDsCount()
         );
+        vector<double>uf = this->gateways[i]->getUFbySF();
+        for(int j = 0; j < (int) uf.size(); j++)
+            fprintf(file, "UF%d: %.2f, ", j+7, uf[j]);
+        fprintf(file, "\n");
+    }
+
     // Print end devices positions
     fprintf(file, "End devices positions and connection details:\n");
     for(unsigned int i = 0; i < this->enddevices.size(); i++){

@@ -137,6 +137,15 @@ double Gateway::getUF() { // total available slots / total slots
     return 1.0 - (double)sum/(double)this->maxSlots;
 }
 
+vector<double> Gateway::getUFbySF() {
+    vector<double> uf(6);
+    for(int i = 0; i < 6; i++){
+        const int max = this->H/(int)pow(2,i);
+        uf[i] = this->availableSlots[i]/(double) max;
+    }
+    return uf;
+}
+
 unsigned int Gateway::connectedEDsCount() {
     return (unsigned int) this->connectedEDs.size();
 }

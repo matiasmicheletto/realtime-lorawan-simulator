@@ -25,6 +25,7 @@ class Gateway : public Node {
         bool removeEndDevice(EndDevice *ed); // Disconnects from end device
         void disconnect(); // Disconnect from all end devices
         double getUF(); // GW current utilization factor
+        vector<double> getUFbySF(); // GW current utilization factor by spreading factor
         unsigned int connectedEDsCount(); // Number of connected end devices
         double getRange(); // Operating range equals 2000 mts when using maxSF=12, or 1000 mts for maxSF=11 and so on
         inline void setMaxSF(unsigned char maxSF) { this->maxSF = maxSF; }; // Configure different SF

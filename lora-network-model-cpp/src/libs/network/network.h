@@ -77,6 +77,7 @@ class Network {
         string getPeriodDistName();
         double getEDCoverage(); // Proportion of connected end devices
         long unsigned int getNCEDCount(); // Not connected end devices
+        double getAvgUF(); // Average utilization factor of gateways
         inline unsigned int getMapSize() {return this->mapSize;}
         inline unsigned int getEDCount() {return this->enddevices.size();}
         inline unsigned int getGWCount() {return this->gateways.size();}
