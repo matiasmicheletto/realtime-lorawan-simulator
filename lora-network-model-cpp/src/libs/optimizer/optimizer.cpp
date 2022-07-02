@@ -18,6 +18,7 @@ Optimizer::Optimizer(Builder builder) {
     this->maxIter = builder.maxIter;
     this->timeout = builder.timeout;
     this->stepMethod = builder.stepMethod;
+    this->initialGW = builder.initialGW;
     this->updatePeriod = builder.updatePeriod;
 
     // Initialize local variables
@@ -39,6 +40,11 @@ Optimizer::Builder* Optimizer::Builder::setNetwork(Network *network) {
 
 Optimizer::Builder* Optimizer::Builder::setMaxIter(unsigned int maxIter) {
     this->maxIter = maxIter;
+    return this;
+}
+
+Optimizer::Builder* Optimizer::Builder::setInitialGW(unsigned int initialGW) {
+    this->initialGW = initialGW;
     return this;
 }
 
@@ -78,37 +84,14 @@ void Optimizer::run( void (*progressCallback)(Network *network) ) {
     const unsigned int mapsize = this->network->getMapSize();
     this->network->removeAllGateaways(); 
     
-    
-    // Estimate initial gw number
+    // Initialize GW at random positions
     Uniform random( -(double)mapsize/2, (double)mapsize/2);
     double x, y;    
-    int incr = 1; // Number of gw to add on each iteration
-    int limit = 10; // Number of iterations before incrementing the number of gw to add
-    int gwNum = 1; // Initial number of gws    
-    long unsigned int nced = this->network->getNCEDCount(); // Number of end devices
-    while(nced > 0) {        
-        this->network->disconnect();
-        for(int i = 0; i < incr; i++){
-            random.setRandom(x, y);
-            this->network->createGateway(x, y);
-        }
-        this->network->autoConnect();
-        nced = this->network->getNCEDCount();        
-        if(nced > 0){
-            gwNum = (int) this->network->getGWCount();
-            if(gwNum == limit){
-                incr *= 10;
-                limit *= 10;
-            }
-        }
-    }
-
-    // Add initial number of gw
-    this->network->removeAllGateaways();
-    for(int i = 0; i < gwNum; i++){
+    for(unsigned int i = 0; i < this->initialGW; i++){
         random.setRandom(x, y);
         this->network->createGateway(x, y);
     }
+    this->network->autoConnect();
 
     this->exitCode = MAX_ITER;
     const unsigned long int timeoutms = (unsigned long int) this->timeout * 1000;
@@ -118,9 +101,10 @@ void Optimizer::run( void (*progressCallback)(Network *network) ) {
     const unsigned int addGWAfter = 10; // Number of iterations without progress after which a new gateway is added
 
     #ifdef DEBUG_MODE
-        printf("--------------------------------\n\n");
+        printf("--------------------------------\n");
         printf("Optimizer started:\n");        
-        printf("  Initial number of GW: %d\n", gwNum);
+        printf("  Initial number of GW: %d\n", this->initialGW);
+        printf("  Initial coverage: %.2f%%\n", this->network->getEDCoverage());
         printf("  Progress thresshold: %ld (min. new connected EDs per iteration)\n", progressThres);
         printf("  Add gateway after: %d steps with no progress\n", addGWAfter);
         printf("--------------------------------\n\n");

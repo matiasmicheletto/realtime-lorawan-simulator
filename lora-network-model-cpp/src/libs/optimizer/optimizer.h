@@ -18,13 +18,15 @@ class Optimizer {
             public:
                 Builder* setNetwork(Network *network);
                 Builder* setMaxIter(unsigned int maxIter);
+                Builder* setInitialGW(unsigned int initialGW);
                 Builder* setTimeout(unsigned int timeout);
                 Builder* setStepMethod(STEP_METHOD stepMethod);
                 Builder* setUpdatePeriod(int updatePeriod);
                 Optimizer build(); // Returns the list of end devices
 
                 Network *network; // Network to optimize
-                unsigned int maxIter = 100; // Maximum number of iterations
+                unsigned int maxIter = 500; // Maximum number of iterations
+                unsigned int initialGW = 1; // Initial number of gateways
                 unsigned int timeout = 60; // Timeout in seconds
                 STEP_METHOD stepMethod = SPRINGS; // Step method
                 int updatePeriod = 10; // Number of iterations between each update call
@@ -64,6 +66,7 @@ class Optimizer {
         unsigned int nced; // Not connected end devices computed on last iteration
         unsigned int timeout; // Timeout in seconds
         unsigned long int elapsed; // Elapsed time in milliseconds
+        unsigned int initialGW; // Initial number of gateways
         STEP_METHOD stepMethod; // Step method
         int updatePeriod; // Number of iterations between each update call
         EXIT_CODE exitCode; // Exit code

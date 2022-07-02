@@ -42,12 +42,12 @@ class Network {
                 Network build(); // Returns the list of end devices
 
                 unsigned int mapSize = 1000; // Size of the map 
-                int H; // System hyperperiod
-                unsigned char maxSF = 12; // Maximum spreading factor
-                unsigned int lastID; // IDs to identify network nodes
-                vector<EndDevice*> enddevices; // List of enddevices
+                unsigned char maxSF = 10; // Maximum spreading factor
                 POS_DIST posDist = UNIFORM; // Distribution of positions
                 PERIOD_DIST periodDist = SOFT; // Distribution of periods
+                vector<EndDevice*> enddevices; // List of enddevices
+                int H; // System hyperperiod
+                unsigned int lastID; // IDs to identify network nodes
             private:
                 unsigned int networkSize = 1000; // Number of end devices       
         };
