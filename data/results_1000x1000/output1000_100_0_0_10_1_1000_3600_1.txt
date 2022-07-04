@@ -1,0 +1,122 @@
+Optimization results:
+  Network improve method: Random
+  Iterations performed: 52
+  Elapsed: 3 ms
+  Exit code [3]: 100% coverage reached
+Network status:
+  Map size: 1000
+  End devices: 100
+  End devices density: 0.00
+  Pos. distr.: Uniform
+  Period dist.: Soft
+  Gateways: 5
+  Average UF: 0.00
+  ED coverage: 100.00 %
+  Used channels: 4
+Gateways positions and connections details:
+  #104: (-214.80, 187.15), channel 0, UF: 0.00, connected to 28 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.01, UF10: 0.02, UF11: 0.00, UF12: 0.00, 
+  #101: (12.68, -10.66), channel 1, UF: 0.00, connected to 10 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.01, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #100: (248.25, 146.44), channel 2, UF: 0.00, connected to 32 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.01, UF10: 0.02, UF11: 0.00, UF12: 0.00, 
+  #103: (-141.61, -352.63), channel 3, UF: 0.00, connected to 14 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.00, UF10: 0.01, UF11: 0.00, UF12: 0.00, 
+  #102: (52.09, -333.70), channel 4, UF: 0.00, connected to 16 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.01, UF10: 0.01, UF11: 0.00, UF12: 0.00, 
+End devices positions and connection details:
+  #0: (340.19, -105.62), period 3200, connected to Gateway #100 (at 268.30 mts.), using SF10 
+  #1: (298.44, 411.65), period 16000, connected to Gateway #100 (at 269.92 mts.), using SF10 
+  #2: (-164.78, 268.23), period 8000, connected to Gateway #104 (at 95.27 mts.), using SF8 
+  #3: (53.97, -22.60), period 4000, connected to Gateway #101 (at 42.99 mts.), using SF7 
+  #4: (-135.22, 13.40), period 3200, connected to Gateway #101 (at 149.84 mts.), using SF9 
+  #5: (416.20, 135.71), period 4000, connected to Gateway #100 (at 168.29 mts.), using SF9 
+  #6: (-358.40, 106.97), period 16000, connected to Gateway #104 (at 164.46 mts.), using SF9 
+  #7: (-257.11, -362.77), period 3200, connected to Gateway #103 (at 115.94 mts.), using SF8 
+  #8: (-343.32, -99.06), period 16000, connected to Gateway #104 (at 313.73 mts.), using SF10 
+  #9: (-391.19, 498.92), period 16000, connected to Gateway #104 (at 358.22 mts.), using SF10 
+  #10: (12.93, 339.11), period 4000, connected to Gateway #104 (at 273.78 mts.), using SF10 
+  #11: (-203.97, 137.55), period 4000, connected to Gateway #104 (at 50.76 mts.), using SF7 
+  #12: (-6.42, 472.78), period 8000, connected to Gateway #104 (at 353.56 mts.), using SF10 
+  #13: (271.36, 26.74), period 3200, connected to Gateway #100 (at 121.90 mts.), using SF8 
+  #14: (-99.77, 391.53), period 8000, connected to Gateway #104 (at 234.53 mts.), using SF9 
+  #15: (-147.54, 307.72), period 3200, connected to Gateway #104 (at 138.07 mts.), using SF9 
+  #16: (-430.24, 449.33), period 4000, connected to Gateway #104 (at 339.34 mts.), using SF10 
+  #17: (-413.94, -307.79), period 4000, connected to Gateway #103 (at 276.00 mts.), using SF10 
+  #18: (390.23, -151.11), period 16000, connected to Gateway #100 (at 329.69 mts.), using SF10 
+  #19: (-479.98, -42.30), period 16000, connected to Gateway #104 (at 350.66 mts.), using SF10 
+  #20: (-261.72, 470.63), period 3200, connected to Gateway #104 (at 287.34 mts.), using SF10 
+  #21: (350.92, -233.33), period 4000, connected to Gateway #102 (at 315.24 mts.), using SF10 
+  #22: (-124.79, 260.25), period 4000, connected to Gateway #104 (at 115.95 mts.), using SF8 
+  #23: (167.72, 31.61), period 16000, connected to Gateway #100 (at 140.25 mts.), using SF9 
+  #24: (-62.36, 431.84), period 3200, connected to Gateway #104 (at 288.29 mts.), using SF10 
+  #25: (220.95, -215.71), period 4000, connected to Gateway #102 (at 206.01 mts.), using SF9 
+  #26: (139.98, -145.95), period 4000, connected to Gateway #101 (at 185.77 mts.), using SF9 
+  #27: (-334.03, -59.90), period 3200, connected to Gateway #104 (at 274.31 mts.), using SF10 
+  #28: (329.20, -169.66), period 16000, connected to Gateway #102 (at 322.03 mts.), using SF10 
+  #29: (393.37, -149.64), period 4000, connected to Gateway #100 (at 329.73 mts.), using SF10 
+  #30: (456.47, 88.64), period 4000, connected to Gateway #100 (at 216.09 mts.), using SF9 
+  #31: (358.68, -60.44), period 3200, connected to Gateway #100 (at 234.51 mts.), using SF9 
+  #32: (-101.56, 314.77), period 4000, connected to Gateway #104 (at 170.62 mts.), using SF9 
+  #33: (410.97, -17.51), period 16000, connected to Gateway #100 (at 230.99 mts.), using SF9 
+  #34: (450.25, 420.13), period 16000, connected to Gateway #100 (at 340.17 mts.), using SF10 
+  #35: (381.06, 141.08), period 8000, connected to Gateway #100 (at 132.92 mts.), using SF9 
+  #36: (119.60, -218.94), period 3200, connected to Gateway #102 (at 133.15 mts.), using SF9 
+  #37: (-192.54, -52.97), period 16000, connected to Gateway #101 (at 209.54 mts.), using SF9 
+  #38: (-312.47, -223.77), period 4000, connected to Gateway #103 (at 214.00 mts.), using SF9 
+  #39: (-83.50, -330.39), period 3200, connected to Gateway #103 (at 62.22 mts.), using SF7 
+  #40: (-396.83, -373.92), period 8000, connected to Gateway #103 (at 256.10 mts.), using SF10 
+  #41: (260.48, 484.75), period 3200, connected to Gateway #100 (at 338.53 mts.), using SF10 
+  #42: (184.45, -116.81), period 4000, connected to Gateway #101 (at 201.92 mts.), using SF9 
+  #43: (-131.34, -205.84), period 16000, connected to Gateway #103 (at 147.15 mts.), using SF9 
+  #44: (84.49, -255.59), period 16000, connected to Gateway #102 (at 84.57 mts.), using SF8 
+  #45: (232.15, -374.53), period 3200, connected to Gateway #102 (at 184.63 mts.), using SF9 
+  #46: (-335.90, 245.07), period 16000, connected to Gateway #104 (at 134.24 mts.), using SF9 
+  #47: (450.10, -447.47), period 4000, connected to Gateway #102 (at 413.96 mts.), using SF10 
+  #48: (-323.79, -259.94), period 3200, connected to Gateway #103 (at 204.40 mts.), using SF9 
+  #49: (232.65, 156.56), period 3200, connected to Gateway #100 (at 18.59 mts.), using SF7 
+  #50: (139.46, 259.73), period 16000, connected to Gateway #100 (at 157.07 mts.), using SF9 
+  #51: (-365.10, 20.21), period 16000, connected to Gateway #104 (at 224.63 mts.), using SF9 
+  #52: (-430.09, -295.34), period 8000, connected to Gateway #103 (at 294.11 mts.), using SF10 
+  #53: (319.68, 73.32), period 3200, connected to Gateway #100 (at 102.22 mts.), using SF8 
+  #54: (-448.06, -342.19), period 3200, connected to Gateway #103 (at 306.62 mts.), using SF10 
+  #55: (-295.67, 389.96), period 16000, connected to Gateway #104 (at 218.34 mts.), using SF9 
+  #56: (497.80, -445.94), period 3200, connected to Gateway #102 (at 459.63 mts.), using SF10 
+  #57: (-427.67, -495.84), period 3200, connected to Gateway #103 (at 319.90 mts.), using SF10 
+  #58: (93.89, -319.63), period 16000, connected to Gateway #102 (at 44.11 mts.), using SF7 
+  #59: (-108.31, 413.03), period 3200, connected to Gateway #104 (at 249.72 mts.), using SF9 
+  #60: (-140.90, 52.49), period 4000, connected to Gateway #104 (at 153.61 mts.), using SF9 
+  #61: (-47.42, 187.39), period 16000, connected to Gateway #104 (at 167.38 mts.), using SF9 
+  #62: (30.81, 257.29), period 8000, connected to Gateway #100 (at 244.07 mts.), using SF9 
+  #63: (492.23, 76.97), period 3200, connected to Gateway #100 (at 253.68 mts.), using SF10 
+  #64: (247.81, 128.91), period 16000, connected to Gateway #100 (at 17.53 mts.), using SF7 
+  #65: (247.80, 333.24), period 3200, connected to Gateway #100 (at 186.80 mts.), using SF9 
+  #66: (373.27, 331.04), period 3200, connected to Gateway #100 (at 222.95 mts.), using SF9 
+  #67: (243.81, 403.37), period 3200, connected to Gateway #100 (at 256.97 mts.), using SF10 
+  #68: (166.88, -2.74), period 16000, connected to Gateway #101 (at 154.41 mts.), using SF9 
+  #69: (330.01, 388.95), period 16000, connected to Gateway #100 (at 255.92 mts.), using SF10 
+  #70: (149.71, -251.96), period 4000, connected to Gateway #102 (at 127.33 mts.), using SF9 
+  #71: (-270.86, 200.62), period 8000, connected to Gateway #104 (at 57.66 mts.), using SF7 
+  #72: (-171.22, -268.57), period 16000, connected to Gateway #103 (at 89.12 mts.), using SF8 
+  #73: (133.07, -276.34), period 4000, connected to Gateway #102 (at 99.24 mts.), using SF8 
+  #74: (10.69, 471.47), period 8000, connected to Gateway #104 (at 362.88 mts.), using SF10 
+  #75: (46.11, 219.27), period 16000, connected to Gateway #100 (at 214.86 mts.), using SF9 
+  #76: (-28.52, 92.54), period 3200, connected to Gateway #101 (at 111.11 mts.), using SF8 
+  #77: (-49.08, -163.65), period 3200, connected to Gateway #101 (at 164.99 mts.), using SF9 
+  #78: (-65.49, -496.77), period 8000, connected to Gateway #103 (at 163.01 mts.), using SF9 
+  #79: (98.48, 333.24), period 16000, connected to Gateway #100 (at 239.43 mts.), using SF9 
+  #80: (175.48, -17.05), period 8000, connected to Gateway #101 (at 162.92 mts.), using SF9 
+  #81: (-195.04, 212.09), period 16000, connected to Gateway #104 (at 31.82 mts.), using SF7 
+  #82: (121.82, -459.14), period 8000, connected to Gateway #102 (at 143.51 mts.), using SF9 
+  #83: (195.98, 173.94), period 4000, connected to Gateway #100 (at 59.06 mts.), using SF7 
+  #84: (-152.88, -315.38), period 4000, connected to Gateway #103 (at 38.92 mts.), using SF7 
+  #85: (127.16, 230.73), period 8000, connected to Gateway #100 (at 147.54 mts.), using SF9 
+  #86: (240.44, -297.79), period 3200, connected to Gateway #102 (at 191.75 mts.), using SF9 
+  #87: (184.76, 153.13), period 8000, connected to Gateway #100 (at 63.84 mts.), using SF8 
+  #88: (32.44, -412.36), period 8000, connected to Gateway #102 (at 81.07 mts.), using SF8 
+  #89: (377.38, 186.12), period 16000, connected to Gateway #100 (at 135.10 mts.), using SF9 
+  #90: (-388.72, -138.40), period 4000, connected to Gateway #103 (at 327.04 mts.), using SF10 
+  #91: (93.21, 166.56), period 8000, connected to Gateway #100 (at 156.33 mts.), using SF9 
+  #92: (275.77, -211.62), period 8000, connected to Gateway #102 (at 254.83 mts.), using SF10 
+  #93: (-310.25, 484.36), period 16000, connected to Gateway #104 (at 312.17 mts.), using SF10 
+  #94: (327.39, -168.52), period 16000, connected to Gateway #102 (at 321.06 mts.), using SF10 
+  #95: (-63.50, 458.64), period 3200, connected to Gateway #104 (at 310.80 mts.), using SF10 
+  #96: (264.87, 199.08), period 16000, connected to Gateway #100 (at 55.20 mts.), using SF7 
+  #97: (185.79, -116.17), period 3200, connected to Gateway #101 (at 202.73 mts.), using SF9 
+  #98: (443.05, 416.27), period 3200, connected to Gateway #100 (at 332.81 mts.), using SF10 
+  #99: (-296.45, 293.66), period 4000, connected to Gateway #104 (at 134.21 mts.), using SF9 

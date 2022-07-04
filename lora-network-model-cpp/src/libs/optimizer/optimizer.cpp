@@ -104,11 +104,13 @@ void Optimizer::run( void (*progressCallback)(Network *network) ) {
         printf("--------------------------------\n");
         printf("Optimizer started:\n");        
         printf("  Initial number of GW: %d\n", this->initialGW);
-        printf("  Initial coverage: %.2f%%\n", this->network->getEDCoverage());
+        printf("  Initial coverage: %.2f%%\n", this->network->getEDCoverage()*100);
         printf("  Progress thresshold: %ld (min. new connected EDs per iteration)\n", progressThres);
         printf("  Add gateway after: %d steps with no progress\n", addGWAfter);
         printf("--------------------------------\n\n");
     #endif
+
+    unsigned int gwCounter = this->initialGW;
     
     for(this->currentIter = 0; this->currentIter < this->maxIter; this->currentIter++){
         
@@ -146,9 +148,8 @@ void Optimizer::run( void (*progressCallback)(Network *network) ) {
         #if defined(DEBUG_MODE) && !defined(EMSCRIPTEN)
             printf("\r");
             printf(
-                "Iteration %d (%.2f %%) -- not connected: %d (change: %ld)", 
-                this->currentIter, 
-                this->currentIter/(double)this->maxIter*100, 
+                "Iteration %d -- ED left: %d (added: %ld) ", 
+                this->currentIter,                 
                 newNCED,
                 ncedDiff
             );
@@ -166,8 +167,9 @@ void Optimizer::run( void (*progressCallback)(Network *network) ) {
                 random.setRandom(x, y); // x, and y are declared at initialization
                 this->network->createGateway(x, y);
                 noProgressStepCounter = 0;
+                gwCounter++;
                 #ifdef DEBUG_MODE
-                    printf("New gateway added at (%f, %f)\n", x, y);
+                    printf("\nGateway #%d added at (%f, %f)\n", gwCounter, x, y);
                 #endif
             }
         }
@@ -224,7 +226,7 @@ void Optimizer::printResults() {
     printf("  Average utilization factor: %f\n",this->network->getAvgUF());
     printf("  Coverage: %.2f %% \n",this->network->getEDCoverage()*100.0);
     printf(exitCodes[this->exitCode].c_str(),this->exitCode);
-    printf("\n------------------------\n\n");
+    printf("------------------------\n\n");
 }
 
 void Optimizer::exportFullResults(char *filename) {

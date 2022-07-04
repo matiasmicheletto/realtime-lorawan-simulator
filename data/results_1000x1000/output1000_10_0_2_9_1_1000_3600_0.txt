@@ -1,0 +1,43 @@
+Optimization results:
+  Network improve method: Springs
+  Iterations performed: 187
+  Elapsed: 4 ms
+  Exit code [3]: 100% coverage reached
+Network status:
+  Map size: 1000
+  End devices: 10
+  End devices density: 0.00
+  Pos. distr.: Uniform
+  Period dist.: Hard
+  Gateways: 16
+  Average UF: 0.00
+  ED coverage: 100.00 %
+  Used channels: 7
+Gateways positions and connections details:
+  #11: (-391.19, 498.92), channel 0, UF: 0.00, connected to 1 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #23: (-455.70, 444.66), channel 1, UF: 0.00, connected to 0 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #24: (-275.43, 462.87), channel 2, UF: 0.00, connected to 0 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #16: (-164.78, 268.23), channel 3, UF: 0.00, connected to 1 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #20: (-358.61, 106.96), channel 4, UF: 0.00, connected to 1 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #17: (-179.02, 158.11), channel 5, UF: 0.00, connected to 0 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #19: (-458.20, 34.47), channel 6, UF: 0.00, connected to 0 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #22: (-469.11, 18.43), channel 7, UF: 0.00, connected to 0 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #15: (-135.21, 13.40), channel 1, UF: 0.00, connected to 1 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #14: (-343.34, -98.74), channel 2, UF: 0.00, connected to 1 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #10: (53.97, -22.60), channel 6, UF: 0.00, connected to 1 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #25: (298.44, 411.65), channel 1, UF: 0.00, connected to 1 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #13: (-257.11, -362.77), channel 3, UF: 0.00, connected to 1 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #12: (414.07, 150.13), channel 2, UF: 0.00, connected to 1 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #18: (340.18, -105.63), channel 3, UF: 0.00, connected to 1 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #21: (40.51, -352.39), channel 0, UF: 0.00, connected to 0 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+End devices positions and connection details:
+  #0: (340.19, -105.62), period 320, connected to Gateway #18 (at 0.02 mts.), using SF7 
+  #1: (298.44, 411.65), period 1600, connected to Gateway #25 (at 0.00 mts.), using SF7 
+  #2: (-164.78, 268.23), period 800, connected to Gateway #16 (at 0.00 mts.), using SF7 
+  #3: (53.97, -22.60), period 400, connected to Gateway #10 (at 0.00 mts.), using SF7 
+  #4: (-135.22, 13.40), period 320, connected to Gateway #15 (at 0.00 mts.), using SF7 
+  #5: (416.20, 135.71), period 400, connected to Gateway #12 (at 14.57 mts.), using SF7 
+  #6: (-358.40, 106.97), period 1600, connected to Gateway #20 (at 0.21 mts.), using SF7 
+  #7: (-257.11, -362.77), period 320, connected to Gateway #13 (at 0.00 mts.), using SF7 
+  #8: (-343.32, -99.06), period 1600, connected to Gateway #14 (at 0.31 mts.), using SF7 
+  #9: (-391.19, 498.92), period 1600, connected to Gateway #11 (at 0.00 mts.), using SF7 

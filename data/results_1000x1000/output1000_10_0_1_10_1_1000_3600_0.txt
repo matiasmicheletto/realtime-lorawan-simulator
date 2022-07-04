@@ -1,0 +1,30 @@
+Optimization results:
+  Network improve method: Springs
+  Iterations performed: 36
+  Elapsed: 0 ms
+  Exit code [3]: 100% coverage reached
+Network status:
+  Map size: 1000
+  End devices: 10
+  End devices density: 0.00
+  Pos. distr.: Uniform
+  Period dist.: Medium
+  Gateways: 3
+  Average UF: 0.00
+  ED coverage: 100.00 %
+  Used channels: 2
+Gateways positions and connections details:
+  #12: (-218.17, 51.06), channel 0, UF: 0.00, connected to 5 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #11: (107.81, 348.76), channel 1, UF: 0.00, connected to 2 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #10: (-33.86, -121.82), channel 2, UF: 0.00, connected to 3 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+End devices positions and connection details:
+  #0: (340.19, -105.62), period 3600, connected to Gateway #10 (at 374.40 mts.), using SF10 
+  #1: (298.44, 411.65), period 3600, connected to Gateway #11 (at 200.73 mts.), using SF9 
+  #2: (-164.78, 268.23), period 3600, connected to Gateway #12 (at 223.64 mts.), using SF9 
+  #3: (53.97, -22.60), period 3600, connected to Gateway #10 (at 132.51 mts.), using SF9 
+  #4: (-135.22, 13.40), period 3600, connected to Gateway #12 (at 91.10 mts.), using SF8 
+  #5: (416.20, 135.71), period 3600, connected to Gateway #11 (at 374.82 mts.), using SF10 
+  #6: (-358.40, 106.97), period 3600, connected to Gateway #12 (at 150.97 mts.), using SF9 
+  #7: (-257.11, -362.77), period 3600, connected to Gateway #10 (at 328.48 mts.), using SF10 
+  #8: (-343.32, -99.06), period 3600, connected to Gateway #12 (at 195.44 mts.), using SF9 
+  #9: (-391.19, 498.92), period 3600, connected to Gateway #12 (at 480.13 mts.), using SF10 

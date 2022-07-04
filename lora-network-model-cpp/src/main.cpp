@@ -28,7 +28,7 @@ void printHelp() {
     printf("  -x, --positions       0\n");
     printf("  -p, --periods         0\n");
     printf("  -g, --gateways        1\n");
-    printf("  -s, --sfmax           10\n");
+    printf("  -s, --sfmax           12\n");
     printf("  -a, --algorithm       0\n");
     printf("  -i, --iterations      500\n");
     printf("  -t, --timeout         60\n");
@@ -122,6 +122,7 @@ int main(int argc, char **argv) {
     optimizerBuilder.setNetwork(network);
     optimizer = new Optimizer(optimizerBuilder.build());
         
+    
     // Run optimization
     optimizer->run();
 
@@ -130,9 +131,15 @@ int main(int argc, char **argv) {
 
     char outputfilename[100];
     char csvfilename[100];
-    string filename = "";
-    for(int i = 1; i < 9; i++) 
-        filename += "_" + to_string(atoi(argv[i]));
+    string filename = to_string(networkBuilder.mapSize) + "_" + 
+                      to_string(networkBuilder.enddevices.size()) + "_" +
+                      to_string(networkBuilder.posDist) + "_" + 
+                      to_string(networkBuilder.periodDist) + "_" + 
+                      to_string(networkBuilder.maxSF) + "_" + 
+                      to_string(optimizerBuilder.initialGW) + "_" + 
+                      to_string(optimizerBuilder.maxIter) + "_" + 
+                      to_string(optimizerBuilder.timeout) + "_" + 
+                      to_string(optimizerBuilder.stepMethod);
     strcpy(outputfilename, ("output"+filename+".txt").c_str());
     strcpy(csvfilename, ("nodes"+filename+".csv").c_str());
 

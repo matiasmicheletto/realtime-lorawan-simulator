@@ -141,7 +141,7 @@ vector<double> Gateway::getUFbySF() {
     vector<double> uf(6);
     for(int i = 0; i < 6; i++){
         const int max = this->H/(int)pow(2,i);
-        uf[i] = this->availableSlots[i]/(double) max;
+        uf[i] = 1 - this->availableSlots[i]/(double) max;
     }
     return uf;
 }

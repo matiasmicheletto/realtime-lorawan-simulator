@@ -1,0 +1,591 @@
+Optimization results:
+  Network improve method: Random
+  Iterations performed: 624
+  Elapsed: 16571 ms
+  Exit code [3]: 100% coverage reached
+Network status:
+  Map size: 1000
+  End devices: 500
+  End devices density: 0.00
+  Pos. distr.: Uniform
+  Period dist.: Hard
+  Gateways: 74
+  Average UF: 0.01
+  ED coverage: 100.00 %
+  Used channels: 23
+Gateways positions and connections details:
+  #500: (-372.29, -395.73), channel 0, UF: 0.01, connected to 11 EDs. UF7: 0.02, UF8: 0.01, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #563: (-443.28, -454.04), channel 1, UF: 0.01, connected to 14 EDs. UF7: 0.02, UF8: 0.02, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #521: (-349.96, -255.90), channel 2, UF: 0.02, connected to 16 EDs. UF7: 0.02, UF8: 0.03, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #523: (-286.71, -289.22), channel 3, UF: 0.00, connected to 3 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #524: (-255.34, -393.14), channel 4, UF: 0.01, connected to 6 EDs. UF7: 0.01, UF8: 0.01, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #501: (-238.08, -256.97), channel 5, UF: 0.01, connected to 8 EDs. UF7: 0.02, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #573: (-227.79, -196.41), channel 6, UF: 0.00, connected to 2 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #505: (-303.47, -117.82), channel 7, UF: 0.01, connected to 9 EDs. UF7: 0.01, UF8: 0.02, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #566: (-138.31, -287.94), channel 8, UF: 0.01, connected to 6 EDs. UF7: 0.01, UF8: 0.01, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #546: (-162.16, -176.21), channel 9, UF: 0.01, connected to 8 EDs. UF7: 0.01, UF8: 0.01, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #571: (-107.96, -437.10), channel 10, UF: 0.01, connected to 6 EDs. UF7: 0.01, UF8: 0.02, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #564: (-288.66, -56.38), channel 11, UF: 0.00, connected to 1 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #531: (-499.88, -47.37), channel 10, UF: 0.00, connected to 3 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #527: (-289.25, -48.77), channel 12, UF: 0.01, connected to 5 EDs. UF7: 0.01, UF8: 0.01, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #508: (-442.90, -25.30), channel 13, UF: 0.00, connected to 4 EDs. UF7: 0.01, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #503: (-54.87, -311.24), channel 14, UF: 0.01, connected to 9 EDs. UF7: 0.02, UF8: 0.02, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #513: (-47.24, -440.83), channel 13, UF: 0.01, connected to 7 EDs. UF7: 0.02, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #509: (-199.66, -29.48), channel 15, UF: 0.01, connected to 6 EDs. UF7: 0.00, UF8: 0.02, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #511: (-461.77, 20.34), channel 14, UF: 0.00, connected to 1 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #568: (-76.08, -69.37), channel 1, UF: 0.00, connected to 4 EDs. UF7: 0.01, UF8: 0.01, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #552: (-91.82, -43.80), channel 16, UF: 0.01, connected to 5 EDs. UF7: 0.00, UF8: 0.01, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #557: (-448.42, 88.66), channel 4, UF: 0.00, connected to 4 EDs. UF7: 0.01, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #507: (63.48, -411.68), channel 11, UF: 0.02, connected to 19 EDs. UF7: 0.01, UF8: 0.04, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #534: (-328.57, 105.87), channel 17, UF: 0.01, connected to 16 EDs. UF7: 0.01, UF8: 0.03, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #514: (23.33, -148.69), channel 18, UF: 0.01, connected to 9 EDs. UF7: 0.01, UF8: 0.02, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #550: (-28.32, -17.62), channel 19, UF: 0.01, connected to 9 EDs. UF7: 0.01, UF8: 0.02, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #516: (97.91, -159.36), channel 17, UF: 0.01, connected to 12 EDs. UF7: 0.01, UF8: 0.03, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #536: (-441.55, 197.08), channel 3, UF: 0.01, connected to 6 EDs. UF7: 0.01, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #533: (163.40, -280.41), channel 2, UF: 0.01, connected to 14 EDs. UF7: 0.01, UF8: 0.02, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #510: (183.84, -303.93), channel 7, UF: 0.01, connected to 6 EDs. UF7: 0.01, UF8: 0.01, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #551: (15.37, 87.75), channel 10, UF: 0.00, connected to 0 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #515: (25.88, 79.12), channel 20, UF: 0.00, connected to 1 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #504: (-421.28, 257.09), channel 2, UF: 0.00, connected to 5 EDs. UF7: 0.00, UF8: 0.01, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #517: (5.57, 106.86), channel 21, UF: 0.01, connected to 9 EDs. UF7: 0.01, UF8: 0.02, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #570: (112.87, -13.09), channel 4, UF: 0.01, connected to 11 EDs. UF7: 0.01, UF8: 0.02, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #544: (-437.22, 258.72), channel 5, UF: 0.00, connected to 2 EDs. UF7: 0.00, UF8: 0.01, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #525: (-152.15, 228.66), channel 8, UF: 0.02, connected to 17 EDs. UF7: 0.02, UF8: 0.03, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #547: (97.98, 41.15), channel 3, UF: 0.00, connected to 1 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #569: (280.45, -395.32), channel 5, UF: 0.01, connected to 8 EDs. UF7: 0.01, UF8: 0.02, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #532: (151.56, 49.18), channel 13, UF: 0.00, connected to 6 EDs. UF7: 0.01, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #541: (-221.83, 314.69), channel 6, UF: 0.00, connected to 4 EDs. UF7: 0.00, UF8: 0.01, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #542: (298.52, -324.60), channel 6, UF: 0.00, connected to 1 EDs. UF7: 0.00, UF8: 0.01, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #535: (67.74, 173.60), channel 5, UF: 0.02, connected to 13 EDs. UF7: 0.02, UF8: 0.03, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #572: (-303.13, 349.73), channel 9, UF: 0.01, connected to 8 EDs. UF7: 0.01, UF8: 0.01, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #529: (327.55, -286.59), channel 9, UF: 0.01, connected to 9 EDs. UF7: 0.01, UF8: 0.02, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #502: (-67.71, 311.55), channel 22, UF: 0.02, connected to 13 EDs. UF7: 0.02, UF8: 0.03, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #548: (292.63, -68.52), channel 12, UF: 0.01, connected to 11 EDs. UF7: 0.01, UF8: 0.03, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #539: (-223.68, 374.74), channel 18, UF: 0.00, connected to 4 EDs. UF7: 0.00, UF8: 0.01, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #554: (354.72, -448.60), channel 1, UF: 0.00, connected to 1 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #555: (267.42, 43.81), channel 23, UF: 0.01, connected to 9 EDs. UF7: 0.01, UF8: 0.02, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #512: (352.94, -140.17), channel 8, UF: 0.01, connected to 14 EDs. UF7: 0.02, UF8: 0.01, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #565: (336.50, -30.34), channel 15, UF: 0.00, connected to 3 EDs. UF7: 0.01, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #543: (-399.48, 452.41), channel 1, UF: 0.01, connected to 13 EDs. UF7: 0.01, UF8: 0.02, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #538: (404.00, -499.81), channel 3, UF: 0.00, connected to 0 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #537: (429.66, -411.22), channel 4, UF: 0.01, connected to 6 EDs. UF7: 0.02, UF8: 0.01, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #518: (380.17, -13.30), channel 11, UF: 0.00, connected to 3 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #519: (-168.11, 466.06), channel 7, UF: 0.01, connected to 11 EDs. UF7: 0.01, UF8: 0.04, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #556: (197.48, 262.81), channel 2, UF: 0.01, connected to 10 EDs. UF7: 0.00, UF8: 0.04, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #558: (467.41, -342.76), channel 10, UF: 0.01, connected to 7 EDs. UF7: 0.00, UF8: 0.02, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #528: (392.25, 9.27), channel 14, UF: 0.00, connected to 4 EDs. UF7: 0.01, UF8: 0.01, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #522: (453.37, 22.81), channel 16, UF: 0.01, connected to 8 EDs. UF7: 0.01, UF8: 0.03, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #562: (165.73, 391.17), channel 1, UF: 0.01, connected to 10 EDs. UF7: 0.01, UF8: 0.02, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #526: (499.04, -55.41), channel 19, UF: 0.00, connected to 0 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #561: (289.48, 319.76), channel 6, UF: 0.00, connected to 3 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #545: (163.21, 427.88), channel 12, UF: 0.00, connected to 5 EDs. UF7: 0.00, UF8: 0.02, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #553: (258.72, 350.05), channel 9, UF: 0.01, connected to 10 EDs. UF7: 0.02, UF8: 0.01, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #540: (132.59, 449.91), channel 11, UF: 0.00, connected to 5 EDs. UF7: 0.00, UF8: 0.01, UF9: 0.01, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #567: (320.97, 306.31), channel 7, UF: 0.00, connected to 2 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #530: (406.18, 264.61), channel 17, UF: 0.01, connected to 10 EDs. UF7: 0.01, UF8: 0.01, UF9: 0.01, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #560: (498.37, 247.85), channel 10, UF: 0.00, connected to 0 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #506: (499.48, 249.21), channel 18, UF: 0.00, connected to 0 EDs. UF7: 0.00, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #559: (382.64, 421.49), channel 4, UF: 0.01, connected to 8 EDs. UF7: 0.01, UF8: 0.01, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #520: (474.88, 360.94), channel 8, UF: 0.00, connected to 4 EDs. UF7: 0.01, UF8: 0.00, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+  #549: (391.45, 486.76), channel 0, UF: 0.00, connected to 2 EDs. UF7: 0.00, UF8: 0.01, UF9: 0.00, UF10: 0.00, UF11: 0.00, UF12: 0.00, 
+End devices positions and connection details:
+  #0: (340.19, -105.62), period 320, connected to Gateway #512 (at 36.83 mts.), using SF7 
+  #1: (298.44, 411.65), period 1600, connected to Gateway #553 (at 73.29 mts.), using SF8 
+  #2: (-164.78, 268.23), period 800, connected to Gateway #525 (at 41.53 mts.), using SF7 
+  #3: (53.97, -22.60), period 400, connected to Gateway #570 (at 59.66 mts.), using SF7 
+  #4: (-135.22, 13.40), period 320, connected to Gateway #552 (at 71.80 mts.), using SF8 
+  #5: (416.20, 135.71), period 400, connected to Gateway #522 (at 118.86 mts.), using SF8 
+  #6: (-358.40, 106.97), period 1600, connected to Gateway #534 (at 29.85 mts.), using SF7 
+  #7: (-257.11, -362.77), period 320, connected to Gateway #524 (at 30.42 mts.), using SF7 
+  #8: (-343.32, -99.06), period 1600, connected to Gateway #505 (at 44.05 mts.), using SF7 
+  #9: (-391.19, 498.92), period 1600, connected to Gateway #543 (at 47.25 mts.), using SF7 
+  #10: (12.93, 339.11), period 400, connected to Gateway #502 (at 85.22 mts.), using SF8 
+  #11: (-203.97, 137.55), period 400, connected to Gateway #525 (at 104.82 mts.), using SF8 
+  #12: (-6.42, 472.78), period 800, connected to Gateway #540 (at 140.87 mts.), using SF9 
+  #13: (271.36, 26.74), period 320, connected to Gateway #555 (at 17.51 mts.), using SF7 
+  #14: (-99.77, 391.53), period 800, connected to Gateway #502 (at 86.16 mts.), using SF8 
+  #15: (-147.54, 307.72), period 320, connected to Gateway #541 (at 74.62 mts.), using SF8 
+  #16: (-430.24, 449.33), period 400, connected to Gateway #543 (at 30.92 mts.), using SF7 
+  #17: (-413.94, -307.79), period 400, connected to Gateway #521 (at 82.38 mts.), using SF8 
+  #18: (390.23, -151.11), period 1600, connected to Gateway #512 (at 38.87 mts.), using SF7 
+  #19: (-479.98, -42.30), period 1600, connected to Gateway #531 (at 20.54 mts.), using SF7 
+  #20: (-261.72, 470.63), period 320, connected to Gateway #519 (at 93.73 mts.), using SF8 
+  #21: (350.92, -233.33), period 400, connected to Gateway #529 (at 58.15 mts.), using SF7 
+  #22: (-124.79, 260.25), period 400, connected to Gateway #525 (at 41.79 mts.), using SF7 
+  #23: (167.72, 31.61), period 1600, connected to Gateway #532 (at 23.88 mts.), using SF7 
+  #24: (-62.36, 431.84), period 320, connected to Gateway #519 (at 111.15 mts.), using SF8 
+  #25: (220.95, -215.71), period 400, connected to Gateway #533 (at 86.60 mts.), using SF8 
+  #26: (139.98, -145.95), period 400, connected to Gateway #516 (at 44.16 mts.), using SF7 
+  #27: (-334.03, -59.90), period 320, connected to Gateway #564 (at 45.50 mts.), using SF7 
+  #28: (329.20, -169.66), period 1600, connected to Gateway #512 (at 37.86 mts.), using SF7 
+  #29: (393.37, -149.64), period 400, connected to Gateway #512 (at 41.53 mts.), using SF7 
+  #30: (456.47, 88.64), period 400, connected to Gateway #522 (at 65.90 mts.), using SF8 
+  #31: (358.68, -60.44), period 320, connected to Gateway #565 (at 37.39 mts.), using SF7 
+  #32: (-101.56, 314.77), period 400, connected to Gateway #502 (at 34.00 mts.), using SF7 
+  #33: (410.97, -17.51), period 1600, connected to Gateway #518 (at 31.09 mts.), using SF7 
+  #34: (450.25, 420.13), period 1600, connected to Gateway #520 (at 64.10 mts.), using SF8 
+  #35: (381.06, 141.08), period 800, connected to Gateway #530 (at 126.06 mts.), using SF9 
+  #36: (119.60, -218.94), period 320, connected to Gateway #516 (at 63.41 mts.), using SF8 
+  #37: (-192.54, -52.97), period 1600, connected to Gateway #509 (at 24.54 mts.), using SF7 
+  #38: (-312.47, -223.77), period 400, connected to Gateway #521 (at 49.38 mts.), using SF7 
+  #39: (-83.50, -330.39), period 320, connected to Gateway #503 (at 34.45 mts.), using SF7 
+  #40: (-396.83, -373.92), period 800, connected to Gateway #500 (at 32.83 mts.), using SF7 
+  #41: (260.48, 484.75), period 320, connected to Gateway #545 (at 112.67 mts.), using SF8 
+  #42: (184.45, -116.81), period 400, connected to Gateway #516 (at 96.43 mts.), using SF8 
+  #43: (-131.34, -205.84), period 1600, connected to Gateway #546 (at 42.76 mts.), using SF7 
+  #44: (84.49, -255.59), period 1600, connected to Gateway #533 (at 82.73 mts.), using SF8 
+  #45: (232.15, -374.53), period 320, connected to Gateway #569 (at 52.58 mts.), using SF7 
+  #46: (-335.90, 245.07), period 1600, connected to Gateway #504 (at 86.22 mts.), using SF8 
+  #47: (450.10, -447.47), period 400, connected to Gateway #537 (at 41.62 mts.), using SF7 
+  #48: (-323.79, -259.94), period 320, connected to Gateway #521 (at 26.48 mts.), using SF7 
+  #49: (232.65, 156.56), period 320, connected to Gateway #556 (at 111.92 mts.), using SF8 
+  #50: (139.46, 259.73), period 1600, connected to Gateway #556 (at 58.10 mts.), using SF7 
+  #51: (-365.10, 20.21), period 1600, connected to Gateway #508 (at 90.13 mts.), using SF8 
+  #52: (-430.09, -295.34), period 800, connected to Gateway #521 (at 89.32 mts.), using SF8 
+  #53: (319.68, 73.32), period 320, connected to Gateway #555 (at 60.02 mts.), using SF7 
+  #54: (-448.06, -342.19), period 320, connected to Gateway #500 (at 92.78 mts.), using SF8 
+  #55: (-295.67, 389.96), period 1600, connected to Gateway #572 (at 40.91 mts.), using SF7 
+  #56: (497.80, -445.94), period 320, connected to Gateway #537 (at 76.47 mts.), using SF8 
+  #57: (-427.67, -495.84), period 320, connected to Gateway #563 (at 44.62 mts.), using SF7 
+  #58: (93.89, -319.63), period 1600, connected to Gateway #533 (at 79.81 mts.), using SF8 
+  #59: (-108.31, 413.03), period 320, connected to Gateway #519 (at 79.93 mts.), using SF8 
+  #60: (-140.90, 52.49), period 400, connected to Gateway #509 (at 100.85 mts.), using SF8 
+  #61: (-47.42, 187.39), period 1600, connected to Gateway #517 (at 96.40 mts.), using SF8 
+  #62: (30.81, 257.29), period 800, connected to Gateway #535 (at 91.48 mts.), using SF8 
+  #63: (492.23, 76.97), period 320, connected to Gateway #522 (at 66.65 mts.), using SF8 
+  #64: (247.81, 128.91), period 1600, connected to Gateway #555 (at 87.33 mts.), using SF8 
+  #65: (247.80, 333.24), period 320, connected to Gateway #553 (at 20.05 mts.), using SF7 
+  #66: (373.27, 331.04), period 320, connected to Gateway #567 (at 57.85 mts.), using SF7 
+  #67: (243.81, 403.37), period 320, connected to Gateway #553 (at 55.36 mts.), using SF7 
+  #68: (166.88, -2.74), period 1600, connected to Gateway #532 (at 54.14 mts.), using SF7 
+  #69: (330.01, 388.95), period 1600, connected to Gateway #559 (at 61.88 mts.), using SF7 
+  #70: (149.71, -251.96), period 400, connected to Gateway #533 (at 31.58 mts.), using SF7 
+  #71: (-270.86, 200.62), period 800, connected to Gateway #534 (at 110.94 mts.), using SF8 
+  #72: (-171.22, -268.57), period 1600, connected to Gateway #566 (at 38.18 mts.), using SF7 
+  #73: (133.07, -276.34), period 400, connected to Gateway #533 (at 30.60 mts.), using SF7 
+  #74: (10.69, 471.47), period 800, connected to Gateway #540 (at 123.79 mts.), using SF8 
+  #75: (46.11, 219.27), period 1600, connected to Gateway #535 (at 50.53 mts.), using SF7 
+  #76: (-28.52, 92.54), period 320, connected to Gateway #517 (at 36.97 mts.), using SF7 
+  #77: (-49.08, -163.65), period 320, connected to Gateway #514 (at 73.94 mts.), using SF8 
+  #78: (-65.49, -496.77), period 800, connected to Gateway #513 (at 58.84 mts.), using SF7 
+  #79: (98.48, 333.24), period 1600, connected to Gateway #562 (at 88.75 mts.), using SF8 
+  #80: (175.48, -17.05), period 800, connected to Gateway #570 (at 62.73 mts.), using SF8 
+  #81: (-195.04, 212.09), period 1600, connected to Gateway #525 (at 45.99 mts.), using SF7 
+  #82: (121.82, -459.14), period 800, connected to Gateway #507 (at 75.21 mts.), using SF8 
+  #83: (195.98, 173.94), period 400, connected to Gateway #556 (at 88.89 mts.), using SF8 
+  #84: (-152.88, -315.38), period 400, connected to Gateway #566 (at 31.07 mts.), using SF7 
+  #85: (127.16, 230.73), period 800, connected to Gateway #556 (at 77.30 mts.), using SF8 
+  #86: (240.44, -297.79), period 320, connected to Gateway #510 (at 56.93 mts.), using SF7 
+  #87: (184.76, 153.13), period 800, connected to Gateway #532 (at 109.12 mts.), using SF8 
+  #88: (32.44, -412.36), period 800, connected to Gateway #507 (at 31.05 mts.), using SF7 
+  #89: (377.38, 186.12), period 1600, connected to Gateway #530 (at 83.60 mts.), using SF8 
+  #90: (-388.72, -138.40), period 400, connected to Gateway #505 (at 87.71 mts.), using SF8 
+  #91: (93.21, 166.56), period 800, connected to Gateway #535 (at 26.42 mts.), using SF7 
+  #92: (275.77, -211.62), period 800, connected to Gateway #529 (at 91.11 mts.), using SF8 
+  #93: (-310.25, 484.36), period 1600, connected to Gateway #543 (at 94.78 mts.), using SF8 
+  #94: (327.39, -168.52), period 1600, connected to Gateway #512 (at 38.16 mts.), using SF7 
+  #95: (-63.50, 458.64), period 320, connected to Gateway #519 (at 104.87 mts.), using SF8 
+  #96: (264.87, 199.08), period 1600, connected to Gateway #556 (at 92.76 mts.), using SF8 
+  #97: (185.79, -116.17), period 320, connected to Gateway #516 (at 97.92 mts.), using SF8 
+  #98: (443.05, 416.27), period 320, connected to Gateway #559 (at 60.63 mts.), using SF7 
+  #99: (-296.45, 293.66), period 400, connected to Gateway #572 (at 56.47 mts.), using SF7 
+  #100: (-202.71, 404.93), period 320, connected to Gateway #539 (at 36.76 mts.), using SF7 
+  #101: (373.98, -1.86), period 400, connected to Gateway #518 (at 13.01 mts.), using SF7 
+  #102: (-337.24, -226.09), period 320, connected to Gateway #521 (at 32.41 mts.), using SF7 
+  #103: (-7.60, -36.34), period 320, connected to Gateway #550 (at 27.92 mts.), using SF7 
+  #104: (-4.02, -208.95), period 1600, connected to Gateway #514 (at 66.17 mts.), using SF8 
+  #105: (184.18, 227.55), period 1600, connected to Gateway #556 (at 37.69 mts.), using SF7 
+  #106: (103.11, -7.58), period 320, connected to Gateway #570 (at 11.21 mts.), using SF7 
+  #107: (224.25, -321.79), period 1600, connected to Gateway #510 (at 44.18 mts.), using SF7 
+  #108: (-1.47, -378.74), period 1600, connected to Gateway #507 (at 72.83 mts.), using SF8 
+  #109: (-139.56, -175.19), period 320, connected to Gateway #546 (at 22.63 mts.), using SF7 
+  #110: (408.48, 122.10), period 320, connected to Gateway #522 (at 108.96 mts.), using SF8 
+  #111: (318.13, -3.93), period 800, connected to Gateway #565 (at 32.17 mts.), using SF7 
+  #112: (-105.67, 158.83), period 400, connected to Gateway #525 (at 83.89 mts.), using SF8 
+  #113: (-241.09, -348.77), period 1600, connected to Gateway #524 (at 46.60 mts.), using SF7 
+  #114: (-392.15, 147.21), period 800, connected to Gateway #536 (at 70.19 mts.), using SF8 
+  #115: (-211.73, -168.61), period 1600, connected to Gateway #573 (at 32.10 mts.), using SF7 
+  #116: (-72.67, 434.49), period 400, connected to Gateway #519 (at 100.52 mts.), using SF8 
+  #117: (-234.54, 158.75), period 320, connected to Gateway #534 (at 107.88 mts.), using SF8 
+  #118: (-12.57, -342.73), period 320, connected to Gateway #503 (at 52.73 mts.), using SF7 
+  #119: (125.67, 17.71), period 1600, connected to Gateway #570 (at 33.36 mts.), using SF7 
+  #120: (57.56, -73.80), period 320, connected to Gateway #570 (at 82.12 mts.), using SF8 
+  #121: (-105.61, -255.67), period 800, connected to Gateway #566 (at 45.94 mts.), using SF7 
+  #122: (229.36, 138.65), period 320, connected to Gateway #555 (at 102.20 mts.), using SF8 
+  #123: (-161.76, 397.56), period 1600, connected to Gateway #539 (at 66.00 mts.), using SF8 
+  #124: (-89.21, -494.59), period 320, connected to Gateway #571 (at 60.47 mts.), using SF7 
+  #125: (274.39, -206.32), period 1600, connected to Gateway #529 (at 96.27 mts.), using SF8 
+  #126: (365.53, 221.01), period 1600, connected to Gateway #530 (at 59.61 mts.), using SF7 
+  #127: (-50.89, 486.47), period 400, connected to Gateway #519 (at 118.97 mts.), using SF8 
+  #128: (-289.12, -26.11), period 320, connected to Gateway #527 (at 22.66 mts.), using SF7 
+  #129: (-406.08, -400.44), period 800, connected to Gateway #500 (at 34.12 mts.), using SF7 
+  #130: (-198.24, 157.12), period 320, connected to Gateway #525 (at 85.10 mts.), using SF8 
+  #131: (-368.30, -448.49), period 1600, connected to Gateway #500 (at 52.91 mts.), using SF7 
+  #132: (-42.28, 280.87), period 400, connected to Gateway #502 (at 39.85 mts.), using SF7 
+  #133: (-57.44, -380.89), period 400, connected to Gateway #513 (at 60.81 mts.), using SF7 
+  #134: (78.63, 29.90), period 400, connected to Gateway #547 (at 22.38 mts.), using SF7 
+  #135: (-138.08, -195.71), period 320, connected to Gateway #546 (at 30.99 mts.), using SF7 
+  #136: (-23.42, -330.18), period 400, connected to Gateway #503 (at 36.72 mts.), using SF7 
+  #137: (25.75, 118.93), period 400, connected to Gateway #517 (at 23.51 mts.), using SF7 
+  #138: (-266.34, 329.81), period 1600, connected to Gateway #572 (at 41.84 mts.), using SF7 
+  #139: (-401.16, 423.73), period 1600, connected to Gateway #543 (at 28.73 mts.), using SF7 
+  #140: (-18.27, -274.51), period 320, connected to Gateway #503 (at 51.85 mts.), using SF7 
+  #141: (-209.17, -142.81), period 320, connected to Gateway #573 (at 56.75 mts.), using SF7 
+  #142: (-155.75, 314.91), period 400, connected to Gateway #541 (at 66.08 mts.), using SF8 
+  #143: (-463.67, -242.53), period 320, connected to Gateway #521 (at 114.50 mts.), using SF8 
+  #144: (125.96, 336.10), period 800, connected to Gateway #562 (at 67.92 mts.), using SF8 
+  #145: (-278.99, -301.98), period 400, connected to Gateway #523 (at 14.91 mts.), using SF7 
+  #146: (-390.27, 174.61), period 320, connected to Gateway #536 (at 55.99 mts.), using SF7 
+  #147: (219.46, -299.65), period 800, connected to Gateway #510 (at 35.88 mts.), using SF7 
+  #148: (-184.34, -65.99), period 1600, connected to Gateway #509 (at 39.59 mts.), using SF7 
+  #149: (-114.25, 32.85), period 1600, connected to Gateway #552 (at 79.86 mts.), using SF8 
+  #150: (55.40, -485.42), period 800, connected to Gateway #507 (at 74.19 mts.), using SF8 
+  #151: (-117.83, -194.59), period 400, connected to Gateway #546 (at 47.99 mts.), using SF7 
+  #152: (-239.56, 149.66), period 400, connected to Gateway #534 (at 99.20 mts.), using SF8 
+  #153: (419.59, 185.99), period 320, connected to Gateway #530 (at 79.76 mts.), using SF8 
+  #154: (197.85, -188.05), period 400, connected to Gateway #533 (at 98.58 mts.), using SF8 
+  #155: (-494.00, 32.96), period 320, connected to Gateway #511 (at 34.61 mts.), using SF7 
+  #156: (118.45, 142.69), period 400, connected to Gateway #535 (at 59.38 mts.), using SF7 
+  #157: (-99.29, -137.85), period 400, connected to Gateway #568 (at 72.30 mts.), using SF8 
+  #158: (301.90, 177.81), period 1600, connected to Gateway #567 (at 129.91 mts.), using SF9 
+  #159: (-467.11, -436.44), period 400, connected to Gateway #563 (at 29.62 mts.), using SF7 
+  #160: (-312.38, 118.96), period 400, connected to Gateway #534 (at 20.81 mts.), using SF7 
+  #161: (67.83, -498.87), period 1600, connected to Gateway #507 (at 87.31 mts.), using SF8 
+  #162: (-194.76, -238.43), period 400, connected to Gateway #501 (at 47.12 mts.), using SF7 
+  #163: (357.56, -318.84), period 800, connected to Gateway #529 (at 44.05 mts.), using SF7 
+  #164: (167.34, 379.01), period 400, connected to Gateway #562 (at 12.27 mts.), using SF7 
+  #165: (-186.77, 385.01), period 1600, connected to Gateway #539 (at 38.32 mts.), using SF7 
+  #166: (-342.86, 3.46), period 320, connected to Gateway #527 (at 74.85 mts.), using SF8 
+  #167: (175.65, 404.17), period 1600, connected to Gateway #562 (at 16.36 mts.), using SF7 
+  #168: (-105.48, 206.07), period 320, connected to Gateway #525 (at 51.85 mts.), using SF7 
+  #169: (47.40, 238.96), period 320, connected to Gateway #535 (at 68.45 mts.), using SF8 
+  #170: (-266.88, 426.58), period 400, connected to Gateway #539 (at 67.47 mts.), using SF8 
+  #171: (433.42, -5.59), period 400, connected to Gateway #522 (at 34.72 mts.), using SF7 
+  #172: (439.13, 299.65), period 320, connected to Gateway #530 (at 48.09 mts.), using SF7 
+  #173: (94.50, 157.20), period 320, connected to Gateway #535 (at 31.38 mts.), using SF7 
+  #174: (435.85, -175.46), period 320, connected to Gateway #512 (at 90.11 mts.), using SF8 
+  #175: (89.16, 137.77), period 320, connected to Gateway #535 (at 41.74 mts.), using SF7 
+  #176: (275.42, 294.91), period 800, connected to Gateway #561 (at 28.55 mts.), using SF7 
+  #177: (104.38, -29.44), period 1600, connected to Gateway #570 (at 18.42 mts.), using SF7 
+  #178: (295.49, 365.09), period 320, connected to Gateway #553 (at 39.72 mts.), using SF7 
+  #179: (164.41, -87.52), period 400, connected to Gateway #570 (at 90.53 mts.), using SF8 
+  #180: (96.90, 145.60), period 400, connected to Gateway #535 (at 40.42 mts.), using SF7 
+  #181: (-351.66, 79.02), period 1600, connected to Gateway #534 (at 35.41 mts.), using SF7 
+  #182: (200.91, 18.15), period 320, connected to Gateway #532 (at 58.29 mts.), using SF7 
+  #183: (15.05, -387.35), period 800, connected to Gateway #507 (at 54.20 mts.), using SF7 
+  #184: (10.35, -451.50), period 320, connected to Gateway #513 (at 58.57 mts.), using SF7 
+  #185: (-115.34, 137.66), period 800, connected to Gateway #525 (at 98.17 mts.), using SF8 
+  #186: (-356.02, -86.92), period 1600, connected to Gateway #505 (at 60.96 mts.), using SF7 
+  #187: (-93.23, -482.54), period 400, connected to Gateway #571 (at 47.77 mts.), using SF7 
+  #188: (73.72, 312.95), period 400, connected to Gateway #562 (at 120.76 mts.), using SF8 
+  #189: (-53.26, -22.64), period 320, connected to Gateway #550 (at 25.44 mts.), using SF7 
+  #190: (-441.28, -425.74), period 400, connected to Gateway #563 (at 28.37 mts.), using SF7 
+  #191: (97.28, -277.40), period 1600, connected to Gateway #533 (at 66.19 mts.), using SF8 
+  #192: (130.24, 423.51), period 400, connected to Gateway #540 (at 26.50 mts.), using SF7 
+  #193: (-37.15, -61.44), period 320, connected to Gateway #568 (at 39.73 mts.), using SF7 
+  #194: (452.66, 448.91), period 320, connected to Gateway #549 (at 71.97 mts.), using SF8 
+  #195: (267.01, -166.43), period 400, connected to Gateway #512 (at 89.85 mts.), using SF8 
+  #196: (-280.86, -22.45), period 320, connected to Gateway #527 (at 27.63 mts.), using SF7 
+  #197: (-33.83, 384.32), period 320, connected to Gateway #502 (at 80.27 mts.), using SF8 
+  #198: (-316.23, -41.96), period 320, connected to Gateway #527 (at 27.83 mts.), using SF7 
+  #199: (266.45, 404.78), period 800, connected to Gateway #553 (at 55.27 mts.), using SF7 
+  #200: (261.61, 463.50), period 800, connected to Gateway #545 (at 104.65 mts.), using SF8 
+  #201: (-97.62, 60.78), period 400, connected to Gateway #550 (at 104.65 mts.), using SF8 
+  #202: (122.17, -308.97), period 800, connected to Gateway #533 (at 50.16 mts.), using SF7 
+  #203: (-139.89, 153.88), period 320, connected to Gateway #525 (at 75.78 mts.), using SF8 
+  #204: (-289.31, 106.54), period 320, connected to Gateway #534 (at 39.26 mts.), using SF7 
+  #205: (-390.22, -126.44), period 1600, connected to Gateway #505 (at 87.18 mts.), using SF8 
+  #206: (146.52, 92.69), period 400, connected to Gateway #532 (at 43.80 mts.), using SF7 
+  #207: (96.34, -441.14), period 400, connected to Gateway #507 (at 44.13 mts.), using SF7 
+  #208: (63.62, -257.37), period 1600, connected to Gateway #533 (at 102.41 mts.), using SF8 
+  #209: (-156.16, -490.93), period 320, connected to Gateway #571 (at 72.25 mts.), using SF8 
+  #210: (101.43, 270.69), period 320, connected to Gateway #556 (at 96.38 mts.), using SF8 
+  #211: (433.27, -326.94), period 800, connected to Gateway #558 (at 37.63 mts.), using SF7 
+  #212: (-12.28, 295.23), period 400, connected to Gateway #502 (at 57.79 mts.), using SF7 
+  #213: (465.68, -344.66), period 800, connected to Gateway #558 (at 2.57 mts.), using SF7 
+  #214: (382.20, -133.97), period 320, connected to Gateway #512 (at 29.92 mts.), using SF7 
+  #215: (247.64, -24.19), period 800, connected to Gateway #548 (at 63.16 mts.), using SF8 
+  #216: (446.64, -377.67), period 320, connected to Gateway #537 (at 37.60 mts.), using SF7 
+  #217: (123.19, 218.67), period 320, connected to Gateway #535 (at 71.46 mts.), using SF8 
+  #218: (-315.93, -217.72), period 1600, connected to Gateway #521 (at 51.14 mts.), using SF7 
+  #219: (-297.02, 126.13), period 1600, connected to Gateway #534 (at 37.49 mts.), using SF7 
+  #220: (-373.33, -272.45), period 320, connected to Gateway #521 (at 28.64 mts.), using SF7 
+  #221: (-486.13, -339.18), period 1600, connected to Gateway #563 (at 122.60 mts.), using SF8 
+  #222: (-38.15, 148.55), period 320, connected to Gateway #517 (at 60.41 mts.), using SF7 
+  #223: (-399.14, 114.23), period 1600, connected to Gateway #557 (at 55.51 mts.), using SF7 
+  #224: (-106.25, -3.57), period 800, connected to Gateway #552 (at 42.74 mts.), using SF7 
+  #225: (-206.82, -255.93), period 320, connected to Gateway #501 (at 31.28 mts.), using SF7 
+  #226: (66.16, -309.29), period 1600, connected to Gateway #533 (at 101.44 mts.), using SF8 
+  #227: (-68.16, 313.90), period 320, connected to Gateway #502 (at 2.39 mts.), using SF7 
+  #228: (-143.62, 497.97), period 1600, connected to Gateway #519 (at 40.22 mts.), using SF7 
+  #229: (23.55, -299.05), period 400, connected to Gateway #503 (at 79.36 mts.), using SF8 
+  #230: (199.79, -172.38), period 320, connected to Gateway #516 (at 102.71 mts.), using SF8 
+  #231: (146.71, -158.52), period 1600, connected to Gateway #516 (at 48.81 mts.), using SF7 
+  #232: (266.70, 303.33), period 400, connected to Gateway #561 (at 28.08 mts.), using SF7 
+  #233: (181.92, 404.19), period 800, connected to Gateway #562 (at 20.78 mts.), using SF7 
+  #234: (252.48, -202.07), period 320, connected to Gateway #529 (at 113.04 mts.), using SF8 
+  #235: (-310.94, 91.11), period 1600, connected to Gateway #534 (at 22.99 mts.), using SF7 
+  #236: (-398.55, -342.72), period 1600, connected to Gateway #500 (at 59.15 mts.), using SF7 
+  #237: (-363.83, 89.12), period 1600, connected to Gateway #534 (at 39.04 mts.), using SF7 
+  #238: (389.55, 445.50), period 1600, connected to Gateway #559 (at 24.99 mts.), using SF7 
+  #239: (425.22, -30.95), period 800, connected to Gateway #518 (at 48.38 mts.), using SF7 
+  #240: (87.01, -331.16), period 400, connected to Gateway #507 (at 83.88 mts.), using SF8 
+  #241: (-23.65, 315.55), period 320, connected to Gateway #502 (at 44.25 mts.), using SF7 
+  #242: (26.52, 82.25), period 400, connected to Gateway #515 (at 3.19 mts.), using SF7 
+  #243: (-274.76, -235.83), period 400, connected to Gateway #501 (at 42.34 mts.), using SF7 
+  #244: (38.18, -483.35), period 320, connected to Gateway #507 (at 76.01 mts.), using SF8 
+  #245: (-152.45, -294.29), period 400, connected to Gateway #566 (at 15.50 mts.), using SF7 
+  #246: (-99.01, -192.83), period 400, connected to Gateway #546 (at 65.30 mts.), using SF8 
+  #247: (145.13, -56.66), period 800, connected to Gateway #570 (at 54.21 mts.), using SF7 
+  #248: (203.19, -167.11), period 1600, connected to Gateway #516 (at 105.56 mts.), using SF8 
+  #249: (259.21, -241.89), period 400, connected to Gateway #529 (at 81.66 mts.), using SF8 
+  #250: (-483.82, 345.12), period 320, connected to Gateway #544 (at 98.18 mts.), using SF8 
+  #251: (100.76, -178.52), period 400, connected to Gateway #516 (at 19.38 mts.), using SF7 
+  #252: (26.83, 348.00), period 800, connected to Gateway #502 (at 101.33 mts.), using SF8 
+  #253: (-243.77, -426.76), period 400, connected to Gateway #524 (at 35.56 mts.), using SF7 
+  #254: (389.81, 111.41), period 400, connected to Gateway #528 (at 102.17 mts.), using SF8 
+  #255: (321.33, 458.96), period 400, connected to Gateway #559 (at 71.86 mts.), using SF8 
+  #256: (-156.04, -140.06), period 1600, connected to Gateway #546 (at 36.66 mts.), using SF7 
+  #257: (-476.14, -494.92), period 800, connected to Gateway #563 (at 52.45 mts.), using SF7 
+  #258: (-207.11, 208.26), period 320, connected to Gateway #525 (at 58.63 mts.), using SF7 
+  #259: (7.41, -32.53), period 1600, connected to Gateway #550 (at 38.71 mts.), using SF7 
+  #260: (-309.02, -16.35), period 320, connected to Gateway #527 (at 37.97 mts.), using SF7 
+  #261: (-456.61, -415.59), period 1600, connected to Gateway #563 (at 40.70 mts.), using SF7 
+  #262: (211.35, 111.24), period 1600, connected to Gateway #532 (at 86.18 mts.), using SF8 
+  #263: (461.57, 367.47), period 1600, connected to Gateway #520 (at 14.83 mts.), using SF7 
+  #264: (-24.05, 257.28), period 320, connected to Gateway #502 (at 69.65 mts.), using SF8 
+  #265: (-493.02, 78.61), period 400, connected to Gateway #557 (at 45.72 mts.), using SF7 
+  #266: (243.73, 422.57), period 1600, connected to Gateway #553 (at 74.05 mts.), using SF8 
+  #267: (287.64, 446.44), period 1600, connected to Gateway #559 (at 98.22 mts.), using SF8 
+  #268: (-225.10, -260.68), period 320, connected to Gateway #501 (at 13.50 mts.), using SF7 
+  #269: (-404.96, 246.73), period 800, connected to Gateway #504 (at 19.33 mts.), using SF7 
+  #270: (-326.70, 437.71), period 320, connected to Gateway #543 (at 74.25 mts.), using SF8 
+  #271: (-403.32, 481.11), period 320, connected to Gateway #543 (at 28.95 mts.), using SF7 
+  #272: (-158.46, 192.46), period 800, connected to Gateway #525 (at 36.75 mts.), using SF7 
+  #273: (-65.60, 154.03), period 800, connected to Gateway #517 (at 85.39 mts.), using SF8 
+  #274: (100.49, -370.02), period 1600, connected to Gateway #507 (at 55.72 mts.), using SF7 
+  #275: (-122.00, -363.04), period 400, connected to Gateway #571 (at 75.37 mts.), using SF8 
+  #276: (-385.54, 380.68), period 400, connected to Gateway #543 (at 73.07 mts.), using SF8 
+  #277: (-289.14, 168.33), period 400, connected to Gateway #534 (at 73.86 mts.), using SF8 
+  #278: (-187.66, 443.22), period 320, connected to Gateway #519 (at 30.07 mts.), using SF7 
+  #279: (-377.91, -461.74), period 400, connected to Gateway #563 (at 65.82 mts.), using SF8 
+  #280: (-100.70, -288.43), period 800, connected to Gateway #566 (at 37.62 mts.), using SF7 
+  #281: (-339.84, -191.75), period 800, connected to Gateway #521 (at 64.94 mts.), using SF8 
+  #282: (-494.57, 149.79), period 1600, connected to Gateway #536 (at 71.05 mts.), using SF8 
+  #283: (-38.05, -415.82), period 320, connected to Gateway #513 (at 26.65 mts.), using SF7 
+  #284: (285.93, 184.68), period 320, connected to Gateway #556 (at 118.02 mts.), using SF8 
+  #285: (367.20, -437.33), period 1600, connected to Gateway #554 (at 16.82 mts.), using SF7 
+  #286: (27.07, -322.87), period 320, connected to Gateway #503 (at 82.77 mts.), using SF8 
+  #287: (-390.48, -112.00), period 400, connected to Gateway #505 (at 87.20 mts.), using SF8 
+  #288: (138.41, 200.34), period 400, connected to Gateway #535 (at 75.56 mts.), using SF8 
+  #289: (-93.38, 322.43), period 400, connected to Gateway #502 (at 27.88 mts.), using SF7 
+  #290: (421.55, -278.27), period 320, connected to Gateway #558 (at 79.13 mts.), using SF8 
+  #291: (-125.80, -118.11), period 1600, connected to Gateway #546 (at 68.54 mts.), using SF8 
+  #292: (307.96, -112.68), period 400, connected to Gateway #548 (at 46.74 mts.), using SF7 
+  #293: (434.18, 349.27), period 320, connected to Gateway #520 (at 42.34 mts.), using SF7 
+  #294: (214.43, 135.20), period 400, connected to Gateway #555 (at 105.64 mts.), using SF8 
+  #295: (124.66, 2.40), period 400, connected to Gateway #570 (at 19.47 mts.), using SF7 
+  #296: (171.84, -470.52), period 320, connected to Gateway #507 (at 123.31 mts.), using SF8 
+  #297: (99.71, -361.00), period 1600, connected to Gateway #507 (at 62.29 mts.), using SF7 
+  #298: (-304.10, 277.41), period 320, connected to Gateway #572 (at 72.33 mts.), using SF8 
+  #299: (235.31, -315.97), period 400, connected to Gateway #510 (at 52.86 mts.), using SF7 
+  #300: (-187.01, -394.42), period 320, connected to Gateway #524 (at 68.34 mts.), using SF8 
+  #301: (-397.77, -20.22), period 800, connected to Gateway #508 (at 45.42 mts.), using SF7 
+  #302: (-300.28, -212.26), period 400, connected to Gateway #521 (at 66.12 mts.), using SF8 
+  #303: (447.00, -278.08), period 400, connected to Gateway #558 (at 67.82 mts.), using SF8 
+  #304: (278.46, 436.35), period 1600, connected to Gateway #553 (at 88.53 mts.), using SF8 
+  #305: (-205.40, 61.01), period 400, connected to Gateway #509 (at 90.67 mts.), using SF8 
+  #306: (373.41, -267.15), period 400, connected to Gateway #529 (at 49.81 mts.), using SF7 
+  #307: (129.36, 332.55), period 320, connected to Gateway #562 (at 68.98 mts.), using SF8 
+  #308: (273.30, -471.55), period 400, connected to Gateway #569 (at 76.56 mts.), using SF8 
+  #309: (117.58, 263.76), period 320, connected to Gateway #556 (at 79.90 mts.), using SF8 
+  #310: (-215.71, -423.25), period 320, connected to Gateway #524 (at 49.77 mts.), using SF7 
+  #311: (-327.28, -321.01), period 800, connected to Gateway #523 (at 51.54 mts.), using SF7 
+  #312: (-56.96, -121.29), period 400, connected to Gateway #568 (at 55.33 mts.), using SF7 
+  #313: (-399.31, -174.29), period 320, connected to Gateway #521 (at 95.38 mts.), using SF8 
+  #314: (107.60, -395.83), period 320, connected to Gateway #507 (at 46.88 mts.), using SF7 
+  #315: (249.72, -101.22), period 800, connected to Gateway #548 (at 53.95 mts.), using SF7 
+  #316: (-105.76, -227.81), period 400, connected to Gateway #566 (at 68.37 mts.), using SF8 
+  #317: (-431.77, 401.55), period 800, connected to Gateway #543 (at 60.24 mts.), using SF7 
+  #318: (381.23, 174.85), period 800, connected to Gateway #530 (at 93.17 mts.), using SF8 
+  #319: (-28.36, -207.57), period 1600, connected to Gateway #514 (at 78.35 mts.), using SF8 
+  #320: (-253.93, 76.72), period 800, connected to Gateway #534 (at 80.13 mts.), using SF8 
+  #321: (-373.92, 249.44), period 800, connected to Gateway #504 (at 47.97 mts.), using SF7 
+  #322: (-14.13, -307.51), period 320, connected to Gateway #503 (at 40.91 mts.), using SF7 
+  #323: (-366.61, -206.83), period 1600, connected to Gateway #521 (at 51.82 mts.), using SF7 
+  #324: (-497.17, 400.77), period 800, connected to Gateway #543 (at 110.50 mts.), using SF8 
+  #325: (308.62, 150.49), period 400, connected to Gateway #555 (at 114.36 mts.), using SF8 
+  #326: (-324.59, -455.27), period 320, connected to Gateway #500 (at 76.29 mts.), using SF8 
+  #327: (275.06, -387.04), period 320, connected to Gateway #569 (at 9.88 mts.), using SF7 
+  #328: (-292.74, 494.20), period 400, connected to Gateway #543 (at 114.63 mts.), using SF8 
+  #329: (167.91, -34.17), period 320, connected to Gateway #570 (at 58.94 mts.), using SF7 
+  #330: (392.32, 211.91), period 800, connected to Gateway #530 (at 54.50 mts.), using SF7 
+  #331: (-306.51, 337.99), period 1600, connected to Gateway #572 (at 12.22 mts.), using SF7 
+  #332: (173.65, -176.15), period 800, connected to Gateway #516 (at 77.58 mts.), using SF8 
+  #333: (32.51, -42.76), period 400, connected to Gateway #550 (at 65.82 mts.), using SF8 
+  #334: (217.09, -39.93), period 400, connected to Gateway #548 (at 80.77 mts.), using SF8 
+  #335: (-494.16, -231.32), period 1600, connected to Gateway #521 (at 146.28 mts.), using SF9 
+  #336: (193.37, -55.90), period 1600, connected to Gateway #570 (at 91.18 mts.), using SF8 
+  #337: (153.09, -280.85), period 800, connected to Gateway #533 (at 10.32 mts.), using SF7 
+  #338: (14.35, -73.59), period 800, connected to Gateway #550 (at 70.38 mts.), using SF8 
+  #339: (-449.53, -405.68), period 320, connected to Gateway #563 (at 48.76 mts.), using SF7 
+  #340: (379.01, 486.64), period 400, connected to Gateway #549 (at 12.44 mts.), using SF7 
+  #341: (-215.72, -319.86), period 800, connected to Gateway #501 (at 66.75 mts.), using SF8 
+  #342: (-61.01, 353.78), period 400, connected to Gateway #502 (at 42.76 mts.), using SF7 
+  #343: (286.19, -113.70), period 1600, connected to Gateway #548 (at 45.64 mts.), using SF7 
+  #344: (-73.45, -396.61), period 400, connected to Gateway #513 (at 51.40 mts.), using SF7 
+  #345: (467.69, -390.77), period 320, connected to Gateway #537 (at 43.18 mts.), using SF7 
+  #346: (-340.68, 302.60), period 800, connected to Gateway #572 (at 60.26 mts.), using SF7 
+  #347: (-104.32, -44.31), period 400, connected to Gateway #552 (at 12.51 mts.), using SF7 
+  #348: (245.01, 470.04), period 320, connected to Gateway #545 (at 92.02 mts.), using SF8 
+  #349: (-411.47, -479.49), period 1600, connected to Gateway #563 (at 40.74 mts.), using SF7 
+  #350: (397.88, 399.52), period 1600, connected to Gateway #559 (at 26.73 mts.), using SF7 
+  #351: (-80.86, -316.20), period 1600, connected to Gateway #503 (at 26.46 mts.), using SF7 
+  #352: (278.39, 122.79), period 1600, connected to Gateway #555 (at 79.74 mts.), using SF8 
+  #353: (-38.51, -91.02), period 800, connected to Gateway #568 (at 43.36 mts.), using SF7 
+  #354: (101.83, 335.53), period 400, connected to Gateway #562 (at 84.73 mts.), using SF8 
+  #355: (-297.77, 303.23), period 400, connected to Gateway #572 (at 46.82 mts.), using SF7 
+  #356: (-428.68, 462.55), period 800, connected to Gateway #543 (at 30.91 mts.), using SF7 
+  #357: (-115.49, -141.76), period 320, connected to Gateway #546 (at 58.00 mts.), using SF7 
+  #358: (416.85, -396.76), period 320, connected to Gateway #537 (at 19.32 mts.), using SF7 
+  #359: (375.60, -308.23), period 320, connected to Gateway #529 (at 52.70 mts.), using SF7 
+  #360: (428.68, -410.35), period 320, connected to Gateway #537 (at 1.32 mts.), using SF7 
+  #361: (468.39, 8.80), period 1600, connected to Gateway #522 (at 20.54 mts.), using SF7 
+  #362: (-311.75, -212.81), period 400, connected to Gateway #521 (at 57.59 mts.), using SF7 
+  #363: (-238.11, 248.68), period 1600, connected to Gateway #541 (at 67.99 mts.), using SF8 
+  #364: (221.82, -149.49), period 320, connected to Gateway #548 (at 107.57 mts.), using SF8 
+  #365: (-214.85, 52.74), period 400, connected to Gateway #509 (at 83.61 mts.), using SF8 
+  #366: (457.71, 124.06), period 400, connected to Gateway #522 (at 101.34 mts.), using SF8 
+  #367: (-67.13, -491.43), period 320, connected to Gateway #513 (at 54.37 mts.), using SF7 
+  #368: (-136.27, 425.42), period 1600, connected to Gateway #519 (at 51.63 mts.), using SF7 
+  #369: (-235.38, 301.02), period 800, connected to Gateway #541 (at 19.24 mts.), using SF7 
+  #370: (-313.97, 229.70), period 800, connected to Gateway #504 (at 110.75 mts.), using SF8 
+  #371: (-493.05, 198.10), period 320, connected to Gateway #536 (at 51.51 mts.), using SF7 
+  #372: (-488.32, 386.34), period 1600, connected to Gateway #543 (at 110.71 mts.), using SF8 
+  #373: (139.20, -351.77), period 320, connected to Gateway #510 (at 65.43 mts.), using SF8 
+  #374: (175.69, 370.05), period 800, connected to Gateway #562 (at 23.35 mts.), using SF7 
+  #375: (47.72, -344.80), period 320, connected to Gateway #507 (at 68.71 mts.), using SF8 
+  #376: (-277.02, -387.09), period 800, connected to Gateway #524 (at 22.51 mts.), using SF7 
+  #377: (360.78, 45.78), period 800, connected to Gateway #528 (at 48.20 mts.), using SF7 
+  #378: (356.83, 409.51), period 800, connected to Gateway #559 (at 28.46 mts.), using SF7 
+  #379: (456.11, -325.86), period 1600, connected to Gateway #558 (at 20.33 mts.), using SF7 
+  #380: (-252.83, -139.84), period 320, connected to Gateway #505 (at 55.21 mts.), using SF7 
+  #381: (127.88, -132.88), period 400, connected to Gateway #516 (at 39.99 mts.), using SF7 
+  #382: (17.39, -121.20), period 400, connected to Gateway #514 (at 28.13 mts.), using SF7 
+  #383: (194.09, -482.00), period 400, connected to Gateway #569 (at 122.36 mts.), using SF8 
+  #384: (119.47, 193.69), period 400, connected to Gateway #535 (at 55.49 mts.), using SF7 
+  #385: (395.35, -258.59), period 400, connected to Gateway #529 (at 73.36 mts.), using SF8 
+  #386: (223.98, -35.61), period 320, connected to Gateway #548 (at 76.14 mts.), using SF8 
+  #387: (-323.34, -174.82), period 800, connected to Gateway #505 (at 60.37 mts.), using SF7 
+  #388: (137.91, -318.00), period 1600, connected to Gateway #533 (at 45.42 mts.), using SF7 
+  #389: (-475.42, -361.89), period 800, connected to Gateway #563 (at 97.60 mts.), using SF8 
+  #390: (-287.73, -114.72), period 320, connected to Gateway #505 (at 16.04 mts.), using SF7 
+  #391: (-370.34, -486.84), period 1600, connected to Gateway #563 (at 79.98 mts.), using SF8 
+  #392: (245.15, 30.55), period 400, connected to Gateway #555 (at 25.91 mts.), using SF7 
+  #393: (-253.01, -275.36), period 400, connected to Gateway #501 (at 23.68 mts.), using SF7 
+  #394: (397.06, 344.11), period 1600, connected to Gateway #559 (at 78.70 mts.), using SF8 
+  #395: (-82.83, 239.47), period 800, connected to Gateway #525 (at 70.16 mts.), using SF8 
+  #396: (-407.51, -36.56), period 320, connected to Gateway #508 (at 37.14 mts.), using SF7 
+  #397: (380.73, 140.10), period 800, connected to Gateway #530 (at 127.09 mts.), using SF9 
+  #398: (-285.26, -222.00), period 800, connected to Gateway #501 (at 58.73 mts.), using SF7 
+  #399: (-41.73, -197.42), period 400, connected to Gateway #514 (at 81.29 mts.), using SF8 
+  #400: (375.93, 14.85), period 320, connected to Gateway #528 (at 17.24 mts.), using SF7 
+  #401: (153.76, 144.51), period 320, connected to Gateway #535 (at 90.80 mts.), using SF8 
+  #402: (298.71, -110.33), period 400, connected to Gateway #548 (at 42.25 mts.), using SF7 
+  #403: (-177.55, 136.66), period 400, connected to Gateway #525 (at 95.45 mts.), using SF8 
+  #404: (364.19, 33.71), period 400, connected to Gateway #528 (at 37.20 mts.), using SF7 
+  #405: (-400.37, 450.89), period 800, connected to Gateway #543 (at 1.77 mts.), using SF7 
+  #406: (76.48, -456.62), period 320, connected to Gateway #507 (at 46.79 mts.), using SF7 
+  #407: (17.72, 424.10), period 800, connected to Gateway #540 (at 117.73 mts.), using SF8 
+  #408: (284.14, -361.16), period 400, connected to Gateway #569 (at 34.36 mts.), using SF7 
+  #409: (-267.43, 97.11), period 1600, connected to Gateway #534 (at 61.76 mts.), using SF7 
+  #410: (319.10, -26.95), period 400, connected to Gateway #565 (at 17.72 mts.), using SF7 
+  #411: (290.92, -373.19), period 1600, connected to Gateway #569 (at 24.48 mts.), using SF7 
+  #412: (275.90, 425.51), period 400, connected to Gateway #553 (at 77.39 mts.), using SF8 
+  #413: (-208.57, -252.04), period 1600, connected to Gateway #501 (at 29.92 mts.), using SF7 
+  #414: (-468.39, -387.84), period 400, connected to Gateway #563 (at 70.80 mts.), using SF8 
+  #415: (115.89, -288.21), period 400, connected to Gateway #533 (at 48.14 mts.), using SF7 
+  #416: (439.65, 288.27), period 400, connected to Gateway #530 (at 40.98 mts.), using SF7 
+  #417: (226.85, -194.01), period 400, connected to Gateway #533 (at 107.19 mts.), using SF8 
+  #418: (-345.86, -409.87), period 320, connected to Gateway #500 (at 29.98 mts.), using SF7 
+  #419: (359.44, -177.31), period 800, connected to Gateway #512 (at 37.70 mts.), using SF7 
+  #420: (367.32, -358.20), period 320, connected to Gateway #542 (at 76.57 mts.), using SF8 
+  #421: (-109.95, 432.72), period 320, connected to Gateway #519 (at 67.04 mts.), using SF8 
+  #422: (57.29, 208.62), period 320, connected to Gateway #535 (at 36.54 mts.), using SF7 
+  #423: (-385.80, -499.95), period 1600, connected to Gateway #563 (at 73.57 mts.), using SF8 
+  #424: (-192.24, -468.35), period 800, connected to Gateway #571 (at 89.88 mts.), using SF8 
+  #425: (-464.96, 147.55), period 800, connected to Gateway #536 (at 54.79 mts.), using SF7 
+  #426: (213.20, 87.20), period 800, connected to Gateway #555 (at 69.44 mts.), using SF8 
+  #427: (-65.26, -185.96), period 400, connected to Gateway #514 (at 96.11 mts.), using SF8 
+  #428: (-419.62, -31.82), period 400, connected to Gateway #508 (at 24.18 mts.), using SF7 
+  #429: (364.87, -172.37), period 320, connected to Gateway #512 (at 34.35 mts.), using SF7 
+  #430: (-253.52, -305.05), period 1600, connected to Gateway #523 (at 36.76 mts.), using SF7 
+  #431: (-398.88, 85.00), period 1600, connected to Gateway #557 (at 49.68 mts.), using SF7 
+  #432: (-417.42, -357.71), period 320, connected to Gateway #500 (at 59.01 mts.), using SF7 
+  #433: (489.54, -243.51), period 320, connected to Gateway #558 (at 101.69 mts.), using SF8 
+  #434: (-355.53, 64.25), period 320, connected to Gateway #534 (at 49.59 mts.), using SF7 
+  #435: (-88.45, 99.29), period 800, connected to Gateway #517 (at 94.33 mts.), using SF8 
+  #436: (390.42, -187.51), period 1600, connected to Gateway #512 (at 60.38 mts.), using SF7 
+  #437: (-342.45, 247.23), period 800, connected to Gateway #504 (at 79.45 mts.), using SF8 
+  #438: (230.68, 327.61), period 320, connected to Gateway #553 (at 35.92 mts.), using SF7 
+  #439: (-106.07, 192.49), period 1600, connected to Gateway #525 (at 58.58 mts.), using SF7 
+  #440: (-120.13, 438.96), period 800, connected to Gateway #519 (at 55.11 mts.), using SF7 
+  #441: (7.62, -459.91), period 320, connected to Gateway #513 (at 58.08 mts.), using SF7 
+  #442: (68.08, -377.34), period 1600, connected to Gateway #507 (at 34.65 mts.), using SF7 
+  #443: (-162.85, -387.79), period 800, connected to Gateway #571 (at 73.78 mts.), using SF8 
+  #444: (-393.73, -243.33), period 320, connected to Gateway #521 (at 45.54 mts.), using SF7 
+  #445: (407.05, 168.22), period 800, connected to Gateway #530 (at 96.39 mts.), using SF8 
+  #446: (-144.63, 58.64), period 320, connected to Gateway #509 (at 103.90 mts.), using SF8 
+  #447: (-109.11, 216.20), period 400, connected to Gateway #525 (at 44.81 mts.), using SF7 
+  #448: (240.45, -53.12), period 800, connected to Gateway #548 (at 54.41 mts.), using SF7 
+  #449: (58.20, 340.80), period 1600, connected to Gateway #562 (at 118.74 mts.), using SF8 
+  #450: (203.57, -279.32), period 1600, connected to Gateway #510 (at 31.54 mts.), using SF7 
+  #451: (-456.11, 228.30), period 1600, connected to Gateway #536 (at 34.45 mts.), using SF7 
+  #452: (469.21, -203.63), period 1600, connected to Gateway #512 (at 132.46 mts.), using SF9 
+  #453: (-463.18, 133.52), period 800, connected to Gateway #557 (at 47.23 mts.), using SF7 
+  #454: (-139.09, 239.79), period 400, connected to Gateway #525 (at 17.16 mts.), using SF7 
+  #455: (-250.74, 146.84), period 1600, connected to Gateway #534 (at 87.95 mts.), using SF8 
+  #456: (236.90, -497.79), period 320, connected to Gateway #569 (at 111.34 mts.), using SF8 
+  #457: (37.03, -106.90), period 800, connected to Gateway #514 (at 43.98 mts.), using SF7 
+  #458: (-415.61, -366.45), period 320, connected to Gateway #500 (at 52.29 mts.), using SF7 
+  #459: (-40.64, 191.75), period 320, connected to Gateway #517 (at 96.65 mts.), using SF8 
+  #460: (26.83, -104.68), period 320, connected to Gateway #514 (at 44.15 mts.), using SF7 
+  #461: (33.25, -60.79), period 400, connected to Gateway #550 (at 75.20 mts.), using SF8 
+  #462: (79.77, -91.58), period 1600, connected to Gateway #516 (at 70.16 mts.), using SF8 
+  #463: (248.94, -54.77), period 400, connected to Gateway #548 (at 45.81 mts.), using SF7 
+  #464: (-469.68, 306.15), period 800, connected to Gateway #544 (at 57.48 mts.), using SF7 
+  #465: (68.38, -444.59), period 1600, connected to Gateway #507 (at 33.28 mts.), using SF7 
+  #466: (274.66, 292.31), period 1600, connected to Gateway #561 (at 31.19 mts.), using SF7 
+  #467: (39.58, -170.66), period 800, connected to Gateway #514 (at 27.32 mts.), using SF7 
+  #468: (-479.29, -86.27), period 400, connected to Gateway #531 (at 44.01 mts.), using SF7 
+  #469: (448.71, 373.10), period 800, connected to Gateway #520 (at 28.86 mts.), using SF7 
+  #470: (217.51, -100.08), period 400, connected to Gateway #548 (at 81.48 mts.), using SF8 
+  #471: (207.00, 433.18), period 1600, connected to Gateway #545 (at 44.10 mts.), using SF7 
+  #472: (-75.23, 12.94), period 800, connected to Gateway #550 (at 55.99 mts.), using SF7 
+  #473: (-61.08, -238.12), period 320, connected to Gateway #503 (at 73.39 mts.), using SF8 
+  #474: (-413.40, -207.79), period 400, connected to Gateway #521 (at 79.62 mts.), using SF8 
+  #475: (-25.94, 360.59), period 320, connected to Gateway #502 (at 64.42 mts.), using SF8 
+  #476: (8.37, 135.25), period 400, connected to Gateway #517 (at 28.53 mts.), using SF7 
+  #477: (44.89, -325.17), period 320, connected to Gateway #507 (at 88.48 mts.), using SF8 
+  #478: (474.50, -304.46), period 800, connected to Gateway #558 (at 38.95 mts.), using SF7 
+  #479: (37.66, -355.75), period 1600, connected to Gateway #507 (at 61.60 mts.), using SF7 
+  #480: (292.57, 361.76), period 400, connected to Gateway #553 (at 35.81 mts.), using SF7 
+  #481: (-57.21, 68.75), period 400, connected to Gateway #517 (at 73.44 mts.), using SF8 
+  #482: (32.22, 493.53), period 1600, connected to Gateway #540 (at 109.44 mts.), using SF8 
+  #483: (-469.93, -67.55), period 800, connected to Gateway #531 (at 36.11 mts.), using SF7 
+  #484: (473.15, 19.05), period 400, connected to Gateway #522 (at 20.13 mts.), using SF7 
+  #485: (222.38, 493.11), period 800, connected to Gateway #545 (at 88.07 mts.), using SF8 
+  #486: (27.02, 1.48), period 1600, connected to Gateway #550 (at 58.54 mts.), using SF7 
+  #487: (-376.03, -453.63), period 800, connected to Gateway #500 (at 58.03 mts.), using SF7 
+  #488: (-449.74, -479.14), period 800, connected to Gateway #563 (at 25.91 mts.), using SF7 
+  #489: (-109.71, 58.52), period 400, connected to Gateway #552 (at 103.87 mts.), using SF8 
+  #490: (103.41, -148.91), period 800, connected to Gateway #516 (at 11.81 mts.), using SF7 
+  #491: (-283.54, 293.88), period 1600, connected to Gateway #572 (at 59.19 mts.), using SF7 
+  #492: (262.68, -173.90), period 1600, connected to Gateway #512 (at 96.36 mts.), using SF8 
+  #493: (321.84, -143.84), period 800, connected to Gateway #512 (at 31.31 mts.), using SF7 
+  #494: (-357.11, -170.69), period 320, connected to Gateway #505 (at 75.32 mts.), using SF8 
+  #495: (256.14, -448.31), period 320, connected to Gateway #569 (at 58.30 mts.), using SF7 
+  #496: (-270.02, 78.70), period 800, connected to Gateway #534 (at 64.55 mts.), using SF8 
+  #497: (-160.93, 202.67), period 400, connected to Gateway #525 (at 27.43 mts.), using SF7 
+  #498: (122.99, 252.94), period 400, connected to Gateway #556 (at 75.14 mts.), using SF8 
+  #499: (-397.56, -356.78), period 1600, connected to Gateway #500 (at 46.43 mts.), using SF7 
