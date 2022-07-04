@@ -27,7 +27,8 @@ class Gateway : public Node {
         double getUF(); // GW current utilization factor
         vector<double> getUFbySF(); // GW current utilization factor by spreading factor
         unsigned int connectedEDsCount(); // Number of connected end devices
-        double getRange(); // Operating range equals 2000 mts when using maxSF=12, or 1000 mts for maxSF=11 and so on
+        static double getRange(unsigned char sf); // Operating range equals 2000 mts when using maxSF=12, or 1000 mts for maxSF=11 and so on
+        double getRange(); // Range of current instance
         inline void setMaxSF(unsigned char maxSF) { this->maxSF = maxSF; }; // Configure different SF
         inline void reduceMaxSF() { this->maxSF = this->maxSF == 7 ? 7 : this->maxSF - 1;}
          // Operating channel

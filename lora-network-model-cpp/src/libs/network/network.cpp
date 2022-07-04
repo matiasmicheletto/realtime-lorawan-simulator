@@ -199,6 +199,7 @@ Network Network::Builder::build(){
 void Network::autoConnect() {
     for(long unsigned int i = 0; i < this->enddevices.size(); i++) {
         if(!this->enddevices.at(i)->isConnected()){
+            /*
             // Sort gateways by distance
             sort(this->gateways.begin(), this->gateways.end(), [this, i](Gateway *a, Gateway *b) {
                 return a->distanceTo(this->enddevices.at(i)) < b->distanceTo(this->enddevices.at(i));
@@ -206,6 +207,27 @@ void Network::autoConnect() {
             for(long unsigned int j = 0; j < this->gateways.size(); j++)
                 if(this->gateways.at(j)->addEndDevice(this->enddevices.at(i)))
                     break;
+            */
+            const double gwRange = Gateway::getRange(this->maxSF);
+            double maxDist = gwRange;
+            double minDist = 0;
+            long unsigned int candidateGW = 0;
+            while(minDist < maxDist){
+                for(long unsigned int j = 0; j < this->gateways.size(); j++){
+                    double dist = this->gateways.at(j)->distanceTo(this->enddevices.at(i));
+                    if(dist < maxDist && dist > minDist){
+                        maxDist = dist;
+                        candidateGW = j;
+                    }
+                }
+                // Try to connect ed to the gateway
+                if(this->gateways.at(candidateGW)->addEndDevice(this->enddevices.at(i)))
+                    break;
+                else{ // If not, adjust ranges and search next gw
+                    minDist = maxDist;
+                    maxDist = gwRange;
+                }
+            }
         }
     }
 }

@@ -40,8 +40,8 @@ void Gateway::freeSlots(unsigned char sf, unsigned int period){
         this->availableSlots[sf-7] += this->H/period;
 }
 
-double Gateway::getRange() {
-    switch(this->maxSF){
+double Gateway::getRange(unsigned char sf) {
+    switch(sf){
         case 12:
             return 2000.0;
         case 11:
@@ -57,6 +57,10 @@ double Gateway::getRange() {
         default: 
             return 0;
     }
+}
+
+double Gateway::getRange() {
+    return Gateway::getRange(this->maxSF);
 }
 
 unsigned char Gateway::getMinSF(double distance) {
