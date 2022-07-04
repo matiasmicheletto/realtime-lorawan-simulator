@@ -364,6 +364,11 @@ double Network::getAvgUF() {
     return avgUF / (double) this->gateways.size();
 }
 
+void Network::setMaxSF(unsigned char maxSF) {
+    if(maxSF >= 7 && maxSF <= 12)
+        this->maxSF = maxSF;    
+}
+
 void Network::printNetworkStatus(FILE *file) {
 
     // Print status
@@ -526,4 +531,5 @@ void Network::configureGWChannels() {
         if(minAvailableChannel > this->minChannels)
             this->minChannels = minAvailableChannel;
     }
+    this->minChannels++;
 }

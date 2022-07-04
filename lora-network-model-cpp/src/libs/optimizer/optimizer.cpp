@@ -80,103 +80,106 @@ Optimizer Optimizer::Builder::build(){
 void Optimizer::run( void (*progressCallback)(Network *network) ) {
 
     steady_clock::time_point begin = steady_clock::now();
-
     const unsigned int mapsize = this->network->getMapSize();
-    this->network->removeAllGateaways(); 
-    
-    // Initialize GW at random positions
     Uniform random( -(double)mapsize/2, (double)mapsize/2);
     double x, y;    
-    for(unsigned int i = 0; i < this->initialGW; i++){
-        random.setRandom(x, y);
-        this->network->createGateway(x, y);
-    }
-    this->network->autoConnect();
-
     this->exitCode = MAX_ITER;
     const unsigned long int timeoutms = (unsigned long int) this->timeout * 1000;
-    
-    unsigned int noProgressStepCounter = 0; // Number of iterations without significative progress
-    const long int progressThres = 1 + this->network->getEDCount()/1000; // New connected devices number to be considered as progress
-    const unsigned int addGWAfter = 10; // Number of iterations without progress after which a new gateway is added
 
-    #ifdef DEBUG_MODE
-        printf("--------------------------------\n");
-        printf("Optimizer started:\n");        
-        printf("  Initial number of GW: %d\n", this->initialGW);
-        printf("  Initial coverage: %.2f%%\n", this->network->getEDCoverage()*100);
-        printf("  Progress thresshold: %ld (min. new connected EDs per iteration)\n", progressThres);
-        printf("  Add gateway after: %d steps with no progress\n", addGWAfter);
-        printf("--------------------------------\n\n");
-    #endif
-
-    unsigned int gwCounter = this->initialGW;
-    
-    for(this->currentIter = 0; this->currentIter < this->maxIter; this->currentIter++){
+    while(true) {
+        // Initialize GWs at random positions 
+        this->network->removeAllGateaways(); 
+        for(unsigned int i = 0; i < this->initialGW; i++){
+            random.setRandom(x, y);
+            this->network->createGateway(x, y);
+        }
+        this->network->autoConnect();
         
-        switch (this->stepMethod) {
-            case SPRINGS:
-                this->network->stepSprings();
-                break;
-            case RANDOM:
-                this->network->stepRandom();
-                break;
-            default:
-                break;
-        }
+        unsigned int noProgressStepCounter = 0; // Number of iterations without significative progress
+        const long int progressThres = 1 + this->network->getEDCount()/1000; // New connected devices number to be considered as progress
+        const unsigned int addGWAfter = 10; // Number of iterations without progress after which a new gateway is added
 
-        if((this->currentIter % this->updatePeriod == 0) && progressCallback != nullptr)
-            progressCallback(this->network);
-
-        // Exit condition: timeout
-        steady_clock::time_point end = steady_clock::now();
-        this->elapsed = (unsigned long int) duration_cast<milliseconds>(end - begin).count();
-        if(this->elapsed > timeoutms){
-            this->exitCode = TIMEOUT;
-            break;
-        }
-
-        // Objective function: gw network coverage
-        //double newCoverage = this->network->getEDCoverage();
-        //double coverageDiff = newCoverage - this->coverage;
-        //this->coverage = newCoverage;
-
-        unsigned int newNCED = this->network->getNCEDCount();
-        long int ncedDiff =  (long int) this->nced - (long int) newNCED;
-        this->nced = newNCED;
-
-        #if defined(DEBUG_MODE) && !defined(EMSCRIPTEN)
-            printf("\r");
-            printf(
-                "Iteration %d -- ED left: %d (added: %ld) ", 
-                this->currentIter,                 
-                newNCED,
-                ncedDiff
-            );
+        #ifdef DEBUG_MODE
+            printf("--------------------------------\n");
+            printf("Optimizer started:\n");        
+            printf("  Max. SF: %d\n", this->network->getMaxSF());
+            printf("  Initial number of GW: %d\n", this->initialGW);
+            printf("  Initial coverage: %.2f%%\n", this->network->getEDCoverage()*100);
+            printf("  Progress thresshold: %ld (min. new connected EDs per iteration)\n", progressThres);
+            printf("  Add gateway after: %d steps with no progress\n", addGWAfter);
+            printf("--------------------------------\n\n");
         #endif
 
-        if(newNCED == 0){ // If not connected EDs is 0, then max coverage reached
-            this->exitCode = MAX_COVERAGE;
-            break;
-        }else{
-            if(ncedDiff < progressThres)
-                noProgressStepCounter++;
-            if(noProgressStepCounter > addGWAfter){  
-                // Determine number of gw to add
-                
-                random.setRandom(x, y); // x, and y are declared at initialization
-                this->network->createGateway(x, y);
-                noProgressStepCounter = 0;
-                gwCounter++;
-                #ifdef DEBUG_MODE
-                    printf("\nGateway #%d added at (%f, %f)\n", gwCounter, x, y);
-                #endif
+        unsigned int gwCounter = this->initialGW;
+        
+        for(this->currentIter = 0; this->currentIter < this->maxIter; this->currentIter++){
+            
+            switch (this->stepMethod) {
+                case SPRINGS:
+                    this->network->stepSprings();
+                    break;
+                case RANDOM:
+                    this->network->stepRandom();
+                    break;
+                default:
+                    break;
+            }
+
+            if((this->currentIter % this->updatePeriod == 0) && progressCallback != nullptr)
+                progressCallback(this->network);
+
+            // Exit condition: timeout
+            steady_clock::time_point end = steady_clock::now();
+            this->elapsed = (unsigned long int) duration_cast<milliseconds>(end - begin).count();
+            if(this->elapsed > timeoutms){
+                this->exitCode = TIMEOUT;
+                break;
+            }
+
+            // Objective function: maximize network coverage -> nced = 0
+            unsigned int newNCED = this->network->getNCEDCount();
+            long int ncedDiff =  (long int) this->nced - (long int) newNCED;
+            this->nced = newNCED;
+
+            #if defined(DEBUG_MODE) && !defined(EMSCRIPTEN)
+                printf("\r");
+                printf(
+                    "Iteration %d -- ED left: %d (added: %ld) ", 
+                    this->currentIter,                 
+                    newNCED,
+                    ncedDiff
+                );
+            #endif
+
+            if(newNCED == 0){ // If not connected EDs is 0, then max coverage reached
+                this->exitCode = MAX_COVERAGE;
+                break;
+            }else{
+                if(ncedDiff < progressThres)
+                    noProgressStepCounter++;
+                if(noProgressStepCounter > addGWAfter){  
+                    // Determine number of gw to add
+                    
+                    random.setRandom(x, y); // x, and y are declared at initialization
+                    this->network->createGateway(x, y);
+                    noProgressStepCounter = 0;
+                    gwCounter++;
+                    #ifdef DEBUG_MODE
+                        printf("\nGateway #%d added at (%f, %f)\n", gwCounter, x, y);
+                    #endif
+                }
             }
         }
-    }
 
-    // Apply coloring algorithm to graph of gateways
-    this->network->configureGWChannels();
+        // Apply coloring algorithm to graph of gateways
+        this->network->configureGWChannels();
+        if(this->network->getMinChannels() < 16 || this->network->getMaxSF() == 7)
+            break;
+        else{
+            printf("\nNumber of channels = %d, reducing max. SF to %d\n", this->network->getMinChannels(), this->network->getMaxSF()-1);
+            this->network->setMaxSF(this->network->getMaxSF() - 1);
+        }
+    }
 
     if(progressCallback != nullptr)
         progressCallback(this->network);

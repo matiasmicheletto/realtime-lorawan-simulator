@@ -122,7 +122,6 @@ int main(int argc, char **argv) {
     optimizerBuilder.setNetwork(network);
     optimizer = new Optimizer(optimizerBuilder.build());
         
-    
     // Run optimization
     optimizer->run();
 
@@ -140,8 +139,8 @@ int main(int argc, char **argv) {
                       to_string(optimizerBuilder.maxIter) + "_" + 
                       to_string(optimizerBuilder.timeout) + "_" + 
                       to_string(optimizerBuilder.stepMethod);
-    strcpy(outputfilename, ("output"+filename+".txt").c_str());
-    strcpy(csvfilename, ("nodes"+filename+".csv").c_str());
+    strcpy(outputfilename, ("output_"+filename+".txt").c_str());
+    strcpy(csvfilename, ("nodes_"+filename+".csv").c_str());
 
     network->exportNodesCSV(csvfilename);
     optimizer->exportFullResults(outputfilename);

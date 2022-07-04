@@ -78,10 +78,12 @@ class Network {
         double getEDCoverage(); // Proportion of connected end devices
         long unsigned int getNCEDCount(); // Not connected end devices
         double getAvgUF(); // Average utilization factor of gateways
+        
         inline unsigned int getMapSize() {return this->mapSize;}
         inline unsigned int getEDCount() {return this->enddevices.size();}
         inline unsigned int getGWCount() {return this->gateways.size();}
         inline unsigned char getMaxSF() {return this->maxSF;}
+        void setMaxSF(unsigned char maxSF); // Set maximum spreading factor
         inline int getMinChannels() {return this->minChannels;}
         inline vector<EndDevice*>* getEDs() {return &(this->enddevices);}
         inline vector<Gateway*>* getGWs() {return &(this->gateways);}
