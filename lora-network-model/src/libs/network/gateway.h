@@ -21,19 +21,33 @@ class Gateway : public Node {
             unsigned char maxSF = 12);
         ~Gateway();
 
+        // GW dynamic position management
+        inline void setVel(double vx, double vy) { this->velX = vx; this->velY = vy; }
+        inline void addToVel(double vx, double vy) { this->velX += vx; this->velY += vy; }
+        inline void getVel(double &vx, double &vy) { vx = this->velX; vy = this->velY; }
+        void updatePos(double vlim = 0.0);
+
+        // Network management
         bool addEndDevice(EndDevice *ed); // Try to connect an end device
         bool removeEndDevice(EndDevice *ed); // Disconnects from end device
         void disconnect(); // Disconnect from all end devices
+        
+        // Maximum spreading factor allowed for this GW
+        inline void setMaxSF(unsigned char maxSF) { this->maxSF = maxSF < 7 ? 7 : (maxSF > 12 ? 12 : maxSF); }; // Configure different SF
+        inline void reduceMaxSF() { this->maxSF = this->maxSF == 7 ? 7 : this->maxSF - 1;}
+         
+        // Operating channel
+        inline void setChannel(unsigned char channel){ this->channel = channel; }
+        inline unsigned char getChannel() { return this->channel; } 
+
+        // Stats
         double getUF(); // GW current utilization factor
         vector<double> getUFbySF(); // GW current utilization factor by spreading factor
         unsigned int connectedEDsCount(); // Number of connected end devices
-        static double getRange(unsigned char sf); // Operating range equals 2000 mts when using maxSF=12, or 1000 mts for maxSF=11 and so on
-        double getRange(); // Range of current instance
-        inline void setMaxSF(unsigned char maxSF) { this->maxSF = maxSF; }; // Configure different SF
-        inline void reduceMaxSF() { this->maxSF = this->maxSF == 7 ? 7 : this->maxSF - 1;}
-         // Operating channel
-        inline void setChannel(unsigned char channel){ this->channel = channel; }
-        inline unsigned char getChannel() { return this->channel; } 
+        static double getRange(unsigned char sf); // Operating range depends on the spreading factor
+        double getRange(); // Range of this GW
+        template <typename T> 
+        static inline T mclamp(T value, T min, T max) {return value < min ? min : (value > max ? max : value);}
 
     private: 
         void resetSlots(); // Restores available slots to initial values
@@ -42,6 +56,8 @@ class Gateway : public Node {
 
         unsigned char getMinSF(double distance); // Returns minimum SF for connecting to an end device at given distance
         unsigned char getMaxSF(unsigned int period); // Returns maximum SF for connecting to an end device with given period
+
+        double velX = 0.0, velY = 0.0; // GW velocity
 
         vector<EndDevice*> connectedEDs;
         unsigned int H;

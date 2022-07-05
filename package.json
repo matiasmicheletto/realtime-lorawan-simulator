@@ -23,16 +23,13 @@
     "url": "https://github.com/matiasmicheletto/realtime-lorawan-simulator/issues"
   },
   "homepage": "https://github.com/matiasmicheletto/realtime-lorawan-simulator#readme",
-  "dependencies": {
-    "lora-network-model": "file:./lora-network-model",
+  "dependencies": {    
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
     "@mui/material": "^5.8.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "react-router-dom": "^6.3.0",
-    "vis-data": "^7.1.4",
-    "vis-network": "^9.1.2"
+    "react-router-dom": "^6.3.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.0",

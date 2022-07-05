@@ -90,8 +90,6 @@ class Network {
         inline vector<Gateway*>* getGWs() {return &(this->gateways);}
         
         // Utils
-        template <typename T> 
-        static inline T mclamp(T value, T min, T max) {return value < min ? min : (value > max ? max : value);}
         static inline int gcd(int a, int b) {return b == 0 ? a : gcd(b, a % b);}
         static inline int lcm(int a, int b){return a * b / gcd(a, b);}
         

@@ -9,7 +9,7 @@ const Navigation = () => {
     
     return (
         <Box sx={{ flexGrow: 1}} >
-            <AppBar position="static" color="secondary">
+            <AppBar position="static" color="primary">
                 <Toolbar>
                     <Button LinkComponent={Link} to="/" color="inherit">
                         <span style={{fontWeight: path=="home" ? "bold" : "normal"}}>Home</span>

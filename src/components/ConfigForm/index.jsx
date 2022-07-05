@@ -1,4 +1,4 @@
-import React, { useRef, useState, useContext } from 'react';
+import React, {useState} from 'react';
 import { 
     Grid, 
     TextField, 
@@ -8,8 +8,6 @@ import {
     FormControl, 
     InputLabel 
 } from '@mui/material';
-import { LoadingContext, manager } from '../../context';
-import { readFile } from '../../utils';
 
 const styles = {
     button: {
@@ -28,322 +26,187 @@ const styles = {
 
 const ConfigForm = () => {
 
-    const fileInputRef = useRef(null);
-    const [format, setFormat] = useState("csv");
+    const [inputs, setInputs] = useState({
+        mapSize: "1000",
+        edNumber: "10000",
+        maxSF: "10",
+        posDist: "0",
+        periodDist: "0",
+        maxIter: "1000",
+        timeout: "360",
+        algorithm: "0",
+        updateRate: "10"
+    });
 
-    const { loading, setLoading } = useContext(LoadingContext);
-
-    const [inputs, setInputs] = useState(manager.getAllParams());
     const {
-        N,
-        H,
-        mapWidth,
-        mapHeight,
-        posDistr,
-        periodsDistr,
-        initialGW,
-        strategy,
-        schedulingBy,
+        mapSize,
+        edNumber,
+        maxSF,
+        posDist,
+        periodDist,
         maxIter,
-        addGWAfter,
-        maxRuntime,
+        timeout,
+        algorithm,
         updateRate
     } = inputs;
 
-    const handleImportModel = () => {
-        fileInputRef.current.click();
-    };
-
-    const handleLoadFile = e => {
-        if(e.target.files?.length > 0)
-            readFile(e.target.files[0], format)
-            .then(result => {
-                try{
-                    manager.importConfig(result, format);
-                    setInputs(manager.getAllParams());
-                }catch(e){
-                    console.error(e);
-                }
-            });
-    };
-
-    const handleExportModel = () => {
-        const data = manager.exportModel(format);
-        const extensions = {
-            csv: "csv",
-            json: "json",
-            matlab: "m"
-        };
-        var blob = new Blob([data], { type: 'text/plain' });
-        var a = document.createElement('a');
-        a.download = `NetworkModel.${extensions[format]}`;
-        a.href = window.URL.createObjectURL(blob);
-        a.click();
-    };
-
-    const handleFormatChange = e => {        
-        setFormat(e.target.value);
-    };
-
-    const handleInputChange = e => {
-        if(!loading){
-            const { name, value } = e.target;
-            console.log(name, value);
-            manager.configure({ [name]: value });
-            if(["N", "mapWidth", "mapHeight", "posDistr", "initialGW", "strategy", "schedulingBy", "periodsDistr"].includes(name)){ // Only update network for certain parameters
-                manager.initialize();
-            }
-            setInputs(prev => ({ ...prev, [name]: value }));
-        }
-    };
-
-    const runSimulation = () => {
-        if(!loading){
-            setLoading(true);
-            manager.start().then(results => {
-                setLoading(false);
-                console.log(results);
-            });
-        }
+    const handleInputChange = event => {
+        const {name, value} = event.target;
+        setInputs({...inputs, [name]: value});
     };
 
     return (        
-        <div>
-            <div style={styles.form}>
-                <Grid container spacing={2} alignItems="center">
-                    <Grid item xs={4}>
-                        <Button 
-                            style={styles.button}
-                            variant="contained"
-                            color="error"
-                            onClick={handleImportModel}>
-                            Import configuration
-                        </Button>
-                        <TextField                        
-                            type="file"
-                            style={{display:"none"}}
-                            inputRef={fileInputRef}
-                            onChange={handleLoadFile}/>  
-                    </Grid>
-                    <Grid item xs={4}>
-                        <Button 
-                            style={styles.button}
-                            color="info"
-                            variant="contained"
-                            onClick={handleExportModel}>
-                            Export network
-                        </Button>
-                    </Grid>
-                    <Grid item xs={4}>    
-                        <FormControl fullWidth>
-                            <InputLabel>Format</InputLabel>
-                            <Select                        
-                                value={format}
-                                label="Format"
-                                size="small"
-                                onChange={handleFormatChange}>
-                                <MenuItem value="csv">CSV</MenuItem>
-                                <MenuItem value="json">JSON</MenuItem>
-                                <MenuItem value="matlab">MATLAB</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
+        <div style={styles.form}>
+            <Grid container spacing={2}>
+                <Grid item xs={12} md={6} lg={3}>
+                    <TextField
+                        style={{width: "100%"}}
+                        value={mapSize}
+                        variant="outlined"
+                        type="number"
+                        size="small"
+                        label="Map size"
+                        name="mapSize"
+                        onChange={handleInputChange}
+                        inputProps={{min:10,max:10000}}/>
                 </Grid>
+                <Grid item xs={12} md={6} lg={3}>
+                    <TextField
+                        style={{width: "100%"}}
+                        value={edNumber}
+                        variant="outlined"
+                        type="number"
+                        size="small"
+                        label="Number of end devices"
+                        name="edNumber"
+                        onChange={handleInputChange}
+                        inputProps={{min:1,max:100000}}/>
+                </Grid>
+                <Grid item xs={12} md={6} lg={3}>
+                    <FormControl fullWidth>
+                        <InputLabel>Max. SF</InputLabel>
+                        <Select                        
+                            value={maxSF}
+                            label="Max. SF"
+                            size="small"
+                            name="maxSF"
+                            onChange={handleInputChange}>
+                            <MenuItem value="7">SF7</MenuItem>
+                            <MenuItem value="8">SF8</MenuItem>
+                            <MenuItem value="9">SF9</MenuItem>
+                            <MenuItem value="10">SF10</MenuItem>
+                            <MenuItem value="11">SF11</MenuItem>
+                            <MenuItem value="12">SF12</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Grid>
+                <Grid item xs={12} md={6} lg={3}>
+                    <FormControl fullWidth>
+                        <InputLabel>Pos. Dist.</InputLabel>
+                        <Select                        
+                            value={posDist}
+                            label="Pos. Dist."
+                            size="small"
+                            name="posDist"
+                            onChange={handleInputChange}>
+                            <MenuItem value="0">Uniform</MenuItem>
+                            <MenuItem value="1">Normal</MenuItem>
+                            <MenuItem value="2">Clouds</MenuItem> 
+                        </Select>
+                    </FormControl>
+                </Grid>
+                <Grid item xs={12} md={6} lg={3}>
+                    <FormControl fullWidth>
+                        <InputLabel>Period Dist.</InputLabel>
+                        <Select                        
+                            value={periodDist}
+                            label="Period Dist."
+                            size="small"
+                            name="periodDist"
+                            onChange={handleInputChange}>
+                            <MenuItem value="0">Soft</MenuItem>                            
+                            <MenuItem value="1">Medium</MenuItem>
+                            <MenuItem value="2">Hard</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Grid>
+                <Grid item xs={12} md={6} lg={3}>
+                    <TextField
+                        style={{width: "100%"}}
+                        value={maxIter}
+                        variant="outlined"
+                        type="number"
+                        size="small"
+                        label="Maximum iterations"
+                        name="maxIter"
+                        onChange={handleInputChange}
+                        inputProps={{min:1,max:10000}}/>
+                </Grid>
+                <Grid item xs={12} md={6} lg={3}>
+                    <TextField
+                        style={{width: "100%"}}
+                        value={timeout}
+                        variant="outlined"
+                        type="number"
+                        size="small"
+                        label="Timeout"
+                        name="timeout"
+                        onChange={handleInputChange}
+                        inputProps={{min:1,max:3600}}/>
+                </Grid>
+                <Grid item xs={12} md={6} lg={3}>
+                    <FormControl fullWidth>
+                        <InputLabel>Step algo.</InputLabel>
+                        <Select                        
+                            value={algorithm}
+                            label="Step algo."
+                            size="small"
+                            name="algorithm"
+                            onChange={handleInputChange}>
+                            <MenuItem value="0">Springs</MenuItem>                            
+                            <MenuItem value="1">Random</MenuItem>                            
+                        </Select>
+                    </FormControl>
+                </Grid>
+                <Grid item xs={12} md={6} lg={3}>
+                    <FormControl fullWidth>
+                        <InputLabel>Frame rate</InputLabel>
+                        <Select                        
+                            value={updateRate}
+                            label="Frame rate"
+                            size="small"
+                            name="updateRate"
+                            onChange={handleInputChange}>
+                            <MenuItem value="1">Every iteration</MenuItem>                            
+                            <MenuItem value="10">Every 10 iterations</MenuItem>
+                            <MenuItem value="25">Every 25 iterations</MenuItem>
+                            <MenuItem value="50">Every 50 iterations</MenuItem>
+                            <MenuItem value="100">Every 100 iterations</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Grid>
+            </Grid>
 
-                <Grid container spacing={2} style={{marginTop:"10px"}}>
-                    <Grid item xs={12} md={6} lg={3}>
-                        <TextField
-                            style={{width: "100%"}}
-                            value={N}
-                            variant="outlined"
-                            type="number"
-                            size="small"
-                            label="Number of end devices"
-                            name="N"
-                            onChange={handleInputChange}
-                            inputProps={{min:1,max:15000}}/>
-                    </Grid>
-                    <Grid item xs={12} md={6} lg={3}>
-                        <TextField
-                            style={{width: "100%"}}
-                            value={mapWidth}
-                            variant="outlined"
-                            type="number"
-                            size="small"
-                            label="Map width (mts)"
-                            name="mapWidth"
-                            onChange={handleInputChange}
-                            inputProps={{min:1,max:10000}}/>
-                    </Grid>
-                    <Grid item xs={12} md={6} lg={3}>
-                        <TextField
-                            style={{width: "100%"}} 
-                            value={mapHeight}
-                            variant="outlined"
-                            type="number"
-                            size="small"
-                            label="Map height (mts)"
-                            name="mapHeight"
-                            onChange={handleInputChange}
-                            inputProps={{min:1,max:10000}}/>
-                    </Grid>
-                    <Grid item xs={12} md={6} lg={3}>
-                        <FormControl fullWidth>
-                            <InputLabel id="dist-select-label">End devices dist.</InputLabel>
-                            <Select                        
-                                labelId="dist-select-label"
-                                value={posDistr}
-                                name="posDistr"
-                                size="small"
-                                onChange={handleInputChange}
-                                label="End device dist.">
-                                <MenuItem value="uniform">Uniform</MenuItem>
-                                <MenuItem value="normal">Normal</MenuItem>
-                                <MenuItem value="clouds">Clouds</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>    
-                </Grid>
-
-                <Grid container spacing={2} style={{marginTop:"10px"}}>                    
-                    <Grid item xs={12} md={6}>
-                        <TextField
-                            style={{width: "100%"}} 
-                            value={H}
-                            variant="outlined"
-                            type="number"
-                            label="System hyperperiod"
-                            name="H"
-                            size="small"
-                            onChange={handleInputChange}
-                            inputProps={{min:1, max:10000}}/>
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                        <TextField
-                            style={{width: "100%"}}
-                            value={periodsDistr}
-                            variant="outlined"
-                            type="text"
-                            label="Period distribution"
-                            name="periodsDistr"
-                            size="small"
-                            onChange={handleInputChange}/>
-                    </Grid>
-                </Grid>
-                <Grid container spacing={2} style={{marginTop:"10px"}}>
-                    <Grid item xs={12} md={6} lg={3}>
-                        <TextField
-                            style={{width: "100%"}} 
-                            value={initialGW}
-                            variant="outlined"
-                            type="number"
-                            label="Initial gateway number"
-                            name="initialGW"
-                            size="small"
-                            onChange={handleInputChange}
-                            inputProps={{min:1,max:16}}/>
-                    </Grid>
-                    <Grid item xs={12} md={6} lg={3}>
-                        <FormControl fullWidth>
-                            <InputLabel id="strat-select-label">Gateway positioning strategy</InputLabel>
-                            <Select                        
-                                labelId="strat-select-label"
-                                value={strategy}
-                                label="Gateway positioning strategy"
-                                name="strategy"
-                                size="small"
-                                onChange={handleInputChange}>
-                                <MenuItem value="random">Random</MenuItem>
-                                <MenuItem value="spring">Springs</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                    <Grid item xs={12} md={6} lg={3}>
-                        <FormControl fullWidth>
-                            <InputLabel id="addgw-select-label">Add GW on low cov.</InputLabel>
-                            <Select                        
-                                labelId="addgw-select-label"
-                                value={addGWAfter}
-                                label="Add GW on low cov."
-                                name="addGWAfter"
-                                size="small"
-                                onChange={handleInputChange}>
-                                    <MenuItem value={10}>after 10 iterations</MenuItem>
-                                <MenuItem value={25}>after 25 iterations</MenuItem>
-                                <MenuItem value={50}>after 50 iterations</MenuItem>
-                                <MenuItem value={100}>after 100 iterations</MenuItem>
-                                <MenuItem value={1000}>after 100 iterations</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                    <Grid item xs={12} md={6} lg={3}>
-                        <FormControl fullWidth>
-                            <InputLabel id="strat-select-label">Scheduling method</InputLabel>
-                            <Select                        
-                                labelId="strat-select-label"
-                                value={schedulingBy}
-                                label="Scheduling method"
-                                name="schedulingBy"
-                                size="small"
-                                onChange={handleInputChange}>
-                                <MenuItem value="gw">By gateway</MenuItem>
-                                <MenuItem value="ed">By end device</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                </Grid>
-                <Grid container spacing={2} style={{marginTop:"10px"}}>
-                    <Grid item xs={4}>
-                        <TextField
-                            style={{width: "100%"}} 
-                            value={maxIter}
-                            variant="outlined"
-                            type="number"
-                            label="Max. iterations"
-                            name="maxIter"
-                            size="small"
-                            onChange={handleInputChange}
-                            inputProps={{min:1,max:1000}}/>
-                    </Grid>
-                    <Grid item xs={4}>
-                        <TextField
-                            style={{width: "100%"}} 
-                            value={maxRuntime}
-                            variant="outlined"
-                            type="number"
-                            label="Max. execution time (s)"
-                            name="maxRuntime"
-                            size="small"
-                            onChange={handleInputChange}
-                            inputProps={{min:10,max:300}}/>
-                    </Grid>
-                    <Grid item xs={4}>
-                        <FormControl fullWidth>
-                            <InputLabel id="vis-select-label">Update GUI</InputLabel>
-                            <Select                        
-                                labelId="vis-select-label"
-                                value={updateRate}
-                                label="Update GUI"
-                                name="updateRate"
-                                size="small"
-                                onChange={handleInputChange}>
-                                <MenuItem value={1}>after each iteration</MenuItem>
-                                <MenuItem value={10}>after 10 iterations</MenuItem>
-                                <MenuItem value={100}>after 100 iterations</MenuItem>
-                                <MenuItem value={0.1}>on finish</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                </Grid>
-                <Grid container style={{marginTop:"10px"}} justifyContent="flex-end">                
+            <Grid container spacing={2} style={{marginTop:"10px"}} justifyContent="flex-start">
+                <Grid item xs={12} md={6} lg={3}>
                     <Button
+                        style={{width: "100%", marginRight: "5px"}}
                         color="primary"
                         variant="contained"
-                        onClick={runSimulation}>
+                        onClick={()=>{}}>
                         Run simulation
                     </Button>
                 </Grid>
-            </div>
+                <Grid item xs={12} md={6} lg={3}>
+                    <Button
+                        style={{width: "100%"}}
+                        color="secondary"
+                        variant="contained"
+                        onClick={()=>{}}>
+                        Repeat animation
+                    </Button>
+                </Grid>
+            </Grid>
         </div>
     );
 };

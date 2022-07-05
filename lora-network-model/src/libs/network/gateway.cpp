@@ -17,6 +17,11 @@ Gateway::~Gateway() {
     this->disconnect();
 }
 
+void Gateway::updatePos(double vlim) {
+    this->moveTo(this->getX() + mclamp(this->velX, -vlim, vlim), this->getY() + mclamp(this->velY, -vlim, vlim));
+    this->setVel(0.0, 0.0);
+}
+
 void Gateway::resetSlots() {
     this->maxSlots = 0;
     for(int i = 0; i < 6; i++){
@@ -40,6 +45,7 @@ void Gateway::freeSlots(unsigned char sf, unsigned int period){
         this->availableSlots[sf-7] += this->H/period;
 }
 
+// static
 double Gateway::getRange(unsigned char sf) {
     switch(sf){
         case 12:

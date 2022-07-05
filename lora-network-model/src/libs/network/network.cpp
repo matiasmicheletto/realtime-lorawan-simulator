@@ -275,21 +275,15 @@ void Network::stepSprings() {
     struct force {
         double x = 0;
         double y = 0;
-    };
-    vector<force> forces(this->gateways.size()); // Forces for each gateway
+    };    
     const long unsigned int nced = this->getNCEDCount();
     const long unsigned int ted = this->getEDCount();
     for (long unsigned int i = 0; i < this->enddevices.size(); i++) {
         if(this->enddevices[i]->isConnected()){ // Weak attraction force to stabilize gateways in the middle of its end devices
-            // Get ID of connected GW
-            unsigned int gwID = this->enddevices[i]->getGatewayId();
-            // Get index of GW in the vector
-            long unsigned int connectedGW = 0;
-            for(long unsigned int j = 0; j < this->gateways.size(); j++)
-                if(this->gateways[j]->getId() == gwID)
-                    connectedGW = j;
-            forces[connectedGW].x += (this->enddevices[i]->getX() - this->gateways[connectedGW]->getX())/(double)ted;
-            forces[connectedGW].y += (this->enddevices[i]->getY() - this->gateways[connectedGW]->getY())/(double)ted;
+            Gateway *gw = this->enddevices[i]->getGateway();
+            double vx = (this->enddevices[i]->getX() - gw->getX())/(double)ted;
+            double vy = (this->enddevices[i]->getY() - gw->getY())/(double)ted;
+            gw->addToVel(vx, vy);
         } else { // Strong attraction force to move gateways close to not connected end devices
             // Get closest gateway
             long unsigned int closestGW = 0;
@@ -302,34 +296,33 @@ void Network::stepSprings() {
                 }
             }
             // Add attraction force for closest gw
-            forces[closestGW].x += (this->enddevices[i]->getX() - this->gateways[closestGW]->getX())/(double)nced;
-            forces[closestGW].y += (this->enddevices[i]->getY() - this->gateways[closestGW]->getY())/(double)nced;
+            double vx = (this->enddevices[i]->getX() - this->gateways[closestGW]->getX())/(double)nced;
+            double vy = (this->enddevices[i]->getY() - this->gateways[closestGW]->getY())/(double)nced;
+            this->gateways[closestGW]->addToVel(vx, vy);
         }
     }
     
     // Disconnect all nodes
     this->disconnect();
     // Update gateways positions according to forces
-    for (long unsigned int i = 0; i < this->gateways.size(); i++) {
-        double newX = this->gateways[i]->getX() + mclamp(forces[i].x, -100.0, 100.0);
-        double newY = this->gateways[i]->getY() + mclamp(forces[i].y, -100.0, 100.0);
-        this->gateways[i]->moveTo(newX, newY);
-    }
+    double flimit = (double) this->mapSize/ 4.0; // Maximum force to apply to each gateway
+    for (long unsigned int i = 0; i < this->gateways.size(); i++)
+        this->gateways[i]->updatePos(flimit);
     // Reconnect network
     this->autoConnect();
 }
 
 void Network::stepRandom() {
+    // Save original positions and coverage
     double originalCoverage = this->getEDCoverage();
-    // Save original positions
     vector<vector<double>> originalPositions;
     for(long unsigned int i = 0; i < this->gateways.size(); i++){
         double x = this->gateways[i]->getX();
         double y = this->gateways[i]->getY();
         originalPositions.push_back(vector<double>{x, y});
     }
+    // Randomize gw positions
     this->disconnect(); 
-    // Randomize positions
     Uniform gwPosGenerator = Uniform(-(double)this->mapSize/2, (double)this->mapSize/2);
     double newX, newY;
     for(long unsigned int i = 0; i < this->gateways.size(); i++){
@@ -340,8 +333,8 @@ void Network::stepRandom() {
     this->autoConnect();
     double newCoverage = this->getEDCoverage();
     if(newCoverage < originalCoverage){ // If coverage did not improve
-        this->disconnect();
         // Restore original positions
+        this->disconnect();
         for(long unsigned int i = 0; i < this->gateways.size(); i++){
             double x = originalPositions[i][0];
             double y = originalPositions[i][1];
