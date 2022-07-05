@@ -254,7 +254,18 @@ bool Network::removeGateway(unsigned int id) {
     return false;
 }
 
-void Network::removeAllGateaways() {
+void Network::removeIdleGateways() {
+    for (unsigned int i = 0; i < this->gateways.size(); i++) {
+        if (this->gateways[i]->connectedEDsCount() == 0) {
+            delete this->gateways[i];
+            this->gateways.erase(this->gateways.begin() + i);
+            i--;
+        }
+    }
+}
+
+void Network::removeAllGateways() {
+    this->disconnect();
     for(long unsigned int i = 0; i < this->gateways.size(); i++)
         delete this->gateways[i];
     this->gateways.clear();

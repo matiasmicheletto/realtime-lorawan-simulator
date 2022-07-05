@@ -61,7 +61,8 @@ class Network {
         void disconnect(); // Disconnect all nodes
         void createGateway(double x = 0, double y = 0);
         bool removeGateway(unsigned int id);
-        void removeAllGateaways(); // Remove all gateways except 1 and autoconnect
+        void removeIdleGateways(); // Remove gateways without end devices
+        void removeAllGateways(); // Remove all gateways except 1 and autoconnect
         void configureGWChannels(); // Assign channels to gateways minimizing the number of channels
         void stepSprings(); // Improve coverage by moving GW using attraction forces
         void stepRandom(); // Try to improve coverage by randomizing GW positions

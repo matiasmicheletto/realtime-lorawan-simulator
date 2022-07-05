@@ -88,7 +88,7 @@ void Optimizer::run( void (*progressCallback)(Network *network) ) {
 
     while(true) {
         // Initialize GWs at random positions 
-        this->network->removeAllGateaways(); 
+        this->network->removeAllGateways(); 
         for(unsigned int i = 0; i < this->initialGW; i++){
             random.setRandom(x, y);
             this->network->createGateway(x, y);
@@ -170,6 +170,9 @@ void Optimizer::run( void (*progressCallback)(Network *network) ) {
                 }
             }
         }
+
+        // Remove GWs that are not connected to any ED
+        this->network->removeIdleGateways();
 
         // Apply coloring algorithm to graph of gateways
         this->network->configureGWChannels();
