@@ -20,7 +20,7 @@ const styles = {
         boxShadow: "3px 3px 10px gray",
         marginTop: "10px",
         paddingTop: "30px",
-        paddingBottom: "30px"
+        paddingBottom: "30px"        
     }
 };
 
@@ -54,6 +54,18 @@ const ConfigForm = () => {
         const {name, value} = event.target;
         setInputs({...inputs, [name]: value});
     };
+
+    const runSimulation = () => {        
+        runOptimizer(mapSize,
+            edNumber,
+            maxSF,
+            posDist,
+            periodDist,
+            maxIter,
+            timeout,
+            algorithm,
+            updateRate);
+    }
 
     return (        
         <div style={styles.form}>
@@ -188,22 +200,13 @@ const ConfigForm = () => {
             </Grid>
 
             <Grid container spacing={2} style={{marginTop:"10px"}} justifyContent="flex-start">
-                <Grid item xs={12} md={6} lg={3}>
+                <Grid item xs={6} md={3}>
                     <Button
                         style={{width: "100%", marginRight: "5px"}}
                         color="primary"
                         variant="contained"
-                        onClick={()=>{}}>
+                        onClick={runSimulation}>
                         Run simulation
-                    </Button>
-                </Grid>
-                <Grid item xs={12} md={6} lg={3}>
-                    <Button
-                        style={{width: "100%"}}
-                        color="secondary"
-                        variant="contained"
-                        onClick={()=>{}}>
-                        Repeat animation
                     </Button>
                 </Grid>
             </Grid>

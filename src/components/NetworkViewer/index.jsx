@@ -1,22 +1,76 @@
-import React from 'react';
-import { Checkbox, FormControlLabel, Grid, Box } from '@mui/material';
+import React, { useRef, useState, useEffect } from 'react';
+import { Checkbox, FormControlLabel, Grid, Box, Button } from '@mui/material';
 
 const styles = {
-    container: {
-        width:"100%", 
-        height:"50vh",
+    container: {        
         border: "1px solid #bbb",
         boxShadow: "3px 3px 10px gray",
         borderRadius: "1%"
     },
+    canvas : {        
+        width: "100%",
+    },
     form: {
-        padding: "20px"
+        padding: "10px",
+        height: "100%"
     }
-}
+};
 
-const edgeColors = [];
 
 const NetworkViewer = () => {
+
+    const canvasRef = useRef(null);        
+    let currentFrame = 0;
+
+    useEffect(() => {
+        const canvas = canvasRef.current;        
+        canvas.width = window.innerWidth/2;
+        canvas.height = canvas.width;
+    }, []);
+
+    const drawNetwork = () => {
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        const scale = canvasRef.current.width;
+        const iter = frames[currentFrame];
+
+        const nlen = iter.nodes.length;
+        const elen = iter.edges.length;
+        let i = 0;
+        while(i < nlen) {
+            if(iter.nodes[i]){
+                const {group, x, y, color} = iter.nodes[i];
+                ctx.fillStyle = color;
+                ctx.fillRect(x*scale, y*scale, 1, 1);
+            }
+            i++;
+        }
+        i = 0;
+        while(i < elen) {
+            if(iter.edges[i]){                
+                const fromNode = iter.nodes[iter.edges[i].from];
+                const toNode = iter.nodes[iter.edges[i].to];
+                ctx.beginPath();
+                ctx.moveTo(fromNode.x*scale, fromNode.y*scale);
+                ctx.lineTo(toNode.x*scale, toNode.y*scale);
+                ctx.strokeStyle = iter.edges[i].color;
+                ctx.stroke();
+            }
+            i++;
+        }
+        
+        if(currentFrame < frames.length-1){
+            currentFrame++;
+            setTimeout(drawNetwork, 100);
+        }   
+    };
+
+    const repeatAnimation = () => {        
+        currentFrame = 0;
+        drawNetwork();
+    };
 
     return (
         <div style={{marginTop: "20px"}}>
@@ -48,14 +102,6 @@ const NetworkViewer = () => {
                             }
                             label="Gateways"
                         />                        
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={false}
-                                    onChange={()=>{}}/>
-                            }
-                            label="Labels"
-                        />
                         <div>
                             <FormControlLabel
                                 control={
@@ -71,7 +117,7 @@ const NetworkViewer = () => {
                                     Object.keys(edgeColors).map( (sf, index) => (
                                         <FormControlLabel
                                             key={index}
-                                            label={sf}
+                                            label={"SF"+sf}
                                             control={
                                                 <Checkbox 
                                                     checked={false} 
@@ -82,10 +128,19 @@ const NetworkViewer = () => {
                                 }    
                             </Box>
                         </div>
+                        <Button
+                            style={{width: "100%"}}
+                            color="secondary"
+                            variant="contained"
+                            onClick={repeatAnimation}>
+                            Repeat animation
+                        </Button>
                     </div>
                 </Grid>
                 <Grid item xs={12} md={9}>
-                    <div style={styles.container}></div>
+                    <div style={styles.container}>
+                        <canvas style={styles.canvas} ref={canvasRef}></canvas>
+                    </div>
                 </Grid>
             </Grid>
         </div>

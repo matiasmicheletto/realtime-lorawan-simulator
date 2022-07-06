@@ -13,7 +13,6 @@ const edgeColors = {
     12: "rgb(150, 0, 150, .3)"
 };
 
-
 const canvas = document.getElementById("canvas");
 const runBtn = document.getElementById("runBtn");
 const repeatBtn = document.getElementById("repeatBtn");
