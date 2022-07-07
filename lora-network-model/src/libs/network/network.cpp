@@ -518,22 +518,33 @@ void Network::configureGWChannels() {
         usedChannels.clear();
         for(long unsigned int j = 0; j < this->gateways.size(); j++){
             if(i == j) continue; // Skip current gateway
-            double range = this->gateways[i]->getRange()+this->gateways[j]->getRange();
-            if(this->gateways[i]->distanceTo(this->gateways[j]) <= range) // If i and j are neighbors
+            double separation = this->gateways[i]->distanceTo(this->gateways[j]);
+            unsigned char sf = Gateway::getMinSF(separation/2); // Interference sf
+            // Get utilization factor of both gateways
+            vector<double>ufi = this->gateways[i]->getUFbySF();
+            vector<double>ufj = this->gateways[j]->getUFbySF();
+            // Check if are neighbors (sf < 13 && ufi + ufj < 1)
+            bool neighboors = false; // if i and j are neighbors, must have different channels
+            for(int k = sf; k < 12; k++){
+                if(ufi[k-7] + ufj[k-7] >= 1){
+                    neighboors = true;
+                    break;
+                }
+            }
+            if(neighboors) // If i and j are neighbors
                 usedChannels.push_back(this->gateways[j]->getChannel()); // Add channel of j to the list
         }
         // Traverse the list of used channels and find the minimum available
         int minAvailableChannel = 0;
-        for(unsigned long int j = 0; j < this->gateways.size(); j++){
-            if(find(usedChannels.begin(), usedChannels.end(), j) == usedChannels.end()){
-                minAvailableChannel = j;
-                break;
+        for(unsigned long int j = 0; j < this->gateways.size(); j++){ // Worst case is one channel per gateway
+            if(find(usedChannels.begin(), usedChannels.end(), j) == usedChannels.end()){ // if channel j not found
+                minAvailableChannel = j; // If j is not used, then is the minimum available channel
+                break; // Stop search
             }
         }
         this->gateways[i]->setChannel(minAvailableChannel);
         // Update minimum number of channels
-        if(minAvailableChannel > this->minChannels)
-            this->minChannels = minAvailableChannel;
-    }
-    this->minChannels++;
+        if(minAvailableChannel+1 > this->minChannels)
+            this->minChannels = minAvailableChannel+1;
+    }    
 }

@@ -45,7 +45,10 @@ class Gateway : public Node {
         vector<double> getUFbySF(); // GW current utilization factor by spreading factor
         unsigned int connectedEDsCount(); // Number of connected end devices
         static double getRange(unsigned char sf); // Operating range depends on the spreading factor
-        double getRange(); // Range of this GW
+        double getRange(); // Range of this GW        
+        static unsigned char getMinSF(double distance); // Returns minimum SF for connecting to an end device at given distance
+        static unsigned char getMaxSF(unsigned int period); // Returns maximum SF for connecting to an end device with given period
+
         template <typename T> 
         static inline T mclamp(T value, T min, T max) {return value < min ? min : (value > max ? max : value);}
 
@@ -53,9 +56,6 @@ class Gateway : public Node {
         void resetSlots(); // Restores available slots to initial values
         bool useSlots(unsigned char sf, unsigned int period); // Try to use slots for given sf
         void freeSlots(unsigned char sf, unsigned int period); // Restores slots for given sf
-
-        unsigned char getMinSF(double distance); // Returns minimum SF for connecting to an end device at given distance
-        unsigned char getMaxSF(unsigned int period); // Returns maximum SF for connecting to an end device with given period
 
         double velX = 0.0, velY = 0.0; // GW velocity
 
