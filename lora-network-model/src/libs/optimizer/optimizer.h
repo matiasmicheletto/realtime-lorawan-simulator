@@ -36,7 +36,7 @@ class Optimizer {
         ~Optimizer();
         
         // Compute the minimun number of gateways to connect all end devices
-        void run( void (*progressCallback)(Network *network) = NULL );
+        void run( void (*progressCallback)(Network *network, unsigned int iter) = NULL );
         
         // Display results 
         void printResults();

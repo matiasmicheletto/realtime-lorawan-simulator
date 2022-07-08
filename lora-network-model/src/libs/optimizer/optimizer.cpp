@@ -77,7 +77,7 @@ Optimizer Optimizer::Builder::build(){
 }
 
 
-void Optimizer::run( void (*progressCallback)(Network *network) ) {
+void Optimizer::run( void (*progressCallback)(Network *network, unsigned int iter) ) {
 
     steady_clock::time_point begin = steady_clock::now();
     const unsigned int mapsize = this->network->getMapSize();
@@ -126,7 +126,7 @@ void Optimizer::run( void (*progressCallback)(Network *network) ) {
             }
 
             if((this->currentIter % this->updatePeriod == 0) && progressCallback != nullptr)
-                progressCallback(this->network);
+                progressCallback(this->network, this->currentIter);
 
             // Exit condition: timeout
             steady_clock::time_point end = steady_clock::now();
@@ -185,7 +185,7 @@ void Optimizer::run( void (*progressCallback)(Network *network) ) {
     }
 
     if(progressCallback != nullptr)
-        progressCallback(this->network);
+        progressCallback(this->network, this->currentIter);
 }
 
 string Optimizer::getExitCodeName(EXIT_CODE exitCode) {

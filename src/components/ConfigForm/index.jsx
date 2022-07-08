@@ -55,16 +55,24 @@ const ConfigForm = () => {
         setInputs({...inputs, [name]: value});
     };
 
-    const runSimulation = () => {        
-        runOptimizer(mapSize,
-            edNumber,
-            maxSF,
-            posDist,
-            periodDist,
-            maxIter,
-            timeout,
-            algorithm,
-            updateRate);
+    const runSimulation = () => {    
+        Module.onNetworkUpdate = (nodes, edges, gw, ced, nced, iter, maxSF) => {
+            frames.push({nodes, edges});
+        };
+        if(optimizerReady){              
+            Module._runSimulation(
+                mapSize,
+                edNumber,
+                1,
+                maxSF,
+                posDist,
+                periodDist,
+                maxIter,
+                timeout,
+                algorithm,
+                updateRate
+            );
+        }
     }
 
     return (        

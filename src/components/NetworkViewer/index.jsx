@@ -41,7 +41,7 @@ const NetworkViewer = () => {
         let i = 0;
         while(i < nlen) {
             if(iter.nodes[i]){
-                const {group, x, y, color} = iter.nodes[i];
+                const {x, y, color} = iter.nodes[i];
                 ctx.fillStyle = color;
                 ctx.fillRect(x*scale, y*scale, 1, 1);
             }
@@ -114,7 +114,7 @@ const NetworkViewer = () => {
                             />
                             <Box sx={{ display: 'flex', flexDirection: 'column', ml: 3 }}>
                                 {
-                                    Object.keys(edgeColors).map( (sf, index) => (
+                                    Object.keys(Module.edgeColors).map( (sf, index) => (
                                         <FormControlLabel
                                             key={index}
                                             label={"SF"+sf}
