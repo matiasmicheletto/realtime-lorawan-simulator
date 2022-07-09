@@ -1,5 +1,3 @@
-var frames = [];
-var gmapSize = 1000;
 var optimizerReady = false;
 var Module = {
     onRuntimeInitialized: function() {

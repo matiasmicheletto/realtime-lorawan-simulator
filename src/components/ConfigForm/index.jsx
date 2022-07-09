@@ -29,6 +29,7 @@ const ConfigForm = () => {
     const [inputs, setInputs] = useState({
         mapSize: "1000",
         edNumber: "10000",
+        initialGW: "1",
         maxSF: "10",
         posDist: "0",
         periodDist: "0",
@@ -41,6 +42,7 @@ const ConfigForm = () => {
     const {
         mapSize,
         edNumber,
+        initialGW,
         maxSF,
         posDist,
         periodDist,
@@ -56,14 +58,11 @@ const ConfigForm = () => {
     };
 
     const runSimulation = () => {    
-        Module.onNetworkUpdate = (nodes, edges, gw, ced, nced, iter, maxSF) => {
-            frames.push({nodes, edges});
-        };
         if(optimizerReady){              
             Module._runSimulation(
                 mapSize,
                 edNumber,
-                1,
+                initialGW,
                 maxSF,
                 posDist,
                 periodDist,
@@ -99,6 +98,18 @@ const ConfigForm = () => {
                         size="small"
                         label="Number of end devices"
                         name="edNumber"
+                        onChange={handleInputChange}
+                        inputProps={{min:1,max:100000}}/>
+                </Grid>
+                <Grid item xs={12} md={6} lg={3}>
+                    <TextField
+                        style={{width: "100%"}}
+                        value={initialGW}
+                        variant="outlined"
+                        type="number"
+                        size="small"
+                        label="Initial gateways"
+                        name="initialGW"
                         onChange={handleInputChange}
                         inputProps={{min:1,max:100000}}/>
                 </Grid>

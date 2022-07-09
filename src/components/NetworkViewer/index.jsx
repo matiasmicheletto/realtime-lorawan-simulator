@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Checkbox, FormControlLabel, Grid, Box, Button } from '@mui/material';
 
 const styles = {
@@ -16,30 +16,30 @@ const styles = {
     }
 };
 
-
 const NetworkViewer = () => {
 
     const canvasRef = useRef(null);        
+    const frames = [];
     let currentFrame = 0;
 
     useEffect(() => {
         const canvas = canvasRef.current;        
         canvas.width = window.innerWidth/2;
         canvas.height = canvas.width;
+        Module.onNetworkUpdate = (nodes, edges, gw, ced, nced, iter, maxSF) => {
+            frames.push({nodes, edges, gw, ced, nced, iter, maxSF});
+        };
     }, []);
 
     const drawNetwork = () => {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
+        const scale = canvas.width;
+        const iter = frames[currentFrame];
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
-        const scale = canvasRef.current.width;
-        const iter = frames[currentFrame];
-
-        const nlen = iter.nodes.length;
-        const elen = iter.edges.length;
         let i = 0;
-        while(i < nlen) {
+        while(i < iter.nodes.length) {
             if(iter.nodes[i]){
                 const {x, y, color} = iter.nodes[i];
                 ctx.fillStyle = color;
@@ -48,7 +48,7 @@ const NetworkViewer = () => {
             i++;
         }
         i = 0;
-        while(i < elen) {
+        while(i < iter.edges.length) {
             if(iter.edges[i]){                
                 const fromNode = iter.nodes[iter.edges[i].from];
                 const toNode = iter.nodes[iter.edges[i].to];
@@ -60,16 +60,23 @@ const NetworkViewer = () => {
             }
             i++;
         }
+
+        ctx.fillStyle = "white";
+        ctx.fillRect(5, 5, 135, 80);
+        ctx.fillStyle = "black";
+        ctx.font = "12px Arial bold";
+        ctx.fillText(`Iteration: ${iter.iter}`, 10, 20);
+        ctx.fillText(`Gateways: ${iter.gw}`, 10, 35);
+        ctx.fillText(`Max. SF: ${iter.maxSF}`, 10, 50);
+        ctx.fillText(`Connected EDs: ${iter.ced}`, 10, 65);
+        ctx.fillText(`Not connected EDs: ${iter.nced}`, 10, 80);
         
         if(currentFrame < frames.length-1){
             currentFrame++;
             setTimeout(drawNetwork, 100);
+        }else{
+            currentFrame = 0;
         }   
-    };
-
-    const repeatAnimation = () => {        
-        currentFrame = 0;
-        drawNetwork();
     };
 
     return (
@@ -132,8 +139,8 @@ const NetworkViewer = () => {
                             style={{width: "100%"}}
                             color="secondary"
                             variant="contained"
-                            onClick={repeatAnimation}>
-                            Repeat animation
+                            onClick={drawNetwork}>
+                            Run animation
                         </Button>
                     </div>
                 </Grid>
