@@ -45,8 +45,8 @@ EM_JS(void, updateNetwork, (
 
     for(var i = 0; i < nodeslen; i++) {                    
         nodes[idArray[i]] = {
-            x: (xArray[i]/gmapSize+.5),
-            y: (yArray[i]/gmapSize+.5),
+            x: xArray[i],
+            y: yArray[i],
             group: groupArray[i],
             color: Module.nodeColors[groupArray[i]]
         };
@@ -125,9 +125,9 @@ void progressCallback(Network *network, unsigned int iter) {
     // Fill arrays
     unsigned int j = 0;
     for (unsigned int i = 0; i < edlen; i++) {
-        // For nodes
-        x[i] = eds->at(i)->getX();
-        y[i] = eds->at(i)->getY();
+        // For nodes (rescale positions to 0..1)
+        x[i] = eds->at(i)->getX()/network->getMapSize() + .5;
+        y[i] = eds->at(i)->getY()/network->getMapSize() + .5;
         id[i] = eds->at(i)->getId();
         group[i] = eds->at(i)->isConnected() ? 1 : 0; // 0 = NCED, 1 = ED, 2 = GW
         // For edges
@@ -140,8 +140,8 @@ void progressCallback(Network *network, unsigned int iter) {
     }
     for(unsigned int i = 0; i < gwlen; i++) {
         // For nodes
-        x[i + edlen] = gws->at(i)->getX();
-        y[i + edlen] = gws->at(i)->getY();
+        x[i + edlen] = gws->at(i)->getX()/network->getMapSize() + .5;
+        y[i + edlen] = gws->at(i)->getY()/network->getMapSize() + .5;
         id[i + edlen] = gws->at(i)->getId();
         group[i + edlen] = 2;
     }
