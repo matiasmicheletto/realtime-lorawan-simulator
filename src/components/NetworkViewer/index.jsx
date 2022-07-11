@@ -3,14 +3,17 @@ import { Checkbox, FormControlLabel, Grid, Box, Button } from '@mui/material';
 
 const styles = {
     container: {        
+        padding: "10px",
+        marginTop: "10px",
         border: "1px solid #bbb",
         boxShadow: "3px 3px 10px gray",
         borderRadius: "1%"
     },
     canvas : {        
-        width: "100%",
+        border: "1px solid #bbb",
+        width: "100%"
     },
-    form: {
+    form: {    
         padding: "10px",
         height: "100%"
     }
@@ -19,23 +22,19 @@ const styles = {
 const NetworkViewer = () => {
 
     const canvasRef = useRef(null);        
-    const frames = [];
     let currentFrame = 0;
 
     useEffect(() => {
         const canvas = canvasRef.current;        
         canvas.width = window.innerWidth/2;
         canvas.height = canvas.width;
-        Module.onNetworkUpdate = (nodes, edges, gw, ced, nced, iter, maxSF) => {
-            frames.push({nodes, edges, gw, ced, nced, iter, maxSF});
-        };
     }, []);
 
     const drawNetwork = () => {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
         const scale = canvas.width;
-        const iter = frames[currentFrame];
+        const iter = Module.frames[currentFrame];
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
         let i = 0;
@@ -71,7 +70,7 @@ const NetworkViewer = () => {
         ctx.fillText(`Connected EDs: ${iter.ced}`, 10, 65);
         ctx.fillText(`Not connected EDs: ${iter.nced}`, 10, 80);
         
-        if(currentFrame < frames.length-1){
+        if(currentFrame < Module.frames.length-1){
             currentFrame++;
             setTimeout(drawNetwork, 100);
         }else{
@@ -80,77 +79,80 @@ const NetworkViewer = () => {
     };
 
     return (
-        <div style={{marginTop: "20px"}}>
-            <Grid container spacing={2} alignItems="center">
-                <Grid item xs={12} md={3}>
-                    <div style={{...styles.container, ...styles.form}}>
-                        <h4 style={{padding:0, margin:0}}>Visualization filters</h4>
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={false}
-                                    onChange={()=>{}}/>
-                            }
-                            label="Connected ED"
-                        />                        
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={false}
-                                    onChange={()=>{}}/>
-                            }
-                            label="Disconnected ED"
-                        />                        
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={false}
-                                    onChange={()=>{}}/>
-                            }
-                            label="Gateways"
-                        />                        
-                        <div>
+        //Module.frames.length > 0 ?
+            <div style={styles.container}>
+                <h3>Progress animation</h3>
+                <Grid container spacing={2} alignItems="stretch">
+                    <Grid item xs={12} md={3}>
+                        <div style={styles.form}>
+                            <h4 style={{padding:0, margin:0}}>Visualization filters</h4>
                             <FormControlLabel
                                 control={
                                     <Checkbox
                                         checked={false}
-                                        indeterminate={false}
-                                        onChange={()=>{}} />
+                                        onChange={()=>{}}/>
                                 }
-                                label="Links"
-                            />
-                            <Box sx={{ display: 'flex', flexDirection: 'column', ml: 3 }}>
-                                {
-                                    Object.keys(Module.edgeColors).map( (sf, index) => (
-                                        <FormControlLabel
-                                            key={index}
-                                            label={"SF"+sf}
-                                            control={
-                                                <Checkbox 
-                                                    checked={false} 
-                                                    onChange={()=>{}} />
-                                            }
-                                        />
-                                    ))
-                                }    
-                            </Box>
+                                label="Connected ED"
+                            />                        
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={false}
+                                        onChange={()=>{}}/>
+                                }
+                                label="Disconnected ED"
+                            />                        
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={false}
+                                        onChange={()=>{}}/>
+                                }
+                                label="Gateways"
+                            />                        
+                            <div>
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={false}
+                                            indeterminate={false}
+                                            onChange={()=>{}} />
+                                    }
+                                    label="Links"
+                                />
+                                <Box sx={{ display: 'flex', flexDirection: 'column', ml: 3 }}>
+                                    {
+                                        Object.keys(Module.edgeColors).map( (sf, index) => (
+                                            <FormControlLabel
+                                                key={index}
+                                                label={"SF"+sf}
+                                                control={
+                                                    <Checkbox 
+                                                        checked={false} 
+                                                        onChange={()=>{}} />
+                                                }
+                                            />
+                                        ))
+                                    }    
+                                </Box>
+                            </div>
+                            <Button
+                                style={{width: "100%", marginTop: "10px"}}
+                                variant="contained"
+                                onClick={drawNetwork}>
+                                Run animation
+                            </Button>
                         </div>
-                        <Button
-                            style={{width: "100%"}}
-                            color="secondary"
-                            variant="contained"
-                            onClick={drawNetwork}>
-                            Run animation
-                        </Button>
-                    </div>
+                    </Grid>
+                    <Grid item xs={12} md={9}>
+                        <div>
+                            <canvas style={styles.canvas} ref={canvasRef}></canvas>
+                        </div>
+                    </Grid>
                 </Grid>
-                <Grid item xs={12} md={9}>
-                    <div style={styles.container}>
-                        <canvas style={styles.canvas} ref={canvasRef}></canvas>
-                    </div>
-                </Grid>
-            </Grid>
-        </div>
+            </div>
+            //:
+            //null
     );
 };
 

@@ -1,55 +1,58 @@
 import React, { useState } from 'react';
-import { Grid, LinearProgress } from '@mui/material';
+import { Table, TableHead, TableBody, TableRow, TableCell } from '@mui/material';
 
 const styles = {
-    form: {
-        lineHeight: "0.9em",
+    container: {
         border: "1px solid #bbb",
         padding: "10px",
         borderRadius: "5px",
         boxShadow: "3px 3px 10px gray",
         marginTop: "10px",
-        paddingTop: "30px",
+        paddingTop: "10px",
         paddingBottom: "30px"
     }
 };
 const OutputBlock = () => {
-   
-    const [ outputs, setOutputs ] = useState({
-        iters: 0,
-        elapsed: 0,
-        exitCode: "",
-        gws: 0,
-        coverage: 0,
-        channels: 0
-    });
-    Module.onResults = setOutputs;
+    const [ outputs, setOutputs ] = useState([]);
 
-    const { iters, elapsed, exitCode, gws, coverage, channels } = outputs;
+    Module.onResultsUpdate = (iters,elapsed,exitCode,gws,coverage,channels) => {
+        const temp = [...outputs];
+        temp.push({iters,elapsed,exitCode,gws,coverage,channels});
+        setOutputs(temp);
+    };
 
-    return (                
-        <div style={styles.form}>
-            <Grid container spacing={3}>
-                <Grid item xs={12} md={6} lg={3}>
-                    <b>Iterations:</b> <span>{iters}</span>
-                </Grid>
-                <Grid item xs={12} md={6} lg={3}>
-                    <b>Elapsed time:</b> <span>{elapsed} ms</span>
-                </Grid>
-                <Grid item xs={12} md={6} lg={3}>
-                    <b>Exit condition:</b> <span>{exitCode}</span>
-                </Grid>
-                <Grid item xs={12} md={6} lg={3}>
-                    <b>GW used:</b> <span>{gws}</span>
-                </Grid>
-                <Grid item xs={12} md={6} lg={3}>
-                    <b>Coverage:</b> <span>{coverage*100} %</span>
-                </Grid>
-                <Grid item xs={12} md={6} lg={3}>
-                    <b>Channels:</b> <span>{channels}</span>
-                </Grid>
-            </Grid>
-        </div>
+    return (
+        outputs.length > 0 ?
+            <div style={styles.container}>
+                <h3>Results</h3>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell><b>#</b></TableCell>
+                            <TableCell><b>Iterations</b></TableCell>
+                            <TableCell><b>Elapsed</b></TableCell>
+                            <TableCell><b>Exit Code</b></TableCell>
+                            <TableCell><b>GWs</b></TableCell>
+                            <TableCell><b>Coverage</b></TableCell>
+                            <TableCell><b>Channels</b></TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {outputs.map((output, index) => (
+                            <TableRow key={index}>
+                                <TableCell>{index+1}</TableCell>
+                                <TableCell>{output.iters}</TableCell>
+                                <TableCell>{output.elapsed} ms</TableCell>
+                                <TableCell>{output.exitCode}</TableCell>
+                                <TableCell>{output.gws}</TableCell>
+                                <TableCell>{output.coverage*100} %</TableCell>
+                                <TableCell>{output.channels}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </div>
+        : null
     )
 };
 

@@ -4,7 +4,6 @@ import * as Views from './views';
 import { ThemeProvider } from '@mui/material/styles'; 
 import { LoadingProvider } from './context';
 import Navigation from './components/Navigation/';
-import Home from './views/Home';
 import { CssBaseline } from '@mui/material';
 import theme from './themes';
 
@@ -16,7 +15,9 @@ const App = () => (
                 <BrowserRouter>
                     <Navigation/>
                     <Routes>
-                        <Route index element={<Views.Home/>}/>                        
+                        <Route index element={<Views.Home/>}/>
+                        <Route path='/help/' element={<Views.Help/>}/>
+                        <Route path='/about/' element={<Views.About/>}/>
                     </Routes> 
                 </BrowserRouter>
             </LoadingProvider>

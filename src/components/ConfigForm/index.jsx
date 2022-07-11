@@ -13,13 +13,13 @@ const styles = {
     button: {
         width:"100%"
     },
-    form: {
+    container: {
         border: "1px solid #bbb",
         padding: "10px",
         borderRadius: "5px",
         boxShadow: "3px 3px 10px gray",
-        marginTop: "10px",
-        paddingTop: "30px",
+        marginTop: "20px",
+        paddingTop: "10px",
         paddingBottom: "30px"        
     }
 };
@@ -57,8 +57,9 @@ const ConfigForm = () => {
         setInputs({...inputs, [name]: value});
     };
 
-    const runSimulation = () => {    
-        if(optimizerReady){              
+    const runSimulation = () => {
+        if(optimizerReady){      
+            Module.frames = [];        
             Module._runSimulation(
                 mapSize,
                 edNumber,
@@ -75,7 +76,8 @@ const ConfigForm = () => {
     }
 
     return (        
-        <div style={styles.form}>
+        <div style={styles.container}>
+            <h3>Instance configuration</h3>
             <Grid container spacing={2}>
                 <Grid item xs={12} md={6} lg={3}>
                     <TextField
@@ -225,7 +227,7 @@ const ConfigForm = () => {
                         color="primary"
                         variant="contained"
                         onClick={runSimulation}>
-                        Run simulation
+                        Run instance
                     </Button>
                 </Grid>
             </Grid>

@@ -4,7 +4,7 @@ var Module = {
         optimizerReady = true;
     },
     onNetworkUpdate: (nodes, edges, gw, ced, nced, iter, maxSF) => {
-        console.log(nodes, edges, gw, ced, nced, iter, maxSF);
+        Module.frames.push({nodes, edges, gw, ced, nced, iter, maxSF});
     },
     onResultsUpdate: (iters,elapsed,exitCode,gws,coverage,channels) => {
         console.log(iters,elapsed,exitCode,gws,coverage,channels);
@@ -21,5 +21,6 @@ var Module = {
         0: "rgb(250,0,0)",
         1: "rgb(0,0,250)",
         2: "rgb(0,250,0)"
-    }
+    },
+    frames: []
 };
