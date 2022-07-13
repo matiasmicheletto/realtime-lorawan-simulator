@@ -1,4 +1,0 @@
-Method,Pos. distr.,Period distr., Map size, ED, Dens, Max. SF, GW, Channels, Coverage, Avg. UF, Elapsed, Iters, Exit cond.
-Springs,Uniform,Soft,1000,50000,0.05,12,11,11,100.00,0.43,8316,168,Max. coverage
-Random,Uniform,Medium,1000,50000,0.05,12,25,9,100.00,0.30,123,0,Max. coverage
-Random,Uniform,Medium,1000,50000,0.05,11,21,13,100.00,0.36,4061,18,Max. coverage

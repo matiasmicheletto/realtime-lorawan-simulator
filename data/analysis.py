@@ -27,10 +27,10 @@ def plotdata(data, figname):
     plt.savefig(figname)
     plt.show()
 
-data_100x100 = readfile("summary_100x100.csv")
+#data_100x100 = readfile("summary_100x100.csv")
 #data_1000x1000 = readfile("summary_1000x1000.csv")
-#data_2000x2000 = readfile("summary_2000x2000.csv")
+data_2000x2000 = readfile("summary_2000x2000.csv")
 
-plotdata(data_100x100, "EDs_vs_GWs_100x100.png")
+#plotdata(data_100x100, "EDs_vs_GWs_100x100.png")
 #plotdata(data_1000x1000, "EDs_vs_GWs_1000x1000.png")
-#plotdata(data_2000x2000, "EDs_vs_GWs_2000x2000.png")
+plotdata(data_2000x2000, "EDs_vs_GWs_2000x2000.png")
