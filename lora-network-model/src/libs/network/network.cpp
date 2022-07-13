@@ -27,7 +27,7 @@ Network::Network(char* filename) {
     this->H = 1;
     this->posDist = EXT_POS;
     this->periodDist = EXT_PER;
-    this->lastID = 0;
+    this->lastID = 1; // 0 is reserved
     double minMapSize = 0.0;
     double maxMapSize = 0.0;
     char line[LINE_BUFFER_SIZE];
@@ -550,6 +550,12 @@ void Network::configureGWChannels() {
 }
 
 void Network::printScheduler(char *filename) {
+
+    if(this->getNCEDCount() > 0){
+        printf("Error: There are not connected End Devices. Coverage should equals 100%% to run scheduler.\n");
+        return;
+    }
+
     // initialize scheduler with dimenstion (unsigned int) this->H, 6, this->gateways.size()
     vector<vector<vector<unsigned int>>> scheduler(this->H, vector<vector<unsigned int>>(6, vector<unsigned int>(this->gateways.size())));
     // initialize scheduler with 0s
@@ -565,10 +571,13 @@ void Network::printScheduler(char *filename) {
     sort(this->enddevices.begin(), this->enddevices.end(), [](EndDevice *a, EndDevice *b){
         return a->getPeriod() < b->getPeriod();
     });
+
+    vector<unsigned int> unfeasibleEds;
     for(unsigned int ed = 0; ed < this->enddevices.size(); ed++){
         
         // Get SF index (j)
-        const unsigned char j = this->enddevices[ed]->getSF()-7;
+        const unsigned char j = this->enddevices[ed]->getSF()-7; // SF index (0..5)
+        const unsigned int edId = this->enddevices[ed]->getId(); // IDs begins at 1
         
         // Get gw index (k)
         const unsigned int gwId = this->enddevices[ed]->getGatewayId();
@@ -579,21 +588,21 @@ void Network::printScheduler(char *filename) {
                 break;
             }
         }
-        
-        // Get slot index (i)
-        unsigned int period = this->enddevices[ed]->getPeriod();
+
+        // Allocate slots (i)        
+        unsigned int period = this->enddevices[ed]->getPeriod(); // End device period
         for(unsigned int instance = 0; instance < this->H/period; instance++){
             unsigned int msgSlot = pow(2, j); // slots for the message to send
-            unsigned int i = instance*period;
-            for(unsigned int slot = i; slot < (instance+1)*period; slot++){
-                if(scheduler[i][j][k] == 0){ // If slot is free
-                    scheduler[i][j][k] = ed+1;
+            for(unsigned int i = instance*period; i < (instance+1)*period; i++){
+                if(scheduler[i][j][k] == 0){ // If slot is free, allocate here
+                    scheduler[i][j][k] = edId;
                     msgSlot--;
                     if(msgSlot == 0) break;
                 }
             }
-            if(msgSlot > 0){ // If there are still messages to be sent
-                printf("Error: not enough slots to schedule enddevice %d\n", this->enddevices[ed]->getId());
+            if(msgSlot > 0){ // If there are still messages to be sent when reaching end of period, --> unfeasible
+                printf("Error: not enough slots to schedule enddevice %d\n", edId);
+                unfeasibleEds.push_back(ed);
                 break;
             }
         }
@@ -601,8 +610,22 @@ void Network::printScheduler(char *filename) {
 
     // Print scheduler to file
     FILE *file = fopen(filename, "w");
+
+    // Print unfeasible EDs if any
+    if(unfeasibleEds.size() > 0){
+        fprintf(file, "Unfeasible EDs\n");
+        fprintf(file, "ID, period, SF, GW ID\n");
+        for(unsigned int ed = 0; ed < unfeasibleEds.size(); ed++){
+            const unsigned int edIdx = unfeasibleEds.at(ed);
+            EndDevice* uED = this->enddevices.at(edIdx);
+            fprintf(file, "%d,%d,%d,%d\n", uED->getId(), uED->getPeriod(), uED->getSF(), uED->getGateway()->getId());
+        }
+    }
+
+    // Print scheduling table for each GW
+    fprintf(file, "\nScheduling table\n");
     for(unsigned int k = 0; k < this->gateways.size(); k++){
-        fprintf(file, "Scheduler for GW %d\n,", this->gateways[k]->getId());
+        fprintf(file, "Scheduling table for GW %d\n,", this->gateways[k]->getId());
         for(unsigned int i = 0; i < this->H; i++)
             fprintf(file, "%d,", i);
         fprintf(file, "\n");
