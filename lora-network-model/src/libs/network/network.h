@@ -46,7 +46,7 @@ class Network {
                 POS_DIST posDist = UNIFORM; // Distribution of positions
                 PERIOD_DIST periodDist = SOFT; // Distribution of periods
                 vector<EndDevice*> enddevices; // List of enddevices
-                int H; // System hyperperiod
+                unsigned int H; // System hyperperiod
                 unsigned int lastID; // IDs to identify network nodes
             private:
                 unsigned int networkSize = 1000; // Number of end devices       
@@ -63,9 +63,14 @@ class Network {
         bool removeGateway(unsigned int id);
         void removeIdleGateways(); // Remove gateways without end devices
         void removeAllGateways(); // Remove all gateways except 1 and autoconnect
-        void configureGWChannels(); // Assign channels to gateways minimizing the number of channels
+        
+        // Optimization steps
         void stepSprings(); // Improve coverage by moving GW using attraction forces
         void stepRandom(); // Try to improve coverage by randomizing GW positions
+
+        // Network analysis
+        void configureGWChannels(); // Assign channels to gateways minimizing the number of channels
+        void printScheduler(char *filename); // Compute the scheduler to validate time requirements
         
         // Network information
         void exportNodesCSV(char *filename);
@@ -96,7 +101,7 @@ class Network {
     private: 
         vector<EndDevice*> enddevices; // List of enddevices
         unsigned int mapSize; // Size of the map (required to create new gateways)
-        int H; // Hyperperiod (is calculated from periods)        
+        unsigned int H; // Hyperperiod (is calculated from periods)        
         unsigned int lastID; // IDs to identify network nodes        
         unsigned char maxSF; // Maximum spreading factor (used to create new gateways)
 

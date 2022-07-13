@@ -59,7 +59,7 @@ Network::Network(char* filename) {
                     break;
             }
         }
-        this->H = lcm(this->H, period);
+        this->H = (unsigned int) lcm(this->H, period);
         if(col == FILE_COLS){
             this->H = lcm(this->H, period);
             // Add end device to the network
@@ -547,4 +547,73 @@ void Network::configureGWChannels() {
         if(minAvailableChannel+1 > this->minChannels)
             this->minChannels = minAvailableChannel+1;
     }    
+}
+
+void Network::printScheduler(char *filename) {
+    // initialize scheduler with dimenstion (unsigned int) this->H, 6, this->gateways.size()
+    vector<vector<vector<unsigned int>>> scheduler(this->H, vector<vector<unsigned int>>(6, vector<unsigned int>(this->gateways.size())));
+    // initialize scheduler with 0s
+    for(unsigned int i = 0; i < (unsigned int) this->H; i++){
+        for(unsigned int j = 0; j < 6; j++){
+            for(unsigned int k = 0; k < this->gateways.size(); k++){
+                scheduler[i][j][k] = 0;
+            }
+        }
+    }
+
+    // Sort endevice vector by period
+    sort(this->enddevices.begin(), this->enddevices.end(), [](EndDevice *a, EndDevice *b){
+        return a->getPeriod() < b->getPeriod();
+    });
+    for(unsigned int ed = 0; ed < this->enddevices.size(); ed++){
+        
+        // Get SF index (j)
+        const unsigned char j = this->enddevices[ed]->getSF()-7;
+        
+        // Get gw index (k)
+        const unsigned int gwId = this->enddevices[ed]->getGatewayId();
+        unsigned int k = 0;
+        for(unsigned int gw = 0; gw < this->gateways.size(); gw++) {
+            if(this->gateways[gw]->getId() == gwId) {
+                k = gw;
+                break;
+            }
+        }
+        
+        // Get slot index (i)
+        unsigned int period = this->enddevices[ed]->getPeriod();
+        for(unsigned int instance = 0; instance < this->H/period; instance++){
+            unsigned int msgSlot = pow(2, j); // slots for the message to send
+            unsigned int i = instance*period;
+            for(unsigned int slot = i; slot < (instance+1)*period; slot++){
+                if(scheduler[i][j][k] == 0){ // If slot is free
+                    scheduler[i][j][k] = ed+1;
+                    msgSlot--;
+                    if(msgSlot == 0) break;
+                }
+            }
+            if(msgSlot > 0){ // If there are still messages to be sent
+                printf("Error: not enough slots to schedule enddevice %d\n", this->enddevices[ed]->getId());
+                break;
+            }
+        }
+    }
+
+    // Print scheduler to file
+    FILE *file = fopen(filename, "w");
+    for(unsigned int k = 0; k < this->gateways.size(); k++){
+        fprintf(file, "Scheduler for GW %d\n,", this->gateways[k]->getId());
+        for(unsigned int i = 0; i < this->H; i++)
+            fprintf(file, "%d,", i);
+        fprintf(file, "\n");
+        for(unsigned int j = 0; j < 6; j++){
+            fprintf(file, "SF%d:,", j+7);
+            for(unsigned int i = 0; i < this->H; i++){    
+                fprintf(file, "%d,", scheduler[i][j][k]);
+            }
+            fprintf(file, "\n");
+        }
+        fprintf(file, "\n");
+    }
+    fclose(file);
 }

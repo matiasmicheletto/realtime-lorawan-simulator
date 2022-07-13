@@ -130,6 +130,7 @@ int main(int argc, char **argv) {
 
     char outputfilename[100];
     char csvfilename[100];
+    char schedfilename[100];
     string filename = to_string(networkBuilder.mapSize) + "_" + 
                       to_string(networkBuilder.enddevices.size()) + "_" +
                       to_string(networkBuilder.posDist) + "_" + 
@@ -141,8 +142,10 @@ int main(int argc, char **argv) {
                       to_string(optimizerBuilder.stepMethod);
     strcpy(outputfilename, ("output_"+filename+".txt").c_str());
     strcpy(csvfilename, ("nodes_"+filename+".csv").c_str());
+    strcpy(schedfilename, ("sched_"+filename+".csv").c_str());
 
     network->exportNodesCSV(csvfilename);
+    network->printScheduler(schedfilename);
     optimizer->exportFullResults(outputfilename);
     optimizer->appendToLog("summary.csv");
     
