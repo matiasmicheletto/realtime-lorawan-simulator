@@ -7,6 +7,7 @@ class EndDevice; // Forward declaration
 #include <math.h>
 #include "node.h"
 #include "enddevice.h"
+#include "stdio.h"
 
 using namespace std;
 
@@ -44,7 +45,7 @@ class Gateway : public Node {
         double getUF(); // GW current utilization factor
         vector<double> getUFbySF(); // GW current utilization factor by spreading factor
         unsigned int connectedEDsCount(); // Number of connected end devices
-        static double getRange(unsigned char sf); // Operating range depends on the spreading factor
+        static double getRange(const unsigned char sf); // Operating range depends on the spreading factor
         double getRange(); // Range of this GW        
         static unsigned char getMinSF(double distance); // Returns minimum SF for connecting to an end device at given distance
         static unsigned char getMaxSF(unsigned int period); // Returns maximum SF for connecting to an end device with given period
@@ -53,17 +54,16 @@ class Gateway : public Node {
         static inline T mclamp(T value, T min, T max) {return value < min ? min : (value > max ? max : value);}
 
     private: 
-        void resetSlots(); // Restores available slots to initial values
-        bool useSlots(unsigned char sf, unsigned int period); // Try to use slots for given sf
-        void freeSlots(unsigned char sf, unsigned int period); // Restores slots for given sf
+        void resetUF(); // Restores available slots to initial values
+        bool allocate(unsigned char sf, unsigned int period); // Try to use slots for given sf
+        void deallocate(unsigned char sf, unsigned int period); // Restores slots for given sf
 
         double velX = 0.0, velY = 0.0; // GW velocity
 
         vector<EndDevice*> connectedEDs;
-        unsigned int H;
-        unsigned int maxSlots;
-        unsigned char channel;
-        unsigned int availableSlots[6];
+        unsigned int H;        
+        unsigned char channel;        
+        double UF[6]; // Spreading factor utilization factor
         unsigned char maxSF;
 };
 

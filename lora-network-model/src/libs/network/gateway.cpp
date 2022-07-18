@@ -7,10 +7,10 @@ Gateway::Gateway(
         unsigned int hyperperiod,
         unsigned char channel,
         unsigned char maxSF) : Node(x, y, id) {
+    this->maxSF = maxSF < 7 ? 7 : (maxSF > 12 ? 12 : maxSF);
     this->H = hyperperiod;
     this->channel = channel;
-    this->maxSF = maxSF;
-    this->resetSlots();
+    this->resetUF();
 }
 
 Gateway::~Gateway() {
@@ -22,31 +22,32 @@ void Gateway::updatePos(double vlim) {
     this->setVel(0.0, 0.0);
 }
 
-void Gateway::resetSlots() {
-    this->maxSlots = 0;
-    for(int i = 0; i < 6; i++){
-        this->availableSlots[i] = this->H/(int)pow(2,i);
-        this->maxSlots += this->availableSlots[i];
-    }
+void Gateway::resetUF() {    
+    for(int i = 0; i < 6; i++)
+        this->UF[i] = 0.0;
 }
 
-bool Gateway::useSlots(unsigned char sf, unsigned int period){
+bool Gateway::allocate(unsigned char sf, unsigned int period){
     if(sf >= 7 && sf <= 12){
-        if(this->availableSlots[sf-7] >= this->H/period){
-            this->availableSlots[sf-7] -= this->H/period;
+        const unsigned char mxsf = this->getMaxSF(period);
+        const double utilization = pow(2, sf-7) / ((double) period - pow(2,mxsf-7));
+        if(this->UF[sf-7] + utilization <= 1.0){
+            this->UF[sf-7] += utilization;
             return true;
         }
     }
     return false;
 }
 
-void Gateway::freeSlots(unsigned char sf, unsigned int period){
-    if(sf >= 7 && sf <= 12)
-        this->availableSlots[sf-7] += this->H/period;
+void Gateway::deallocate(unsigned char sf, unsigned int period){
+    if(sf >= 7 && sf <= 12){
+        const unsigned char mxsf = this->getMaxSF(period);
+        this->UF[sf-7] += pow(2, sf-7) / ((double) period - pow(2,mxsf-7));
+    }
 }
 
 // static
-double Gateway::getRange(unsigned char sf) {
+double Gateway::getRange(const unsigned char sf) {
     switch(sf){
         case 12:
             return 2000.0;
@@ -109,7 +110,7 @@ bool Gateway::addEndDevice(EndDevice *ed) {
         unsigned char sf = getMinSF(this->distanceTo(ed));
         unsigned char maxSFPeriod = getMaxSF(ed->getPeriod());
         while(sf <= maxSFPeriod && sf <= this->maxSF){ // Try to connect with minimum SF
-            if(this->useSlots(sf, ed->getPeriod())){
+            if(this->allocate(sf, ed->getPeriod())){
                 ed->connect(this, sf);
                 this->connectedEDs.push_back(ed);
                 return true;
@@ -124,7 +125,7 @@ bool Gateway::addEndDevice(EndDevice *ed) {
 bool Gateway::removeEndDevice(EndDevice *ed) {
     for (long unsigned int i = 0; i < this->connectedEDs.size(); i++) {
         if (this->connectedEDs[i] == ed) {
-            this->freeSlots(ed->getSF(), ed->getPeriod());
+            this->deallocate(ed->getSF(), ed->getPeriod());
             this->connectedEDs.erase(this->connectedEDs.begin() + i);
             ed->disconnect();
             return true;
@@ -137,22 +138,20 @@ void Gateway::disconnect() {
     for (long unsigned int i = 0; i < this->connectedEDs.size(); i++)
         this->connectedEDs[i]->disconnect();
     this->connectedEDs.clear();
-    this->resetSlots();
+    this->resetUF();
 }
 
-double Gateway::getUF() { // total available slots / total slots
-    unsigned int sum = 0;
+double Gateway::getUF() { 
+    double sum = 0.0;
     for(int i = 0; i < 6; i++)
-        sum += this->availableSlots[i];
-    return 1.0 - (double)sum/(double)this->maxSlots;
+        sum += this->UF[i];
+    return sum/6.0;
 }
 
 vector<double> Gateway::getUFbySF() {
     vector<double> uf(6);
-    for(int i = 0; i < 6; i++){
-        const int max = this->H/(int)pow(2,i);
-        uf[i] = 1 - this->availableSlots[i]/(double) max;
-    }
+    for(int i = 0; i < 6; i++)
+        uf[i] = this->UF[i];
     return uf;
 }
 

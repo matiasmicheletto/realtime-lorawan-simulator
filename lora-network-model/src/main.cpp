@@ -7,7 +7,7 @@
 using namespace std;
 
 void printHelp() {    
-    printf("Usage: ./runnable [-f | --file] [-m | --mapsize] [-e | --enddevices] [-x | --positions] [-p | --periods] [-s | --sfmax] [-i | --iterations] [-t | --timeout] [-a | --algorithm]\n");
+    printf("Usage: ./runnable [-f | --file] [-m | --mapsize] [-e | --enddevices] [-x | --positions] [-p | --periods] [-s | --sfmax] [-i | --iterations] [-t | --timeout] [-a | --algorithm] [-v | --verbose]\n");
     
     printf("Arguments:\n");
     printf("  -f, --file            network configuration file.\n");
@@ -21,6 +21,7 @@ void printHelp() {
     printf("  -a, --algorithm       gateway configuration algorithm: 0->springs, 1->random.\n");
     printf("  -i, --iterations      number of iterations.\n");
     printf("  -t, --timeout         timeout for the optimization.\n");
+    printf("  -v, --verbose         verbose mode: prints complete outputs.\n");
     
     printf("Default values:\n");
     printf("  -m, --mapsize         1000\n");
@@ -32,10 +33,11 @@ void printHelp() {
     printf("  -a, --algorithm       0\n");
     printf("  -i, --iterations      500\n");
     printf("  -t, --timeout         60\n");
+    printf("  -v, --verbose         true\n");
 
     printf("Examples: \n");
     printf("\t./runnable -f network_nodes.csv -s 11 -i 100 -t 60  -a 0\n");
-    printf("\t./runnable -m 1000 -e 6500 -x 0 -p 0 -s 11 -i 100 -t 60  -a 0\n");
+    printf("\t./runnable -m 1000 -e 6500 -x 0 -p 0 -s 11 -i 100 -t 60  -a 0 -v\n");
     printf("\t./runnable -m 1000 -e 800  -x 1 -p 0 -s 10 -i 250 -t 120 -a 1\n");
     exit(1);
 }
@@ -45,6 +47,7 @@ int main(int argc, char **argv) {
     Network::Builder networkBuilder = Network::Builder();
     Optimizer::Builder optimizerBuilder = Optimizer::Builder();
     bool buildNetwork = true; // If nodes file is not provided, then build the network
+    bool verbose = false; // If verbose mode is enabled, then print complete outputs
 
     Network *network;
     Optimizer* optimizer;
@@ -114,6 +117,9 @@ int main(int argc, char **argv) {
             else
                 printHelp();
         }
+        if(strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--verbose") == 0){
+            verbose = true;
+        }
     }
 
     if(buildNetwork)
@@ -128,25 +134,27 @@ int main(int argc, char **argv) {
     // Print and export results
     optimizer->printResults();
 
-    char outputfilename[100];
-    char csvfilename[100];
-    char schedfilename[100];
-    string filename = to_string(networkBuilder.mapSize) + "_" + 
-                      to_string(networkBuilder.enddevices.size()) + "_" +
-                      to_string(networkBuilder.posDist) + "_" + 
-                      to_string(networkBuilder.periodDist) + "_" + 
-                      to_string(networkBuilder.maxSF) + "_" + 
-                      to_string(optimizerBuilder.initialGW) + "_" + 
-                      to_string(optimizerBuilder.maxIter) + "_" + 
-                      to_string(optimizerBuilder.timeout) + "_" + 
-                      to_string(optimizerBuilder.stepMethod);
-    strcpy(outputfilename, ("output_"+filename+".txt").c_str());
-    strcpy(csvfilename, ("nodes_"+filename+".csv").c_str());
-    strcpy(schedfilename, ("sched_"+filename+".csv").c_str());
-
-    network->exportNodesCSV(csvfilename);
-    network->printScheduler(schedfilename);
-    optimizer->exportFullResults(outputfilename);
+    if(verbose) {
+        char outputfilename[100];
+        char csvfilename[100];
+        char schedfilename[100];
+        string filename = to_string(networkBuilder.mapSize) + "_" + 
+                        to_string(networkBuilder.enddevices.size()) + "_" +
+                        to_string(networkBuilder.posDist) + "_" + 
+                        to_string(networkBuilder.periodDist) + "_" + 
+                        to_string(networkBuilder.maxSF) + "_" + 
+                        to_string(optimizerBuilder.initialGW) + "_" + 
+                        to_string(optimizerBuilder.maxIter) + "_" + 
+                        to_string(optimizerBuilder.timeout) + "_" + 
+                        to_string(optimizerBuilder.stepMethod);
+        strcpy(outputfilename, ("output_"+filename+".txt").c_str());
+        strcpy(csvfilename, ("nodes_"+filename+".csv").c_str());
+        strcpy(schedfilename, ("sched_"+filename+".csv").c_str());
+        network->exportNodesCSV(csvfilename);
+        network->printScheduler(schedfilename);
+        optimizer->exportFullResults(outputfilename);
+    }
+    
     optimizer->appendToLog("summary.csv");
     
     delete optimizer;

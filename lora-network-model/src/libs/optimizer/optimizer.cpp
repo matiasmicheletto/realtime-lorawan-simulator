@@ -184,6 +184,10 @@ void Optimizer::run( void (*progressCallback)(Network *network, unsigned int ite
         }
     }
 
+    // Check if system is time-feasible
+    this->network->computeScheduler();
+    printf("\n");
+
     if(progressCallback != nullptr)
         progressCallback(this->network, this->currentIter);
 }

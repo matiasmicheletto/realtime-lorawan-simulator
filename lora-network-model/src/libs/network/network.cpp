@@ -73,7 +73,7 @@ Network::Network(char* filename) {
     #ifdef DEBUG_MODE
         printf("-----------------------------------\n");
         printf("Configuration file loaded\n");
-        printf("End devices: %d\n", this->lastID);
+        printf("End devices: %ld\n", this->enddevices.size());
         printf("System hyperperiod: %d\n", this->H);
         printf("Map size: %d\n", this->mapSize);
         printf("-----------------------------------\n");
@@ -144,9 +144,10 @@ Network Network::Builder::build(){
 
             break;
         case MEDIUM:
-		    distBuilder.addValue(3600, 0.97)
-                ->addValue(1800, 0.01)
-                ->addValue(900, 0.02);
+		    distBuilder.addValue(8000, 0.25)
+                ->addValue(4000, 0.25)
+                ->addValue(2000, 0.25)
+                ->addValue(1600, 0.25);
             break;
         case HARD:
             distBuilder.addValue(1600, 0.25)
@@ -163,6 +164,8 @@ Network Network::Builder::build(){
 
     // Period values and probabilities for the end devices
     this->H = 1; // Initially 1 and will be updated when the periods are generated
+    // Set initial ID
+    this->lastID = 1; // 0 is reserved
     for (unsigned int i = 0; i < this->networkSize; i++) {
         // End device position
         double x, y; 
@@ -170,7 +173,7 @@ Network Network::Builder::build(){
         // End device period
         int period = periodGenerator->randomInt(); 
         // Update hyperperiod
-        this->H = lcm(this->H, period);
+        this->H = lcm(this->H, period);    
         // Add end device to the network
         EndDevice *ed = new EndDevice(x, y, this->lastID, period);
         this->enddevices.push_back(ed);
@@ -379,12 +382,14 @@ void Network::printNetworkStatus(FILE *file) {
     fprintf(file, "Network status:\n");
     fprintf(file, "  Map size: %d\n", this->mapSize);
     fprintf(file, "  End devices: %ld\n", this->enddevices.size());
-    fprintf(file, "  End devices density: %.2f\n", (double) this->enddevices.size() / (double) this->mapSize / (double) this->mapSize);
+    fprintf(file, "  End devices density: %.4f\n", (double) this->enddevices.size() / (double) this->mapSize / (double) this->mapSize);
     fprintf(file, "  Pos. distr.: %s\n", this->getPosDistName(this->posDist).c_str());
     fprintf(file, "  Period dist.: %s\n", this->getPeriodDistName(this->periodDist).c_str());
     fprintf(file, "  Gateways: %ld\n", this->gateways.size());
-    fprintf(file, "  Average UF: %.2f\n", this->getAvgUF());
-    fprintf(file, "  ED coverage: %.2f %%\n", this->getEDCoverage()*100);
+    fprintf(file, "  Average UF: %.4f\n", this->getAvgUF());
+    fprintf(file, "  Max. SF: %d\n", this->maxSF);
+    fprintf(file, "  Not feasible EDs: %ld\n", this->timeUnfeasibleEDs.size());
+    fprintf(file, "  ED coverage: %.4f %%\n", this->getEDCoverage()*100);
     fprintf(file, "  Used channels: %d\n", this->minChannels);
     // Print gateways positions
     fprintf(file, "Gateways positions and connections details:\n");
@@ -518,21 +523,29 @@ void Network::configureGWChannels() {
         usedChannels.clear();
         for(long unsigned int j = 0; j < this->gateways.size(); j++){
             if(i == j) continue; // Skip current gateway
-            double separation = this->gateways[i]->distanceTo(this->gateways[j]);
-            unsigned char sf = Gateway::getMinSF(separation/2); // Interference sf
+            const double rangei = this->gateways[i]->getRange();
+            const double rangej = this->gateways[j]->getRange();
+            const double distance = this->gateways[i]->distanceTo(this->gateways[j]);                        
+            if(distance < rangei+rangej){ // i and j are neighbors
+                usedChannels.push_back(this->gateways[j]->getChannel()); // Add channel of j to the list
+            }
+            
+            /*
+            bool neighboors = false; // if i and j are neighbors, must have different channels
+            double distance = this->gateways[i]->distanceTo(this->gateways[j]);
+            unsigned char sf = Gateway::getMinSF(distance/2); // Interference sf
             // Get utilization factor of both gateways
             vector<double>ufi = this->gateways[i]->getUFbySF();
             vector<double>ufj = this->gateways[j]->getUFbySF();
             // Check if are neighbors (sf < 13 && ufi + ufj < 1)
-            bool neighboors = false; // if i and j are neighbors, must have different channels
             for(int k = sf; k < 12; k++){
                 if(ufi[k-7] + ufj[k-7] >= 1){
                     neighboors = true;
                     break;
                 }
-            }
             if(neighboors) // If i and j are neighbors
                 usedChannels.push_back(this->gateways[j]->getChannel()); // Add channel of j to the list
+            }*/
         }
         // Traverse the list of used channels and find the minimum available
         int minAvailableChannel = 0;
@@ -549,35 +562,35 @@ void Network::configureGWChannels() {
     }    
 }
 
-void Network::printScheduler(char *filename) {
-
+void Network::computeScheduler() {
+    // initialize scheduler with dimenstion (unsigned int) this->H, 6, this->gateways.size()
+    //vector<vector<vector<unsigned int>>> scheduler(this->H, vector<vector<unsigned int>>(6, vector<unsigned int>(this->gateways.size())));
+    this->scheduler.resize(this->H);
+    for(unsigned int i = 0; i < (unsigned int) this->H; i++){
+        this->scheduler[i].resize(6);
+        for(unsigned int j = 0; j < 6; j++){
+            this->scheduler[i][j].resize(this->gateways.size());
+            for(unsigned int k = 0; k < this->gateways.size(); k++){
+                this->scheduler[i][j][k] = 0; // initialize scheduler with all slots empty
+            }
+        }
+    }
+    
     if(this->getNCEDCount() > 0){
         printf("Error: There are not connected End Devices. Coverage should equals 100%% to run scheduler.\n");
         return;
     }
 
-    // initialize scheduler with dimenstion (unsigned int) this->H, 6, this->gateways.size()
-    vector<vector<vector<unsigned int>>> scheduler(this->H, vector<vector<unsigned int>>(6, vector<unsigned int>(this->gateways.size())));
-    // initialize scheduler with 0s
-    for(unsigned int i = 0; i < (unsigned int) this->H; i++){
-        for(unsigned int j = 0; j < 6; j++){
-            for(unsigned int k = 0; k < this->gateways.size(); k++){
-                scheduler[i][j][k] = 0;
-            }
-        }
-    }
-
-    // Sort endevice vector by period
+    // Sort endevice vector by ascending period
     sort(this->enddevices.begin(), this->enddevices.end(), [](EndDevice *a, EndDevice *b){
         return a->getPeriod() < b->getPeriod();
     });
 
-    vector<unsigned int> unfeasibleEds;
     for(unsigned int ed = 0; ed < this->enddevices.size(); ed++){
         
         // Get SF index (j)
-        const unsigned char j = this->enddevices[ed]->getSF()-7; // SF index (0..5)
-        const unsigned int edId = this->enddevices[ed]->getId(); // IDs begins at 1
+        const unsigned int j = (unsigned int) this->enddevices[ed]->getSF()-7; // SF index (0..5)
+        const unsigned int edId = this->enddevices[ed]->getId(); // IDs (begins at 1)
         
         // Get gw index (k)
         const unsigned int gwId = this->enddevices[ed]->getGatewayId();
@@ -590,53 +603,98 @@ void Network::printScheduler(char *filename) {
         }
 
         // Allocate slots (i)        
-        unsigned int period = this->enddevices[ed]->getPeriod(); // End device period
+        unsigned int period = this->enddevices[ed]->getPeriod(); // End device period        
         for(unsigned int instance = 0; instance < this->H/period; instance++){
             unsigned int msgSlot = pow(2, j); // slots for the message to send
             for(unsigned int i = instance*period; i < (instance+1)*period; i++){
-                if(scheduler[i][j][k] == 0){ // If slot is free, allocate here
-                    scheduler[i][j][k] = edId;
+                if(this->scheduler[i][j][k] == 0){ // If slot is free, allocate here                    
+                    this->scheduler[i][j][k] = edId;
                     msgSlot--;
                     if(msgSlot == 0) break;
                 }
-            }
+            }            
             if(msgSlot > 0){ // If there are still messages to be sent when reaching end of period, --> unfeasible
-                printf("Error: not enough slots to schedule enddevice %d\n", edId);
-                unfeasibleEds.push_back(ed);
-                break;
+                printf("Error: not enough slots to schedule instance %d of enddevice %d, with period %d\n", instance, edId, period);
+                
+                /*
+                // Backtrack printing used slots of current GW and SF
+                int counter3200 = 0;
+                int counter4000 = 0;
+                int counter8000 = 0;
+                for(unsigned int i = instance*period; i < (instance+1)*period; i++){
+                    const unsigned int sedID = this->scheduler[i][j][k];       
+                    unsigned int edIdx = 0;
+                    for(unsigned int ii = 0; ii < this->enddevices.size(); ii++){
+                        if(this->enddevices[ii]->getId() == sedID) {
+                            edIdx = ii;
+                            break;
+                        }
+                    }             
+                    const unsigned int P = this->enddevices[edIdx]->getPeriod(); 
+                    const unsigned int G = this->enddevices[edIdx]->getGatewayId();
+                    const unsigned int S = this->enddevices[edIdx]->getSF();
+                    switch (P)
+                    {
+                    case 3200:
+                        counter3200++;
+                        break;
+                    case 4000:
+                        counter4000++;
+                        break;
+                    case 8000:
+                        counter8000++;
+                        break;
+                    default:
+                        break;
+                    }
+                    printf("\tSlot %d, ED: %d, period: %d, gw: %d, sf: %d\n", i, sedID, P, G, S);
+                }
+                printf("\tCounter 3200: %d\n", counter3200);
+                printf("\tCounter 4000: %d\n", counter4000);
+                printf("\tCounter 8000: %d\n", counter8000);
+                return;
+                */
+        
+
+                this->timeUnfeasibleEDs.push_back(ed);
+                //break;
             }
         }
     }
+}
 
-    // Print scheduler to file
-    FILE *file = fopen(filename, "w");
+void Network::printScheduler(char *filename) {
+    // Print scheduler to file if filename is not null
+    if(filename != NULL){
+        FILE *file = fopen(filename, "w");
 
-    // Print unfeasible EDs if any
-    if(unfeasibleEds.size() > 0){
-        fprintf(file, "Unfeasible EDs\n");
-        fprintf(file, "ID, period, SF, GW ID\n");
-        for(unsigned int ed = 0; ed < unfeasibleEds.size(); ed++){
-            const unsigned int edIdx = unfeasibleEds.at(ed);
-            EndDevice* uED = this->enddevices.at(edIdx);
-            fprintf(file, "%d,%d,%d,%d\n", uED->getId(), uED->getPeriod(), uED->getSF(), uED->getGateway()->getId());
+        // Print unfeasible EDs if any
+        if(this->timeUnfeasibleEDs.size() > 0){
+            fprintf(file, "Unfeasible EDs\n");
+            fprintf(file, "ID, period, SF, GW ID\n");
+            for(unsigned int ed = 0; ed < this->timeUnfeasibleEDs.size(); ed++){
+                const unsigned int edIdx = this->timeUnfeasibleEDs.at(ed);
+                EndDevice* uED = this->enddevices.at(edIdx);
+                fprintf(file, "%d,%d,%d,%d\n", uED->getId(), uED->getPeriod(), uED->getSF(), uED->getGateway()->getId());
+            }
         }
-    }
 
-    // Print scheduling table for each GW
-    fprintf(file, "\nScheduling table\n");
-    for(unsigned int k = 0; k < this->gateways.size(); k++){
-        fprintf(file, "Scheduling table for GW %d\n,", this->gateways[k]->getId());
-        for(unsigned int i = 0; i < this->H; i++)
-            fprintf(file, "%d,", i);
-        fprintf(file, "\n");
-        for(unsigned int j = 0; j < 6; j++){
-            fprintf(file, "SF%d:,", j+7);
-            for(unsigned int i = 0; i < this->H; i++){    
-                fprintf(file, "%d,", scheduler[i][j][k]);
+        // Print scheduling table for each GW
+        fprintf(file, "\nScheduling table\n");
+        for(unsigned int k = 0; k < this->gateways.size(); k++){
+            fprintf(file, "Scheduling table for GW %d\n,", this->gateways[k]->getId());
+            for(unsigned int i = 0; i < this->H; i++)
+                fprintf(file, "%d,", i);
+            fprintf(file, "\n");
+            for(unsigned int j = 0; j < 6; j++){
+                fprintf(file, "SF%d:,", j+7);
+                for(unsigned int i = 0; i < this->H; i++){    
+                    fprintf(file, "%d,", this->scheduler[i][j][k]);
+                }
+                fprintf(file, "\n");
             }
             fprintf(file, "\n");
         }
-        fprintf(file, "\n");
+        fclose(file);
     }
-    fclose(file);
 }

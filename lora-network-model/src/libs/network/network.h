@@ -70,11 +70,12 @@ class Network {
 
         // Network analysis
         void configureGWChannels(); // Assign channels to gateways minimizing the number of channels
-        void printScheduler(char *filename); // Compute the scheduler to validate time requirements
+        void computeScheduler(); // Compute the time scheduler for each gateway
         
         // Network information
         void exportNodesCSV(char *filename);
         void printNetworkStatus(FILE *file);
+        void printScheduler(char *filename); // Compute the scheduler to validate time requirements
         
         // Getters
         static string getPosDistName(POS_DIST posDist);
@@ -99,7 +100,6 @@ class Network {
         static inline int lcm(int a, int b){return a * b / gcd(a, b);}
         
     private: 
-        vector<EndDevice*> enddevices; // List of enddevices
         unsigned int mapSize; // Size of the map (required to create new gateways)
         unsigned int H; // Hyperperiod (is calculated from periods)        
         unsigned int lastID; // IDs to identify network nodes        
@@ -107,6 +107,10 @@ class Network {
 
         POS_DIST posDist; // Distribution used for ED positions
         PERIOD_DIST periodDist; // Distribution used for ED periods
+
+        vector<EndDevice*> enddevices; // List of enddevices
+        vector<vector<vector<unsigned int>>> scheduler; // Scheduler for each gateway, sf and time slot
+        vector<unsigned int> timeUnfeasibleEDs; // List of enddevices that cannot be scheduled (due to time constraints)
 
         // GW management
         vector<Gateway*> gateways; // List of gateways (generated on run())
