@@ -651,32 +651,28 @@ void Network::compSchedulerEDF() {
                 const unsigned int Hsf = this->H/pow(2, j); // Number of slots of current SF
                 unsigned int k = 0;
                 while(k < Hsf){ // For each slot of current GW and SF
-                    printf("Scheduling slot %d of SF %d of GW %d\n", k, j, i);
                     // Get list of ready EDs for current slot
                     for(unsigned int ed = 0; ed < schED.size(); ed++){
                         const unsigned int period = schED[ed]->getPeriod()/pow(2, j);
                         if(k % period == 0)
                             readyEDs.push_back(schED[ed]);
                     }
-                    printf("Ready EDs: %ld\n", readyEDs.size());
                     if(readyEDs.size() > 0){ // If there are ready EDs, schedule them
                         // Find ED with earliest deadline
                         unsigned int minDeadline = Hsf+1;
                         EndDevice* minED = NULL;
                         for(unsigned int ed = 0; ed < readyEDs.size(); ed++){
                             const unsigned int period = readyEDs[ed]->getPeriod()/pow(2, j);
-                            const unsigned int deadline = k/period + period; // Deadline slot
+                            const unsigned int deadline = (k / period + 1)*period; // Deadline slot
                             if(deadline < minDeadline){
                                 minDeadline = deadline;
                                 minED = readyEDs[ed];
                             }
                         }
                         // Schedule ED
-                        printf("Found ED %d with deadline %d\n", minED->getId(), minDeadline);
                         bool allocated = false;
                         while(k < minDeadline){
                             if(this->scheduler[i][j][k] == 0){
-                                printf("Allocated slot %d with ED %d\n", k, minED->getId());
                                 this->scheduler[i][j][k] = minED->getId();
                                 // Remove ED from list of ready EDs
                                 for(unsigned int ed = 0; ed < readyEDs.size(); ed++){
@@ -692,6 +688,13 @@ void Network::compSchedulerEDF() {
                         }
                         if(!allocated){ // Could not find free slot for some instance of current ED
                             this->timeUnfeasibleEDs.push_back(minED->getId());
+                            
+                            /*
+                            printf("Error: Could not find free slot for ED %d.\n", minED->getId());
+                            printf("Period is %d, SF is %d, k is %d, minDeadline is %d.\n", minED->getPeriod(), j+7, k, minDeadline);
+                            return;
+                            */
+                            
                             k++;
                         }
                     }else{

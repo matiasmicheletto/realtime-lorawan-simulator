@@ -154,7 +154,8 @@ int main(int argc, char **argv) {
                         to_string(optimizerBuilder.initialGW) + "_" + 
                         to_string(optimizerBuilder.maxIter) + "_" + 
                         to_string(optimizerBuilder.timeout) + "_" + 
-                        to_string(optimizerBuilder.stepMethod);
+                        to_string(optimizerBuilder.stepMethod) + "_" +
+                        to_string(optimizerBuilder.schedulingMethod);
         strcpy(outputfilename, ("output_"+filename+".txt").c_str());
         strcpy(csvfilename, ("nodes_"+filename+".csv").c_str());
         strcpy(schedfilename, ("sched_"+filename+".csv").c_str());
