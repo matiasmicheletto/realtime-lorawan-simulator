@@ -68,14 +68,16 @@ class Network {
         void stepSprings(); // Improve coverage by moving GW using attraction forces
         void stepRandom(); // Try to improve coverage by randomizing GW positions
 
-        // Network analysis
+        // Network post processing
         void configureGWChannels(); // Assign channels to gateways minimizing the number of channels
-        void computeScheduler(); // Compute the time scheduler for each gateway
+        void compSchedulerMinPeriod(); // Compute the time scheduler for each gateway using the minimum period
+        void compSchedulerEDF(); // Compute the time scheduler for each gateway using the EDF algorithm
         
         // Network information
         void exportNodesCSV(char *filename);
         void printNetworkStatus(FILE *file);
         void printScheduler(char *filename); // Compute the scheduler to validate time requirements
+        unsigned int getNonFeasibleEDs(); // Return the number of end devices that cannot be scheduled
         
         // Getters
         static string getPosDistName(POS_DIST posDist);

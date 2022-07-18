@@ -31,7 +31,7 @@ class Gateway : public Node {
         // Network management
         bool addEndDevice(EndDevice *ed); // Try to connect an end device
         bool removeEndDevice(EndDevice *ed); // Disconnects from end device
-        void disconnect(); // Disconnect from all end devices
+        void disconnect(); // Disconnect from all end devices                
         
         // Maximum spreading factor allowed for this GW
         inline void setMaxSF(unsigned char maxSF) { this->maxSF = maxSF < 7 ? 7 : (maxSF > 12 ? 12 : maxSF); }; // Configure different SF
@@ -45,6 +45,7 @@ class Gateway : public Node {
         double getUF(); // GW current utilization factor
         vector<double> getUFbySF(); // GW current utilization factor by spreading factor
         unsigned int connectedEDsCount(); // Number of connected end devices
+        vector<EndDevice*> getConnectedEDs(unsigned char sf); // List of connected end devices using sf
         static double getRange(const unsigned char sf); // Operating range depends on the spreading factor
         double getRange(); // Range of this GW        
         static unsigned char getMinSF(double distance); // Returns minimum SF for connecting to an end device at given distance
@@ -60,11 +61,11 @@ class Gateway : public Node {
 
         double velX = 0.0, velY = 0.0; // GW velocity
 
-        vector<EndDevice*> connectedEDs;
         unsigned int H;        
         unsigned char channel;        
         double UF[6]; // Spreading factor utilization factor
         unsigned char maxSF;
+        vector<EndDevice*> connectedEDs; // List of connected end devices
 };
 
 #endif

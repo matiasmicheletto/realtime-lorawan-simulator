@@ -158,3 +158,11 @@ vector<double> Gateway::getUFbySF() {
 unsigned int Gateway::connectedEDsCount() {
     return (unsigned int) this->connectedEDs.size();
 }
+
+vector<EndDevice*> Gateway::getConnectedEDs(unsigned char sf) {
+    vector<EndDevice*> eds;
+    for(unsigned int i = 0; i < this->connectedEDs.size(); i++)
+        if(this->connectedEDs[i]->getSF() == sf)
+            eds.push_back(this->connectedEDs[i]);
+    return eds;
+}

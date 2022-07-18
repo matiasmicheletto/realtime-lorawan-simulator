@@ -7,11 +7,6 @@ class Gateway; // Forward declaration
 #include "gateway.h"
 
 class EndDevice : public Node {
-    private:
-        unsigned int period;
-        unsigned char sf;
-        Gateway *gw;
-        
     public: 
         EndDevice(double x, double y, unsigned int id, unsigned int period);
         ~EndDevice();
@@ -25,6 +20,10 @@ class EndDevice : public Node {
         inline Gateway *getGateway() { return this->gw; };
         unsigned int getGatewayId();
         double getGWDist();
+    private:
+        unsigned int period;
+        unsigned char sf;
+        Gateway *gw;
 };
 
 #endif

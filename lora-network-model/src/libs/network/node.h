@@ -4,10 +4,6 @@
 #include <math.h>
 
 class Node {
-    private:
-        unsigned int id;
-        double x;
-        double y;
     public:
         Node(double x, double y, unsigned int id);
         ~Node();
@@ -19,6 +15,11 @@ class Node {
         inline unsigned int getId() { return this->id; };
         inline double getX() { return this->x; };
         inline double getY() { return this->y; };
+    
+    private:
+        unsigned int id;
+        double x;
+        double y;
 };
 
 #endif

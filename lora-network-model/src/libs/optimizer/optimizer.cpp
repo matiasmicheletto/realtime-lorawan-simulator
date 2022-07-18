@@ -18,6 +18,7 @@ Optimizer::Optimizer(Builder builder) {
     this->maxIter = builder.maxIter;
     this->timeout = builder.timeout;
     this->stepMethod = builder.stepMethod;
+    this->schedulingMethod = builder.schedulingMethod;
     this->initialGW = builder.initialGW;
     this->updatePeriod = builder.updatePeriod;
 
@@ -58,6 +59,11 @@ Optimizer::Builder* Optimizer::Builder::setStepMethod(STEP_METHOD stepMethod) {
     return this;
 }
 
+Optimizer::Builder* Optimizer::Builder::setSchedulingMethod(SCHED_METHOD schedulingMethod) {
+    this->schedulingMethod = schedulingMethod;
+    return this;
+}
+
 Optimizer::Builder* Optimizer::Builder::setUpdatePeriod(int updatePeriod) {
     this->updatePeriod = updatePeriod;
     return this;
@@ -70,6 +76,7 @@ Optimizer Optimizer::Builder::build(){
         printf("  Iterations: %d\n", this->maxIter);
         printf("  Timeout: %d\n", this->timeout);
         printf("  Method: %s\n", Optimizer::getStepMethodName(this->stepMethod).c_str());
+        printf("  Scheduling method: %s\n", Optimizer::getSchedMethodName(this->schedulingMethod).c_str());
         printf("--------------------------------\n\n");
     #endif
 
@@ -172,21 +179,48 @@ void Optimizer::run( void (*progressCallback)(Network *network, unsigned int ite
         }
 
         // Remove GWs that are not connected to any ED
+        #ifdef DEBUG_MODE
+            printf("\nRemoving idle gateways...\n");
+        #endif
         this->network->removeIdleGateways();
+        #ifdef DEBUG_MODE
+            printf("Done.\n");
+        #endif
 
         // Apply coloring algorithm to graph of gateways
+        #ifdef DEBUG_MODE
+            printf("Determining minimum number of cannels...\n");
+        #endif
         this->network->configureGWChannels();
-        if(this->network->getMinChannels() < 16 || this->network->getMaxSF() == 7)
+        if(this->network->getMinChannels() < 16 || this->network->getMaxSF() == 7){
+            #ifdef DEBUG_MODE
+                printf("Done. Channels = %d\n", this->network->getMinChannels());
+            #endif
             break;
-        else{
-            printf("\nNumber of channels = %d, reducing max. SF to %d\n", this->network->getMinChannels(), this->network->getMaxSF()-1);
+        }else{
+            #ifdef DEBUG_MODE
+                printf("Number of channels = %d, reducing max. SF to %d\n", this->network->getMinChannels(), this->network->getMaxSF()-1);
+            #endif
             this->network->setMaxSF(this->network->getMaxSF() - 1);
         }
     }
 
     // Check if system is time-feasible
-    this->network->computeScheduler();
-    printf("\n");
+    #ifdef DEBUG_MODE
+        printf("Computing schedule...\n");
+    #endif
+    switch (this->schedulingMethod){
+        case EDF:
+            this->network->compSchedulerEDF();
+            break;
+        case PERIOD:
+            this->network->compSchedulerMinPeriod();        
+        default:
+            break;
+    }       
+    #ifdef DEBUG_MODE
+        printf("Done. Unfeasible ED Instances: %d\n", this->network->getNonFeasibleEDs());
+    #endif
 
     if(progressCallback != nullptr)
         progressCallback(this->network, this->currentIter);
@@ -226,6 +260,21 @@ string Optimizer::getStepMethodName() {
     return this->getStepMethodName(this->stepMethod);
 }
 
+string Optimizer::getSchedMethodName(SCHED_METHOD schedMethod) {
+    switch(schedMethod){
+        case EDF:
+            return "EDF";
+        case PERIOD:
+            return "Min. period";
+        default:
+            return "Unknown";
+    }
+}
+
+string Optimizer::getSchedMethodName() {
+    return this->getSchedMethodName(this->schedulingMethod);
+}
+
 void Optimizer::printResults() {
     printf("\n------------------------\n");
     printf("Results:\n");
@@ -234,6 +283,7 @@ void Optimizer::printResults() {
     printf("  Gateways: %d\n",this->network->getGWCount());
     printf("  Used channels: %d\n",this->network->getMinChannels());
     printf("  Average utilization factor: %f\n",this->network->getAvgUF());
+    printf("  Unfeasible ED msg. instances: %d\n",this->network->getNonFeasibleEDs());
     printf("  Coverage: %.2f %% \n",this->network->getEDCoverage()*100.0);
     printf(exitCodes[this->exitCode].c_str(),this->exitCode);
     printf("------------------------\n\n");
@@ -246,7 +296,7 @@ void Optimizer::exportFullResults(char *filename) {
         return;
     }
     fprintf(file, "Optimization results:\n");
-    fprintf(file, "  Network improve method: %s\n", this->getStepMethodName().c_str());
+    fprintf(file, "  Network improve heuristic: %s\n", this->getStepMethodName().c_str());
     fprintf(file, "  Iterations performed: %d\n", this->currentIter);
     fprintf(file, "  Elapsed: %lu ms\n", this->elapsed);
     fprintf(file, exitCodes[this->exitCode].c_str(), this->exitCode);
@@ -266,13 +316,14 @@ void Optimizer::appendToLog(char *filename) {
         return;
     }
     if(printHeader)
-        fprintf(logfile, "Method,Pos. distr.,Period distr., Map size, ED, Dens, Max. SF, GW, Channels, Coverage, Avg. UF, Elapsed, Iters, Exit cond.\n");
+        fprintf(logfile, "GW Pos. Heuristic,ED Sched. Method,Position distr.,Periods distr.,Map size,ED Number,ED Dens. (1/m^2),Max. SF,GW Number,Channels used,ED Unfeas. Instances,Coverage %%,GW Avg. UF,Elapsed,Iterations,Exit condition\n");
     
     const unsigned int mapSize = this->network->getMapSize();
     const unsigned int netSize = this->network->getEDCount();
 
-    fprintf(logfile, "%s,%s,%s,%d,%d,%.2f,%d,%d,%d,%.2f,%.2f,%lu,%d,%s\n", 
+    fprintf(logfile, "%s,%s,%s,%s,%d,%d,%.2f,%d,%d,%d,%d,%.2f,%.2f,%lu,%d,%s\n", 
         this->getStepMethodName().c_str(),
+        this->getSchedMethodName().c_str(),
         this->network->getPosDistName().c_str(),
         this->network->getPeriodDistName().c_str(),
         mapSize, 
@@ -281,6 +332,7 @@ void Optimizer::appendToLog(char *filename) {
         this->network->getMaxSF(),
         this->network->getGWCount(), 
         this->network->getMinChannels(),
+        this->network->getNonFeasibleEDs(),
         this->network->getEDCoverage()*100,
         this->network->getAvgUF(),
         this->elapsed,

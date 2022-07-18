@@ -11,6 +11,7 @@ using namespace std;
 
 enum STEP_METHOD { SPRINGS = 0, RANDOM = 1 };
 enum EXIT_CODE { NOT_RUN = 0, TIMEOUT = 1, MAX_ITER = 2, MAX_COVERAGE = 3};
+enum SCHED_METHOD { EDF = 0, PERIOD = 1 };
 
 class Optimizer {
     public:
@@ -21,6 +22,7 @@ class Optimizer {
                 Builder* setInitialGW(unsigned int initialGW);
                 Builder* setTimeout(unsigned int timeout);
                 Builder* setStepMethod(STEP_METHOD stepMethod);
+                Builder* setSchedulingMethod(SCHED_METHOD schedulingMethod);
                 Builder* setUpdatePeriod(int updatePeriod);
                 Optimizer build(); // Returns the list of end devices
 
@@ -29,6 +31,7 @@ class Optimizer {
                 unsigned int initialGW = 1; // Initial number of gateways
                 unsigned int timeout = 60; // Timeout in seconds
                 STEP_METHOD stepMethod = SPRINGS; // Step method
+                SCHED_METHOD schedulingMethod = EDF; // Scheduling method
                 int updatePeriod = 10; // Number of iterations between each update call
         };
 
@@ -46,6 +49,8 @@ class Optimizer {
         string getExitCodeName();
         static string getStepMethodName(STEP_METHOD stepMethod);
         string getStepMethodName();
+        static string getSchedMethodName(SCHED_METHOD schedMethod);
+        string getSchedMethodName();
 
         inline unsigned int getIterations() { return this->currentIter; }
         inline unsigned long int getElapsed() { return this->elapsed; }
@@ -68,6 +73,7 @@ class Optimizer {
         unsigned long int elapsed; // Elapsed time in milliseconds
         unsigned int initialGW; // Initial number of gateways
         STEP_METHOD stepMethod; // Step method
+        SCHED_METHOD schedulingMethod; // Scheduling method
         int updatePeriod; // Number of iterations between each update call
         EXIT_CODE exitCode; // Exit code
 };

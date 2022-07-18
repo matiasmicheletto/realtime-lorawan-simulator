@@ -562,15 +562,75 @@ void Network::configureGWChannels() {
     }    
 }
 
-void Network::computeScheduler() {
-    // initialize scheduler with dimenstion (unsigned int) this->H, 6, this->gateways.size()
-    //vector<vector<vector<unsigned int>>> scheduler(this->H, vector<vector<unsigned int>>(6, vector<unsigned int>(this->gateways.size())));
-    this->scheduler.resize(this->H);
-    for(unsigned int i = 0; i < (unsigned int) this->H; i++){
+void Network::compSchedulerMinPeriod() {
+    // initialize scheduler with dimenstions GW x SF x H    
+    this->scheduler.resize(this->gateways.size());
+    for(unsigned int i = 0; i < this->gateways.size(); i++){
         this->scheduler[i].resize(6);
         for(unsigned int j = 0; j < 6; j++){
-            this->scheduler[i][j].resize(this->gateways.size());
-            for(unsigned int k = 0; k < this->gateways.size(); k++){
+            this->scheduler[i][j].resize(this->H/pow(2, j));
+            for(unsigned int k = 0; k < this->H/pow(2, j); k++){
+                this->scheduler[i][j][k] = 0; // initialize scheduler with all slots empty
+            }
+        }
+    }
+    
+    if(this->getNCEDCount() > 0){
+        printf("Error: There are not connected End Devices. Coverage should equals 100%% to run scheduler.\n");
+        return;
+    }
+    
+    this->timeUnfeasibleEDs.clear(); // Clear list of unfeasible EDs  
+
+    // Sort endevices vector by ascending period
+    sort(this->enddevices.begin(), this->enddevices.end(), [](EndDevice *a, EndDevice *b){
+        return a->getPeriod() < b->getPeriod();
+    });
+
+    // Schedule by ED with fixed priorities
+    for(unsigned int ed = 0; ed < this->enddevices.size(); ed++){
+        // The ID is used to identify the ED in the scheduler slots
+        const unsigned int edId = this->enddevices[ed]->getId(); // IDs (begins at 1)
+
+        // Get GW index (i) of current ED
+        const unsigned int gwId = this->enddevices[ed]->getGatewayId();
+        unsigned int i = 0; // GW index
+        for(unsigned int gw = 0; gw < this->gateways.size(); gw++) {
+            if(this->gateways[gw]->getId() == gwId) {
+                i = gw; // found
+                break;
+            }
+        }
+
+        // Get SF index (j)
+        const unsigned int j = (unsigned int) this->enddevices[ed]->getSF()-7; // SF index (0..5)        
+
+        // Allocate slots for current ED
+        unsigned int period = this->enddevices[ed]->getPeriod()/pow(2, j); // End device period scaled to SF
+        unsigned int instances = this->H/this->enddevices[ed]->getPeriod(); // Instance number is constant for all SF
+        for(unsigned int inst = 0; inst < instances; inst++){            
+            bool allocated = false;
+            for(unsigned int k = inst*period; k < (inst+1)*period; k++){                
+                if(this->scheduler[i][j][k] == 0){ // if slot is empty
+                    this->scheduler[i][j][k] = edId;
+                    allocated = true;
+                    break;
+                }
+            }
+            if(!allocated) // Could not find free slot for some instance of current ED
+                this->timeUnfeasibleEDs.push_back(ed);
+        }
+    }
+}
+
+void Network::compSchedulerEDF() {
+    // initialize scheduler with dimenstions GW x SF x H
+    this->scheduler.resize(this->gateways.size());
+    for(unsigned int i = 0; i < this->gateways.size(); i++){
+        this->scheduler[i].resize(6);
+        for(unsigned int j = 0; j < 6; j++){
+            this->scheduler[i][j].resize(this->H/pow(2, j));
+            for(unsigned int k = 0; k < this->H/pow(2, j); k++){
                 this->scheduler[i][j][k] = 0; // initialize scheduler with all slots empty
             }
         }
@@ -581,83 +641,63 @@ void Network::computeScheduler() {
         return;
     }
 
-    // Sort endevice vector by ascending period
-    sort(this->enddevices.begin(), this->enddevices.end(), [](EndDevice *a, EndDevice *b){
-        return a->getPeriod() < b->getPeriod();
-    });
-
-    for(unsigned int ed = 0; ed < this->enddevices.size(); ed++){
-        
-        // Get SF index (j)
-        const unsigned int j = (unsigned int) this->enddevices[ed]->getSF()-7; // SF index (0..5)
-        const unsigned int edId = this->enddevices[ed]->getId(); // IDs (begins at 1)
-        
-        // Get gw index (k)
-        const unsigned int gwId = this->enddevices[ed]->getGatewayId();
-        unsigned int k = 0;
-        for(unsigned int gw = 0; gw < this->gateways.size(); gw++) {
-            if(this->gateways[gw]->getId() == gwId) {
-                k = gw;
-                break;
-            }
-        }
-
-        // Allocate slots (i)        
-        unsigned int period = this->enddevices[ed]->getPeriod(); // End device period        
-        for(unsigned int instance = 0; instance < this->H/period; instance++){
-            unsigned int msgSlot = pow(2, j); // slots for the message to send
-            for(unsigned int i = instance*period; i < (instance+1)*period; i++){
-                if(this->scheduler[i][j][k] == 0){ // If slot is free, allocate here                    
-                    this->scheduler[i][j][k] = edId;
-                    msgSlot--;
-                    if(msgSlot == 0) break;
-                }
-            }            
-            if(msgSlot > 0){ // If there are still messages to be sent when reaching end of period, --> unfeasible
-                printf("Error: not enough slots to schedule instance %d of enddevice %d, with period %d\n", instance, edId, period);
-                
-                /*
-                // Backtrack printing used slots of current GW and SF
-                int counter3200 = 0;
-                int counter4000 = 0;
-                int counter8000 = 0;
-                for(unsigned int i = instance*period; i < (instance+1)*period; i++){
-                    const unsigned int sedID = this->scheduler[i][j][k];       
-                    unsigned int edIdx = 0;
-                    for(unsigned int ii = 0; ii < this->enddevices.size(); ii++){
-                        if(this->enddevices[ii]->getId() == sedID) {
-                            edIdx = ii;
-                            break;
-                        }
-                    }             
-                    const unsigned int P = this->enddevices[edIdx]->getPeriod(); 
-                    const unsigned int G = this->enddevices[edIdx]->getGatewayId();
-                    const unsigned int S = this->enddevices[edIdx]->getSF();
-                    switch (P)
-                    {
-                    case 3200:
-                        counter3200++;
-                        break;
-                    case 4000:
-                        counter4000++;
-                        break;
-                    case 8000:
-                        counter8000++;
-                        break;
-                    default:
-                        break;
+    // Schedule with dynamic priorities (early deadline first)
+    this->timeUnfeasibleEDs.clear(); // Clear list of unfeasible EDs  
+    for(unsigned int i = 0; i < this->gateways.size(); i++){ // For each GW schedule        
+        for(unsigned int j = 0; j < 6; j++){ // For each SF            
+            vector<EndDevice*> schED = this->gateways[i]->getConnectedEDs(j+7); // List of ED to schedule for current GW and SF
+            if(schED.size() > 0){
+                vector<EndDevice*> readyEDs; // List of EDs ready to be scheduled on each slot                
+                const unsigned int Hsf = this->H/pow(2, j); // Number of slots of current SF
+                unsigned int k = 0;
+                while(k < Hsf){ // For each slot of current GW and SF
+                    printf("Scheduling slot %d of SF %d of GW %d\n", k, j, i);
+                    // Get list of ready EDs for current slot
+                    for(unsigned int ed = 0; ed < schED.size(); ed++){
+                        const unsigned int period = schED[ed]->getPeriod()/pow(2, j);
+                        if(k % period == 0)
+                            readyEDs.push_back(schED[ed]);
                     }
-                    printf("\tSlot %d, ED: %d, period: %d, gw: %d, sf: %d\n", i, sedID, P, G, S);
+                    printf("Ready EDs: %ld\n", readyEDs.size());
+                    if(readyEDs.size() > 0){ // If there are ready EDs, schedule them
+                        // Find ED with earliest deadline
+                        unsigned int minDeadline = Hsf+1;
+                        EndDevice* minED = NULL;
+                        for(unsigned int ed = 0; ed < readyEDs.size(); ed++){
+                            const unsigned int period = readyEDs[ed]->getPeriod()/pow(2, j);
+                            const unsigned int deadline = k/period + period; // Deadline slot
+                            if(deadline < minDeadline){
+                                minDeadline = deadline;
+                                minED = readyEDs[ed];
+                            }
+                        }
+                        // Schedule ED
+                        printf("Found ED %d with deadline %d\n", minED->getId(), minDeadline);
+                        bool allocated = false;
+                        while(k < minDeadline){
+                            if(this->scheduler[i][j][k] == 0){
+                                printf("Allocated slot %d with ED %d\n", k, minED->getId());
+                                this->scheduler[i][j][k] = minED->getId();
+                                // Remove ED from list of ready EDs
+                                for(unsigned int ed = 0; ed < readyEDs.size(); ed++){
+                                    if(readyEDs[ed]->getId() == minED->getId()){
+                                        readyEDs.erase(readyEDs.begin()+ed);
+                                    }
+                                }
+                                allocated = true;
+                                break;
+                            }else{
+                                k++;
+                            }
+                        }
+                        if(!allocated){ // Could not find free slot for some instance of current ED
+                            this->timeUnfeasibleEDs.push_back(minED->getId());
+                            k++;
+                        }
+                    }else{
+                        k++;
+                    }                    
                 }
-                printf("\tCounter 3200: %d\n", counter3200);
-                printf("\tCounter 4000: %d\n", counter4000);
-                printf("\tCounter 8000: %d\n", counter8000);
-                return;
-                */
-        
-
-                this->timeUnfeasibleEDs.push_back(ed);
-                //break;
             }
         }
     }
@@ -673,22 +713,22 @@ void Network::printScheduler(char *filename) {
             fprintf(file, "Unfeasible EDs\n");
             fprintf(file, "ID, period, SF, GW ID\n");
             for(unsigned int ed = 0; ed < this->timeUnfeasibleEDs.size(); ed++){
-                const unsigned int edIdx = this->timeUnfeasibleEDs.at(ed);
-                EndDevice* uED = this->enddevices.at(edIdx);
+                const unsigned int edIdx = this->timeUnfeasibleEDs[ed];
+                EndDevice* uED = this->enddevices[edIdx];
                 fprintf(file, "%d,%d,%d,%d\n", uED->getId(), uED->getPeriod(), uED->getSF(), uED->getGateway()->getId());
             }
         }
 
         // Print scheduling table for each GW
         fprintf(file, "\nScheduling table\n");
-        for(unsigned int k = 0; k < this->gateways.size(); k++){
-            fprintf(file, "Scheduling table for GW %d\n,", this->gateways[k]->getId());
-            for(unsigned int i = 0; i < this->H; i++)
-                fprintf(file, "%d,", i);
+        for(unsigned int i = 0; i < this->gateways.size(); i++){
+            fprintf(file, "Scheduling table for GW %d\n,", this->gateways[i]->getId());
+            for(unsigned int k = 0; k < this->H; k++)
+                fprintf(file, "%d,", k);
             fprintf(file, "\n");
             for(unsigned int j = 0; j < 6; j++){
                 fprintf(file, "SF%d:,", j+7);
-                for(unsigned int i = 0; i < this->H; i++){    
+                for(unsigned int k = 0; k < this->H/pow(2, j); k++){    
                     fprintf(file, "%d,", this->scheduler[i][j][k]);
                 }
                 fprintf(file, "\n");
@@ -697,4 +737,8 @@ void Network::printScheduler(char *filename) {
         }
         fclose(file);
     }
+}
+
+unsigned int Network::getNonFeasibleEDs() {
+    return this->timeUnfeasibleEDs.size();
 }

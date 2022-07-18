@@ -19,6 +19,7 @@ void printHelp() {
     printf("  -g, --gateways        initial number of gateways.\n");    
     printf("  -s, --sfmax           maximum spreading factor for gateways.\n");
     printf("  -a, --algorithm       gateway configuration algorithm: 0->springs, 1->random.\n");
+    printf("  -c, --scheduling      scheduling algorithm: 0->EDF, 1->Min. Periods.\n");
     printf("  -i, --iterations      number of iterations.\n");
     printf("  -t, --timeout         timeout for the optimization.\n");
     printf("  -v, --verbose         verbose mode: prints complete outputs.\n");
@@ -31,13 +32,14 @@ void printHelp() {
     printf("  -g, --gateways        1\n");
     printf("  -s, --sfmax           12\n");
     printf("  -a, --algorithm       0\n");
+    printf("  -c, --scheduling      0\n");
     printf("  -i, --iterations      500\n");
     printf("  -t, --timeout         60\n");
-    printf("  -v, --verbose         true\n");
+    printf("  -v, --verbose         false\n");
 
     printf("Examples: \n");
-    printf("\t./runnable -f network_nodes.csv -s 11 -i 100 -t 60  -a 0\n");
-    printf("\t./runnable -m 1000 -e 6500 -x 0 -p 0 -s 11 -i 100 -t 60  -a 0 -v\n");
+    printf("\t./runnable -f network_nodes.csv -s 11 -i 100 -t 60 -a 0\n");
+    printf("\t./runnable -m 1000 -e 6500 -x 0 -p 0 -s 11 -i 100 -t 60 -a 0 -v\n");
     printf("\t./runnable -m 1000 -e 800  -x 1 -p 0 -s 10 -i 250 -t 120 -a 1\n");
     exit(1);
 }
@@ -56,12 +58,12 @@ int main(int argc, char **argv) {
         if(strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0){
             printHelp();
         }
-
         if(strcmp(argv[i], "-f") == 0 || strcmp(argv[i], "--file") == 0) {
             if(i + 1 < argc) {
                 network = new Network(argv[i + 1]);
                 buildNetwork = false;
-            }
+            }else
+                printHelp();
         }
         if(strcmp(argv[i], "-m") == 0 || strcmp(argv[i], "--mapsize") == 0){
             if(i+1 < argc)
@@ -114,6 +116,12 @@ int main(int argc, char **argv) {
         if(strcmp(argv[i], "-a") == 0 || strcmp(argv[i], "--algorithm") == 0){
             if(i+1 < argc)
                 optimizerBuilder.setStepMethod((STEP_METHOD) atoi(argv[i+1]));
+            else
+                printHelp();
+        }
+        if(strcmp(argv[i], "-c") == 0 || strcmp(argv[i], "--scheduling") == 0){
+            if(i+1 < argc)
+                optimizerBuilder.setSchedulingMethod((SCHED_METHOD) atoi(argv[i+1]));
             else
                 printHelp();
         }
