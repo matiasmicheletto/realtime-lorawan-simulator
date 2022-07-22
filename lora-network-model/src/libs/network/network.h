@@ -21,7 +21,7 @@
 #include "../network/gateway.h"
 #include "../network/enddevice.h"
 
-#define DEBUG_MODE 1
+//#define DEBUG_MODE 1
 #define LINE_BUFFER_SIZE 256 // Line buffer for input file
 #define FILE_COLS 9 // Number of columns of input file
 
