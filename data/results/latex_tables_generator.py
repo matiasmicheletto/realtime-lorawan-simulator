@@ -26,7 +26,9 @@ def generateLatexTable(dataframe, mapsize, algo):
     # Encabezados
     header = ('\\begin{table}[htb]\n' # Tabla vertical (una sola pagina)
         '\t\\centering\n'
+        '\t\\footnotesize\n'
         '\t\\begin{tabular}{|r|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|} \n'
+        '\t\t\\hline\n'
         '\t\t\\multirow{2}{*}{ED} & \multicolumn{5}{c|}{Hard} & \multicolumn{5}{c|}{Medium} &\multicolumn{5}{c|}{Soft} \\\\ \n'
         '\t\t\\cline{2-16} \n'
         '\t\t&$SF_{m}$&GW & Ch & $\overline{U}$&T[s] &$SF_{m}$&GW & Ch & $\overline{U}$ &T[s] &$SF_{m}$&GW & Ch & $\overline{U}$  & T[s]  \\\\ \n'
@@ -70,13 +72,13 @@ def generateLatexTable(dataframe, mapsize, algo):
     # Cierre de la tabla
     footer = ('\t\t\\hline \n'
         '\t\\end{tabular} \n'
-        '\t\\caption{Uniform distribution, Spring Heuristic, '+str(mapsize*mapsize)+' $m^2$} \n'
+        '\t\\caption{Uniform distribution, '+algo+', '+str(mapsize*mapsize)+' $m^2$} \n'
         '\t\\label{tab:Un'+algo+''+str(mapsize)+'} \n'
         '\\end{table} \n')
 
     text = text + footer
     
-    with open(algo+"_"+str(mapsize)+".tex", 'w') as output_file:
+    with open("Uniform_"+algo+"_"+str(mapsize)+".tex", 'w') as output_file:
         output_file.write(text)
 
 

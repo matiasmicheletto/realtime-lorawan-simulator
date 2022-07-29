@@ -48,6 +48,39 @@ plt.show()
 """
 
 
+"""
+# Tiempos de ejecución 
+def getElapsedAvg(alg, per, mapsize):
+    sample = data[(data[ALGO] == alg) & (data[PERIOD] == per) & (data[MAP] == mapsize)]
+    return sample.groupby(ED).mean()[ELAPSED]
+
+
+plt.figure(figsize=(10, 20))
+for a, algo in enumerate(["Random", "Springs"]):    
+    for m, mapsize in enumerate([100, 1000, 2000]):
+        plt.subplot(3, 2, 2*m+1 + a)                
+        plt.plot(getElapsedAvg(algo, 'Soft', mapsize), '-o', label = 'Soft')
+        plt.plot(getElapsedAvg(algo, 'Medium', mapsize), '-x', label = 'Medium')
+        plt.plot(getElapsedAvg(algo, 'Hard', mapsize), '-s', label = 'Hard')
+        plt.xlabel('ED Number')
+        plt.ylabel('Elapsed time [ms]')
+        title = 'Elapsed ' + algo + ' - Map size = '+str(mapsize)+'x'+str(mapsize)
+        plt.title(title)
+        plt.legend()
+        plt.grid()
+        
+top=0.94
+bottom=0.07
+left=0.125
+right=0.9
+hspace=0.3
+wspace=0.2
+plt.subplots_adjust(top=top, bottom=bottom, left=left, right=right, hspace=hspace, wspace=wspace)
+if SAVEFIGS:
+    plt.savefig('Elapsed Time.png')
+plt.show()
+"""
+
 
 
 """
