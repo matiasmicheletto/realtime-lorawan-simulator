@@ -5,8 +5,9 @@ import numpy as np
 
 plt = mpl.pyplot
 
-# File with data to analyze
-data = pd.read_csv("summary_uniform.csv")
+
+data = pd.read_csv("summary_clouds.csv")
+
 # Column names
 ALGO = 'GW Pos. Heuristic'
 SCHED = 'ED Sched. Method'
@@ -26,13 +27,13 @@ ITERS = 'Iterations'
 EXIT = 'Exit condition'
 
 # Poner en True para que se guarden las figuras
-SAVEFIGS = False
+SAVEFIGS = True
 mpl.rcParams['mathtext.fontset'] = 'stix'
 mpl.rcParams['font.family'] = 'STIXGeneral'
 mpl.rcParams['font.size'] = 12
 
 
-"""
+
 # Grafico comparativo de tiempos de ejecucion random vs springs separando casos hard, medium y soft
 fig, ax = plt.subplots(figsize=(10, 15))
 ax.set_yscale("log") # Poner escala de tiempo en logaritmo
@@ -43,12 +44,12 @@ plt.xlabel(ALGO)
 plt.ylabel(ELAPSED + ' [ms] (log scale)')
 plt.grid()
 if SAVEFIGS:
-    plt.savefig('Springs_vs_Random.png')
+    plt.savefig('Clouds_Springs_vs_Random.png')
 plt.show()
-"""
 
 
-"""
+
+
 # Tiempos de ejecución 
 def getElapsedAvg(alg, per, mapsize):
     sample = data[(data[ALGO] == alg) & (data[PERIOD] == per) & (data[MAP] == mapsize)]
@@ -77,13 +78,13 @@ hspace=0.3
 wspace=0.2
 plt.subplots_adjust(top=top, bottom=bottom, left=left, right=right, hspace=hspace, wspace=wspace)
 if SAVEFIGS:
-    plt.savefig('Elapsed Time.png')
+    plt.savefig('Clouds Elapsed Time.png')
 plt.show()
-"""
 
 
 
-"""
+
+
 def getEDvsGWAvg(alg, per, mapsize):
     if alg == "Random" and per == "Hard" and mapsize == 2000: # Limitado para menos de 5.000 EDs
         sample = data[(data[ALGO] == alg) & (data[PERIOD] == per) & (data[MAP] == mapsize) & (data[ED] <= 5000)]
@@ -108,7 +109,7 @@ for m, mapsize in enumerate([100, 1000, 2000]):
     plt.legend()
     plt.grid()
     if SAVEFIGS:
-        plt.savefig('ED vs GW '+algo + '_' + str(mapsize) + '.png')
+        plt.savefig('CLouds ED vs GW '+algo + '_' + str(mapsize) + '.png')
     plt.show()
 
 # Para subplots en columna
@@ -122,6 +123,6 @@ for m, mapsize in enumerate([100, 1000, 2000]):
 #if SAVEFIGS:
 #    plt.savefig('ED vs GW.png')
 #plt.show()
-"""
+
 
 

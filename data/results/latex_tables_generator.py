@@ -1,7 +1,10 @@
 import pandas as pd
 
-# File with data
-data = pd.read_csv("summary_uniform.csv")
+### Cambiar el nombre del caption segun sea Clouds o Uniform, linea: 78
+### Cambiar el prefijo para los nombres de los archivos de salida, linea: 84
+
+#data = pd.read_csv("summary_uniform.csv")
+data = pd.read_csv("summary_clouds.csv")
 
 # Column names
 ALGO = 'GW Pos. Heuristic'
@@ -72,13 +75,13 @@ def generateLatexTable(dataframe, mapsize, algo):
     # Cierre de la tabla
     footer = ('\t\t\\hline \n'
         '\t\\end{tabular} \n'
-        '\t\\caption{Uniform distribution, '+algo+', '+str(mapsize*mapsize)+' $m^2$} \n'
+        '\t\\caption{Clouds distribution, '+algo+', '+str(mapsize*mapsize)+' $m^2$} \n'
         '\t\\label{tab:Un'+algo+''+str(mapsize)+'} \n'
         '\\end{table} \n')
 
     text = text + footer
     
-    with open("Uniform_"+algo+"_"+str(mapsize)+".tex", 'w') as output_file:
+    with open("Clouds_"+algo+"_"+str(mapsize)+".tex", 'w') as output_file:
         output_file.write(text)
 
 
