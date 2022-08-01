@@ -94,23 +94,22 @@ def getEDvsGWAvg(alg, per, mapsize):
 
 
 #plt.figure(figsize=(10, 20))
-#for a, algo in enumerate(["Random", "Springs"]):    
-algo = "Random"
-for m, mapsize in enumerate([100, 1000, 2000]):
-    #plt.subplot(3, 2, 2*m+1 + a)
-    #plt.subplot(3, 1, m+1)
-    plt.figure(figsize=(10, 5))
-    plt.plot(getEDvsGWAvg(algo, 'Soft', mapsize), '-o', label = 'Soft')
-    plt.plot(getEDvsGWAvg(algo, 'Medium', mapsize), '-x', label = 'Medium')
-    plt.plot(getEDvsGWAvg(algo, 'Hard', mapsize), '-s', label = 'Hard')
-    plt.xlabel('ED Number')
-    plt.ylabel('GW Number')
-    #plt.title(algo + ' - Map size = '+str(mapsize)+'x'+str(mapsize))
-    plt.legend()
-    plt.grid()
-    if SAVEFIGS:
-        plt.savefig('CLouds ED vs GW '+algo + '_' + str(mapsize) + '.png')
-    plt.show()
+for a, algo in enumerate(["Random", "Springs"]):    
+    for m, mapsize in enumerate([100, 1000, 2000]):
+        #plt.subplot(3, 2, 2*m+1 + a)
+        #plt.subplot(3, 1, m+1)
+        plt.figure(figsize=(10, 5))
+        plt.plot(getEDvsGWAvg(algo, 'Soft', mapsize), '-o', label = 'Soft')
+        plt.plot(getEDvsGWAvg(algo, 'Medium', mapsize), '-x', label = 'Medium')
+        plt.plot(getEDvsGWAvg(algo, 'Hard', mapsize), '-s', label = 'Hard')
+        plt.xlabel('ED Number')
+        plt.ylabel('GW Number')
+        #plt.title(algo + ' - Map size = '+str(mapsize)+'x'+str(mapsize))
+        plt.legend()
+        plt.grid()
+        if SAVEFIGS:
+            plt.savefig('Clouds ED vs GW '+algo + '_' + str(mapsize) + '.png')
+        plt.show()
 
 # Para subplots en columna
 #top=0.94
