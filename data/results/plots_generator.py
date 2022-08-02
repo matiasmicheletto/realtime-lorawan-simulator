@@ -56,7 +56,7 @@ def getElapsedAvg(alg, per, mapsize):
     return sample.groupby(ED).mean()[ELAPSED]
 
 
-plt.figure(figsize=(10, 20))
+plt.figure(figsize=(15, 20))
 for a, algo in enumerate(["Random", "Springs"]):    
     for m, mapsize in enumerate([100, 1000, 2000]):
         plt.subplot(3, 2, 2*m+1 + a)                
@@ -86,9 +86,9 @@ plt.show()
 
 
 def getEDvsGWAvg(alg, per, mapsize):
-    if alg == "Random" and per == "Hard" and mapsize == 2000: # Limitado para menos de 5.000 EDs
-        sample = data[(data[ALGO] == alg) & (data[PERIOD] == per) & (data[MAP] == mapsize) & (data[ED] <= 5000)]
-        return sample.groupby(ED).mean()[GW]
+    #if alg == "Random" and per == "Hard" and mapsize == 2000: # Limitado para menos de 5.000 EDs
+    #    sample = data[(data[ALGO] == alg) & (data[PERIOD] == per) & (data[MAP] == mapsize) & (data[ED] <= 5000)]
+    #    return sample.groupby(ED).mean()[GW]
     sample = data[(data[ALGO] == alg) & (data[PERIOD] == per) & (data[MAP] == mapsize)]
     return sample.groupby(ED).mean()[GW]
 
