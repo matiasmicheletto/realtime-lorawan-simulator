@@ -5,8 +5,11 @@ import numpy as np
 
 plt = mpl.pyplot
 
+#name = "Clouds"
+#data = pd.read_csv("summary_clouds.csv")
 
-data = pd.read_csv("summary_clouds.csv")
+name = "Uniform"
+data = pd.read_csv("summary_uniform.csv")
 
 # Column names
 ALGO = 'GW Pos. Heuristic'
@@ -44,7 +47,7 @@ plt.xlabel(ALGO)
 plt.ylabel(ELAPSED + ' [ms] (log scale)')
 plt.grid()
 if SAVEFIGS:
-    plt.savefig('Clouds_Springs_vs_Random.png')
+    plt.savefig(name+'_Springs_vs_Random.png')
 plt.show()
 
 
@@ -78,7 +81,7 @@ hspace=0.3
 wspace=0.2
 plt.subplots_adjust(top=top, bottom=bottom, left=left, right=right, hspace=hspace, wspace=wspace)
 if SAVEFIGS:
-    plt.savefig('Clouds Elapsed Time.png')
+    plt.savefig(name+' Elapsed Time.png')
 plt.show()
 
 
@@ -86,10 +89,24 @@ plt.show()
 
 
 def getEDvsGWAvg(alg, per, mapsize):
-    if alg == "Random" and per == "Hard" and mapsize == 1000: # Limitado para menos de 5.000 EDs
-        sample = data[(data[ALGO] == alg) & (data[PERIOD] == per) & (data[MAP] == mapsize) & (data[ED] <= 20000)]
-        return sample.groupby(ED).mean()[GW]
     sample = data[(data[ALGO] == alg) & (data[PERIOD] == per) & (data[MAP] == mapsize)]
+    if name == "Clouds":
+        if per == "Hard":
+            if alg == "Random":
+                if mapsize == 1000: 
+                    sample = data[(data[ALGO] == alg) & (data[PERIOD] == per) & (data[MAP] == mapsize) & (data[ED] <= 20000)]
+                if mapsize == 2000:
+                    sample = data[(data[ALGO] == alg) & (data[PERIOD] == per) & (data[MAP] == mapsize) & (data[ED] <= 10000)]
+            else:
+                if alg == "Springs":
+                    if mapsize == 1000: 
+                        sample = data[(data[ALGO] == alg) & (data[PERIOD] == per) & (data[MAP] == mapsize) & (data[ED] <= 50000)]
+    else:
+        if per == "Hard":
+            if alg == "Random":
+                if mapsize == 2000 or mapsize == 1000: 
+                    sample = data[(data[ALGO] == alg) & (data[PERIOD] == per) & (data[MAP] == mapsize) & (data[ED] <= 5000)]
+                    
     return sample.groupby(ED).mean()[GW]
 
 
@@ -108,7 +125,7 @@ for a, algo in enumerate(["Random", "Springs"]):
         plt.legend()
         plt.grid()
         if SAVEFIGS:
-            plt.savefig('Clouds ED vs GW '+algo + '_' + str(mapsize) + '.png')
+            plt.savefig(name+' ED vs GW '+algo + '_' + str(mapsize) + '.png')
         plt.show()
 
 # Para subplots en columna
@@ -122,6 +139,4 @@ for a, algo in enumerate(["Random", "Springs"]):
 #if SAVEFIGS:
 #    plt.savefig('ED vs GW.png')
 #plt.show()
-
-
 
