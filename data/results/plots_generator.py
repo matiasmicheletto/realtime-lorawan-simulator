@@ -86,9 +86,9 @@ plt.show()
 
 
 def getEDvsGWAvg(alg, per, mapsize):
-    #if alg == "Random" and per == "Hard" and mapsize == 2000: # Limitado para menos de 5.000 EDs
-    #    sample = data[(data[ALGO] == alg) & (data[PERIOD] == per) & (data[MAP] == mapsize) & (data[ED] <= 5000)]
-    #    return sample.groupby(ED).mean()[GW]
+    if alg == "Random" and per == "Hard" and mapsize == 1000: # Limitado para menos de 5.000 EDs
+        sample = data[(data[ALGO] == alg) & (data[PERIOD] == per) & (data[MAP] == mapsize) & (data[ED] <= 20000)]
+        return sample.groupby(ED).mean()[GW]
     sample = data[(data[ALGO] == alg) & (data[PERIOD] == per) & (data[MAP] == mapsize)]
     return sample.groupby(ED).mean()[GW]
 
