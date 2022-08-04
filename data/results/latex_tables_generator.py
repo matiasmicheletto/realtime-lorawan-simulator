@@ -85,6 +85,7 @@ def generateLatexTable(dataframe, mapsize, algo):
         output_file.write(text)
 
 
+
 generateLatexTable(data, 100, "Random")
 generateLatexTable(data, 1000, "Random")
 generateLatexTable(data, 2000, "Random")
@@ -92,4 +93,3 @@ generateLatexTable(data, 2000, "Random")
 generateLatexTable(data, 100, "Springs")
 generateLatexTable(data, 1000, "Springs")
 generateLatexTable(data, 2000, "Springs")
-

@@ -5,11 +5,11 @@ import numpy as np
 
 plt = mpl.pyplot
 
-#name = "Clouds"
-#data = pd.read_csv("summary_clouds.csv")
+name = "Clouds"
+data = pd.read_csv("summary_clouds.csv")
 
-name = "Uniform"
-data = pd.read_csv("summary_uniform.csv")
+#name = "Uniform"
+#data = pd.read_csv("summary_uniform.csv")
 
 # Column names
 ALGO = 'GW Pos. Heuristic'
@@ -30,11 +30,10 @@ ITERS = 'Iterations'
 EXIT = 'Exit condition'
 
 # Poner en True para que se guarden las figuras
-SAVEFIGS = True
+SAVEFIGS = False
 mpl.rcParams['mathtext.fontset'] = 'stix'
 mpl.rcParams['font.family'] = 'STIXGeneral'
 mpl.rcParams['font.size'] = 12
-
 
 
 # Grafico comparativo de tiempos de ejecucion random vs springs separando casos hard, medium y soft
