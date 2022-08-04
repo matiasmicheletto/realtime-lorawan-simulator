@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { LoadingContext } from '../../context/loading';
 import { Table, TableHead, TableBody, TableRow, TableCell } from '@mui/material';
 
 const styles = {
@@ -14,11 +15,13 @@ const styles = {
 };
 const OutputBlock = () => {
     const [ outputs, setOutputs ] = useState([]);
+    const {setLoading} = useContext(LoadingContext);
 
     Module.onResultsUpdate = (iters,elapsed,exitCode,gws,coverage,channels) => {
         const temp = [...outputs];
         temp.push({iters,elapsed,exitCode,gws,coverage,channels});
         setOutputs(temp);
+        setLoading(false);
     };
 
     return (

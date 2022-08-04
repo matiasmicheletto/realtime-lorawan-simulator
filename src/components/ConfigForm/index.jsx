@@ -8,6 +8,8 @@ import {
     FormControl, 
     InputLabel 
 } from '@mui/material';
+import { LoadingContext } from '../../context/loading';
+import { useContext } from 'react';
 
 const styles = {
     button: {
@@ -25,6 +27,8 @@ const styles = {
 };
 
 const ConfigForm = () => {
+
+    const {setLoading} = useContext(LoadingContext);
 
     const [inputs, setInputs] = useState({
         mapSize: "1000",
@@ -60,18 +64,21 @@ const ConfigForm = () => {
     const runSimulation = () => {
         if(optimizerReady){      
             Module.frames = [];        
-            Module._runSimulation(
-                mapSize,
-                edNumber,
-                initialGW,
-                maxSF,
-                posDist,
-                periodDist,
-                maxIter,
-                timeout,
-                algorithm,
-                updateRate
-            );
+            setLoading(true);
+            setTimeout(() => {
+                Module._runSimulation(
+                    mapSize,
+                    edNumber,
+                    initialGW,
+                    maxSF,
+                    posDist,
+                    periodDist,
+                    maxIter,
+                    timeout,
+                    algorithm,
+                    updateRate
+                );
+            }, 100);            
         }
     }
 
