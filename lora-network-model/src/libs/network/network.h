@@ -39,10 +39,12 @@ class Network {
                 Builder* setMapSize(unsigned int mapSize);
                 Builder* setNetworkSize(unsigned int networkSize);
                 Builder* setMaxSF(unsigned char maxSF);
+                Builder* setGWCnt(unsigned int gwCnt);
                 Network build(); // Returns the list of end devices
 
                 unsigned int mapSize = 1000; // Size of the map 
                 unsigned char maxSF = 12; // Maximum spreading factor
+                unsigned int gwCnt = 9; // Number of GW for the initial grid distribution
                 POS_DIST posDist = UNIFORM; // Distribution of positions
                 PERIOD_DIST periodDist = SOFT; // Distribution of periods
                 vector<EndDevice*> enddevices; // List of enddevices
@@ -76,6 +78,7 @@ class Network {
         // Network information
         void exportNodesCSV(char *filename);
         void printNetworkStatus(FILE *file);
+        void exportGWGrid(char *filename);
         void printScheduler(char *filename); // Compute the scheduler to validate time requirements
         unsigned int getNonFeasibleEDs(); // Return the number of end devices that cannot be scheduled
         
@@ -106,6 +109,7 @@ class Network {
         unsigned int H; // Hyperperiod (is calculated from periods)        
         unsigned int lastID; // IDs to identify network nodes        
         unsigned char maxSF; // Maximum spreading factor (used to create new gateways)
+        unsigned int gwCnt; // Number of GW for regular grid
 
         POS_DIST posDist; // Distribution used for ED positions
         PERIOD_DIST periodDist; // Distribution used for ED periods

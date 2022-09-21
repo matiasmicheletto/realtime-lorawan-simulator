@@ -10,6 +10,7 @@ Network::Network(Builder builder) {
     this->mapSize = builder.mapSize;
     this->H = builder.H;
     this->maxSF = builder.maxSF;
+    this->gwCnt = builder.gwCnt;
     this->lastID = builder.lastID;
     this->posDist = builder.posDist;
     this->periodDist = builder.periodDist;
@@ -111,6 +112,11 @@ Network::Builder* Network::Builder::setNetworkSize(unsigned int networkSize) {
 
 Network::Builder* Network::Builder::setMaxSF(unsigned char maxSF) {
     this->maxSF = maxSF;
+    return this;
+}
+
+Network::Builder* Network::Builder::setGWCnt(unsigned int gwCnt) {
+    this->gwCnt = gwCnt;
     return this;
 }
 
@@ -703,6 +709,39 @@ void Network::compSchedulerEDF() {
                 }
             }
         }
+    }
+}
+
+void Network::exportGWGrid(char *filename) {
+    // Build a regular grid of GW and print adjacency matrix
+    if(filename != NULL){
+        FILE *file = fopen(filename, "w");
+
+        /// Build GW grid
+        const int side = sqrt(this->gwCnt);
+        const int offset = this->mapSize/2;
+        const int step = this->mapSize/(side-1);
+        for(int row = 0; row < side; row++) {
+            for(int col = 0; col < side; col++){
+                double x = row * step - offset;
+                double y = col * step - offset;
+                this->createGateway(x, y);
+            }
+        }
+
+        /// Print data
+        fprintf(file, "%ld %d\n", this->enddevices.size(), this->gwCnt); // Header of file
+        for(long unsigned int i = 0; i < this->enddevices.size(); i++) {
+            for(unsigned int j = 0; j < this->gwCnt; j++) {
+                const double dist = this->gateways[j]->distanceTo(this->enddevices[i]);
+                const int minSF = this->gateways[j]->getMinSF(dist);
+                const int maxSF = this->gateways[j]->getMaxSF(this->enddevices[i]->getPeriod());
+                fprintf(file, "%d ", (minSF > 12 || minSF > maxSF) ? 100 : minSF);
+            }
+            fprintf(file, "%d\n", this->enddevices[i]->getPeriod());
+        }
+
+        fclose(file);
     }
 }
 
