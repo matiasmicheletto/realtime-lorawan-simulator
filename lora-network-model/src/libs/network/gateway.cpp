@@ -29,8 +29,8 @@ void Gateway::resetUF() {
 
 bool Gateway::allocate(unsigned char sf, unsigned int period){
     if(sf >= 7 && sf <= 12){
-        const unsigned char mxsf = this->getMaxSF(period);
-        const double utilization = pow(2, sf-7) / ((double) period - pow(2,mxsf-7));
+        //const unsigned char mxsf = this->getMaxSF(period);
+        const double utilization = pow(2, sf-7) / ((double) period - pow(2,sf-7));
         if(this->UF[sf-7] + utilization <= 1.0){
             this->UF[sf-7] += utilization;
             return true;
@@ -41,8 +41,8 @@ bool Gateway::allocate(unsigned char sf, unsigned int period){
 
 void Gateway::deallocate(unsigned char sf, unsigned int period){
     if(sf >= 7 && sf <= 12){
-        const unsigned char mxsf = this->getMaxSF(period);
-        this->UF[sf-7] += pow(2, sf-7) / ((double) period - pow(2,mxsf-7));
+        //const unsigned char mxsf = this->getMaxSF(period);
+        this->UF[sf-7] += pow(2, sf-7) / ((double) period - pow(2,sf-7));
     }
 }
 
