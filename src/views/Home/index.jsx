@@ -4,14 +4,12 @@ import ConfigForm from '../../components/ConfigForm';
 import NetworkViewer from '../../components/NetworkViewer';
 import OutputBlock from '../../components/OutputBlock';
 
-const Home = () => {
-    return (
-        <MainView>
-            <ConfigForm />
-            <OutputBlock />
-            <NetworkViewer />
-        </MainView>
-    );
-};
+const Home = () => (
+    <MainView>
+        <ConfigForm />
+        <OutputBlock />
+        <NetworkViewer />
+    </MainView>
+);
 
 export default Home;
