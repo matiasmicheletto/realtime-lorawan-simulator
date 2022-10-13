@@ -17,8 +17,8 @@ clean: clean-custom
 $(TARGET): $(OBJ)
 	$(CPP) $(patsubst %.o, $(OBJSDIR)/%.o, $(OBJ)) -o $(TARGET)
 
-main.o: src/main2.cpp
-	$(CPP) $(OPT) -c ./src/main2.cpp -o $(OBJSDIR)/main.o 
+main.o: src/main.cpp
+	$(CPP) $(OPT) -c ./src/main.cpp -o $(OBJSDIR)/main.o 
 random.o: src/libs/random/random.cpp	
 	$(CPP) $(OPT) -c $(LIBSDIR)/random/random.cpp -o $(OBJSDIR)/random.o
 uniform.o: src/libs/random/uniform.cpp	

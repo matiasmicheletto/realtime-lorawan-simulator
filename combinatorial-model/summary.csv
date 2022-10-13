@@ -1,2 +1,10 @@
-GW Pos. Heuristic,ED Sched. Method,Position distr.,Periods distr.,Map size,ED Number,ED Dens. (1/m^2),Max. SF,GW Number,Channels used,ED Unfeas. Instances,Coverage %,GW Avg. UF,Elapsed,Iterations,Exit condition
-Springs,EDF,Uniform,Soft,1000,1000,0.00,12,1,1,0,100.00,0.29,0,1,Max. coverage
+Position distr.,Periods distr.,Map size,ED Number,ED Dens. (1/m^2),Max. SF,GW Number,Channels used,Coverage %,GW Avg. UF,Elapsed,Iterations,Exit condition
+Uniform,Soft,1000,10000,0.01,12,4,4,100.00,0.48,1688,116,Max. coverage reached.
+Uniform,Medium,1000,10000,0.01,12,10,10,100.00,0.22,2844,408,Max. coverage reached.
+Uniform,Hard,1000,10000,0.01,9,95,10,100.00,0.04,4765,496,Max. coverage reached.
+Uniform,Soft,1000,50000,0.05,12,12,12,100.00,0.58,47975,304,Max. coverage reached.
+Uniform,Hard,1000,50000,0.05,7,200,9,93.44,0.07,322793,5000,Iterations completed.
+Clouds,Soft,1000,10000,0.01,12,3,3,100.00,0.49,1458,52,Max. coverage reached.
+Clouds,Hard,1000,10000,0.01,7,128,23,97.80,0.02,51121,5000,Iterations completed.
+Clouds,Soft,1000,50000,0.05,12,7,7,100.00,0.69,35610,53,Max. coverage reached.
+Clouds,Hard,1000,50000,0.05,7,195,27,98.55,0.08,310274,5000,Iterations completed.

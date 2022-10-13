@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <list>
 #include <limits>
 #include <random>
 #include <functional>
@@ -8,22 +9,78 @@
 #include <string.h>
 #include <stdio.h>
 
+#include "random/random.h"
+#include "random/uniform.h"
+#include "random/normal.h"
+#include "random/clouds.h"
+#include "random/custom.h"
+
 #define LINE_BUFFER_SIZE 256 // Max length for csv file line
 #define FILE_COLS 4 // Columns of csv file (id, x, y, period)
 
 using namespace std;
 using namespace std::chrono;
 
+// Global parameters
+char* _inputfilename;
+char* _outputfilename;
+unsigned int _mapsize = 1000;    
+unsigned int _enddevices = 1000;
+unsigned char _posdist = 0;    
+unsigned char _perioddist = 0;
+unsigned int _initialGW = 1;
+unsigned int _increaseGWAfter = 50;
+unsigned char _sfmax = 12;
+unsigned int _itermax = 1000;
+unsigned int _timeout = 360000; // ms
+unsigned int _alpha = 1000;
+unsigned int _beta = 1;
+
+struct Node { // End devices
+    unsigned int id;
+    float x;
+    float y;
+    unsigned int period;
+    unsigned char maxSF; // Computed from period
+};
+
+struct GW { // Gateways
+    unsigned int id;
+    float uf[6];
+    unsigned int ch;
+};
+
+vector<Node> *_network;
+unsigned char** _minSFMatrix;
+steady_clock::time_point _begin;
+bool* _bestSol;
+unsigned int _minGWs;
+unsigned int _currentIter;
+unsigned char _exitCond;
+unsigned char _channels;
+float _coverage;
+float _gwAvgUf;
+
+// Binary random generator
+auto binRnd = bind(uniform_int_distribution<>(0,1), default_random_engine());
+const float _eps = numeric_limits<float>::epsilon();
+
 void printHelp() {    
-    printf("Usage: ./runnable [-h | --help] [-i | --input] [-o | --output] [-a | --alpha] [-b | --beta]\n");
+    printf("Usage: ./runnable [-h | --help] [-f | --file] [-o | --output] [-a | --alpha] [-b | --beta]\n");
     
     printf("Arguments:\n");
     printf("  -h, --help            prints this help and exits.\n");
     printf("  -f, --file            network configuration file.\n");        
+    printf("  or use the following arguments:\n");
+    printf("    -m, --mapsize         size of the map (in meters).\n");
+    printf("    -e, --enddevices      number of end devices.\n");
+    printf("    -x, --positions       position distribution. 0->uniform, 1->normal, 2->clouds.\n");
+    printf("    -p, --periods         period distribution. 0->soft, 1->medium, 2->hard.\n");
     printf("  -o, --output          output file name.\n");
     printf("  -i, --iterations      max. iterations.\n");
     printf("  -t, --timeout         max. run time (seconds).\n");
     printf("  -g, --gateways        initial gw number.\n");
+    printf("  -s, --sfmax           maximum spreading factor for gateways.\n");
     printf("  -a, --alpha           alpha tunning parameter.\n");    
     printf("  -b, --beta            beta tunning parameter.\n");    
     
@@ -44,22 +101,9 @@ void printHelp() {
 // Utils
 inline int gcd(int a, int b) {return b == 0 ? a : gcd(b, a % b);}
 inline int lcm(int a, int b){return a * b / gcd(a, b);}
-
-struct node { // End devices
-    unsigned int id;
-    float x;
-    float y;
-    unsigned int period;
-    unsigned char maxSF; // Computed from period
-};
-
-struct gw { // Gateways
-    unsigned int id;
-    float uf[6];
-};
-
-// Binary random generator
-auto binRnd = bind(uniform_int_distribution<>(0,1), default_random_engine());
+inline unsigned long int getElapsed() {
+    return (unsigned long int) duration_cast<milliseconds>(steady_clock::now() - _begin).count();
+}
 
 unsigned char getMaxSF(const unsigned int period) {
     /*
@@ -82,22 +126,89 @@ unsigned char getMaxSF(const unsigned int period) {
         return 0;
 }
 
-// Load network from file (file.csv -> vector<node>*)
-vector<node>* loadInstance(const char* filename, unsigned int &H) { 
+float getRange(const unsigned char sf) {
     /*
-        This function parses input csv file, builds a vector of nodes 
-        and returns a pointer to it.
-        A second argument &H (pointer to unsigned int H) is taken to 
-        compute the value of the resulting hyperperiod.
+        Max ranges for different spread factors
     */
-    FILE *file = fopen(filename, "r");
+    switch(sf){
+        case 12:
+            return 2000.0;
+        case 11:
+            return 1000.0;
+        case 10:
+            return 500.0;
+        case 9:
+            return 250.0;
+        case 8:
+            return 125.0;
+        case 7:
+            return 62.5;
+        default: 
+            return 0;
+    }
+}
+
+string getPosDistName(unsigned char posDist) {
+    switch(posDist){
+        case 0:
+            return "Uniform";
+        case 1:
+            return "Normal";
+        case 2:
+            return "Clouds";
+        case 3:
+            return "External";
+        default:
+            return "Unknown";
+    }
+}
+
+string getPeriodDistName(unsigned char periodDist) {
+    switch(periodDist){
+        case 0:
+            return "Soft";
+        case 1:
+            return "Medium";
+        case 2:
+            return "Hard";
+        case 3: 
+            return "External";
+        default:
+            return "Unknown";
+    }
+}
+
+string getExitConditionName(unsigned char exitCond) {
+    switch(exitCond){
+        case 0: 
+            return "Iterations completed.";
+        case 1:
+            return "Max. coverage reached.";
+        case 2:
+            return "Timeout.";
+        default:
+            return "Unknown exit code.";
+    }
+}
+
+bool checkFileExists(string filename){
+    FILE *file = fopen(filename.c_str(), "r");
+    bool exists = file != NULL;
+    if(exists) fclose(file);
+    return exists;
+}
+
+void loadInstance() { 
+    /*
+        This function parses input csv file and builds a vector of nodes.        
+    */
+    FILE *file = fopen(_inputfilename, "r");
     if (file == NULL) {
         printf("Error opening file csv file\n");        
         exit(1);
     }
 
-    H = 1;
-    vector<node> *network = new vector<node>;
+    _network = new vector<Node>;
     char line[LINE_BUFFER_SIZE];
     while ( fgets(line, LINE_BUFFER_SIZE, file) != NULL ) {
         int col = 0;
@@ -121,22 +232,94 @@ vector<node>* loadInstance(const char* filename, unsigned int &H) {
                     break;
                 case 3:
                     period = atoi(token);
-                    maxSF = getMaxSF(period);
-                    H = (unsigned int) lcm(H, period);
+                    maxSF = getMaxSF(period);                    
                     break;
                 default:
                     break;
             }
         }
-        network->push_back({id, x, y, period, maxSF});
+        _network->push_back({id, x, y, period, maxSF});
     }
     fclose(file);
 
-    return network;
+    _enddevices = _network->size(); // Update global value
+
+    printf("-----------------------------------\n");
+    printf("Configuration file loaded\n");
+    printf("End devices: %d\n", _enddevices);        
+    printf("-----------------------------------\n\n");
+}
+
+void buildInstance() {
+    Random* posGenerator;
+    // Create the position generator function
+    switch (_posdist) {
+        case 0: // Positions have a uniform distribution
+            posGenerator = new Uniform(-(float)_mapsize/2, (float)_mapsize/2);
+            break;
+        case 1: // Positions have normal distribution
+            posGenerator = new Normal(-(float)_mapsize/2, (float)_mapsize/2);
+            break;
+        case 2:{ // Positions fall with a uniform distribution of 3 normal distributions 
+            posGenerator = new Clouds(-(float)_mapsize/2, (float)_mapsize/2, 5);
+            break;
+        }
+        default:
+            printf("Warning: Invalid position distribution.\n");
+            break;
+    }
+    CustomDist::Builder distBuilder = CustomDist::Builder();
+    switch (_perioddist){
+        case 0:
+            distBuilder.addValue(16000, 0.25)
+                ->addValue(8000, 0.25)
+                ->addValue(4000, 0.25)
+                ->addValue(3200, 0.25);
+
+            break;
+        case 1:
+		    distBuilder.addValue(8000, 0.25)
+                ->addValue(4000, 0.25)
+                ->addValue(2000, 0.25)
+                ->addValue(1600, 0.25);
+            break;
+        case 2:
+            distBuilder.addValue(1600, 0.25)
+                ->addValue(800, 0.25)
+                ->addValue(400, 0.25)
+                ->addValue(320, 0.25);
+            break;
+        default:
+            printf("Warning: Invalid period distribution.\n");
+            break;
+        break;
+    }
+    CustomDist *periodGenerator = new CustomDist(distBuilder.build());
+
+    _network = new vector<Node>;
+    for(unsigned int i = 0; i < _enddevices; i++){
+        float x, y; 
+        posGenerator->setRandom(x, y);
+        unsigned int period = periodGenerator->randomInt();
+        unsigned char maxSF = getMaxSF(period);
+        _network->push_back({i, x, y, period, maxSF});
+    }
+
+    delete posGenerator;
+    delete periodGenerator;
+
+    printf("-----------------------------------\n");
+    printf("Network built\n");
+    printf("  Map size: %d\n", _mapsize);
+    printf("  End devices: %d\n", _enddevices);
+    printf("  Max. SF: %d\n", _sfmax);
+    printf("  ED pos. generator: %s\n", getPosDistName(_posdist).c_str());
+    printf("  ED period generator: %s\n", getPeriodDistName(_perioddist).c_str());
+    printf("-----------------------------------\n\n");
 }
 
 // Euclidean distance between nodes i and j (computationally expensive, use memoization)
-float computeDistance(const vector<node>* nodes, const unsigned int i, const unsigned int j) { 
+float computeDistance(const unsigned int i, const unsigned int j) { 
     /*
         This function computes the euclidean distance between nodes i and j.
         i and j are the indexes of vector of nodes.
@@ -144,84 +327,60 @@ float computeDistance(const vector<node>* nodes, const unsigned int i, const uns
         0 <= i < N and 
         0 <= j < N.
     */
-    float dx = nodes->at(i).x - nodes->at(j).x;
-    float dy = nodes->at(i).y - nodes->at(j).y;
+    float dx = _network->at(i).x - _network->at(j).x;
+    float dy = _network->at(i).y - _network->at(j).y;
     return sqrt(dx*dx + dy*dy);
 }
 
 // Compute the min SF matrix for network nodes
-unsigned char** buildMinSFMatrix(const vector<node>* nodes) {
+void buildMinSFMatrix() {
     /*
-        Builds the minimum SF matrix and returns a pointer to it.
+        Builds the minimum SF matrix.
         matrix[i][j] means min SF for connecting nodes (i+1) and j.
         INPORTANT: This matrix is triangular, so i,j: i > j
     */
-    const unsigned int N = nodes->size();
-    unsigned char** matrix = (unsigned char**) malloc(sizeof(unsigned char*)*N - 1);
-    for(unsigned int i = 0; i < N-1; i++){
-        matrix[i] = (unsigned char*) malloc(sizeof(unsigned char)*(i+1));
+    _minSFMatrix = (unsigned char**) malloc(sizeof(unsigned char*)*_enddevices - 1);
+    for(unsigned int i = 0; i < _enddevices - 1; i++){
+        _minSFMatrix[i] = (unsigned char*) malloc(sizeof(unsigned char)*(i+1));
         for(unsigned int j = 0; j < i+1; j++){
-            float distance = computeDistance(nodes, i+1, j);
+            float distance = computeDistance(i+1, j);
             if(distance < 62.5)
-                matrix[i][j] = 7;
+                _minSFMatrix[i][j] = 7;
             else if(distance < 125)
-                matrix[i][j] = 8;
+                _minSFMatrix[i][j] = 8;
             else if(distance < 250)
-                matrix[i][j] = 9;
+                _minSFMatrix[i][j] = 9;
             else if(distance < 500)
-                matrix[i][j] = 10;
+                _minSFMatrix[i][j] = 10;
             else if(distance < 1000)
-                matrix[i][j] = 11;
+                _minSFMatrix[i][j] = 11;
             else if(distance < 2000)
-                matrix[i][j] = 12;
+                _minSFMatrix[i][j] = 12;
             else // No SF for this distance
-                matrix[i][j] = 13;
+                _minSFMatrix[i][j] = 13;
         }
     }
-    return matrix;
 }
 
-// Access min SF matrix of network
-unsigned char getMinSF(unsigned char** matrix, const unsigned int i, const unsigned int j) {    
+// Access min SF matrix of the network
+unsigned char getMinSF(const unsigned int i, const unsigned int j) {    
     /*
         This function eases the acces to the min SF matrix.
         0 <= i < N and 
         0 <= j < N.
     */
     if(i == j) return 7; // If gw is on ed position, sf=7
-    return i < j ? matrix[j-1][i] : matrix[i-1][j];
-}
-
-void printMinSFMatrix(unsigned char** matrix, unsigned int size) {
-    /*
-        This function is intended to test the computing of the min. SF matrix.
-    */
-    for(unsigned int i = 0; i < size; i++){
-        for(unsigned int j = 0; j < size; j++){
-            if(i != j)
-                printf("%d ", getMinSF(matrix, i, j));
-            else 
-                printf("%d ", 7);
-        }
-        printf("\n");
-    }
+    return i < j ? _minSFMatrix[j-1][i] : _minSFMatrix[i-1][j];
 }
 
 // Free pointers of min SF matrix
-void destroyMinSFMatrix(unsigned char** matrix, const unsigned int size) {
-    for(unsigned int i = 0; i < size-1; i++)
-        free(matrix[i]);
-    free(matrix);
+void destroyMinSFMatrix() {
+    for(unsigned int i = 0; i < _enddevices - 1; i++)
+        free(_minSFMatrix[i]);
+    free(_minSFMatrix);
 }
 
-unsigned int objectiveFunction( // Get cost of a candidate solution
-    const vector<node>* nodes, // List of nodes of network
-    unsigned char** minSFMatrix, // Min. SF matrix
-    const bool *sol, // Pointer to candidate solution to evaluate
-    unsigned int alpha, // Tunning parameter (not connected ed)
-    unsigned int beta, // Tunning parameter (number of gw)
-    unsigned int &connectedNodes // Resulting connected end devices
-    ) {
+unsigned int objectiveFunction(const bool *sol, unsigned int &connectedNodes, const bool stats = false) {
     /*
         Given the array of nodes that are gw, assign a gw for
         each node and compute a quality value depending on the 
@@ -233,29 +392,27 @@ unsigned int objectiveFunction( // Get cost of a candidate solution
                         for each gw:
                             try to connect; (checking allowed sf and uf[sf] of gw)
     */
-    // Compute number of gw
-    const unsigned int size = nodes->size();
-    vector<gw> *gateways = new vector<gw>;
-    bool* connected = (bool*) malloc(sizeof(bool)*size);
-    for(unsigned int i = 0; i < size; i++){
-        connected[i] = false;
-        if(sol[i]){ // If gw
-            gateways->push_back({i, {0.0, 0.0, 0.0, 0.0, 0.0, 0.0}}); // Init gw empty UF            
-        }
+    // Compute number of gw    
+    vector<GW> *gateways = new vector<GW>;
+    bool connected[_enddevices];
+    for(unsigned int i = 0; i < _enddevices; i++){
+        connected[i] = false; // Initially disconected
+        if(sol[i]) // If node has GW
+            gateways->push_back({i, {0.0, 0.0, 0.0, 0.0, 0.0, 0.0}, 0}); // Init gw empty UF and channel=0
     }
     connectedNodes = 0;
 
     if(gateways->size() == 0)
-        return alpha*size;
+        return _alpha*_enddevices;
 
-    for(unsigned char sf = 7; sf <= 12; sf++){ // For each SF (7..12)
-        for(unsigned int i = 0; i < size; i++){ // For each node
+    for(unsigned char sf = 7; sf <= _sfmax; sf++){ // For each SF (7..12)
+        for(unsigned int i = 0; i < _enddevices; i++){ // For each ED
             if(!connected[i]){ // If node is not connected
                 for(unsigned int j = 0; j < gateways->size(); j++){ // For each gateway
                     // Check if feasible sf (before computing UF)
-                    if(sf >= getMinSF(minSFMatrix, i, gateways->at(j).id) && sf <= nodes->at(i).maxSF){ 
-                        const float requiredUF = pow(2, sf-7) / ((float) nodes->at(i).period - pow(2,sf-7));
-                        if(gateways->at(j).uf[sf-7] < 1.0 - requiredUF){ // If possible to connect
+                    if(sf >= getMinSF(i, gateways->at(j).id) && sf <= _network->at(i).maxSF){ 
+                        const float requiredUF = pow(2, sf-7) / ((float) _network->at(i).period - pow(2,sf-7));
+                        if(gateways->at(j).uf[sf-7]+requiredUF < 1.0){ // If possible to connect
                             gateways->at(j).uf[sf-7] += requiredUF; // Compute UF for this GW and sf
                             connected[i] = true; // Mark node as connected
                             connectedNodes++; // Increment counter
@@ -268,209 +425,303 @@ unsigned int objectiveFunction( // Get cost of a candidate solution
     }
 
     // Compute objective cost
-    const unsigned int cost = alpha*(size - connectedNodes) + beta*gateways->size();
+    const unsigned int cost = _alpha*(_enddevices - connectedNodes) + _beta*gateways->size();
 
-    // Free used memory
-    free(connected);
+    if(stats){ // Expensive block
+        // Compute network coverage %
+        _coverage = (float)connectedNodes / (float) _enddevices * 100.0;
+        
+        // Compute Avg. UF for gateways
+        _gwAvgUf = 0.0;
+        for(unsigned int i = 0; i < gateways->size(); i++){
+            float ufAvg = 0.0;
+            for(unsigned int j = 0; j < 6; j++){
+                ufAvg += gateways->at(i).uf[j];
+            }
+            ufAvg /= 6.0;
+            _gwAvgUf += ufAvg;
+        }
+        _gwAvgUf /= gateways->size();
+        
+        // Compute channels
+        if(gateways->size() > 16){
+            _channels = 0;
+            list<unsigned int> usedChannels;
+            for(unsigned int i = 1; i < gateways->size(); i++){ // Start from 1 to avoid GW 0
+                // Get a list of channels used by the neighbors of the current gateway
+                usedChannels.clear();
+                for(unsigned int j = 0; j < gateways->size(); j++){
+                    if(i == j) continue; // Skip current gateway
+                    unsigned char minsfi = 7, minsfj = 7; // Min. used SF of each GW
+                    for(unsigned char s = 7; s < 12; s++){
+                        if(gateways->at(i).uf[s-7] > _eps) // SF is used
+                            if(s > minsfi)
+                                minsfi = s;
+                        if(gateways->at(j).uf[s-7] > _eps) // SF is used
+                            if(s > minsfj)
+                                minsfj = s;
+                    }
+                    const float rangei = getRange(minsfi);
+                    const float rangej = getRange(minsfj);
+                    const float distance = computeDistance(gateways->at(i).id, gateways->at(j).id);
+                    if(distance < rangei+rangej){ // i and j are neighbors
+                        usedChannels.push_back(gateways->at(j).ch); // Add channel of j to the list
+                    }
+                }
+                // Traverse the list of used channels and find the minimum available
+                int minAvailableChannel = 0;
+                for(unsigned int j = 0; j < gateways->size(); j++){ // Worst case is one channel per gateway
+                    if(find(usedChannels.begin(), usedChannels.end(), j) == usedChannels.end()){ // if channel j not found
+                        minAvailableChannel = j; // If j is not used, then is the minimum available channel
+                        break; // Stop search
+                    }
+                }
+                gateways->at(i).ch = minAvailableChannel;
+                // Update minimum number of channels
+                if(minAvailableChannel+1 > _channels)
+                    _channels = minAvailableChannel+1;
+            }  
+        }else{ // If GW count < 16, assume 1 channel for each gw
+            _channels = gateways->size();
+        }
+    }
+
+    // Free used memory    
     gateways->clear();
     delete gateways;
     
     return cost;
 }
 
-void printSol(bool *sol, unsigned int size){
-    for(unsigned int i = 0; i < size; i++)
-        printf("%d ",sol[i]);
-    printf("\n");
-}
-
-void setRandomSol(bool *sol, unsigned int size){
+void printSummary() {
     /*
-        Generates a full random binary array
+        Print summarized results to summary.csv
     */
-    for(unsigned int i = 0; i < size; i++)
-        sol[i] = (bool) binRnd();
+
+    bool printHeader = !checkFileExists("summary.csv");
+
+    FILE *logfile = fopen("summary.csv", "a");
+    if(logfile == NULL){
+        printf("Error opening log file.\n");
+        return;
+    }
+
+    if(printHeader)
+        fprintf(logfile, "Position distr.,Periods distr.,Map size,ED Number,ED Dens. (1/m^2),Max. SF,GW Number,Channels used,Coverage %%,GW Avg. UF,Elapsed,Iterations,Exit condition\n");
+
+    fprintf(logfile, "%s,%s,%d,%d,%.2f,%d,%d,%d,%.2f,%.2f,%ld,%d,%s\n", 
+        getPosDistName(_posdist).c_str(),
+        getPeriodDistName(_perioddist).c_str(),
+        _mapsize, 
+        _enddevices, 
+        (float) _enddevices / (float) _mapsize / (float) _mapsize,
+        _sfmax,
+        _minGWs,
+        _channels,
+        _coverage,
+        _gwAvgUf,
+        getElapsed(),
+        _currentIter,
+        getExitConditionName(_exitCond).c_str()
+    );
+
+    fclose(logfile);
 }
 
-void setRandomSolN(bool *sol, unsigned int size, unsigned int N) {
+void setRandomSol(bool *sol, unsigned int gwn) {
     /*
         Generates a random binary array with only N ones (at random positions)
     */
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
-    uniform_int_distribution<> distrib(0, size);
-    for(unsigned int i = 0; i < size; i++)
+    uniform_int_distribution<> distrib(0, _enddevices-1);
+    for(unsigned int i = 0; i < _enddevices; i++)
         sol[i] = false; // Set all to false
-    for(unsigned int i = 0; i < N; i++){
+    for(unsigned int i = 0; i < gwn; i++){
         unsigned int pos = (unsigned int) distrib(gen);
-        while(sol[pos]) // TODO: In case of "N" close to "size", this could take a while
+        while(sol[pos]) // TODO: In case of "gwn" close to "_enddevices", this could take a while
             pos = (unsigned int) distrib(gen);
         sol[pos] = true;
     }
 }
 
-void optimizeFullRandom(
-    const vector<node>* network, // List of nodes of network
-    unsigned char** minSFMatrix, // Min. SF matrix
-    unsigned int iterMax, // Max iterations    
-    unsigned int timeout, // Max runtime
-    unsigned int alpha, // Tunning parameter (not connected ed)
-    unsigned int beta // Tunning parameter (number of gw)
-    ) {
+void copySol(bool *from, bool *to) {
     /*
-        Search optima generating full random solutions
+        Copy values between two solution (binary) arrays.
     */
-    unsigned int minCost = network->size();
-    bool* sol = (bool*) malloc(sizeof(bool)*network->size());
-    unsigned int cn = 0; // connected nodes when evaluating objective fc.
-    for(unsigned int iter = 0; iter < iterMax; iter++){
-        setRandomSol(sol, network->size()); // Full random generator
-        unsigned int cost = objectiveFunction(network, minSFMatrix, sol, alpha, beta, cn);
-        if(cost < minCost){
-            minCost = cost;
-            printf("New min. cost found %d on iter %d (%d connected)\n", minCost, iter, cn);
-            printSol(sol, network->size());
-        }
-    }
-    
-    printf("Min cost computed is %d \n", minCost);
-    free(sol);
+    for(unsigned int i = 0; i < _enddevices; i++)
+        to[i] = from[i];
 }
 
-void optimizeRandomHeuristic(
-    const vector<node>* network, // List of nodes of network
-    unsigned char** minSFMatrix, // Min. SF matrix
-    unsigned int iterMax, // Max iterations
-    unsigned int timeout, // Timeout
-    unsigned int initialGW, // Initial number of GW
-    unsigned int increaseAfter, // Iterations to increase the number of GW
-    unsigned int alpha, // Tunning parameter (not connected ed)
-    unsigned int beta // Tunning parameter (number of gw)
-    ) {
+void optimizeRandomHeuristic() {
     /*
         Search optima generating random solutions, but having control
         of the number of GW
     */
-    steady_clock::time_point begin = steady_clock::now();
-    unsigned int minCost = network->size();
-    bool* sol = (bool*) malloc(sizeof(bool)*network->size());    
-    unsigned int cn = 0; // connected nodes when evaluating objective fc.
-    unsigned int gw = initialGW;
-    unsigned int incrCntr = 0;
-    for(unsigned int iter = 0; iter < iterMax; iter++){
-        setRandomSolN(sol, network->size(), gw); // Full random generator
-        unsigned int cost = objectiveFunction(network, minSFMatrix, sol, alpha, beta, cn);
+    _exitCond = 0;
+    unsigned int minCost = _alpha*_enddevices;
+    _minGWs = _enddevices;
+    bool sol[_enddevices];
+    unsigned int gws = _initialGW; // Number of gw
+    unsigned int cn = 0; // connected EDs (determined when evaluating objective fc).    
+    for(_currentIter = 0; _currentIter < _itermax; _currentIter++){
+        setRandomSol(sol, gws); // Full random generator
+        unsigned int cost = objectiveFunction(sol, cn, false);        
         if(cost < minCost){
             minCost = cost;
-            printf("New min. found %d gw (cost=%d) on iter %d (%d connected)\n", gw, minCost, iter, cn);
-            //printSol(sol, network->size());
-            if(cn == network->size()) // Once all connected, try to reduce gw number
-                gw--;
+            _minGWs = gws;
+            copySol(sol, _bestSol);
+            printf("New min. found %d gw (cost=%d) on iter %d (%d connected)\n", _minGWs, minCost, _currentIter, cn);
+            if(cn == _enddevices){ // Once all connected
+                //gws--; Reduce gw number
+                printf("Max. coverage reached.\n");
+                _exitCond = 1;
+                break;
+            }
         }
-        
-        incrCntr++;
-        if(incrCntr > increaseAfter){
-            if(gw < network->size())
-                gw++;
-            incrCntr = 0;
+        if(_currentIter % _increaseGWAfter == 0){
+            if(gws < _enddevices)
+                gws++;            
         }
-        steady_clock::time_point end = steady_clock::now();
-        if(duration_cast<milliseconds>(end - begin).count() > timeout)
+        if(getElapsed() > _timeout){
+            printf("Timeout.\n");
+            _exitCond = 2;
             break;
+        }
     }
     
-    printf("Min cost computed is %d \n", minCost);
-    free(sol);
+    printf("Min. GW num is %d (cost=%d)\n", _minGWs, minCost);    
+
+    // Check number of channels and restart optimization if it is greater than 16
+    objectiveFunction(_bestSol, cn, true); // Run fc. obj. computing channels and UF avg.
+    if(_channels >= 16 && _sfmax > 7 && _exitCond != 2){
+        _sfmax--;
+        printf("Number of channels = %d. Reducing SF Max. to %d.\n", _channels, _sfmax);
+        optimizeRandomHeuristic();
+    }
 }
+
+
 
 int main(int argc, char **argv) {
 
     default_random_engine generator( random_device{}() ); // Random seed
-    char* inputfilename;
-    char* outputfilename;
-    unsigned int alpha = 1000;
-    unsigned int beta = 1;
-    unsigned int gw = 1;
-    unsigned int itermax = 1000;
-    unsigned int timeout = 360;
 
+    bool buildNetwork = true; // If nodes file is not provided, then build the network
+
+    // Arguments parsing
     for(int i = 0; i < argc; i++) {
         if(strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0){
             printHelp();
         }
         if(strcmp(argv[i], "-f") == 0 || strcmp(argv[i], "--file") == 0) {
             if(i + 1 < argc) {
-                inputfilename = argv[i + 1];
+                _inputfilename = argv[i + 1];    
+                loadInstance();
+                _posdist = 3; // External
+                _perioddist = 3; // External
+                buildNetwork = false;
             }else
+                printHelp();
+        }
+        if(strcmp(argv[i], "-m") == 0 || strcmp(argv[i], "--mapsize") == 0){
+            if(i+1 < argc)
+                _mapsize = atoi(argv[i+1]);
+            else
+                printHelp();
+        }
+        if(strcmp(argv[i], "-e") == 0 || strcmp(argv[i], "--enddevices") == 0){
+            if(i+1 < argc)
+                _enddevices = atoi(argv[i+1]);
+            else
+                printHelp();
+        }
+        if(strcmp(argv[i], "-x") == 0 || strcmp(argv[i], "--positions") == 0){
+            if(i+1 < argc)
+                _posdist = atoi(argv[i+1]);
+            else
+                printHelp();
+        }
+        if(strcmp(argv[i], "-p") == 0 || strcmp(argv[i], "--periods") == 0){
+            if(i+1 < argc)
+                _perioddist = atoi(argv[i+1]);
+            else
                 printHelp();
         }
         if(strcmp(argv[i], "-o") == 0 || strcmp(argv[i], "--output") == 0) {
             if(i + 1 < argc) {
-                outputfilename = argv[i + 1];
+                _outputfilename = argv[i + 1];
             }else
-                printHelp();
-        }
-        if(strcmp(argv[i], "-g") == 0 || strcmp(argv[i], "--gateways") == 0){
-            if(i+1 < argc)
-                gw = atoi(argv[i+1]);
-            else
                 printHelp();
         }
         if(strcmp(argv[i], "-i") == 0 || strcmp(argv[i], "--iterations") == 0){
             if(i+1 < argc)
-                itermax = atoi(argv[i+1]);
+                _itermax = atoi(argv[i+1]);
+            else
+                printHelp();
+        }
+        if(strcmp(argv[i], "-g") == 0 || strcmp(argv[i], "--gateways") == 0){
+            if(i+1 < argc)
+                _initialGW = atoi(argv[i+1]);
+            else
+                printHelp();
+        }
+        if(strcmp(argv[i], "-s") == 0 || strcmp(argv[i], "--sfmax") == 0){
+            if(i+1 < argc)
+                _sfmax = atoi(argv[i+1]);
             else
                 printHelp();
         }
         if(strcmp(argv[i], "-t") == 0 || strcmp(argv[i], "--timeout") == 0){
             if(i+1 < argc)
-                timeout = atoi(argv[i+1]);
+                _timeout = atoi(argv[i+1])*1000; // s -> ms
             else
                 printHelp();
         }
         if(strcmp(argv[i], "-a") == 0 || strcmp(argv[i], "--alpha") == 0){
             if(i+1 < argc)
-                alpha = atoi(argv[i+1]);
+                _alpha = atoi(argv[i+1]);
             else
                 printHelp();
         }
         if(strcmp(argv[i], "-b") == 0 || strcmp(argv[i], "--beta") == 0){
             if(i+1 < argc)
-                beta = atoi(argv[i+1]);
+                _beta = atoi(argv[i+1]);
             else
                 printHelp();
-        }        
+        }
     }
 
-    unsigned int H;
-    vector<node> *network = loadInstance(inputfilename, H);
+    _begin = steady_clock::now();
 
-    printf("-----------------------------------\n");
-    printf("Configuration file loaded\n");
-    printf("End devices: %ld\n", network->size());
-    printf("System hyperperiod: %d\n", H);        
-    printf("-----------------------------------\n\n");
+    if(buildNetwork)
+        buildInstance();
 
-    steady_clock::time_point begin = steady_clock::now();
-
-    unsigned char** minSF = buildMinSFMatrix(network);
-    printf("Min. SF matrix built.\n");
-    //printf("Min. SF matrix:\n");
-    //printMinSFMatrix(minSF, network->size()); // Print minSF 
-    //printf("-----------------------------------\n\n");
+    buildMinSFMatrix();
+    printf("Min. SF matrix built (t = %ld ms).\n", getElapsed());
     
-    //optimizeFullRandom(network, minSF, itermax, timeout, alpha, beta);
-    optimizeRandomHeuristic(network, minSF, itermax, timeout*1000, gw, 50, alpha, beta);
+    _bestSol = (bool*) malloc(sizeof(bool)*_enddevices);
+
+    printf("--------------------------------\n");
+    printf("Optimizer started:\n");        
+    printf("  Max. SF: %d\n", _sfmax);
+    printf("  Initial number of GW: %d\n", _initialGW);        
+    printf("  Add gateway after: %d iterations\n", _increaseGWAfter);
+    printf("  Max. iterations: %d\n", _itermax);
+    printf("  Timeout: %d s\n", _timeout/1000);
+    printf("--------------------------------\n\n");
+
+    optimizeRandomHeuristic();
     
     // Print elapsed time
-    steady_clock::time_point end = steady_clock::now();
-    unsigned long int elapsed = (unsigned long int) duration_cast<milliseconds>(end - begin).count();
-    printf("Elapsed time is %ld ms.\n", elapsed);
+    printf("Total elapsed time is %ld ms.\n", getElapsed());
+    printSummary();
     
     // Free pointers    
-    destroyMinSFMatrix(minSF, network->size()); 
-    network->clear();
-    delete network;
+    destroyMinSFMatrix(); 
+    _network->clear();
+    delete _network;
+    free(_bestSol);
 
     return 0;
 }
