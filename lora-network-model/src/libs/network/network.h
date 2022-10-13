@@ -76,7 +76,8 @@ class Network {
         void compSchedulerEDF(); // Compute the time scheduler for each gateway using the EDF algorithm
         
         // Network information
-        void exportNodesCSV(char *filename);
+        void exportNetworkCSV(char *filename);
+        void exportEDsCSV(char *filename);
         void printNetworkStatus(FILE *file);
         void exportGWGrid(char *filename);
         void printScheduler(char *filename); // Compute the scheduler to validate time requirements

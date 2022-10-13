@@ -477,7 +477,7 @@ string Network::getPeriodDistName() {
     return this->getPeriodDistName(this->periodDist);
 }
 
-void Network::exportNodesCSV(char *filename) {
+void Network::exportNetworkCSV(char *filename) {
 
     FILE *file = fopen(filename, "w");
     if(file == NULL){
@@ -509,6 +509,27 @@ void Network::exportNodesCSV(char *filename) {
             this->enddevices[i]->getGatewayId(),
             this->enddevices[i]->getGWDist(),
             this->enddevices[i]->getSF()
+        );
+    }
+
+    fclose(file);
+}
+
+void Network::exportEDsCSV(char *filename) {
+    FILE *file = fopen(filename, "w");
+    if(file == NULL){
+        printf("Error opening file %s\n", filename);
+        return;
+    }
+
+    // Print end devices positions
+    //fprintf(file, "ID,X,Y,Period\n");
+    for(long unsigned int i = 0; i < this->enddevices.size(); i++){
+        fprintf(file, "%d,%.2f,%.2f,%d\n", 
+            this->enddevices[i]->getId(), 
+            this->enddevices[i]->getX(), 
+            this->enddevices[i]->getY(),
+            this->enddevices[i]->getPeriod()
         );
     }
 

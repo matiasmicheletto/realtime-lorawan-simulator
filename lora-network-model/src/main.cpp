@@ -159,7 +159,7 @@ int main(int argc, char **argv) {
         strcpy(outputfilename, ("output_"+filename+".txt").c_str());
         strcpy(csvfilename, ("nodes_"+filename+".csv").c_str());
         strcpy(schedfilename, ("sched_"+filename+".csv").c_str());
-        network->exportNodesCSV(csvfilename);
+        network->exportNetworkCSV(csvfilename);
         network->printScheduler(schedfilename);
         optimizer->exportFullResults(outputfilename);
     }

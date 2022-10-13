@@ -99,7 +99,8 @@ int main(int argc, char **argv) {
     if(buildNetwork)
         network = new Network(networkBuilder.build());
 
-    network->exportGWGrid(outputfilename);
+    //network->exportGWGrid(outputfilename);
+    network->exportEDsCSV(outputfilename);
 
     delete network;
 
