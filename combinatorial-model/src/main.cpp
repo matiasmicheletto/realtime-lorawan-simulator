@@ -10,7 +10,6 @@
 
 #define LINE_BUFFER_SIZE 256 // Max length for csv file line
 #define FILE_COLS 4 // Columns of csv file (id, x, y, period)
-#define INPUT_FILE_NAME "input.csv" // Input file name
 
 using namespace std;
 using namespace std::chrono;
@@ -20,20 +19,25 @@ void printHelp() {
     
     printf("Arguments:\n");
     printf("  -h, --help            prints this help and exits.\n");
-    printf("  -i, --input           network configuration file.\n");        
+    printf("  -f, --file            network configuration file.\n");        
     printf("  -o, --output          output file name.\n");
+    printf("  -i, --iterations      max. iterations.\n");
+    printf("  -t, --timeout         max. run time (seconds).\n");
+    printf("  -g, --gateways        initial gw number.\n");
     printf("  -a, --alpha           alpha tunning parameter.\n");    
     printf("  -b, --beta            beta tunning parameter.\n");    
     
-    
     printf("Default values:\n");
-    printf("  -i, --input           input.csv\n");
+    printf("  -f, --file            input.csv\n");
     printf("  -o, --output          output.dat\n");
-    printf("  -a, --alpha           100.\n");    
-    printf("  -b, --beta            1.\n");    
+    printf("  -i, --iterations      1000\n");    
+    printf("  -t, --timeout         360\n");        
+    printf("  -g, --gateways        1\n");    
+    printf("  -a, --alpha           100\n");    
+    printf("  -b, --beta            1\n");    
 
     printf("Examples: \n");
-    printf("\t./runnable -i input.csv -o output.dat -a 1000 -b 5\n");
+    printf("\t./runnable -f input.csv -o output.dat -a 1000 -b 5\n");
     exit(1);
 }
 
@@ -308,7 +312,8 @@ void setRandomSolN(bool *sol, unsigned int size, unsigned int N) {
 void optimizeFullRandom(
     const vector<node>* network, // List of nodes of network
     unsigned char** minSFMatrix, // Min. SF matrix
-    unsigned int iterMax, // Max iterations
+    unsigned int iterMax, // Max iterations    
+    unsigned int timeout, // Max runtime
     unsigned int alpha, // Tunning parameter (not connected ed)
     unsigned int beta // Tunning parameter (number of gw)
     ) {
@@ -336,6 +341,7 @@ void optimizeRandomHeuristic(
     const vector<node>* network, // List of nodes of network
     unsigned char** minSFMatrix, // Min. SF matrix
     unsigned int iterMax, // Max iterations
+    unsigned int timeout, // Timeout
     unsigned int initialGW, // Initial number of GW
     unsigned int increaseAfter, // Iterations to increase the number of GW
     unsigned int alpha, // Tunning parameter (not connected ed)
@@ -345,6 +351,7 @@ void optimizeRandomHeuristic(
         Search optima generating random solutions, but having control
         of the number of GW
     */
+    steady_clock::time_point begin = steady_clock::now();
     unsigned int minCost = network->size();
     bool* sol = (bool*) malloc(sizeof(bool)*network->size());    
     unsigned int cn = 0; // connected nodes when evaluating objective fc.
@@ -367,6 +374,9 @@ void optimizeRandomHeuristic(
                 gw++;
             incrCntr = 0;
         }
+        steady_clock::time_point end = steady_clock::now();
+        if(duration_cast<milliseconds>(end - begin).count() > timeout)
+            break;
     }
     
     printf("Min cost computed is %d \n", minCost);
@@ -380,12 +390,15 @@ int main(int argc, char **argv) {
     char* outputfilename;
     unsigned int alpha = 1000;
     unsigned int beta = 1;
+    unsigned int gw = 1;
+    unsigned int itermax = 1000;
+    unsigned int timeout = 360;
 
     for(int i = 0; i < argc; i++) {
         if(strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0){
             printHelp();
         }
-        if(strcmp(argv[i], "-i") == 0 || strcmp(argv[i], "--input") == 0) {
+        if(strcmp(argv[i], "-f") == 0 || strcmp(argv[i], "--file") == 0) {
             if(i + 1 < argc) {
                 inputfilename = argv[i + 1];
             }else
@@ -395,6 +408,24 @@ int main(int argc, char **argv) {
             if(i + 1 < argc) {
                 outputfilename = argv[i + 1];
             }else
+                printHelp();
+        }
+        if(strcmp(argv[i], "-g") == 0 || strcmp(argv[i], "--gateways") == 0){
+            if(i+1 < argc)
+                gw = atoi(argv[i+1]);
+            else
+                printHelp();
+        }
+        if(strcmp(argv[i], "-i") == 0 || strcmp(argv[i], "--iterations") == 0){
+            if(i+1 < argc)
+                itermax = atoi(argv[i+1]);
+            else
+                printHelp();
+        }
+        if(strcmp(argv[i], "-t") == 0 || strcmp(argv[i], "--timeout") == 0){
+            if(i+1 < argc)
+                timeout = atoi(argv[i+1]);
+            else
                 printHelp();
         }
         if(strcmp(argv[i], "-a") == 0 || strcmp(argv[i], "--alpha") == 0){
@@ -428,8 +459,8 @@ int main(int argc, char **argv) {
     //printMinSFMatrix(minSF, network->size()); // Print minSF 
     //printf("-----------------------------------\n\n");
     
-    //optimizeFullRandom(network, minSF, 100, alpha, beta);
-    optimizeRandomHeuristic(network, minSF, 5000, 1, 50, alpha, beta);
+    //optimizeFullRandom(network, minSF, itermax, timeout, alpha, beta);
+    optimizeRandomHeuristic(network, minSF, itermax, timeout*1000, gw, 50, alpha, beta);
     
     // Print elapsed time
     steady_clock::time_point end = steady_clock::now();
