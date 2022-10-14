@@ -33,6 +33,7 @@ unsigned int _increaseGWAfter = 50;
 unsigned char _sfmax = 12;
 unsigned int _itermax = 1000;
 unsigned int _timeout = 360000; // ms
+unsigned char _algo = 1; // 0 -> ga (not implemented), 1 -> random
 unsigned int _alpha = 1000;
 unsigned int _beta = 1;
 
@@ -63,6 +64,8 @@ float _gwAvgUf;
 
 // Binary random generator
 auto binRnd = bind(uniform_int_distribution<>(0,1), default_random_engine());
+random_device rd;  //Will be used to obtain a seed for the random number engine
+mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
 const float _eps = numeric_limits<float>::epsilon();
 
 void printHelp() {    
@@ -81,8 +84,7 @@ void printHelp() {
     printf("  -t, --timeout         max. run time (seconds).\n");
     printf("  -g, --gateways        initial gw number.\n");
     printf("  -s, --sfmax           maximum spreading factor for gateways.\n");
-    printf("  -a, --alpha           alpha tunning parameter.\n");    
-    printf("  -b, --beta            beta tunning parameter.\n");    
+    printf("  -a, --algorithm       gateway configuration algorithm: 0->ga, 1->random.\n");       
     
     printf("Default values:\n");
     printf("  -f, --file            input.csv\n");
@@ -181,13 +183,13 @@ string getPeriodDistName(unsigned char periodDist) {
 string getExitConditionName(unsigned char exitCond) {
     switch(exitCond){
         case 0: 
-            return "Iterations completed.";
+            return "Max. iterations";
         case 1:
-            return "Max. coverage reached.";
+            return "Max. coverage";
         case 2:
-            return "Timeout.";
+            return "Timeout";
         default:
-            return "Unknown exit code.";
+            return "Unknown";
     }
 }
 
@@ -506,10 +508,10 @@ void printSummary() {
         return;
     }
 
-    if(printHeader)
-        fprintf(logfile, "Position distr.,Periods distr.,Map size,ED Number,ED Dens. (1/m^2),Max. SF,GW Number,Channels used,Coverage %%,GW Avg. UF,Elapsed,Iterations,Exit condition\n");
+    if(printHeader)        
+        fprintf(logfile, "GW Pos. Heuristic,ED Sched. Method,Position distr.,Periods distr.,Map size,ED Number,ED Dens. (1/m^2),Max. SF,GW Number,Channels used,ED Unfeas. Instances,Coverage %%,GW Avg. UF,Elapsed,Iterations,Exit condition\n");
 
-    fprintf(logfile, "%s,%s,%d,%d,%.2f,%d,%d,%d,%.2f,%.2f,%ld,%d,%s\n", 
+    fprintf(logfile, "Random Comb.,None,%s,%s,%d,%d,%.2f,%d,%d,%d,0,%.2f,%.2f,%ld,%d,%s\n",         
         getPosDistName(_posdist).c_str(),
         getPeriodDistName(_perioddist).c_str(),
         _mapsize, 
@@ -532,8 +534,6 @@ void setRandomSol(bool *sol, unsigned int gwn) {
     /*
         Generates a random binary array with only N ones (at random positions)
     */
-    std::random_device rd;  //Will be used to obtain a seed for the random number engine
-    std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
     uniform_int_distribution<> distrib(0, _enddevices-1);
     for(unsigned int i = 0; i < _enddevices; i++)
         sol[i] = false; // Set all to false
@@ -678,15 +678,9 @@ int main(int argc, char **argv) {
             else
                 printHelp();
         }
-        if(strcmp(argv[i], "-a") == 0 || strcmp(argv[i], "--alpha") == 0){
+        if(strcmp(argv[i], "-a") == 0 || strcmp(argv[i], "--algorithm") == 0){
             if(i+1 < argc)
-                _alpha = atoi(argv[i+1]);
-            else
-                printHelp();
-        }
-        if(strcmp(argv[i], "-b") == 0 || strcmp(argv[i], "--beta") == 0){
-            if(i+1 < argc)
-                _beta = atoi(argv[i+1]);
+                _algo = atoi(argv[i+1]);
             else
                 printHelp();
         }
@@ -711,8 +705,9 @@ int main(int argc, char **argv) {
     printf("  Timeout: %d s\n", _timeout/1000);
     printf("--------------------------------\n\n");
 
-    optimizeRandomHeuristic();
-    
+    if(_algo == 1)
+        optimizeRandomHeuristic();
+
     // Print elapsed time
     printf("Total elapsed time is %ld ms.\n", getElapsed());
     printSummary();

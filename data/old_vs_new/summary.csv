@@ -1,0 +1,25 @@
+GW Pos. Heuristic,ED Sched. Method,Position distr.,Periods distr.,Map size,ED Number,ED Dens. (1/m^2),Max. SF,GW Number,Channels used,ED Unfeas. Instances,Coverage %,GW Avg. UF,Elapsed,Iterations,Exit condition
+Random,EDF,Uniform,Soft,1000,10000,0.01,12,4,4,0,100.00,0.47,296,43,Max. coverage
+Random,EDF,Uniform,Medium,1000,10000,0.01,12,8,8,0,100.00,0.38,1054,103,Max. coverage
+Random,EDF,Uniform,Hard,1000,10000,0.01,8,115,15,0,100.00,0.03,49805,340,Max. coverage
+Random,EDF,Uniform,Soft,1000,25000,0.03,12,8,8,0,100.00,0.54,3069,99,Max. coverage
+Random,EDF,Uniform,Medium,1000,25000,0.03,12,15,15,0,100.00,0.38,9815,184,Max. coverage
+Random,EDF,Uniform,Hard,1000,25000,0.03,8,114,14,0,100.00,0.09,326349,729,Max. coverage
+Random,EDF,Uniform,Soft,1000,50000,0.05,12,13,13,0,100.00,0.55,19043,169,Max. coverage
+Random,EDF,Uniform,Medium,1000,50000,0.05,9,37,15,0,100.00,0.16,201178,448,Max. coverage
+Random,EDF,Uniform,Hard,1000,50000,0.05,7,123,8,0,80.10,0.10,1000287,509,Timeout
+Random,EDF,Uniform,Soft,1000,100000,0.10,9,39,15,0,100.00,0.17,374569,462,Max. coverage
+Random,EDF,Uniform,Medium,1000,100000,0.10,7,90,6,0,69.31,0.05,1000769,488,Timeout
+Random,EDF,Uniform,Hard,1000,100000,0.10,7,199,9,0,86.14,0.14,1001736,582,Timeout
+Random Comb.,None,Uniform,Soft,1000,10000,0.01,12,4,4,0,100.00,0.48,1633,107,Max. coverage
+Random Comb.,None,Uniform,Medium,1000,10000,0.01,12,9,9,0,100.00,0.27,2757,396,Max. coverage
+Random Comb.,None,Uniform,Hard,1000,10000,0.01,9,108,12,0,100.00,0.04,8435,1101,Max. coverage
+Random Comb.,None,Uniform,Soft,1000,25000,0.03,12,8,8,0,100.00,0.52,11837,301,Max. coverage
+Random Comb.,None,Uniform,Medium,1000,25000,0.03,12,14,14,0,100.00,0.37,18254,640,Max. coverage
+Random Comb.,None,Uniform,Hard,1000,25000,0.03,9,124,11,0,100.00,0.08,106733,3653,Max. coverage
+Random Comb.,None,Uniform,Soft,1000,50000,0.05,12,12,12,0,100.00,0.57,53614,522,Max. coverage
+Random Comb.,None,Uniform,Medium,1000,50000,0.05,12,21,15,0,100.00,0.40,84335,966,Max. coverage
+Random Comb.,None,Uniform,Hard,1000,50000,0.05,9,139,12,0,100.00,0.13,239294,2940,Max. coverage
+Random Comb.,None,Uniform,Soft,1000,100000,0.10,9,33,14,0,100.00,0.20,508273,1580,Max. coverage
+Random Comb.,None,Uniform,Medium,1000,100000,0.10,9,51,14,0,100.00,0.21,136396,10,Max. coverage
+Random Comb.,None,Uniform,Hard,1000,100000,0.10,7,243,12,0,91.20,0.12,1000382,4656,Timeout
