@@ -1,2 +1,0 @@
-GW Pos. Heuristic,ED Sched. Method,Position distr.,Periods distr.,Map size,ED Number,ED Dens. (1/m^2),Max. SF,GW Number,Channels used,ED Unfeas. Instances,Coverage %,GW Avg. UF,Elapsed,Iterations,Exit condition
-Random Comb.,None,Uniform,Hard,1000,10000,0.01,12,104,12,0,100.00,0.04,29209,3682,Max. coverage reached.
