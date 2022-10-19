@@ -63,16 +63,16 @@ struct GW { // Gateways
 };
 
 struct Chromosome {
-	bool* gwArr;
+	bool* isGW;
 
 	string to_string() const { // Print number of gw
         unsigned int gwCnt = 0;
         for(unsigned int i = 0; i < _enddevices; i++){
-            if(gwArr[i]){
+            if(isGW[i]){
                 gwCnt++;
             }
         }
-		return "GW count: " + std::to_string(gwCnt);
+		return std::to_string(gwCnt)+" GWs";
 	}
 };
 
@@ -183,6 +183,18 @@ float getRange(const unsigned char sf) {
             return 62.5;
         default: 
             return 0;
+    }
+}
+
+string getAlgorithmName(unsigned char algo) {
+    switch (algo)
+    {
+    case 0:
+        return "GA Opt.";
+    case 1:
+        return "Random Comb.";
+    default:
+        return "Unknown";
     }
 }
 
@@ -418,11 +430,11 @@ unsigned char getMinSF(const unsigned int i, const unsigned int j) {
     return i < j ? _minSFMatrix[j-1][i] : _minSFMatrix[i-1][j];
 }
 
-unsigned int objectiveFunction(const bool *sol, unsigned int &connectedNodes, const bool stats = false) {
+void moFunction(const bool *sol, unsigned int &connectedNodes, unsigned int &gwCount, const bool stats = false) {
     /*
-        Given the array of nodes that are gw, assign a gw for
-        each node and compute a quality value depending on the 
-        coverage % and the number of gw.
+        Given the array of nodes that are GW, assign a GW for
+        each node and compute the number of not connected nodes
+        the number of gw (MO optimization).
         Algorithm:            
             for each sf from 7 to 12:
                 for each node:
@@ -438,15 +450,17 @@ unsigned int objectiveFunction(const bool *sol, unsigned int &connectedNodes, co
         if(sol[i]) // If node has GW
             gateways->push_back({i, {0.0, 0.0, 0.0, 0.0, 0.0, 0.0}, 0}); // Init gw empty UF and channel=0
     }
-    connectedNodes = 0;
 
-    if(gateways->size() == 0)
-        return _alpha*_enddevices;
+    connectedNodes = 0;
+    gwCount = gateways->size();
+
+    if(gwCount == 0)
+        return;
 
     for(unsigned char sf = 7; sf <= _sfmax; sf++){ // For each SF (7..12)
         for(unsigned int i = 0; i < _enddevices; i++){ // For each ED
             if(!connected[i]){ // If node is not connected
-                for(unsigned int j = 0; j < gateways->size(); j++){ // For each gateway
+                for(unsigned int j = 0; j < gwCount; j++){ // For each gateway
                     // Check if feasible sf (before computing UF)
                     if(sf >= getMinSF(i, gateways->at(j).id) && sf <= _network->at(i).maxSF){ 
                         const float requiredUF = pow(2, sf-7) / ((float) _network->at(i).period - pow(2,sf-7));
@@ -462,16 +476,13 @@ unsigned int objectiveFunction(const bool *sol, unsigned int &connectedNodes, co
         }
     }
 
-    // Compute objective cost
-    const unsigned int cost = _alpha*(_enddevices - connectedNodes) + _beta*gateways->size();
-
     if(stats){ // Expensive block
         // Compute network coverage %
         _coverage = (float)connectedNodes / (float) _enddevices * 100.0;
         
         // Compute Avg. UF for gateways
         _gwAvgUf = 0.0;
-        for(unsigned int i = 0; i < gateways->size(); i++){
+        for(unsigned int i = 0; i < gwCount; i++){
             float ufAvg = 0.0;
             for(unsigned int j = 0; j < 6; j++){
                 ufAvg += gateways->at(i).uf[j];
@@ -479,16 +490,16 @@ unsigned int objectiveFunction(const bool *sol, unsigned int &connectedNodes, co
             ufAvg /= 6.0;
             _gwAvgUf += ufAvg;
         }
-        _gwAvgUf /= gateways->size();
+        _gwAvgUf /= gwCount;
         
         // Compute channels
-        if(gateways->size() > 16){
+        if(gwCount > 16){
             _channels = 0;
             list<unsigned int> usedChannels;
-            for(unsigned int i = 1; i < gateways->size(); i++){ // Start from 1 to avoid GW 0
+            for(unsigned int i = 1; i < gwCount; i++){ // Start from 1 to avoid GW 0
                 // Get a list of channels used by the neighbors of the current gateway
                 usedChannels.clear();
-                for(unsigned int j = 0; j < gateways->size(); j++){
+                for(unsigned int j = 0; j < gwCount; j++){
                     if(i == j) continue; // Skip current gateway
                     unsigned char minsfi = 7, minsfj = 7; // Min. used SF of each GW
                     for(unsigned char s = 7; s < 12; s++){
@@ -508,7 +519,7 @@ unsigned int objectiveFunction(const bool *sol, unsigned int &connectedNodes, co
                 }
                 // Traverse the list of used channels and find the minimum available
                 int minAvailableChannel = 0;
-                for(unsigned int j = 0; j < gateways->size(); j++){ // Worst case is one channel per gateway
+                for(unsigned int j = 0; j < gwCount; j++){ // Worst case is one channel per gateway
                     if(find(usedChannels.begin(), usedChannels.end(), j) == usedChannels.end()){ // if channel j not found
                         minAvailableChannel = j; // If j is not used, then is the minimum available channel
                         break; // Stop search
@@ -520,15 +531,17 @@ unsigned int objectiveFunction(const bool *sol, unsigned int &connectedNodes, co
                     _channels = minAvailableChannel+1;
             }  
         }else{ // If GW count < 16, assume 1 channel for each gw
-            _channels = gateways->size();
+            _channels = gwCount;
         }
     }
 
     // Free used memory    
     gateways->clear();
     delete gateways;
-    
-    return cost;
+}
+
+unsigned int evalCost(unsigned int &connectedNodes, unsigned int &gwCount) {
+    return _alpha * (_enddevices - connectedNodes) + _beta * gwCount;
 }
 
 void printSummary() {
@@ -547,7 +560,8 @@ void printSummary() {
     if(printHeader)        
         fprintf(logfile, "GW Pos. Heuristic,ED Sched. Method,Position distr.,Periods distr.,Map size,ED Number,ED Dens. (1/m^2),Max. SF,GW Number,Channels used,ED Unfeas. Instances,Coverage %%,GW Avg. UF,Elapsed,Iterations,Exit condition\n");
 
-    fprintf(logfile, "Random Comb.,None,%s,%s,%d,%d,%.2f,%d,%d,%d,0,%.2f,%.2f,%ld,%d,%s\n",         
+    fprintf(logfile, "%s,None,%s,%s,%d,%d,%.2f,%d,%d,%d,0,%.2f,%.2f,%ld,%d,%s\n",         
+        getAlgorithmName(_algo).c_str(),
         getPosDistName(_posdist).c_str(),
         getPeriodDistName(_perioddist).c_str(),
         _mapsize, 
@@ -599,10 +613,12 @@ void optimizeRandomHeuristic() {
     _minGWs = _enddevices;
     bool sol[_enddevices];
     unsigned int gws = _initialGW; // Number of gw
+    unsigned int gwsCnt = 0; // Number of gw (computed, but it should be gwsCnt == gws)
     unsigned int cn = 0; // connected EDs (determined when evaluating objective fc).    
     for(_currentIter = 0; _currentIter < _itermax; _currentIter++){
         setRandomSol(sol, gws); // Full random generator
-        unsigned int cost = objectiveFunction(sol, cn, false);        
+        moFunction(sol, cn, gwsCnt, false);        
+        const unsigned int cost = evalCost(cn, gwsCnt);
         if(cost < minCost){
             minCost = cost;
             _minGWs = gws;
@@ -625,11 +641,12 @@ void optimizeRandomHeuristic() {
             break;
         }
     }
+    _currentIter = _itermax;
     
     printf("Min. GW num is %d (cost=%d)\n", _minGWs, minCost);    
 
     // Check number of channels and restart optimization if it is greater than 16
-    objectiveFunction(_bestSol, cn, true); // Run fc. obj. computing channels and UF avg.
+    moFunction(_bestSol, cn, gwsCnt, true); // Run fc. obj. computing channels and UF avg.
     if(_channels >= 16 && _sfmax > 7 && _exitCond != 2){
         _sfmax--;
         printf("Number of channels = %d. Reducing SF Max. to %d.\n", _channels, _sfmax);
@@ -642,18 +659,24 @@ void optimizeRandomHeuristic() {
 //// GA OPERATORS ////
 
 void init_genes(Chromosome& p, const function<double(void)> &rnd01) {
-	p.gwArr = (bool*) malloc(sizeof(bool)*_enddevices);
+	p.isGW = (bool*) malloc(sizeof(bool)*_enddevices);
 	for(unsigned int i = 0; i < _enddevices; i++)
-		p.gwArr[i] = rnd01() < 0.001; // 1 gw every 1000 eds
+		p.isGW[i] = rnd01() < 0.001; // 1 gw every 1000 eds
+}
+
+void copy_genes(const Chromosome& from, Chromosome& to) {
+    for(unsigned int i = 0; i < _enddevices; i++)
+        to.isGW[i] = from.isGW[i];
 }
 
 Chromosome mutate(const Chromosome& X_base, const function<double(void)> &rnd01, double shrink_scale) {
 	Chromosome X_new;
+    init_genes(X_new, rnd01);
+    copy_genes(X_base, X_new);
 
-    X_new = X_base;
     for(unsigned int i = 0; i < _enddevices; i++){
         if(rnd01() < _mut_prob){
-            X_new.gwArr[i] = !X_new.gwArr[i]; // Switch gene
+            X_new.isGW[i] = !X_new.isGW[i]; // Switch gene
         }
     }
 
@@ -661,17 +684,22 @@ Chromosome mutate(const Chromosome& X_base, const function<double(void)> &rnd01,
 }
 
 Chromosome crossover(const Chromosome& X1, const Chromosome& X2,const function<double(void)> &rnd01) {
-	Chromosome X_new = X1;
+	Chromosome X_new;
+    init_genes(X_new, rnd01);
     unsigned int x_point = (unsigned int) (rnd01()*(double)_enddevices); // Crossover point
+    for(unsigned int i = 0; i < x_point; i++){
+        X_new.isGW[i] = X1.isGW[i];
+    }
     for(unsigned int i = x_point; i < _enddevices; i++){
-        X_new.gwArr[i] = X2.gwArr[i];
+        X_new.isGW[i] = X2.isGW[i];
     }
 	return X_new;
 }
 
 bool eval_solution(const Chromosome& p, MiddleCost &c) { // Compute costs
-    unsigned int cn;
-    c.cost = objectiveFunction(p.gwArr, cn, false);
+    unsigned int cn, gwCnt;
+    moFunction(p.isGW, cn, gwCnt, false);
+    c.cost = evalCost(cn, gwCnt);
     //printf("[eval_solution] Cost = %d, ED = %d, connected = %d\n", cost, _enddevices, cn);
 
 	return true; // genes always accepted (unrestricted optimization)
@@ -684,13 +712,12 @@ double calculate_SO_total_fitness(const GA_Type::thisChromosomeType &X) { // Com
 }
 
 void SO_report_generation(int generation_number, const EA::GenerationType<Chromosome,MiddleCost> &last_generation, const Chromosome& best_genes) {
-    (void) last_generation; // ??
-
     cout<<"Generation ["<<generation_number<<"], "
-		<<"Best = "<<last_generation.best_total_cost<<", "
-		<<"Average = "<<last_generation.average_cost<<", "
-		<<"Best genes = ("<<best_genes.to_string()<<")"<<", "
-		<<"Exe_time = "<<last_generation.exe_time
+		<<"Best total cost = "<<last_generation.best_total_cost<<", "
+		<<"Average cost = "<<last_generation.average_cost<<", "
+		<<"Best value = "<<best_genes.to_string()<<", "
+        //<<"Best index = "<<last_generation.best_chromosome_index<<", "
+		//<<"Exe_time = "<<last_generation.exe_time
 		<<endl;
 }
 
@@ -709,36 +736,47 @@ void optimizeGA() {
 	ga_obj.idle_delay_us = 1; // switch between threads quickly
 	ga_obj.verbose = false;
 	ga_obj.population = 30;
-	ga_obj.generation_max = _itermax/25;
-    ga_obj.best_stall_max = _itermax/100;
-    ga_obj.average_stall_max = _itermax/100;
+	ga_obj.generation_max = _itermax/ga_obj.population;
+    ga_obj.best_stall_max = _itermax/50;
+    ga_obj.average_stall_max = _itermax/50;
 	ga_obj.calculate_SO_total_fitness = calculate_SO_total_fitness;
 	ga_obj.init_genes = init_genes;
 	ga_obj.eval_solution = eval_solution;
 	ga_obj.mutate = mutate;
 	ga_obj.crossover = crossover;    
 	ga_obj.SO_report_generation = SO_report_generation;
-    //ga_obj.elite_count = 5;
+    //ga_obj.elite_count = 10;
 	ga_obj.crossover_fraction = 0.5;
 	ga_obj.mutation_rate = 0.3;
     
 	// Start optimization
 	ga_obj.solve();
 
+    /*
     printf("Last generation:\n");
     for(unsigned int i = 0; i < ga_obj.population; i++){
         const auto &X = ga_obj.last_generation.chromosomes[i];
-        unsigned int cn = 0;
-        unsigned int cost = objectiveFunction(X.genes.gwArr, cn, true);
+        unsigned int cn, gwCnt;
+        moFunction(X.genes.isGW, cn, gwCnt, true);
+        unsigned int cost = evalCost(cn, gwCnt);
         printf("Xi = %d, cost = %d, ch = %d, coverage = %.2f, uf avg = %.2f   - ",i, cost, _channels, _coverage, _gwAvgUf);
         printf(X.genes.to_string().c_str());
         printf("\n");
     }
+    */
 
 	// Print results
 	cout << "Solution computed in " << timer.toc() << " seconds."<<endl;
-}
 
+    // Check number of channels and restart optimization if it is greater than 16
+    unsigned int cn, gwsCnt;
+    moFunction(_bestSol, cn, gwsCnt, true); // Run fc. obj. computing channels and UF avg.
+    if(_channels >= 16 && _sfmax > 7 && _exitCond != 2){
+        _sfmax--;
+        printf("Number of channels = %d. Reducing SF Max. to %d.\n", _channels, _sfmax);
+        optimizeGA();
+    }
+}
 
 
 int main(int argc, char **argv) {
@@ -836,10 +874,13 @@ int main(int argc, char **argv) {
     _bestSol = (bool*) malloc(sizeof(bool)*_enddevices);
 
     printf("--------------------------------\n");
-    printf("Optimizer started:\n");        
+    printf("Optimizer started:\n");   
+    printf("  Algorithm used: %s\n", getAlgorithmName(_algo).c_str());     
     printf("  Max. SF: %d\n", _sfmax);
-    printf("  Initial number of GW: %d\n", _initialGW);        
-    printf("  Add gateway after: %d iterations\n", _increaseGWAfter);
+    if(_algo == 0){
+        printf("  Initial number of GW: %d\n", _initialGW);        
+        printf("  Add gateway after: %d iterations\n", _increaseGWAfter);
+    }
     printf("  Max. iterations: %d\n", _itermax);
     printf("  Timeout: %d s\n", _timeout/1000);
     printf("--------------------------------\n\n");
