@@ -39,13 +39,15 @@ unsigned int _timeout = 360000; // ms
 unsigned int _alpha = 1000; // Cost of coverage < 100%
 unsigned int _beta = 1; // Cost by gw cnt
 // Opt. alg. method
-unsigned char _algo = 1; // 0 -> ga (not implemented), 1 -> random
+unsigned char _algo = 1; // 0 -> ga, 1 -> random
 // Random opt. tunning parameters
 unsigned int _initialGW = 1;
 unsigned int _increaseGWAfter = 50;
 // GA tunning parameters
 double _mut_prob = 1/(double) _enddevices; // Remember to update this on _enddevices change
-//double _cross_prob = 0.5; // NOT USED
+double _mut_rate = 0.3; // Mutation rate
+double _cross_frac = 0.5; // Crossover fraction
+unsigned int _pop_size = 30; // Population size
 
 
 struct Node { // End devices
@@ -121,6 +123,9 @@ void printHelp() {
     printf("  -g, --gateways        initial gw number.\n");
     printf("  -s, --sfmax           maximum spreading factor for gateways.\n");
     printf("  -a, --algorithm       gateway configuration algorithm: 0->ga, 1->random.\n");       
+    printf("  -pop                  GA population size.\n");
+    printf("  -cros                 GA crossover fraction (between 0 and 1).\n");
+    printf("  -mut                  GA mutation rate (between 0 and 1).\n");
     
     printf("Default values:\n");
     printf("  -f, --file            input.csv\n");
@@ -128,11 +133,14 @@ void printHelp() {
     printf("  -i, --iterations      1000\n");    
     printf("  -t, --timeout         360\n");        
     printf("  -g, --gateways        1\n");    
-    printf("  -a, --alpha           100\n");    
-    printf("  -b, --beta            1\n");    
+    printf("  -s, --sfmax           12\n");    
+    printf("  -a, --algorithm       1 (random)\n");    
+    printf("  -pop                  30\n");
+    printf("  -cros                 0.5\n");
+    printf("  -mut                  0.3\n");
 
     printf("Examples: \n");
-    printf("\t./runnable -f input.csv -o output.dat -a 1000 -b 5\n");
+    printf("\t./runnable -f input.csv -o output.dat\n");
     exit(1);
 }
 
@@ -430,7 +438,7 @@ unsigned char getMinSF(const unsigned int i, const unsigned int j) {
     return i < j ? _minSFMatrix[j-1][i] : _minSFMatrix[i-1][j];
 }
 
-void moFunction(const bool *sol, unsigned int &connectedNodes, unsigned int &gwCount, const bool stats = false) {
+void moFunction(const bool *sol, unsigned int &connectedNodes, unsigned int &gwCount, const bool stats) {
     /*
         Given the array of nodes that are GW, assign a GW for
         each node and compute the number of not connected nodes
@@ -454,8 +462,14 @@ void moFunction(const bool *sol, unsigned int &connectedNodes, unsigned int &gwC
     connectedNodes = 0;
     gwCount = gateways->size();
 
-    if(gwCount == 0)
+    if(gwCount == 0){
+        if(stats){
+            _coverage = 0.0;
+            _gwAvgUf = 0.0;
+            _channels = 0.0;
+        }
         return;
+    }
 
     for(unsigned char sf = 7; sf <= _sfmax; sf++){ // For each SF (7..12)
         for(unsigned int i = 0; i < _enddevices; i++){ // For each ED
@@ -646,7 +660,7 @@ void optimizeRandomHeuristic() {
     printf("Min. GW num is %d (cost=%d)\n", _minGWs, minCost);    
 
     // Check number of channels and restart optimization if it is greater than 16
-    moFunction(_bestSol, cn, gwsCnt, true); // Run fc. obj. computing channels and UF avg.
+    moFunction(_bestSol, cn, _minGWs, true); // Run fc. obj. computing channels and UF avg.
     if(_channels >= 16 && _sfmax > 7 && _exitCond != 2){
         _sfmax--;
         printf("Number of channels = %d. Reducing SF Max. to %d.\n", _channels, _sfmax);
@@ -656,7 +670,7 @@ void optimizeRandomHeuristic() {
 
 
 
-//// GA OPERATORS ////
+/////////// GA OPT ///////////
 
 void init_genes(Chromosome& p, const function<double(void)> &rnd01) {
 	p.isGW = (bool*) malloc(sizeof(bool)*_enddevices);
@@ -735,10 +749,10 @@ void optimizeGA() {
 	ga_obj.multi_threading = true;
 	ga_obj.idle_delay_us = 1; // switch between threads quickly
 	ga_obj.verbose = false;
-	ga_obj.population = 30;
+	ga_obj.population = _pop_size;
 	ga_obj.generation_max = _itermax/ga_obj.population;
-    ga_obj.best_stall_max = _itermax/50;
-    ga_obj.average_stall_max = _itermax/50;
+    ga_obj.best_stall_max = _itermax/100;
+    ga_obj.average_stall_max = _itermax/100;
 	ga_obj.calculate_SO_total_fitness = calculate_SO_total_fitness;
 	ga_obj.init_genes = init_genes;
 	ga_obj.eval_solution = eval_solution;
@@ -746,8 +760,8 @@ void optimizeGA() {
 	ga_obj.crossover = crossover;    
 	ga_obj.SO_report_generation = SO_report_generation;
     //ga_obj.elite_count = 10;
-	ga_obj.crossover_fraction = 0.5;
-	ga_obj.mutation_rate = 0.3;
+	ga_obj.crossover_fraction = _cross_frac;
+	ga_obj.mutation_rate = _mut_rate;
     
 	// Start optimization
 	ga_obj.solve();
@@ -769,14 +783,19 @@ void optimizeGA() {
 	cout << "Solution computed in " << timer.toc() << " seconds."<<endl;
 
     // Check number of channels and restart optimization if it is greater than 16
-    unsigned int cn, gwsCnt;
-    moFunction(_bestSol, cn, gwsCnt, true); // Run fc. obj. computing channels and UF avg.
+    unsigned int cn;
+    moFunction(ga_obj.last_generation.chromosomes[ga_obj.last_generation.best_chromosome_index].genes.isGW, cn, _minGWs, true); // Run fc. obj. computing channels and UF avg.
     if(_channels >= 16 && _sfmax > 7 && _exitCond != 2){
         _sfmax--;
         printf("Number of channels = %d. Reducing SF Max. to %d.\n", _channels, _sfmax);
         optimizeGA();
     }
 }
+
+
+
+/////////// GREEDY ///////////
+
 
 
 int main(int argc, char **argv) {
@@ -861,6 +880,25 @@ int main(int argc, char **argv) {
             else
                 printHelp();
         }
+        /// GA PARAMS
+        if(strcmp(argv[i], "-pop") == 0){
+            if(i+1 < argc)
+                _pop_size = atoi(argv[i+1]);
+            else
+                printHelp();
+        }
+        if(strcmp(argv[i], "-cros") == 0){
+            if(i+1 < argc)
+                _cross_frac = atof(argv[i+1]);
+            else
+                printHelp();
+        }
+        if(strcmp(argv[i], "-mut") == 0){
+            if(i+1 < argc)
+                _mut_rate = atof(argv[i+1]);
+            else
+                printHelp();
+        }
     }
 
     _begin = steady_clock::now();
@@ -878,6 +916,11 @@ int main(int argc, char **argv) {
     printf("  Algorithm used: %s\n", getAlgorithmName(_algo).c_str());     
     printf("  Max. SF: %d\n", _sfmax);
     if(_algo == 0){
+       printf("  GA Population size: %d\n", _pop_size);        
+       printf("  GA crossover fraction: %f\n", _cross_frac);
+       printf("  GA mutation rate: %f\n", _mut_rate);
+    }
+    if(_algo == 1){
         printf("  Initial number of GW: %d\n", _initialGW);        
         printf("  Add gateway after: %d iterations\n", _increaseGWAfter);
     }
