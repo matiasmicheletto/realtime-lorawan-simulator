@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -9,6 +10,7 @@
 #include <math.h>
 #include <string.h>
 #include <stdio.h>
+#include <unistd.h>
 
 #include "random/random.h"
 #include "random/uniform.h"
@@ -92,6 +94,9 @@ unsigned char _exitCond;
 unsigned char _channels;
 float _coverage;
 float _gwAvgUf;
+
+// Greedy
+vector<vector<int>> _adj_matrix;
 
 // Binary random generator
 auto binRnd = bind(uniform_int_distribution<>(0,1), default_random_engine());
@@ -476,8 +481,9 @@ void moFunction(const bool *sol, unsigned int &connectedNodes, unsigned int &gwC
             if(!connected[i]){ // If node is not connected
                 for(unsigned int j = 0; j < gwCount; j++){ // For each gateway
                     // Check if feasible sf (before computing UF)
-                    if(sf >= getMinSF(i, gateways->at(j).id) && sf <= _network->at(i).maxSF){ 
-                        const float requiredUF = pow(2, sf-7) / ((float) _network->at(i).period - pow(2,sf-7));
+                    if(sf >= getMinSF(i, gateways->at(j).id) && sf <= _network->at(i).maxSF){
+                        const float pw = pow(2, sf-7);
+                        const float requiredUF = pw / ((float) _network->at(i).period - pw);
                         if(gateways->at(j).uf[sf-7]+requiredUF < 1.0){ // If possible to connect
                             gateways->at(j).uf[sf-7] += requiredUF; // Compute UF for this GW and sf
                             connected[i] = true; // Mark node as connected
@@ -796,6 +802,131 @@ void optimizeGA() {
 
 /////////// GREEDY ///////////
 
+void buildMinSFMatrixGreedy(){            
+    for (unsigned int i = 0; i < _enddevices; i++){
+        for (unsigned int j = i; j < _enddevices; j++){    
+            float distance = computeDistance(i, j);
+            if(distance < 62.5)
+                _adj_matrix[i][j] = 7;
+            else if(distance < 125)
+                _adj_matrix[i][j] = 8;
+            else if(distance < 250)
+                _adj_matrix[i][j] = 9;
+            else if(distance < 500)
+                _adj_matrix[i][j] = 10;
+            else if(distance < 1000)
+                _adj_matrix[i][j] = 11;
+            else if(distance < 2000)
+                _adj_matrix[i][j] = 12;
+            else // No SF for this distance
+                _adj_matrix[i][j] = 13;
+        }
+    }
+}
+
+void greedy(){        
+    vector<int> init,cero;
+    vector<vector<long int>> asignados;
+    vector<long int> parcial, GWS;
+    
+    unsigned int i,j;
+    vector<int>::iterator it;
+    long Best[_enddevices];
+    long best, Max;
+    srand(time(NULL) ^ (getpid()<<16));
+    
+    float **Usf = (float**) malloc(sizeof(float*)*6);
+    for(int sf = 0; sf < 6; sf++){
+        Usf[sf] = (float*) malloc(sizeof(float)*_enddevices);
+        for(unsigned int k = 0; k < _enddevices; k++){
+            Usf[sf][k] = 0;
+        }
+    }
+    
+    cout << "Calcula adyacencia" << endl;
+    for (i = 0; i<_enddevices; i++)
+        init.push_back(0);
+    for (i = 0; i<_enddevices; i++)
+        _adj_matrix.push_back(init);
+    cero = init;
+    buildMinSFMatrixGreedy();
+    
+    //Para seleccionar el mejor nodo.
+    cout << "Inicia Asignación" << endl;
+    bool sigo = true;
+    unsigned int gw = 0;
+    while (sigo) {
+        gw++;    
+        //cout<<"Paso "<<gw<<endl;
+        best=0;
+        Max=0;
+
+        for(i=0;i<_adj_matrix.size();i++) {
+            Best[i]=0;
+            Best[i]=_adj_matrix[i].size() - count(_adj_matrix[i].begin(), _adj_matrix[i].end(), 0);
+            if (Best[i]>Max){
+                best=i;
+                Max=Best[i];
+            }
+        }
+
+        GWS.push_back(best);
+        for(int k = 0; k < 6; k++){
+            Usf[k][best]=0;
+        }
+        
+        for(j = 0; j < _adj_matrix.size(); j++){
+            for(int k = 0; k < 6; k++){
+                if (_adj_matrix[best][j] == k+7){
+                    const float pw = pow(2, k);
+                    const float requiredUF = pw / ((float) _network->at(j).period - pw);
+                    if (Usf[k][best] + requiredUF < 1){
+                        Usf[k][best] += requiredUF;                        
+                        parcial.push_back(j);
+                        for(unsigned int h = 0; h < _adj_matrix.size(); h++)
+                            _adj_matrix[h][j]=0;
+                    }
+                }    
+            }
+        }
+        for (unsigned int h = 0; h < parcial.size(); h++)
+            _adj_matrix[parcial[h]] = cero;
+        
+        asignados.push_back(parcial);
+        parcial.clear();
+        sigo = false;
+        for(i=0; i<_adj_matrix.size(); i++){
+            if(_adj_matrix[i].size()-count(_adj_matrix[i].begin(), _adj_matrix[i].end(), 0) > 0){
+                sigo = true;
+                break;
+            }
+        }
+    }
+
+    /*
+    parcial.clear();
+    for (i=0; i<asignados.size(); i++){
+        parcial = asignados[i];
+        
+        for(j=0;j<parcial.size();j++){
+            cout<<parcial[j]<<",";
+        }
+        cout<<endl;
+        
+        parcial.clear();
+    }
+    
+    cout << "Gateways Necesarios " << gw << endl;
+
+    cout<<"Lista de gw:"<<endl;
+    for(long h=0; h<GWS.size(); h++)
+        cout << GWS[h] << ",";
+    cout<<endl;        
+    */
+
+    _minGWs = gw;
+    _coverage = 100.0;
+}
 
 
 int main(int argc, char **argv) {
@@ -906,10 +1037,11 @@ int main(int argc, char **argv) {
     if(buildNetwork)
         buildInstance();
 
-    buildMinSFMatrix();
-    printf("Min. SF matrix built (t = %ld ms).\n", getElapsed());
-    
-    _bestSol = (bool*) malloc(sizeof(bool)*_enddevices);
+    if(_algo != 2){ // Greedy has it own adjacency matrix
+        buildMinSFMatrix();
+        printf("Min. SF matrix built (t = %ld ms).\n", getElapsed());
+        _bestSol = (bool*) malloc(sizeof(bool)*_enddevices);
+    }
 
     printf("--------------------------------\n");
     printf("Optimizer started:\n");   
@@ -934,15 +1066,21 @@ int main(int argc, char **argv) {
     if(_algo == 1)
         optimizeRandomHeuristic();
 
+    if(_algo == 2)
+        greedy();
+
     // Print elapsed time
     printf("Total elapsed time is %ld ms.\n", getElapsed());
     printSummary();
     
     // Free pointers    
-    destroyMinSFMatrix(); 
+    if(_algo != 2){
+        destroyMinSFMatrix(); 
+        free(_bestSol);
+    }
+
     _network->clear();
-    delete _network;
-    free(_bestSol);
+    delete _network;    
 
     return 0;
 }
