@@ -206,6 +206,10 @@ string getAlgorithmName(unsigned char algo) {
         return "GA Opt.";
     case 1:
         return "Random Comb.";
+    case 2:
+        return "Greedy";
+    case 3:
+        return "Springs";
     default:
         return "Unknown";
     }
@@ -381,6 +385,14 @@ void buildInstance() {
     printf("-----------------------------------\n\n");
 }
 
+void computeDirectionVector(const unsigned int i, const unsigned int j, float &dx, float&dy){
+    /*
+        Difference of positions between nodes i and j
+     */
+    dx = _network->at(i).x - _network->at(j).x;
+    dy = _network->at(i).y - _network->at(j).y;
+}
+
 // Euclidean distance between nodes i and j (computationally expensive, use memoization)
 float computeDistance(const unsigned int i, const unsigned int j) { 
     /*
@@ -389,10 +401,28 @@ float computeDistance(const unsigned int i, const unsigned int j) {
         It is assumed that:         
         0 <= i < N and 
         0 <= j < N.
-    */
-    float dx = _network->at(i).x - _network->at(j).x;
-    float dy = _network->at(i).y - _network->at(j).y;
+     */
+    float dx, dy;
+    computeDirectionVector(i, j, dx, dy);
     return sqrt(dx*dx + dy*dy);
+}
+
+unsigned int getClosestId(float x, float y){
+    /* 
+        Given x, y coordinates in the map, find the closest node
+     */
+    float minDist = 2*(float)_mapsize;
+    unsigned int closest = _network->size()+1;
+    for(unsigned int i = 0; i < _network->size(); i++){
+        const float dx = x - _network->at(i).x;
+        const float dy = y - _network->at(i).y;
+        const float dist = sqrt(dx*dx + dy*dy);
+        if(dist < minDist){
+            minDist = dist;
+            closest = i;
+        }
+    }
+    return closest;
 }
 
 // Compute the min SF matrix for network nodes
@@ -401,7 +431,7 @@ void buildMinSFMatrix() {
         Builds the minimum SF matrix.
         matrix[i][j] means min SF for connecting nodes (i+1) and j.
         INPORTANT: This matrix is triangular, so i,j: i > j
-    */
+     */
     _minSFMatrix = (unsigned char**) malloc(sizeof(unsigned char*)*_enddevices - 1);
     for(unsigned int i = 0; i < _enddevices - 1; i++){
         _minSFMatrix[i] = (unsigned char*) malloc(sizeof(unsigned char)*(i+1));
@@ -443,7 +473,7 @@ unsigned char getMinSF(const unsigned int i, const unsigned int j) {
     return i < j ? _minSFMatrix[j-1][i] : _minSFMatrix[i-1][j];
 }
 
-void moFunction(const bool *sol, unsigned int &connectedNodes, unsigned int &gwCount, const bool stats) {
+void moFunction(const bool *sol, bool *connected, unsigned int &connectedCount, unsigned int &gwCount, const bool stats) {
     /*
         Given the array of nodes that are GW, assign a GW for
         each node and compute the number of not connected nodes
@@ -457,14 +487,13 @@ void moFunction(const bool *sol, unsigned int &connectedNodes, unsigned int &gwC
     */
     // Compute number of gw    
     vector<GW> *gateways = new vector<GW>;
-    bool connected[_enddevices];
     for(unsigned int i = 0; i < _enddevices; i++){
         connected[i] = false; // Initially disconected
         if(sol[i]) // If node has GW
             gateways->push_back({i, {0.0, 0.0, 0.0, 0.0, 0.0, 0.0}, 0}); // Init gw empty UF and channel=0
     }
 
-    connectedNodes = 0;
+    connectedCount = 0;
     gwCount = gateways->size();
 
     if(gwCount == 0){
@@ -487,7 +516,7 @@ void moFunction(const bool *sol, unsigned int &connectedNodes, unsigned int &gwC
                         if(gateways->at(j).uf[sf-7]+requiredUF < 1.0){ // If possible to connect
                             gateways->at(j).uf[sf-7] += requiredUF; // Compute UF for this GW and sf
                             connected[i] = true; // Mark node as connected
-                            connectedNodes++; // Increment counter
+                            connectedCount++; // Increment counter
                             break; // Do no continue with same gw
                         }
                     }
@@ -498,7 +527,7 @@ void moFunction(const bool *sol, unsigned int &connectedNodes, unsigned int &gwC
 
     if(stats){ // Expensive block
         // Compute network coverage %
-        _coverage = (float)connectedNodes / (float) _enddevices * 100.0;
+        _coverage = (float)connectedCount / (float) _enddevices * 100.0;
         
         // Compute Avg. UF for gateways
         _gwAvgUf = 0.0;
@@ -560,8 +589,8 @@ void moFunction(const bool *sol, unsigned int &connectedNodes, unsigned int &gwC
     delete gateways;
 }
 
-unsigned int evalCost(unsigned int &connectedNodes, unsigned int &gwCount) {
-    return _alpha * (_enddevices - connectedNodes) + _beta * gwCount;
+unsigned int evalCost(unsigned int &connectedCount, unsigned int &gwCount) {
+    return _alpha * (_enddevices - connectedCount) + _beta * gwCount;
 }
 
 void printSummary() {
@@ -604,7 +633,7 @@ void setRandomSol(bool *sol, unsigned int gwn) {
     /*
         Generates a random binary array with only N ones (at random positions)
     */
-    uniform_int_distribution<> distrib(0, _enddevices-1);
+    uniform_int_distribution<> distrib(0, _enddevices-1); // Avoid declare each time ?
     for(unsigned int i = 0; i < _enddevices; i++)
         sol[i] = false; // Set all to false
     for(unsigned int i = 0; i < gwn; i++){
@@ -612,6 +641,21 @@ void setRandomSol(bool *sol, unsigned int gwn) {
         while(sol[pos]) // TODO: In case of "gwn" close to "_enddevices", this could take a while
             pos = (unsigned int) distrib(gen);
         sol[pos] = true;
+    }
+}
+
+void addRandomGW(bool *sol) { 
+    /*
+        Adds a new GW (switches 0 to 1) in a random position
+    */
+    uniform_int_distribution<> distrib(0, _enddevices-1); // Avoid declare each time ?
+    bool added = false;
+    while(!added){
+        unsigned int pos = (unsigned int) distrib(gen);
+        if(!sol[pos]){ // If node is not GW
+            sol[pos] = true; // Add GW
+            added = true; // Break
+        }
     }
 }
 
@@ -635,9 +679,10 @@ void optimizeRandomHeuristic() {
     unsigned int gws = _initialGW; // Number of gw
     unsigned int gwsCnt = 0; // Number of gw (computed, but it should be gwsCnt == gws)
     unsigned int cn = 0; // connected EDs (determined when evaluating objective fc).    
+    bool connected[_enddevices]; // List of connected ed (used inside moFunction)
     for(_currentIter = 0; _currentIter < _itermax; _currentIter++){
         setRandomSol(sol, gws); // Full random generator
-        moFunction(sol, cn, gwsCnt, false);        
+        moFunction(sol, connected, cn, gwsCnt, false);        
         const unsigned int cost = evalCost(cn, gwsCnt);
         if(cost < minCost){
             minCost = cost;
@@ -666,7 +711,7 @@ void optimizeRandomHeuristic() {
     printf("Min. GW num is %d (cost=%d)\n", _minGWs, minCost);    
 
     // Check number of channels and restart optimization if it is greater than 16
-    moFunction(_bestSol, cn, _minGWs, true); // Run fc. obj. computing channels and UF avg.
+    moFunction(_bestSol, connected, cn, _minGWs, true); // Run fc. obj. computing channels and UF avg.
     if(_channels >= 16 && _sfmax > 7 && _exitCond != 2){
         _sfmax--;
         printf("Number of channels = %d. Reducing SF Max. to %d.\n", _channels, _sfmax);
@@ -718,7 +763,8 @@ Chromosome crossover(const Chromosome& X1, const Chromosome& X2,const function<d
 
 bool eval_solution(const Chromosome& p, MiddleCost &c) { // Compute costs
     unsigned int cn, gwCnt;
-    moFunction(p.isGW, cn, gwCnt, false);
+    bool connected[_enddevices];
+    moFunction(p.isGW, connected, cn, gwCnt, false);
     c.cost = evalCost(cn, gwCnt);
     //printf("[eval_solution] Cost = %d, ED = %d, connected = %d\n", cost, _enddevices, cn);
 
@@ -790,7 +836,8 @@ void optimizeGA() {
 
     // Check number of channels and restart optimization if it is greater than 16
     unsigned int cn;
-    moFunction(ga_obj.last_generation.chromosomes[ga_obj.last_generation.best_chromosome_index].genes.isGW, cn, _minGWs, true); // Run fc. obj. computing channels and UF avg.
+    bool connected[_enddevices];
+    moFunction(ga_obj.last_generation.chromosomes[ga_obj.last_generation.best_chromosome_index].genes.isGW, connected, cn, _minGWs, true); // Run fc. obj. computing channels and UF avg.
     if(_channels >= 16 && _sfmax > 7 && _exitCond != 2){
         _sfmax--;
         printf("Number of channels = %d. Reducing SF Max. to %d.\n", _channels, _sfmax);
@@ -824,7 +871,7 @@ void buildMinSFMatrixGreedy(){
     }
 }
 
-void greedy(){        
+void greedy(){
     vector<int> init,cero;
     vector<vector<long int>> asignados;
     vector<long int> parcial, GWS;
@@ -927,6 +974,113 @@ void greedy(){
     _minGWs = gw;
     _coverage = 100.0;
 }
+
+
+
+/////////// SPRINGS ///////////
+
+void improveGWPos(bool* gwPos, bool* connectedEd) {
+    /*
+        Implements the pseudo-springs method on binary arrays
+    */
+
+    // Initialize vector of forces
+    struct force {
+        unsigned int gwIdx;
+        float x;
+        float y;
+    };
+    vector<force> forces;
+    unsigned int ncCount = 0; // Count not connected ED
+    for(unsigned int i = 0; i < _enddevices; i++){
+        if(gwPos[i]){ // If gw in node i
+            forces.push_back({i, 0.0, 0.0});
+        }
+        if(!connectedEd[i])
+            ncCount++;
+    }
+
+    // Compute forces over each GW
+    for(unsigned int i = 0; i < _enddevices; i++){
+        if(!connectedEd[i]){
+            for(unsigned int j = 0; j < forces.size(); j++){
+                float dx, dy;
+                computeDirectionVector(i, forces[j].gwIdx, dx, dy);
+                forces[j].x += dx/(float) ncCount;
+                forces[j].y += dy/(float) ncCount;
+            }
+        }
+    }
+
+    // For each GW, determine which node to move next
+    for(unsigned int j = 0; j < forces.size(); j++){
+        const unsigned int gwId = forces[j].gwIdx;
+        const float nextX = _network->at(gwId).x + forces[j].x;
+        const float nextY = _network->at(gwId).y + forces[j].y;
+        const unsigned int nextId = getClosestId(nextX, nextY);
+        if(!gwPos[nextId]){ // Only move to empty slots
+            gwPos[gwId] = false;
+            gwPos[nextId] = true;
+        }
+    }
+}
+
+void springs() {
+    /*
+        Search optima generating solutions where GWs are moved using pseudo-spring
+        algorithm
+    */
+    _exitCond = 0;
+    unsigned int minCost = _alpha*_enddevices; // Initially largest cost
+    _minGWs = _enddevices;
+    bool sol[_enddevices];
+    unsigned int gws = _initialGW; // Number of gw
+    unsigned int gwsCnt = 0; // Number of gw (computed, but it should be gwsCnt == gws)
+    unsigned int cn = 0; // connected EDs (determined when evaluating objective fc).    
+    bool connected[_enddevices]; // List of connected ed (after evaluating sol)
+    setRandomSol(sol, gws); // Initially random positions
+    for(_currentIter = 0; _currentIter < _itermax; _currentIter++){
+        moFunction(sol, connected, cn, gwsCnt, false);
+        const unsigned int cost = evalCost(cn, gwsCnt);
+        if(cost < minCost){
+            minCost = cost;
+            _minGWs = gws;
+            copySol(sol, _bestSol);
+            printf("New min. found %d gw (cost=%d) on iter %d (%d connected)\n", _minGWs, minCost, _currentIter, cn);
+            if(cn == _enddevices){ // Once all connected
+                //gws--; Reduce gw number
+                printf("Max. coverage reached.\n");
+                _exitCond = 1;
+                break;
+            }
+        }
+        if(_currentIter % _increaseGWAfter == 0){
+            if(gws < _enddevices){
+                gws++;
+                addRandomGW(sol);
+            }
+        }
+        if(getElapsed() > _timeout){
+            printf("Timeout.\n");
+            _exitCond = 2;
+            break;
+        }
+
+        // Update GW positions (sol will change after this step)
+        improveGWPos(sol, connected);
+    }
+    _currentIter = _itermax;
+    
+    printf("Min. GW num is %d (cost=%d)\n", _minGWs, minCost);    
+
+    // Check number of channels and restart optimization if it is greater than 16
+    moFunction(_bestSol, connected, cn, _minGWs, true); // Run fc. obj. computing channels and UF avg.
+    if(_channels >= 16 && _sfmax > 7 && _exitCond != 2){
+        _sfmax--;
+        printf("Number of channels = %d. Reducing SF Max. to %d.\n", _channels, _sfmax);
+        springs();
+    }
+};
 
 
 int main(int argc, char **argv) {
@@ -1069,6 +1223,9 @@ int main(int argc, char **argv) {
     if(_algo == 2)
         greedy();
 
+    if(_algo == 3)
+        springs();
+
     // Print elapsed time
     printf("Total elapsed time is %ld ms.\n", getElapsed());
     printSummary();
@@ -1078,7 +1235,6 @@ int main(int argc, char **argv) {
         destroyMinSFMatrix(); 
         free(_bestSol);
     }
-
     _network->clear();
     delete _network;    
 
