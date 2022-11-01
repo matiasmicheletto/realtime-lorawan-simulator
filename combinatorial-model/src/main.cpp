@@ -728,8 +728,9 @@ void optimizeRandomHeuristic() {
 
 void init_genes(Chromosome& p, const function<double(void)> &rnd01) {
 	p.isGW = (bool*) malloc(sizeof(bool)*_enddevices);
+    double pr = (double)_initialGW / (double)_enddevices; // Probability of gw
 	for(unsigned int i = 0; i < _enddevices; i++)
-		p.isGW[i] = rnd01() < 0.001; // 1 gw every 1000 eds
+		p.isGW[i] = rnd01() < pr; // 
 }
 
 void copy_genes(const Chromosome& from, Chromosome& to) {
@@ -999,13 +1000,13 @@ void improveGWPos(bool* gwPos, bool* connectedEd) {
         float y;
     };
     vector<force> forces;
-    unsigned int ncCount = 0; // Count not connected ED
+    //unsigned int ncCount = 0; // Count not connected ED
     for(unsigned int i = 0; i < _enddevices; i++){
         if(gwPos[i]){ // If gw in node i
             forces.push_back({i, 0.0, 0.0});
         }
-        if(!connectedEd[i])
-            ncCount++;
+        //if(!connectedEd[i])
+        //    ncCount++;
     }
 
     // Compute forces over each GW
@@ -1014,8 +1015,11 @@ void improveGWPos(bool* gwPos, bool* connectedEd) {
             for(unsigned int j = 0; j < forces.size(); j++){
                 float dx, dy;
                 computeDirectionVector(i, forces[j].gwIdx, dx, dy);
-                forces[j].x += dx/(float) ncCount;
-                forces[j].y += dy/(float) ncCount;
+                // TODO: divide components with distance
+                const float d = sqrt(dx*dx + dy*dy);
+                forces[j].x += dx / (d < .1 ? .1 : d);
+                forces[j].y += dy / (d < .1 ? .1 : d);
+                //cout << d << " " << forces[j].x << " " << forces[j].y << endl;
             }
         }
     }
@@ -1029,7 +1033,7 @@ void improveGWPos(bool* gwPos, bool* connectedEd) {
         if(!gwPos[nextId]){ // Only move to empty slots
             gwPos[gwId] = false;
             gwPos[nextId] = true;
-        }
+        } // If cant, then stay in place
     }
 }
 
