@@ -22,6 +22,8 @@
 #define LINE_BUFFER_SIZE 256 // Max length for csv file line
 #define FILE_COLS 4 // Columns of csv file (id, x, y, period)
 
+#define MAX_CHANNELS 16 // Max allowed number of channels for gws
+
 using namespace std;
 using namespace std::chrono;
 
@@ -127,7 +129,7 @@ void printHelp() {
     printf("  -t, --timeout         max. run time (seconds).\n");
     printf("  -g, --gateways        initial gw number.\n");
     printf("  -s, --sfmax           maximum spreading factor for gateways.\n");
-    printf("  -a, --algorithm       gateway configuration algorithm: 0->ga, 1->random.\n");       
+    printf("  -a, --algorithm       gateway configuration algorithm: 0->ga, 1->random, 2->greedy, 3->springs.\n");       
     printf("  -pop                  GA population size.\n");
     printf("  -cros                 GA crossover fraction (between 0 and 1).\n");
     printf("  -mut                  GA mutation rate (between 0 and 1).\n");
@@ -507,8 +509,9 @@ void moFunction(const bool *sol, bool *connected, unsigned int &connectedCount, 
 
     for(unsigned char sf = 7; sf <= _sfmax; sf++){ // For each SF (7..12)
         for(unsigned int i = 0; i < _enddevices; i++){ // For each ED
-            if(!connected[i]){ // If node is not connected
+            if(!connected[i]){ // If node is not connected                
                 for(unsigned int j = 0; j < gwCount; j++){ // For each gateway
+                    //cout << "SF=" << sf << ", node=" << i << " gw=" << j << endl;
                     // Check if feasible sf (before computing UF)
                     if(sf >= getMinSF(i, gateways->at(j).id) && sf <= _network->at(i).maxSF){
                         const float pw = pow(2, sf-7);
@@ -542,7 +545,7 @@ void moFunction(const bool *sol, bool *connected, unsigned int &connectedCount, 
         _gwAvgUf /= gwCount;
         
         // Compute channels
-        if(gwCount > 16){
+        if(gwCount > MAX_CHANNELS){
             _channels = 0;
             list<unsigned int> usedChannels;
             for(unsigned int i = 1; i < gwCount; i++){ // Start from 1 to avoid GW 0
@@ -712,7 +715,7 @@ void optimizeRandomHeuristic() {
 
     // Check number of channels and restart optimization if it is greater than 16
     moFunction(_bestSol, connected, cn, _minGWs, true); // Run fc. obj. computing channels and UF avg.
-    if(_channels >= 16 && _sfmax > 7 && _exitCond != 2){
+    if(_channels >= MAX_CHANNELS && _sfmax > 7 && _exitCond != 2){
         _sfmax--;
         printf("Number of channels = %d. Reducing SF Max. to %d.\n", _channels, _sfmax);
         optimizeRandomHeuristic();
@@ -838,7 +841,7 @@ void optimizeGA() {
     unsigned int cn;
     bool connected[_enddevices];
     moFunction(ga_obj.last_generation.chromosomes[ga_obj.last_generation.best_chromosome_index].genes.isGW, connected, cn, _minGWs, true); // Run fc. obj. computing channels and UF avg.
-    if(_channels >= 16 && _sfmax > 7 && _exitCond != 2){
+    if(_channels >= MAX_CHANNELS && _sfmax > 7 && _exitCond != 2){
         _sfmax--;
         printf("Number of channels = %d. Reducing SF Max. to %d.\n", _channels, _sfmax);
         optimizeGA();
@@ -871,10 +874,14 @@ void buildMinSFMatrixGreedy(){
     }
 }
 
+void destroyMinSFMatrixGreedy(){
+    _adj_matrix.clear();
+}
+
 void greedy(){
     vector<int> init,cero;
-    vector<vector<long int>> asignados;
-    vector<long int> parcial, GWS;
+    vector<vector<unsigned int>> asignados;
+    vector<unsigned int> parcial, GWS;
     
     unsigned int i,j;
     vector<int>::iterator it;
@@ -903,24 +910,30 @@ void greedy(){
     bool sigo = true;
     unsigned int gw = 0;
     while (sigo) {
+
+        if(getElapsed() > _timeout){
+            printf("Timeout.\n");
+            _exitCond = 2;
+            break;
+        }
+
         gw++;    
         //cout<<"Paso "<<gw<<endl;
-        best=0;
-        Max=0;
+        best = 0;
+        Max = 0;
 
-        for(i=0;i<_adj_matrix.size();i++) {
-            Best[i]=0;
-            Best[i]=_adj_matrix[i].size() - count(_adj_matrix[i].begin(), _adj_matrix[i].end(), 0);
-            if (Best[i]>Max){
-                best=i;
-                Max=Best[i];
+        for(i = 0;i < _adj_matrix.size(); i++) {
+            Best[i] = 0;
+            Best[i] = _adj_matrix[i].size() - count(_adj_matrix[i].begin(), _adj_matrix[i].end(), 0);
+            if (Best[i] > Max){
+                best = i;
+                Max = Best[i];
             }
         }
 
         GWS.push_back(best);
-        for(int k = 0; k < 6; k++){
+        for(int k = 0; k < 6; k++)
             Usf[k][best]=0;
-        }
         
         for(j = 0; j < _adj_matrix.size(); j++){
             for(int k = 0; k < 6; k++){
@@ -931,7 +944,7 @@ void greedy(){
                         Usf[k][best] += requiredUF;                        
                         parcial.push_back(j);
                         for(unsigned int h = 0; h < _adj_matrix.size(); h++)
-                            _adj_matrix[h][j]=0;
+                            _adj_matrix[h][j] = 0;
                     }
                 }    
             }
@@ -942,37 +955,32 @@ void greedy(){
         asignados.push_back(parcial);
         parcial.clear();
         sigo = false;
-        for(i=0; i<_adj_matrix.size(); i++){
-            if(_adj_matrix[i].size()-count(_adj_matrix[i].begin(), _adj_matrix[i].end(), 0) > 0){
+        for(i = 0; i < _adj_matrix.size(); i++){
+            if(_adj_matrix[i].size() - count(_adj_matrix[i].begin(), _adj_matrix[i].end(), 0) > 0){
                 sigo = true;
                 break;
             }
         }
     }
 
-    /*
-    parcial.clear();
-    for (i=0; i<asignados.size(); i++){
-        parcial = asignados[i];
-        
-        for(j=0;j<parcial.size();j++){
-            cout<<parcial[j]<<",";
-        }
-        cout<<endl;
-        
-        parcial.clear();
-    }
-    
     cout << "Gateways Necesarios " << gw << endl;
 
-    cout<<"Lista de gw:"<<endl;
-    for(long h=0; h<GWS.size(); h++)
-        cout << GWS[h] << ",";
-    cout<<endl;        
-    */
-
-    _minGWs = gw;
-    _coverage = 100.0;
+    destroyMinSFMatrixGreedy(); // Release some memory
+    buildMinSFMatrix();
+    // Compute solution stats (coverage, channels, GW count, etc)
+    for(i = 0; i < _enddevices; i++)
+        _bestSol[i] = count(GWS.begin(), GWS.end(), i) > 0; // If index is GW
+    unsigned int cn;
+    bool connected[_enddevices];
+    moFunction(_bestSol, connected, cn, _minGWs, true); // Run fc. obj. computing channels and UF avg.
+    if(_channels >= MAX_CHANNELS && _sfmax > 7 && _exitCond != 2){
+        _sfmax--;
+        printf("Number of channels = %d. Reducing SF Max. to %d.\n", _channels, _sfmax);
+        destroyMinSFMatrix(); // Destroy matrix before running algorithm again
+        greedy();
+    }else{
+        destroyMinSFMatrix();
+    }
 }
 
 
@@ -1075,7 +1083,7 @@ void springs() {
 
     // Check number of channels and restart optimization if it is greater than 16
     moFunction(_bestSol, connected, cn, _minGWs, true); // Run fc. obj. computing channels and UF avg.
-    if(_channels >= 16 && _sfmax > 7 && _exitCond != 2){
+    if(_channels >= MAX_CHANNELS && _sfmax > 7 && _exitCond != 2){
         _sfmax--;
         printf("Number of channels = %d. Reducing SF Max. to %d.\n", _channels, _sfmax);
         springs();
@@ -1191,11 +1199,11 @@ int main(int argc, char **argv) {
     if(buildNetwork)
         buildInstance();
 
-    if(_algo != 2){ // Greedy has it own adjacency matrix
+    if(_algo != 2){ // For greedy, dist matrix is built later
         buildMinSFMatrix();
         printf("Min. SF matrix built (t = %ld ms).\n", getElapsed());
-        _bestSol = (bool*) malloc(sizeof(bool)*_enddevices);
     }
+    _bestSol = (bool*) malloc(sizeof(bool)*_enddevices);
 
     printf("--------------------------------\n");
     printf("Optimizer started:\n");   
@@ -1233,8 +1241,8 @@ int main(int argc, char **argv) {
     // Free pointers    
     if(_algo != 2){
         destroyMinSFMatrix(); 
-        free(_bestSol);
     }
+    free(_bestSol);
     _network->clear();
     delete _network;    
 
