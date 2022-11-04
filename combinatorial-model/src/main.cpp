@@ -858,20 +858,20 @@ void buildMinSFMatrixGreedy(){
         for (unsigned int j = i; j < _enddevices; j++){    
             float distance = computeDistance(i, j);
             if(distance < 62.5)
-                _adj_matrix[i][j] = 7;
+                _adj_matrix[i][j] = getMaxSF(_network->at(j).period) >= 7 ? 7 : 0;
             else if(distance < 125)
-                _adj_matrix[i][j] = 8;
+                _adj_matrix[i][j] = getMaxSF(_network->at(j).period) >= 8 ? 8 : 0;
             else if(distance < 250)
-                _adj_matrix[i][j] = 9;
+                _adj_matrix[i][j] = getMaxSF(_network->at(j).period) >= 9 ? 9 : 0;
             else if(distance < 500)
-                _adj_matrix[i][j] = 10;
+                _adj_matrix[i][j] = getMaxSF(_network->at(j).period) >= 10 ? 10 : 0;
             else if(distance < 1000)
-                _adj_matrix[i][j] = 11;
+                _adj_matrix[i][j] = getMaxSF(_network->at(j).period) >= 11 ? 11 : 0;
             else if(distance < 2000)
-                _adj_matrix[i][j] = 12;
+                _adj_matrix[i][j] = getMaxSF(_network->at(j).period) >= 12 ? 12 : 0;
             else // No SF for this distance
-                _adj_matrix[i][j] = 13;
-        }
+                _adj_matrix[i][j] = 0;
+        } // TODO: poner 0 si P < ....
     }
 }
 
@@ -924,8 +924,7 @@ void greedy(){
         Max = 0;
 
         for(i = 0;i < _adj_matrix.size(); i++) {
-            Best[i] = 0;
-            Best[i] = _adj_matrix[i].size() - count(_adj_matrix[i].begin(), _adj_matrix[i].end(), 0);
+            Best[i] = _enddevices - count(_adj_matrix[i].begin(), _adj_matrix[i].end(), 0);
             if (Best[i] > Max){
                 best = i;
                 Max = Best[i];
@@ -965,6 +964,9 @@ void greedy(){
     }
 
     cout << "Gateways Necesarios " << gw << endl;
+    for(i = 0; i < GWS.size(); i++)
+        cout << GWS[i] << " ";
+    cout << endl;
 
     destroyMinSFMatrixGreedy(); // Release some memory
     buildMinSFMatrix();
