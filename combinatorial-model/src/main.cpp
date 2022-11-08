@@ -10,7 +10,7 @@
 #include <math.h>
 #include <string.h>
 #include <stdio.h>
-#include <unistd.h>
+//#include <unistd.h>
 
 #include "random/random.h"
 #include "random/uniform.h"
@@ -888,7 +888,6 @@ void greedy(){
     vector<int>::iterator it;
     long Best[_enddevices];
     long best, Max;
-    srand(time(NULL) ^ (getpid()<<16));
     
     float **Usf = (float**) malloc(sizeof(float*)*6);
     for(int sf = 0; sf < 6; sf++){
@@ -1098,6 +1097,8 @@ void springs() {
 
 
 int main(int argc, char **argv) {
+
+    srand(time(NULL));
 
     default_random_engine generator( random_device{}() ); // Random seed
 
