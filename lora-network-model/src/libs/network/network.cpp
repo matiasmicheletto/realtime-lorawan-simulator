@@ -281,10 +281,10 @@ void Network::removeAllGateways() {
 }
 
 void Network::stepSprings() {
-    struct force {
+    /*struct force {
         double x = 0;
         double y = 0;
-    };    
+    };*/    
     const long unsigned int nced = this->getNCEDCount();
     const long unsigned int ted = this->getEDCount();
     for (long unsigned int i = 0; i < this->enddevices.size(); i++) {
@@ -316,7 +316,7 @@ void Network::stepSprings() {
     // Update gateways positions according to forces
     double flimit = (double) this->mapSize/ 4.0; // Maximum force to apply to each gateway
     for (long unsigned int i = 0; i < this->gateways.size(); i++)
-        this->gateways[i]->updatePos(flimit);
+        this->gateways[i]->updatePos(flimi  t);
     // Reconnect network
     this->autoConnect();
 }

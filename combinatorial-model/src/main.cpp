@@ -10,7 +10,6 @@
 #include <math.h>
 #include <string.h>
 #include <stdio.h>
-//#include <unistd.h>
 
 #include "random/random.h"
 #include "random/uniform.h"
@@ -46,7 +45,7 @@ unsigned int _beta = 1; // Cost by gw cnt
 unsigned char _algo = 1; // 0 -> ga, 1 -> random
 // Random opt. tunning parameters
 unsigned int _initialGW = 1;
-unsigned int _increaseGWAfter = 50;
+unsigned int _increaseGWAfter = 100;
 // GA tunning parameters
 double _mut_prob = 1/(double) _enddevices; // Remember to update this on _enddevices change
 double _mut_rate = 0.3; // Mutation rate
@@ -994,48 +993,55 @@ void improveGWPos(bool* gwPos, bool* connectedEd) {
         Implements the pseudo-springs method on binary arrays
     */
 
-    // Initialize vector of forces
-    struct force {
+    // Initialize vector of gw velocities
+    struct velocity {
         unsigned int gwIdx;
         float x;
         float y;
     };
-    vector<force> forces;
-    //unsigned int ncCount = 0; // Count not connected ED
+    vector<velocity> velocities;
+    unsigned int ncCount = 0; // Count not connected ED
     for(unsigned int i = 0; i < _enddevices; i++){
-        if(gwPos[i]){ // If gw in node i
-            forces.push_back({i, 0.0, 0.0});
-        }
-        //if(!connectedEd[i])
-        //    ncCount++;
+        if(gwPos[i]) velocities.push_back({i, 0.0, 0.0}); // Create vector for this gw
+        if(!connectedEd[i]) ncCount++; // Increase counter of not connected ED
     }
 
-    // Compute forces over each GW
+    // Compute velocities over each GW
     for(unsigned int i = 0; i < _enddevices; i++){
-        if(!connectedEd[i]){
-            for(unsigned int j = 0; j < forces.size(); j++){
-                float dx, dy;
-                computeDirectionVector(i, forces[j].gwIdx, dx, dy);
-                // TODO: divide components with distance
-                const float d = sqrt(dx*dx + dy*dy);
-                forces[j].x += dx / (d < .1 ? .1 : d);
-                forces[j].y += dy / (d < .1 ? .1 : d);
-                //cout << d << " " << forces[j].x << " " << forces[j].y << endl;
+        if(connectedEd[i]){ // Weak attraction force to stabilize gws in middle of all eds
+            (void)0; // Require index of GW which ED[i] is connected to
+        }else{ // Strong attraction force to move gws close to not connected end devices
+            unsigned int closestGW = 0;
+            float minDist = computeDistance(i, velocities[0].gwIdx);
+            for(unsigned int j = 0; j < velocities.size(); j++){
+                const float dist = computeDistance(i, velocities[j].gwIdx);
+                if(dist < minDist){
+                    minDist = dist;
+                    closestGW = j;
+                }
+                //cout << d << " " << velocities[j].x << " " << velocities[j].y << endl;
             }
+            float dx, dy;
+            computeDirectionVector(i, velocities[closestGW].gwIdx, dx, dy);
+            velocities[closestGW].x += dx/(float)ncCount;
+            velocities[closestGW].y += dy/(float)ncCount;
         }
     }
 
     // For each GW, determine which node to move next
-    for(unsigned int j = 0; j < forces.size(); j++){
-        const unsigned int gwId = forces[j].gwIdx;
-        const float nextX = _network->at(gwId).x + forces[j].x;
-        const float nextY = _network->at(gwId).y + forces[j].y;
+    for(unsigned int j = 0; j < velocities.size(); j++){
+        const unsigned int gwId = velocities[j].gwIdx;
+        const float nextX = _network->at(gwId).x + velocities[j].x;
+        const float nextY = _network->at(gwId).y + velocities[j].y;
         const unsigned int nextId = getClosestId(nextX, nextY);
-        if(!gwPos[nextId]){ // Only move to empty slots
+        if(!gwPos[nextId] && gwId != nextId){ // Only move to empty slots
             gwPos[gwId] = false;
             gwPos[nextId] = true;
+            //cout << "Moved " << gwId << " dX=" << velocities[j].x << " dY=" << velocities[j].y << " and ended in " << nextId << endl;
         } // If cant, then stay in place
     }
+
+    velocities.clear(); // ?
 }
 
 void springs() {
@@ -1053,6 +1059,7 @@ void springs() {
     bool connected[_enddevices]; // List of connected ed (after evaluating sol)
     setRandomSol(sol, gws); // Initially random positions
     for(_currentIter = 0; _currentIter < _itermax; _currentIter++){
+        // Eval solution
         moFunction(sol, connected, cn, gwsCnt, false);
         const unsigned int cost = evalCost(cn, gwsCnt);
         if(cost < minCost){
@@ -1071,6 +1078,7 @@ void springs() {
             if(gws < _enddevices){
                 gws++;
                 addRandomGW(sol);
+                //cout << "Added new GW at random pos." << endl;
             }
         }
         if(getElapsed() > _timeout){
@@ -1082,7 +1090,7 @@ void springs() {
         // Update GW positions (sol will change after this step)
         improveGWPos(sol, connected);
     }
-    _currentIter = _itermax;
+    _currentIter = _itermax; // It resets when loop ends?
     
     printf("Min. GW num is %d (cost=%d)\n", _minGWs, minCost);    
 
