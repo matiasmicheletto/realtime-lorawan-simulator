@@ -206,17 +206,9 @@ Network Network::Builder::build(){
 }
 
 void Network::autoConnect() {
+
     for(long unsigned int i = 0; i < this->enddevices.size(); i++) {
         if(!this->enddevices.at(i)->isConnected()){
-            /*
-            // Sort gateways by distance
-            sort(this->gateways.begin(), this->gateways.end(), [this, i](Gateway *a, Gateway *b) {
-                return a->distanceTo(this->enddevices.at(i)) < b->distanceTo(this->enddevices.at(i));
-            });
-            for(long unsigned int j = 0; j < this->gateways.size(); j++)
-                if(this->gateways.at(j)->addEndDevice(this->enddevices.at(i)))
-                    break;
-            */
             const double gwRange = Gateway::getRange(this->maxSF);
             double maxDist = gwRange;
             double minDist = 0;
@@ -316,7 +308,7 @@ void Network::stepSprings() {
     // Update gateways positions according to forces
     double flimit = (double) this->mapSize/ 4.0; // Maximum force to apply to each gateway
     for (long unsigned int i = 0; i < this->gateways.size(); i++)
-        this->gateways[i]->updatePos(flimi  t);
+        this->gateways[i]->updatePos(flimit);
     // Reconnect network
     this->autoConnect();
 }

@@ -95,13 +95,15 @@ void Optimizer::run( void (*progressCallback)(Network *network, unsigned int ite
 
     while(true) {
         // Initialize GWs at random positions 
+
         this->network->removeAllGateways(); 
         for(unsigned int i = 0; i < this->initialGW; i++){
             random.setRandom(x, y);
             this->network->createGateway(x, y);
         }
+
         this->network->autoConnect();
-        
+
         unsigned int noProgressStepCounter = 0; // Number of iterations without significative progress
         const long int progressThres = 1 + this->network->getEDCount()/1000; // New connected devices number to be considered as progress
         const unsigned int addGWAfter = 10; // Number of iterations without progress after which a new gateway is added
@@ -248,9 +250,9 @@ string Optimizer::getExitCodeName() {
 string Optimizer::getStepMethodName(STEP_METHOD stepMethod) {
     switch(stepMethod){
         case SPRINGS:
-            return "Springs";
+            return "Springs (Cont.)";
         case RANDOM:
-            return "Random";
+            return "Random (Cont.)";
         default:
             return "Unknown";
     }
