@@ -1,476 +1,677 @@
-GW Pos. Heuristic,ED Sched. Method,Position distr.,Periods distr.,Map size,ED Number,ED Dens. (1/m^2),Max. SF,GW Number,Channels used,ED Unfeas. Instances,Coverage %,GW Avg. UF,Elapsed,Iterations,Exit condition
-Random Comb.,None,Uniform,Medium,100,1000,0.10,12,1,1,0,100.00,0.07,13,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,100,1000,0.10,12,1,1,0,100.00,0.10,13,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,100,1000,0.10,12,1,1,0,100.00,0.08,12,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,100,1000,0.10,12,1,1,0,100.00,0.09,13,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,100,1000,0.10,12,1,1,0,100.00,0.09,12,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,100,1000,0.10,12,1,1,0,100.00,0.06,12,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,100,1000,0.10,12,1,1,0,100.00,0.07,12,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,100,1000,0.10,12,1,1,0,100.00,0.08,13,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,100,1000,0.10,12,1,1,0,100.00,0.08,12,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,100,1000,0.10,12,1,1,0,100.00,0.08,12,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,100,2000,0.20,12,1,1,0,100.00,0.16,51,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,100,2000,0.20,12,1,1,0,100.00,0.18,51,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,100,2000,0.20,12,1,1,0,100.00,0.13,50,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,100,2000,0.20,12,1,1,0,100.00,0.19,51,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,100,2000,0.20,12,1,1,0,100.00,0.19,50,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,100,2000,0.20,12,1,1,0,100.00,0.16,53,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,100,2000,0.20,12,1,1,0,100.00,0.15,50,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,100,2000,0.20,12,1,1,0,100.00,0.13,51,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,100,2000,0.20,12,1,1,0,100.00,0.17,50,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,100,2000,0.20,12,1,1,0,100.00,0.18,51,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,100,5000,0.50,12,2,2,0,100.00,0.19,315,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,100,5000,0.50,12,2,2,0,100.00,0.17,320,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,100,5000,0.50,12,2,2,0,100.00,0.18,314,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,100,5000,0.50,12,2,2,0,100.00,0.19,320,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,100,5000,0.50,12,2,2,0,100.00,0.18,315,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,100,5000,0.50,12,2,2,0,100.00,0.19,328,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,100,5000,0.50,12,2,2,0,100.00,0.18,316,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,100,5000,0.50,12,2,2,0,100.00,0.19,320,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,100,5000,0.50,12,2,2,0,100.00,0.18,313,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,100,5000,0.50,12,2,2,0,100.00,0.20,362,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,100,10000,1.00,12,2,2,0,100.00,0.66,1254,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,100,10000,1.00,12,2,2,0,100.00,0.66,1283,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,100,10000,1.00,12,3,3,0,100.00,0.25,1373,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,100,10000,1.00,12,3,3,0,100.00,0.25,1418,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,100,10000,1.00,12,3,3,0,100.00,0.25,1381,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,100,10000,1.00,12,3,3,0,100.00,0.26,1415,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,100,10000,1.00,12,3,3,0,100.00,0.25,1376,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,100,10000,1.00,12,3,3,0,100.00,0.27,1413,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,100,10000,1.00,12,3,3,0,100.00,0.25,1364,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,100,10000,1.00,12,3,3,0,100.00,0.25,1501,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,100,20000,2.00,12,5,5,0,100.00,0.34,6607,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,100,20000,2.00,12,4,4,0,100.00,0.66,6421,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,100,20000,2.00,12,5,5,0,100.00,0.34,6686,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,100,20000,2.00,12,5,5,0,100.00,0.34,7001,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,100,20000,2.00,12,5,5,0,100.00,0.34,6611,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,100,20000,2.00,12,5,5,0,100.00,0.34,6985,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,100,20000,2.00,12,5,5,0,100.00,0.34,6586,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,100,20000,2.00,12,5,5,0,100.00,0.34,6976,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,100,20000,2.00,12,4,4,0,100.00,0.66,6195,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,1000,1000,0.00,12,3,3,0,100.00,0.12,28,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,1000,1000,0.00,12,3,3,0,100.00,0.11,32,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,1000,1000,0.00,12,3,3,0,100.00,0.12,29,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,1000,1000,0.00,12,3,3,0,100.00,0.11,28,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,1000,1000,0.00,12,3,3,0,100.00,0.12,27,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,1000,2000,0.00,12,4,4,0,100.00,0.17,113,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,1000,2000,0.00,12,4,4,0,100.00,0.16,112,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,1000,2000,0.00,12,4,4,0,100.00,0.16,116,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,1000,2000,0.00,12,4,4,0,100.00,0.15,115,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,1000,2000,0.00,12,4,4,0,100.00,0.15,113,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,1000,5000,0.00,12,7,7,0,100.00,0.19,859,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,100,20000,2.00,12,5,5,0,100.00,0.34,7024,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,1000,1000,0.00,12,4,4,0,100.00,0.09,38,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,1000,1000,0.00,12,3,3,0,100.00,0.12,24,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,1000,1000,0.00,12,4,4,0,100.00,0.09,35,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,1000,1000,0.00,12,4,4,0,100.00,0.08,35,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,1000,1000,0.00,12,3,3,0,100.00,0.11,33,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,1000,5000,0.00,12,5,5,0,100.00,0.27,676,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,1000,2000,0.00,12,5,5,0,100.00,0.13,130,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,1000,2000,0.00,12,4,4,0,100.00,0.15,107,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,1000,2000,0.00,12,4,4,0,100.00,0.16,112,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,1000,2000,0.00,12,5,5,0,100.00,0.14,129,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,1000,2000,0.00,12,5,5,0,100.00,0.12,141,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,1000,5000,0.00,12,5,5,0,100.00,0.27,663,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,1000,5000,0.00,12,5,5,0,100.00,0.29,639,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,1000,5000,0.00,12,6,6,0,100.00,0.25,735,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,1000,5000,0.00,12,5,5,0,100.00,0.29,663,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,1000,5000,0.00,12,6,6,0,100.00,0.23,783,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,1000,5000,0.00,12,6,6,0,100.00,0.23,716,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,1000,5000,0.00,12,6,6,0,100.00,0.24,735,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,1000,5000,0.00,12,6,6,0,100.00,0.24,738,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,1000,10000,0.01,12,7,7,0,100.00,0.36,2821,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,1000,10000,0.01,12,9,9,0,100.00,0.28,3694,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,1000,10000,0.01,12,8,8,0,100.00,0.31,3266,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,1000,10000,0.01,12,7,7,0,100.00,0.36,3102,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,1000,10000,0.01,12,9,9,0,100.00,0.27,3610,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,1000,10000,0.01,12,9,9,0,100.00,0.28,3494,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,1000,10000,0.01,12,9,9,0,100.00,0.27,3610,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,1000,10000,0.01,12,8,8,0,100.00,0.29,3170,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,1000,10000,0.01,12,8,8,0,100.00,0.33,3401,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,1000,10000,0.01,12,8,8,0,100.00,0.31,3342,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,1000,20000,0.02,12,11,11,0,100.00,0.39,13772,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,1000,20000,0.02,12,13,13,0,100.00,0.36,15937,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,1000,20000,0.02,12,11,11,0,100.00,0.41,13693,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,1000,20000,0.02,12,13,13,0,100.00,0.31,16300,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,1000,20000,0.02,12,11,11,0,100.00,0.40,13380,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,1000,20000,0.02,12,13,13,0,100.00,0.31,17558,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,1000,20000,0.02,12,11,11,0,100.00,0.40,14641,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,1000,20000,0.02,12,12,12,0,100.00,0.35,15653,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,1000,20000,0.02,12,11,11,0,100.00,0.40,14963,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,2000,1000,0.00,12,11,11,0,100.00,0.03,256,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,2000,1000,0.00,12,8,8,0,100.00,0.05,150,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,2000,1000,0.00,12,10,10,0,100.00,0.04,202,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,2000,1000,0.00,12,14,14,0,100.00,0.02,360,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,2000,1000,0.00,12,9,9,0,100.00,0.04,161,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,2000,2000,0.00,12,8,8,0,100.00,0.10,327,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,2000,2000,0.00,12,9,9,0,100.00,0.09,366,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,2000,2000,0.00,12,9,9,0,100.00,0.09,385,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,2000,2000,0.00,12,9,9,0,100.00,0.09,375,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,2000,2000,0.00,12,9,9,0,100.00,0.09,366,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,2000,5000,0.00,12,17,7,0,100.00,0.09,3275,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,2000,5000,0.00,12,12,12,0,100.00,0.15,2096,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,2000,5000,0.00,12,15,15,0,100.00,0.11,2674,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,2000,5000,0.00,12,12,12,0,100.00,0.15,1996,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,2000,5000,0.00,12,13,13,0,100.00,0.14,2286,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,1000,20000,0.02,12,13,13,0,100.00,0.33,17172,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,2000,1000,0.00,12,14,14,0,100.00,0.02,284,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,2000,1000,0.00,10,18,7,0,100.00,0.02,1076,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,2000,1000,0.00,12,15,15,0,100.00,0.02,346,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,2000,1000,0.00,12,15,15,0,100.00,0.02,351,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,2000,1000,0.00,12,17,7,0,100.00,0.02,397,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,2000,2000,0.00,12,12,12,0,100.00,0.06,514,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,2000,2000,0.00,12,17,7,0,100.00,0.04,876,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,2000,2000,0.00,12,17,8,0,100.00,0.04,851,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,2000,2000,0.00,11,18,7,0,100.00,0.04,1650,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,2000,2000,0.00,12,17,6,0,100.00,0.04,851,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,2000,5000,0.00,12,21,8,0,100.00,0.07,4456,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,2000,10000,0.00,12,22,9,0,100.00,0.14,12701,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,2000,5000,0.00,12,17,8,0,100.00,0.10,2982,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,2000,5000,0.00,12,19,7,0,100.00,0.08,4057,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,2000,5000,0.00,12,20,8,0,100.00,0.08,4345,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,2000,5000,0.00,12,19,8,0,100.00,0.08,3992,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,2000,10000,0.00,12,27,9,0,100.00,0.10,21117,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,2000,10000,0.00,12,22,8,0,100.00,0.14,14506,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,2000,10000,0.00,12,19,9,0,100.00,0.15,11684,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,2000,10000,0.00,12,20,8,0,100.00,0.15,12489,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,2000,10000,0.00,12,24,8,0,100.00,0.12,16162,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,2000,10000,0.00,12,20,8,0,100.00,0.15,11645,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,2000,10000,0.00,12,25,9,0,100.00,0.11,17111,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,2000,10000,0.00,12,22,8,0,100.00,0.14,14195,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,2000,10000,0.00,12,23,8,0,100.00,0.13,16577,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,2000,20000,0.00,12,23,10,0,100.00,0.24,45204,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,2000,20000,0.00,12,21,9,0,100.00,0.27,44104,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,2000,20000,0.00,12,31,10,0,100.00,0.16,60661,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,2000,20000,0.00,12,19,8,0,100.00,0.30,35674,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,2000,20000,0.00,12,30,11,0,100.00,0.18,56439,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,2000,20000,0.00,12,20,8,0,100.00,0.28,37865,10000,Max. coverage
-Springs (Discr.),None,Uniform,Medium,2000,20000,0.00,12,20,9,0,100.00,0.28,40051,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,100,1000,0.10,12,2,2,0,100.00,0.17,13,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,100,1000,0.10,12,2,2,0,100.00,0.17,12,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,100,1000,0.10,12,2,2,0,100.00,0.19,13,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,100,1000,0.10,12,2,2,0,100.00,0.16,12,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,100,1000,0.10,12,2,2,0,100.00,0.18,12,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,100,2000,0.20,12,3,3,0,100.00,0.25,75,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,100,2000,0.20,12,3,3,0,100.00,0.24,74,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,100,2000,0.20,12,3,3,0,100.00,0.24,77,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,100,2000,0.20,12,3,3,0,100.00,0.25,74,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,100,2000,0.20,12,3,3,0,100.00,0.24,75,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,100,5000,0.50,12,7,7,0,100.00,0.28,951,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,100,5000,0.50,12,7,7,0,100.00,0.28,944,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,100,5000,0.50,12,7,7,0,100.00,0.28,953,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,100,5000,0.50,12,7,7,0,100.00,0.27,944,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,100,5000,0.50,12,7,7,0,100.00,0.28,940,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,2000,20000,0.00,12,29,9,0,100.00,0.19,54219,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,100,10000,1.00,12,13,13,0,100.00,0.31,6384,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,100,10000,1.00,12,13,13,0,100.00,0.32,7385,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,100,10000,1.00,12,13,13,0,100.00,0.32,7376,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,100,10000,1.00,12,13,13,0,100.00,0.32,7974,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,100,10000,1.00,12,13,13,0,100.00,0.31,7769,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,2000,20000,0.00,12,29,10,0,100.00,0.18,51744,10000,Max. coverage
-Random Comb.,None,Uniform,Medium,2000,20000,0.00,12,30,12,0,100.00,0.17,56396,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,100,1000,0.10,12,1,1,0,100.00,0.03,13,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,100,1000,0.10,12,1,1,0,100.00,0.04,12,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,100,1000,0.10,12,1,1,0,100.00,0.05,13,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,100,1000,0.10,12,1,1,0,100.00,0.05,13,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,100,1000,0.10,12,1,1,0,100.00,0.04,13,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,100,2000,0.20,12,1,1,0,100.00,0.10,51,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,100,2000,0.20,12,1,1,0,100.00,0.08,51,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,100,2000,0.20,12,1,1,0,100.00,0.10,51,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,100,2000,0.20,12,1,1,0,100.00,0.08,51,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,100,2000,0.20,12,1,1,0,100.00,0.08,51,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,100,5000,0.50,12,1,1,0,100.00,0.20,321,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,100,5000,0.50,12,1,1,0,100.00,0.19,322,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,100,5000,0.50,12,1,1,0,100.00,0.22,366,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,100,5000,0.50,12,1,1,0,100.00,0.22,322,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,100,5000,0.50,12,1,1,0,100.00,0.21,320,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,100,10000,1.00,12,1,1,0,100.00,0.68,1286,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,100,10000,1.00,12,1,1,0,100.00,0.70,1285,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,100,10000,1.00,12,2,2,0,100.00,0.18,1280,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,100,10000,1.00,12,1,1,0,100.00,0.78,1280,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,100,10000,1.00,12,1,1,0,100.00,0.70,1274,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,100,20000,2.00,12,2,2,0,100.00,0.65,5128,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,100,20000,2.00,12,2,2,0,100.00,0.68,5150,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,100,20000,2.00,12,2,2,0,100.00,0.66,5147,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,100,20000,2.00,12,2,2,0,100.00,0.65,5141,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,100,20000,2.00,12,2,2,0,100.00,0.69,5154,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,1000,1000,0.00,12,2,2,0,100.00,0.12,14,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,1000,1000,0.00,12,2,2,0,100.00,0.13,14,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,1000,1000,0.00,12,2,2,0,100.00,0.14,14,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,1000,1000,0.00,12,2,2,0,100.00,0.12,14,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,1000,1000,0.00,12,2,2,0,100.00,0.14,14,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,1000,2000,0.00,12,2,2,0,100.00,0.29,58,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,1000,2000,0.00,12,2,2,0,100.00,0.24,58,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,1000,2000,0.00,12,2,2,0,100.00,0.25,58,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,1000,2000,0.00,12,2,2,0,100.00,0.24,58,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,1000,2000,0.00,12,2,2,0,100.00,0.26,58,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,1000,5000,0.00,12,3,3,0,100.00,0.36,436,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,1000,5000,0.00,12,3,3,0,100.00,0.37,438,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,1000,5000,0.00,12,3,3,0,100.00,0.36,437,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,1000,5000,0.00,12,3,3,0,100.00,0.38,436,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,1000,5000,0.00,12,3,3,0,100.00,0.37,445,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,1000,10000,0.01,12,4,4,0,100.00,0.45,1935,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,1000,10000,0.01,12,4,4,0,100.00,0.48,1943,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,1000,10000,0.01,12,4,4,0,100.00,0.44,2008,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,1000,10000,0.01,12,5,5,0,100.00,0.38,2198,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,1000,10000,0.01,12,4,4,0,100.00,0.48,1917,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,1000,20000,0.02,12,7,7,0,100.00,0.49,9581,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,1000,20000,0.02,12,7,7,0,100.00,0.47,9163,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,1000,20000,0.02,12,7,7,0,100.00,0.49,9090,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,1000,20000,0.02,12,7,7,0,100.00,0.48,9046,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,1000,20000,0.02,12,7,7,0,100.00,0.49,9155,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,2000,1000,0.00,12,4,4,0,100.00,0.08,39,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,2000,1000,0.00,12,4,4,0,100.00,0.08,37,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,2000,1000,0.00,12,3,3,0,100.00,0.12,29,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,2000,1000,0.00,12,4,4,0,100.00,0.08,39,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,2000,1000,0.00,12,3,3,0,100.00,0.12,30,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,2000,2000,0.00,12,4,4,0,100.00,0.16,116,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,2000,2000,0.00,12,4,4,0,100.00,0.16,107,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,2000,2000,0.00,12,4,4,0,100.00,0.15,118,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,2000,2000,0.00,12,4,4,0,100.00,0.17,111,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,2000,2000,0.00,12,5,5,0,100.00,0.11,140,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,2000,5000,0.00,12,6,6,0,100.00,0.23,789,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,2000,5000,0.00,12,6,6,0,100.00,0.23,811,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,2000,5000,0.00,12,6,6,0,100.00,0.23,846,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,2000,5000,0.00,12,6,6,0,100.00,0.23,790,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,2000,5000,0.00,12,6,6,0,100.00,0.21,863,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,2000,10000,0.00,12,8,8,0,100.00,0.32,3514,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,2000,10000,0.00,12,9,9,0,100.00,0.25,3855,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,2000,10000,0.00,12,8,8,0,100.00,0.30,3420,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,2000,10000,0.00,12,9,9,0,100.00,0.27,3842,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,2000,10000,0.00,12,8,8,0,100.00,0.31,3656,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,2000,20000,0.00,12,12,12,0,100.00,0.38,16686,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,2000,20000,0.00,12,12,12,0,100.00,0.37,17698,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,2000,20000,0.00,12,13,13,0,100.00,0.33,17793,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,2000,20000,0.00,12,12,12,0,100.00,0.36,16326,10000,Max. coverage
-Random Comb.,None,Uniform,Soft,2000,20000,0.00,12,12,12,0,100.00,0.37,16581,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,100,1000,0.10,12,2,2,0,100.00,0.19,13,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,100,1000,0.10,12,2,2,0,100.00,0.17,13,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,100,1000,0.10,12,2,2,0,100.00,0.19,13,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,100,1000,0.10,12,2,2,0,100.00,0.20,13,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,100,1000,0.10,12,2,2,0,100.00,0.20,13,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,100,2000,0.20,12,3,3,0,100.00,0.26,70,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,100,2000,0.20,12,3,3,0,100.00,0.27,69,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,100,2000,0.20,12,3,3,0,100.00,0.28,69,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,100,2000,0.20,12,3,3,0,100.00,0.26,69,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,100,2000,0.20,12,3,3,0,100.00,0.26,69,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,100,5000,0.50,12,7,7,0,100.00,0.28,857,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,100,5000,0.50,12,7,7,0,100.00,0.28,861,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,100,5000,0.50,12,7,7,0,100.00,0.28,852,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,100,5000,0.50,12,7,7,0,100.00,0.28,860,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,100,5000,0.50,12,7,7,0,100.00,0.28,874,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,100,10000,1.00,12,13,13,0,100.00,0.32,7214,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,100,10000,1.00,12,13,13,0,100.00,0.32,7253,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,100,10000,1.00,12,13,13,0,100.00,0.31,7185,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,100,10000,1.00,12,13,13,0,100.00,0.32,7126,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,100,10000,1.00,12,13,13,0,100.00,0.32,7070,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,100,20000,2.00,7,40,40,0,100.00,0.16,379692,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,100,20000,2.00,7,39,39,0,100.00,0.16,322127,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,100,20000,2.00,7,44,44,0,100.00,0.14,388974,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,100,20000,2.00,7,38,38,0,100.00,0.16,306911,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,100,20000,2.00,7,44,43,0,100.00,0.14,401904,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,100,20000,2.00,7,39,39,0,100.00,0.16,322289,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,100,20000,2.00,7,40,39,0,100.00,0.16,382589,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,100,20000,2.00,7,39,38,0,100.00,0.16,323580,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,100,20000,2.00,7,39,39,0,100.00,0.16,325778,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,1000,1000,0.00,12,83,9,0,100.00,0.00,3333,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,1000,1000,0.00,12,72,8,0,100.00,0.01,2823,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,100,20000,2.00,7,39,39,0,100.00,0.16,368338,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,1000,1000,0.00,12,83,9,0,100.00,0.01,3329,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,1000,1000,0.00,12,61,8,0,100.00,0.01,4493,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,1000,1000,0.00,12,77,10,0,100.00,0.01,2998,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,1000,1000,0.00,12,56,9,0,100.00,0.01,3761,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,1000,1000,0.00,12,86,10,0,100.00,0.00,3416,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,1000,1000,0.00,12,60,9,0,100.00,0.01,4305,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,1000,2000,0.00,12,79,9,0,100.00,0.01,6394,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,1000,1000,0.00,12,71,9,0,100.00,0.01,5469,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,1000,2000,0.00,12,84,9,0,100.00,0.01,6883,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,1000,1000,0.00,12,55,8,0,100.00,0.01,3935,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,1000,2000,0.00,12,82,9,0,100.00,0.01,6571,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,1000,2000,0.00,12,82,10,0,100.00,0.01,12968,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,1000,2000,0.00,12,95,10,0,100.00,0.01,7773,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,1000,2000,0.00,12,57,8,0,100.00,0.02,7637,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,1000,2000,0.00,12,86,10,0,100.00,0.01,6906,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,1000,2000,0.00,12,64,10,0,100.00,0.01,9226,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,1000,2000,0.00,12,55,9,0,100.00,0.02,7716,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,1000,2000,0.00,12,49,8,0,100.00,0.02,6368,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,1000,5000,0.00,12,100,13,0,100.00,0.02,23089,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,1000,5000,0.00,12,99,12,0,100.00,0.02,24529,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,1000,5000,0.00,12,73,9,0,100.00,0.03,33265,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,1000,5000,0.00,12,91,10,0,100.00,0.02,22077,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,1000,5000,0.00,12,54,9,0,100.00,0.04,20005,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,1000,5000,0.00,12,93,10,0,99.98,0.02,24960,10000,Max. iterations
-Springs (Discr.),None,Uniform,Hard,1000,5000,0.00,12,57,9,0,100.00,0.04,23648,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,1000,5000,0.00,12,93,9,0,100.00,0.02,23156,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,1000,5000,0.00,12,54,8,0,100.00,0.04,20800,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,1000,5000,0.00,12,51,9,0,100.00,0.05,19213,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,1000,10000,0.01,12,101,11,0,99.99,0.04,76723,10000,Max. iterations
-Springs (Discr.),None,Uniform,Hard,1000,10000,0.01,12,57,8,0,100.00,0.08,63035,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,1000,10000,0.01,12,47,7,0,100.00,0.10,48575,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,1000,10000,0.01,12,101,12,0,99.99,0.04,76906,10000,Max. iterations
-Springs (Discr.),None,Uniform,Hard,1000,10000,0.01,12,67,10,0,100.00,0.07,70653,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,1000,10000,0.01,12,101,9,0,99.99,0.04,76906,10000,Max. iterations
-Springs (Discr.),None,Uniform,Hard,1000,10000,0.01,12,41,7,0,100.00,0.12,37117,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,1000,10000,0.01,12,57,10,0,100.00,0.08,58422,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,1000,10000,0.01,12,96,12,0,99.97,0.04,77233,10000,Max. iterations
-Random Comb.,None,Uniform,Hard,1000,10000,0.01,12,100,10,0,100.00,0.04,75784,10000,Max. coverage
-Springs (Discr.),None,Uniform,Hard,1000,20000,0.02,12,92,11,0,100.00,0.09,317421,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,1000,20000,0.02,12,92,11,0,99.99,0.09,237028,10000,Max. iterations
-Springs (Discr.),None,Uniform,Hard,1000,20000,0.02,12,68,10,0,100.00,0.13,213205,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,1000,20000,0.02,12,97,10,0,99.99,0.08,232674,10000,Max. iterations
-Random Comb.,None,Uniform,Hard,1000,20000,0.02,12,101,10,0,99.96,0.08,233191,10000,Max. iterations
-Springs (Discr.),None,Uniform,Hard,1000,20000,0.02,12,87,10,0,100.00,0.10,278425,10000,Max. coverage
-Random Comb.,None,Uniform,Hard,1000,20000,0.02,12,97,12,0,99.96,0.08,231168,10000,Max. iterations
-Springs (Discr.),None,Uniform,Hard,1000,20000,0.02,12,96,11,0,100.00,0.08,387612,10000,Max. iterations
-Random Comb.,None,Uniform,Hard,1000,20000,0.02,12,98,10,0,99.99,0.08,224141,10000,Max. iterations
-Random Comb.,None,Uniform,Hard,2000,1000,0.00,12,99,9,0,89.30,0.00,9319,10000,Max. iterations
-Random Comb.,None,Uniform,Hard,2000,1000,0.00,12,101,8,0,89.70,0.00,9317,10000,Max. iterations
-Random Comb.,None,Uniform,Hard,2000,1000,0.00,12,98,8,0,89.50,0.00,9341,10000,Max. iterations
-Random Comb.,None,Uniform,Hard,2000,1000,0.00,12,92,8,0,88.90,0.01,9567,10000,Max. iterations
-Random Comb.,None,Uniform,Hard,2000,1000,0.00,12,101,8,0,90.10,0.00,9503,10000,Max. iterations
-Random Comb.,None,Uniform,Hard,2000,2000,0.00,12,100,8,0,88.20,0.01,20654,10000,Max. iterations
-Random Comb.,None,Uniform,Hard,2000,2000,0.00,12,101,9,0,88.25,0.01,19154,10000,Max. iterations
-Random Comb.,None,Uniform,Hard,2000,2000,0.00,12,101,9,0,88.30,0.01,19126,10000,Max. iterations
-Random Comb.,None,Uniform,Hard,2000,2000,0.00,12,101,9,0,88.85,0.01,18650,10000,Max. iterations
-Random Comb.,None,Uniform,Hard,2000,2000,0.00,12,101,9,0,88.35,0.01,19122,10000,Max. iterations
-Random Comb.,None,Uniform,Hard,2000,5000,0.00,12,98,9,0,87.76,0.02,55084,10000,Max. iterations
-Random Comb.,None,Uniform,Hard,2000,5000,0.00,12,97,10,0,87.24,0.02,54236,10000,Max. iterations
-Springs (Discr.),None,Uniform,Hard,1000,20000,0.02,12,79,11,0,99.92,0.11,306737,10000,Max. iterations
-Springs (Discr.),None,Uniform,Hard,2000,1000,0.00,12,101,9,0,84.60,0.00,17932,10000,Max. iterations
-Springs (Discr.),None,Uniform,Hard,2000,1000,0.00,12,101,9,0,85.00,0.00,18364,10000,Max. iterations
-Random Comb.,None,Uniform,Hard,2000,5000,0.00,12,96,8,0,88.18,0.02,52216,10000,Max. iterations
-Springs (Discr.),None,Uniform,Hard,2000,1000,0.00,12,101,9,0,87.20,0.00,17264,10000,Max. iterations
-Springs (Discr.),None,Uniform,Hard,2000,1000,0.00,12,100,9,0,86.90,0.00,17243,10000,Max. iterations
-Springs (Discr.),None,Uniform,Hard,2000,1000,0.00,12,101,8,0,86.80,0.00,16928,10000,Max. iterations
-Random Comb.,None,Uniform,Hard,2000,5000,0.00,12,100,8,0,87.92,0.02,51017,10000,Max. iterations
-Springs (Discr.),None,Uniform,Hard,2000,2000,0.00,12,100,9,0,86.55,0.01,35090,10000,Max. iterations
-Random Comb.,None,Uniform,Hard,2000,5000,0.00,12,98,10,0,87.24,0.02,51643,10000,Max. iterations
-Springs (Discr.),None,Uniform,Hard,2000,2000,0.00,12,101,10,0,82.60,0.01,36541,10000,Max. iterations
-Springs (Discr.),None,Uniform,Hard,2000,2000,0.00,12,100,10,0,86.05,0.01,35406,10000,Max. iterations
-Springs (Discr.),None,Uniform,Hard,2000,2000,0.00,12,100,10,0,86.25,0.01,35013,10000,Max. iterations
-Springs (Discr.),None,Uniform,Hard,2000,2000,0.00,12,101,9,0,84.95,0.01,36057,10000,Max. iterations
-Random Comb.,None,Uniform,Hard,2000,10000,0.00,12,101,11,0,87.78,0.05,147051,10000,Max. iterations
-Springs (Discr.),None,Uniform,Hard,2000,5000,0.00,12,101,10,0,86.44,0.02,95444,10000,Max. iterations
-Random Comb.,None,Uniform,Hard,2000,10000,0.00,12,101,10,0,86.97,0.04,155657,10000,Max. iterations
-Springs (Discr.),None,Uniform,Hard,2000,5000,0.00,12,98,12,0,82.88,0.02,101956,10000,Max. iterations
-Springs (Discr.),None,Uniform,Hard,2000,5000,0.00,12,101,11,0,85.78,0.02,97543,10000,Max. iterations
-Random Comb.,None,Uniform,Hard,2000,10000,0.00,12,99,11,0,88.21,0.05,154780,10000,Max. iterations
-Springs (Discr.),None,Uniform,Hard,2000,5000,0.00,12,101,10,0,84.44,0.02,98671,10000,Max. iterations
-Random Comb.,None,Uniform,Hard,2000,10000,0.00,12,101,11,0,87.86,0.05,154207,10000,Max. iterations
-Springs (Discr.),None,Uniform,Hard,2000,5000,0.00,12,100,11,0,83.62,0.02,99397,10000,Max. iterations
-Random Comb.,None,Uniform,Hard,2000,10000,0.00,12,101,8,0,87.25,0.05,167795,10000,Max. iterations
-Springs (Discr.),None,Uniform,Hard,2000,10000,0.00,12,101,10,0,85.48,0.04,255717,10000,Max. iterations
-Springs (Discr.),None,Uniform,Hard,2000,10000,0.00,12,101,12,0,83.86,0.04,256528,10000,Max. iterations
-Random Comb.,None,Uniform,Hard,2000,20000,0.00,12,100,10,0,87.85,0.09,447016,10000,Max. iterations
-Springs (Discr.),None,Uniform,Hard,2000,10000,0.00,12,101,11,0,83.43,0.04,263365,10000,Max. iterations
-Springs (Discr.),None,Uniform,Hard,2000,10000,0.00,12,101,10,0,85.73,0.04,261085,10000,Max. iterations
-Random Comb.,None,Uniform,Hard,2000,20000,0.00,12,99,10,0,87.17,0.09,446283,10000,Max. iterations
-Springs (Discr.),None,Uniform,Hard,2000,10000,0.00,12,101,12,0,83.00,0.04,255184,10000,Max. iterations
-Random Comb.,None,Uniform,Hard,2000,20000,0.00,12,101,10,0,86.82,0.09,465597,10000,Max. iterations
-Springs (Discr.),None,Uniform,Hard,2000,20000,0.00,12,101,10,0,86.01,0.09,644666,10000,Max. iterations
-Random Comb.,None,Uniform,Hard,2000,20000,0.00,12,98,10,0,87.36,0.09,468148,10000,Max. iterations
-Random Comb.,None,Uniform,Hard,2000,20000,0.00,12,101,10,0,87.20,0.09,471136,10000,Max. iterations
-Springs (Discr.),None,Uniform,Hard,2000,20000,0.00,12,101,12,0,84.78,0.09,634139,10000,Max. iterations
-Springs (Discr.),None,Uniform,Hard,2000,20000,0.00,12,101,9,0,85.81,0.09,525545,10000,Max. iterations
-Springs (Discr.),None,Uniform,Hard,2000,20000,0.00,12,101,14,0,84.12,0.09,523596,10000,Max. iterations
-Springs (Discr.),None,Uniform,Hard,2000,20000,0.00,12,101,10,0,85.35,0.09,532827,10000,Max. iterations
-Springs (Discr.),None,Uniform,Soft,100,1000,0.10,12,1,1,0,100.00,0.04,12,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,100,1000,0.10,12,1,1,0,100.00,0.05,13,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,100,1000,0.10,12,1,1,0,100.00,0.04,13,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,100,1000,0.10,12,1,1,0,100.00,0.04,12,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,100,1000,0.10,12,1,1,0,100.00,0.05,12,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,100,2000,0.20,12,1,1,0,100.00,0.08,50,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,100,2000,0.20,12,1,1,0,100.00,0.09,50,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,100,2000,0.20,12,1,1,0,100.00,0.09,50,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,100,2000,0.20,12,1,1,0,100.00,0.09,50,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,100,2000,0.20,12,1,1,0,100.00,0.10,50,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,100,5000,0.50,12,1,1,0,100.00,0.22,313,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,100,5000,0.50,12,1,1,0,100.00,0.23,322,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,100,5000,0.50,12,1,1,0,100.00,0.21,321,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,100,5000,0.50,12,1,1,0,100.00,0.21,321,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,100,5000,0.50,12,1,1,0,100.00,0.23,318,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,100,10000,1.00,12,1,1,0,100.00,0.65,1277,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,100,10000,1.00,12,1,1,0,100.00,0.66,1251,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,100,10000,1.00,12,1,1,0,100.00,0.69,1273,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,100,10000,1.00,12,1,1,0,100.00,0.74,1274,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,100,10000,1.00,12,1,1,0,100.00,0.71,1297,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,100,20000,2.00,12,2,2,0,100.00,0.66,5124,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,100,20000,2.00,12,2,2,0,100.00,0.67,5130,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,100,20000,2.00,12,2,2,0,100.00,0.67,5126,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,100,20000,2.00,12,2,2,0,100.00,0.70,5119,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,100,20000,2.00,12,2,2,0,100.00,0.66,5117,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,1000,1000,0.00,12,2,2,0,100.00,0.11,14,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,1000,1000,0.00,12,1,1,0,100.00,0.29,14,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,1000,1000,0.00,12,2,2,0,100.00,0.13,14,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,1000,1000,0.00,12,2,2,0,100.00,0.11,14,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,1000,1000,0.00,12,2,2,0,100.00,0.12,14,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,1000,2000,0.00,12,2,2,0,100.00,0.23,57,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,1000,2000,0.00,12,2,2,0,100.00,0.26,58,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,1000,2000,0.00,12,2,2,0,100.00,0.22,58,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,1000,2000,0.00,12,2,2,0,100.00,0.26,57,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,1000,2000,0.00,12,2,2,0,100.00,0.24,57,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,1000,5000,0.00,12,3,3,0,100.00,0.35,437,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,1000,5000,0.00,12,3,3,0,100.00,0.35,434,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,1000,5000,0.00,12,3,3,0,100.00,0.32,438,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,1000,5000,0.00,12,3,3,0,100.00,0.35,437,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,1000,5000,0.00,12,3,3,0,100.00,0.33,437,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,1000,10000,0.01,12,4,4,0,100.00,0.48,1855,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,1000,10000,0.01,12,4,4,0,100.00,0.48,1836,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,1000,10000,0.01,12,4,4,0,100.00,0.47,1861,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,1000,10000,0.01,12,4,4,0,100.00,0.40,1849,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,1000,10000,0.01,12,4,4,0,100.00,0.46,1860,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,1000,20000,0.02,12,7,7,0,100.00,0.38,8844,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,1000,20000,0.02,12,7,7,0,100.00,0.49,8859,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,1000,20000,0.02,12,7,7,0,100.00,0.43,8862,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,1000,20000,0.02,12,7,7,0,100.00,0.40,8827,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,1000,20000,0.02,12,7,7,0,100.00,0.40,8866,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,2000,1000,0.00,12,3,3,0,100.00,0.11,30,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,2000,1000,0.00,12,3,3,0,100.00,0.11,28,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,2000,1000,0.00,12,3,3,0,100.00,0.12,27,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,2000,1000,0.00,12,3,3,0,100.00,0.12,29,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,2000,1000,0.00,12,3,3,0,100.00,0.12,32,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,2000,2000,0.00,12,4,4,0,100.00,0.16,120,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,2000,2000,0.00,12,4,4,0,100.00,0.16,118,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,2000,2000,0.00,12,4,4,0,100.00,0.16,118,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,2000,2000,0.00,12,5,5,0,100.00,0.12,155,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,2000,2000,0.00,12,4,4,0,100.00,0.17,118,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,2000,5000,0.00,12,5,5,0,100.00,0.29,768,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,2000,5000,0.00,12,5,5,0,100.00,0.29,675,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,2000,5000,0.00,12,5,5,0,100.00,0.29,674,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,2000,5000,0.00,12,6,6,0,100.00,0.22,779,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,2000,5000,0.00,12,5,5,0,100.00,0.28,740,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,2000,10000,0.00,12,8,8,0,100.00,0.28,3392,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,2000,10000,0.00,12,8,8,0,100.00,0.31,3300,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,2000,10000,0.00,12,8,8,0,100.00,0.31,3305,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,2000,10000,0.00,12,7,7,0,100.00,0.37,2972,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,2000,10000,0.00,12,8,8,0,100.00,0.32,3341,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,2000,20000,0.00,12,11,11,0,100.00,0.40,13957,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,2000,20000,0.00,12,12,12,0,100.00,0.35,14957,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,2000,20000,0.00,12,11,11,0,100.00,0.40,14105,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,2000,20000,0.00,12,11,11,0,100.00,0.40,13733,10000,Max. coverage
-Springs (Discr.),None,Uniform,Soft,2000,20000,0.00,12,12,12,0,100.00,0.38,15186,10000,Max. coverage
-GA Opt.,None,Uniform,Hard,100,1000,0.10,12,2,2,0,100.00,0.19,1205,7550,Max. iterations
-GA Opt.,None,Uniform,Hard,100,1000,0.10,12,2,2,0,100.00,0.17,1211,7550,Max. iterations
-GA Opt.,None,Uniform,Hard,100,1000,0.10,12,2,2,0,100.00,0.16,1216,7550,Max. iterations
-GA Opt.,None,Uniform,Hard,100,1000,0.10,12,2,2,0,100.00,0.22,1186,7550,Max. iterations
-GA Opt.,None,Uniform,Hard,100,1000,0.10,12,2,2,0,100.00,0.17,1207,7550,Max. iterations
-GA Opt.,None,Uniform,Hard,100,1000,0.10,12,2,2,0,100.00,0.22,1214,7550,Max. iterations
-GA Opt.,None,Uniform,Hard,100,1000,0.10,12,2,2,0,100.00,0.18,1187,7550,Max. iterations
-GA Opt.,None,Uniform,Hard,100,1000,0.10,12,2,2,0,100.00,0.20,1204,7550,Max. iterations
-GA Opt.,None,Uniform,Hard,100,1000,0.10,12,2,2,0,100.00,0.20,1197,7550,Max. iterations
-GA Opt.,None,Uniform,Hard,100,1000,0.10,12,2,2,0,100.00,0.20,1197,7550,Max. iterations
-GA Opt.,None,Uniform,Hard,100,2000,0.20,12,3,3,0,100.00,0.25,4879,15000,Max. iterations
-GA Opt.,None,Uniform,Hard,100,2000,0.20,12,3,3,0,100.00,0.25,4835,15000,Max. iterations
-GA Opt.,None,Uniform,Hard,100,2000,0.20,12,3,3,0,100.00,0.26,4791,15000,Max. iterations
-GA Opt.,None,Uniform,Hard,100,2000,0.20,12,3,3,0,100.00,0.25,4758,15000,Max. iterations
-GA Opt.,None,Uniform,Hard,100,2000,0.20,12,3,3,0,100.00,0.25,4808,15000,Max. iterations
-GA Opt.,None,Uniform,Hard,100,2000,0.20,12,3,3,0,100.00,0.25,4773,15000,Max. iterations
-GA Opt.,None,Uniform,Hard,100,2000,0.20,12,3,3,0,100.00,0.26,4880,15000,Max. iterations
-GA Opt.,None,Uniform,Hard,100,2000,0.20,12,3,3,0,100.00,0.25,4849,15000,Max. iterations
-GA Opt.,None,Uniform,Hard,100,2000,0.20,12,3,3,0,100.00,0.26,4800,15000,Max. iterations
-GA Opt.,None,Uniform,Hard,100,2000,0.20,12,3,3,0,100.00,0.25,4815,15000,Max. iterations
-GA Opt.,None,Uniform,Hard,100,5000,0.50,12,7,7,0,100.00,0.28,12519,15000,Max. iterations
-GA Opt.,None,Uniform,Hard,100,5000,0.50,12,7,7,0,100.00,0.28,12618,15000,Max. iterations
-GA Opt.,None,Uniform,Hard,100,5000,0.50,12,7,7,0,100.00,0.28,12419,15000,Max. iterations
-GA Opt.,None,Uniform,Hard,100,5000,0.50,12,7,7,0,100.00,0.28,12592,15000,Max. iterations
-GA Opt.,None,Uniform,Hard,100,5000,0.50,12,7,7,0,100.00,0.28,12541,15000,Max. iterations
+﻿GW Pos. Heuristic,ED Sched. Method,Position distr.,Periods distr.,Map size,ED Number,ED Dens. (1/m^2),Max. SF,GW Number,Channels used,ED Unfeas. Instances,Coverage %,GW Avg. UF,Elapsed,Iterations,Exit condition
+Random Comb.,None,Uniform,Medium,100,1000,0.10,12,1,1,0,100.00,0.07,30,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,100,1000,0.10,12,1,1,0,100.00,0.10,30,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,100,1000,0.10,12,1,1,0,100.00,0.08,28,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,100,1000,0.10,12,1,1,0,100.00,0.09,30,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,100,1000,0.10,12,1,1,0,100.00,0.09,28,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,100,1000,0.10,12,1,1,0,100.00,0.06,28,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,100,1000,0.10,12,1,1,0,100.00,0.07,28,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,100,1000,0.10,12,1,1,0,100.00,0.08,30,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,100,1000,0.10,12,1,1,0,100.00,0.08,28,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,100,1000,0.10,12,1,1,0,100.00,0.08,28,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,100,2000,0.20,12,1,1,0,100.00,0.16,118,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,100,2000,0.20,12,1,1,0,100.00,0.18,118,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,100,2000,0.20,12,1,1,0,100.00,0.13,116,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,100,2000,0.20,12,1,1,0,100.00,0.19,118,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,100,2000,0.20,12,1,1,0,100.00,0.19,116,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,100,2000,0.20,12,1,1,0,100.00,0.16,122,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,100,2000,0.20,12,1,1,0,100.00,0.15,116,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,100,2000,0.20,12,1,1,0,100.00,0.13,118,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,100,2000,0.20,12,1,1,0,100.00,0.17,116,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,100,2000,0.20,12,1,1,0,100.00,0.18,118,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,100,5000,0.50,12,2,2,0,100.00,0.19,728,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,100,5000,0.50,12,2,2,0,100.00,0.17,739,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,100,5000,0.50,12,2,2,0,100.00,0.18,725,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,100,5000,0.50,12,2,2,0,100.00,0.19,739,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,100,5000,0.50,12,2,2,0,100.00,0.18,728,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,100,5000,0.50,12,2,2,0,100.00,0.19,758,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,100,5000,0.50,12,2,2,0,100.00,0.18,730,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,100,5000,0.50,12,2,2,0,100.00,0.19,739,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,100,5000,0.50,12,2,2,0,100.00,0.18,723,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,100,5000,0.50,12,2,2,0,100.00,0.20,836,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,100,10000,1.00,12,2,2,0,100.00,0.66,2897,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,100,10000,1.00,12,2,2,0,100.00,0.66,2964,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,100,10000,1.00,12,3,3,0,100.00,0.25,3172,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,100,10000,1.00,12,3,3,0,100.00,0.25,3276,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,100,10000,1.00,12,3,3,0,100.00,0.25,3190,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,100,10000,1.00,12,3,3,0,100.00,0.26,3269,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,100,10000,1.00,12,3,3,0,100.00,0.25,3179,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,100,10000,1.00,12,3,3,0,100.00,0.27,3264,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,100,10000,1.00,12,3,3,0,100.00,0.25,3151,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,100,10000,1.00,12,3,3,0,100.00,0.25,3467,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,100,20000,2.00,12,5,5,0,100.00,0.34,15262,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,100,20000,2.00,12,4,4,0,100.00,0.66,14833,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,100,20000,2.00,12,5,5,0,100.00,0.34,15445,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,100,20000,2.00,12,5,5,0,100.00,0.34,16172,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,100,20000,2.00,12,5,5,0,100.00,0.34,15271,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,100,20000,2.00,12,5,5,0,100.00,0.34,16135,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,100,20000,2.00,12,5,5,0,100.00,0.34,15214,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,100,20000,2.00,12,5,5,0,100.00,0.34,16115,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,100,20000,2.00,12,4,4,0,100.00,0.66,14310,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,1000,1000,0.00,12,3,3,0,100.00,0.12,65,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,1000,1000,0.00,12,3,3,0,100.00,0.11,74,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,1000,1000,0.00,12,3,3,0,100.00,0.12,67,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,1000,1000,0.00,12,3,3,0,100.00,0.11,65,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,1000,1000,0.00,12,3,3,0,100.00,0.12,62,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,1000,2000,0.00,12,4,4,0,100.00,0.17,261,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,1000,2000,0.00,12,4,4,0,100.00,0.16,259,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,1000,2000,0.00,12,4,4,0,100.00,0.16,268,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,1000,2000,0.00,12,4,4,0,100.00,0.15,266,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,1000,2000,0.00,12,4,4,0,100.00,0.15,261,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,1000,5000,0.00,12,7,7,0,100.00,0.19,1984,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,100,20000,2.00,12,5,5,0,100.00,0.34,16225,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,1000,1000,0.00,12,4,4,0,100.00,0.09,88,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,1000,1000,0.00,12,3,3,0,100.00,0.12,55,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,1000,1000,0.00,12,4,4,0,100.00,0.09,81,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,1000,1000,0.00,12,4,4,0,100.00,0.08,81,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,1000,1000,0.00,12,3,3,0,100.00,0.11,76,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,1000,5000,0.00,12,5,5,0,100.00,0.27,1562,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,1000,2000,0.00,12,5,5,0,100.00,0.13,300,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,1000,2000,0.00,12,4,4,0,100.00,0.15,247,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,1000,2000,0.00,12,4,4,0,100.00,0.16,259,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,1000,2000,0.00,12,5,5,0,100.00,0.14,298,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,1000,2000,0.00,12,5,5,0,100.00,0.12,326,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,1000,5000,0.00,12,5,5,0,100.00,0.27,1532,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,1000,5000,0.00,12,5,5,0,100.00,0.29,1476,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,1000,5000,0.00,12,6,6,0,100.00,0.25,1698,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,1000,5000,0.00,12,5,5,0,100.00,0.29,1532,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,1000,5000,0.00,12,6,6,0,100.00,0.23,1809,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,1000,5000,0.00,12,6,6,0,100.00,0.23,1654,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,1000,5000,0.00,12,6,6,0,100.00,0.24,1698,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,1000,5000,0.00,12,6,6,0,100.00,0.24,1705,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,1000,10000,0.01,12,7,7,0,100.00,0.36,6517,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,1000,10000,0.01,12,9,9,0,100.00,0.28,8533,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,1000,10000,0.01,12,8,8,0,100.00,0.31,7544,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,1000,10000,0.01,12,7,7,0,100.00,0.36,7166,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,1000,10000,0.01,12,9,9,0,100.00,0.27,8339,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,1000,10000,0.01,12,9,9,0,100.00,0.28,8071,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,1000,10000,0.01,12,9,9,0,100.00,0.27,8339,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,1000,10000,0.01,12,8,8,0,100.00,0.29,7323,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,1000,10000,0.01,12,8,8,0,100.00,0.33,7856,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,1000,10000,0.01,12,8,8,0,100.00,0.31,7720,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,1000,20000,0.02,12,11,11,0,100.00,0.39,31813,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,1000,20000,0.02,12,13,13,0,100.00,0.36,36814,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,1000,20000,0.02,12,11,11,0,100.00,0.41,31631,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,1000,20000,0.02,12,13,13,0,100.00,0.31,37653,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,1000,20000,0.02,12,11,11,0,100.00,0.40,30908,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,1000,20000,0.02,12,13,13,0,100.00,0.31,40559,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,1000,20000,0.02,12,11,11,0,100.00,0.40,33821,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,1000,20000,0.02,12,12,12,0,100.00,0.35,36158,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,1000,20000,0.02,12,11,11,0,100.00,0.40,34565,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,2000,1000,0.00,12,11,11,0,100.00,0.03,591,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,2000,1000,0.00,12,8,8,0,100.00,0.05,347,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,2000,1000,0.00,12,10,10,0,100.00,0.04,467,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,2000,1000,0.00,12,14,14,0,100.00,0.02,832,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,2000,1000,0.00,12,9,9,0,100.00,0.04,372,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,2000,2000,0.00,12,8,8,0,100.00,0.10,755,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,2000,2000,0.00,12,9,9,0,100.00,0.09,845,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,2000,2000,0.00,12,9,9,0,100.00,0.09,889,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,2000,2000,0.00,12,9,9,0,100.00,0.09,866,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,2000,2000,0.00,12,9,9,0,100.00,0.09,845,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,2000,5000,0.00,12,17,7,0,100.00,0.09,7565,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,2000,5000,0.00,12,12,12,0,100.00,0.15,4842,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,2000,5000,0.00,12,15,15,0,100.00,0.11,6177,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,2000,5000,0.00,12,12,12,0,100.00,0.15,4611,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,2000,5000,0.00,12,13,13,0,100.00,0.14,5281,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,1000,20000,0.02,12,13,13,0,100.00,0.33,39667,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,2000,1000,0.00,12,14,14,0,100.00,0.02,656,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,2000,1000,0.00,10,18,7,0,100.00,0.02,2486,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,2000,1000,0.00,12,15,15,0,100.00,0.02,799,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,2000,1000,0.00,12,15,15,0,100.00,0.02,811,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,2000,1000,0.00,12,17,7,0,100.00,0.02,917,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,2000,2000,0.00,12,12,12,0,100.00,0.06,1187,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,2000,2000,0.00,12,17,7,0,100.00,0.04,2024,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,2000,2000,0.00,12,17,8,0,100.00,0.04,1966,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,2000,2000,0.00,11,18,7,0,100.00,0.04,3812,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,2000,2000,0.00,12,17,6,0,100.00,0.04,1966,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,2000,5000,0.00,12,21,8,0,100.00,0.07,10293,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,2000,10000,0.00,12,22,9,0,100.00,0.14,29339,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,2000,5000,0.00,12,17,8,0,100.00,0.10,6888,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,2000,5000,0.00,12,19,7,0,100.00,0.08,9372,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,2000,5000,0.00,12,20,8,0,100.00,0.08,10037,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,2000,5000,0.00,12,19,8,0,100.00,0.08,9222,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,2000,10000,0.00,12,27,9,0,100.00,0.10,48780,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,2000,10000,0.00,12,22,8,0,100.00,0.14,33509,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,2000,10000,0.00,12,19,9,0,100.00,0.15,26990,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,2000,10000,0.00,12,20,8,0,100.00,0.15,28850,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,2000,10000,0.00,12,24,8,0,100.00,0.12,37334,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,2000,10000,0.00,12,20,8,0,100.00,0.15,26900,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,2000,10000,0.00,12,25,9,0,100.00,0.11,39526,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,2000,10000,0.00,12,22,8,0,100.00,0.14,32790,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,2000,10000,0.00,12,23,8,0,100.00,0.13,38293,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,2000,20000,0.00,12,23,10,0,100.00,0.24,104421,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,2000,20000,0.00,12,21,9,0,100.00,0.27,101880,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,2000,20000,0.00,12,31,10,0,100.00,0.16,140127,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,2000,20000,0.00,12,19,8,0,100.00,0.30,82407,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,2000,20000,0.00,12,30,11,0,100.00,0.18,130374,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,2000,20000,0.00,12,20,8,0,100.00,0.28,87468,10000,Max. coverage
+Springs (Discr.),None,Uniform,Medium,2000,20000,0.00,12,20,9,0,100.00,0.28,92518,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,100,1000,0.10,12,2,2,0,100.00,0.17,30,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,100,1000,0.10,12,2,2,0,100.00,0.17,28,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,100,1000,0.10,12,2,2,0,100.00,0.19,30,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,100,1000,0.10,12,2,2,0,100.00,0.16,28,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,100,1000,0.10,12,2,2,0,100.00,0.18,28,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,100,2000,0.20,12,3,3,0,100.00,0.25,173,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,100,2000,0.20,12,3,3,0,100.00,0.24,171,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,100,2000,0.20,12,3,3,0,100.00,0.24,178,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,100,2000,0.20,12,3,3,0,100.00,0.25,171,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,100,2000,0.20,12,3,3,0,100.00,0.24,173,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,100,5000,0.50,12,7,7,0,100.00,0.28,2197,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,100,5000,0.50,12,7,7,0,100.00,0.28,2181,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,100,5000,0.50,12,7,7,0,100.00,0.28,2201,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,100,5000,0.50,12,7,7,0,100.00,0.27,2181,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,100,5000,0.50,12,7,7,0,100.00,0.28,2171,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,2000,20000,0.00,12,29,9,0,100.00,0.19,125246,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,100,10000,1.00,12,13,13,0,100.00,0.31,14747,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,100,10000,1.00,12,13,13,0,100.00,0.32,17059,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,100,10000,1.00,12,13,13,0,100.00,0.32,17039,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,100,10000,1.00,12,13,13,0,100.00,0.32,18420,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,100,10000,1.00,12,13,13,0,100.00,0.31,17946,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,2000,20000,0.00,12,29,10,0,100.00,0.18,119529,10000,Max. coverage
+Random Comb.,None,Uniform,Medium,2000,20000,0.00,12,30,12,0,100.00,0.17,130275,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,100,1000,0.10,12,1,1,0,100.00,0.03,30,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,100,1000,0.10,12,1,1,0,100.00,0.04,28,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,100,1000,0.10,12,1,1,0,100.00,0.05,30,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,100,1000,0.10,12,1,1,0,100.00,0.05,30,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,100,1000,0.10,12,1,1,0,100.00,0.04,30,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,100,2000,0.20,12,1,1,0,100.00,0.10,118,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,100,2000,0.20,12,1,1,0,100.00,0.08,118,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,100,2000,0.20,12,1,1,0,100.00,0.10,118,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,100,2000,0.20,12,1,1,0,100.00,0.08,118,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,100,2000,0.20,12,1,1,0,100.00,0.08,118,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,100,5000,0.50,12,1,1,0,100.00,0.20,742,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,100,5000,0.50,12,1,1,0,100.00,0.19,744,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,100,5000,0.50,12,1,1,0,100.00,0.22,845,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,100,5000,0.50,12,1,1,0,100.00,0.22,744,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,100,5000,0.50,12,1,1,0,100.00,0.21,739,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,100,10000,1.00,12,1,1,0,100.00,0.68,2971,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,100,10000,1.00,12,1,1,0,100.00,0.70,2968,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,100,10000,1.00,12,2,2,0,100.00,0.18,2957,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,100,10000,1.00,12,1,1,0,100.00,0.78,2957,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,100,10000,1.00,12,1,1,0,100.00,0.70,2943,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,100,20000,2.00,12,2,2,0,100.00,0.65,11846,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,100,20000,2.00,12,2,2,0,100.00,0.68,11897,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,100,20000,2.00,12,2,2,0,100.00,0.66,11890,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,100,20000,2.00,12,2,2,0,100.00,0.65,11876,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,100,20000,2.00,12,2,2,0,100.00,0.69,11906,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,1000,1000,0.00,12,2,2,0,100.00,0.12,32,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,1000,1000,0.00,12,2,2,0,100.00,0.13,32,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,1000,1000,0.00,12,2,2,0,100.00,0.14,32,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,1000,1000,0.00,12,2,2,0,100.00,0.12,32,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,1000,1000,0.00,12,2,2,0,100.00,0.14,32,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,1000,2000,0.00,12,2,2,0,100.00,0.29,134,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,1000,2000,0.00,12,2,2,0,100.00,0.24,134,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,1000,2000,0.00,12,2,2,0,100.00,0.25,134,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,1000,2000,0.00,12,2,2,0,100.00,0.24,134,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,1000,2000,0.00,12,2,2,0,100.00,0.26,134,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,1000,5000,0.00,12,3,3,0,100.00,0.36,1007,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,1000,5000,0.00,12,3,3,0,100.00,0.37,1012,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,1000,5000,0.00,12,3,3,0,100.00,0.36,1009,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,1000,5000,0.00,12,3,3,0,100.00,0.38,1007,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,1000,5000,0.00,12,3,3,0,100.00,0.37,1028,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,1000,10000,0.01,12,4,4,0,100.00,0.45,4470,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,1000,10000,0.01,12,4,4,0,100.00,0.48,4488,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,1000,10000,0.01,12,4,4,0,100.00,0.44,4638,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,1000,10000,0.01,12,5,5,0,100.00,0.38,5077,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,1000,10000,0.01,12,4,4,0,100.00,0.48,4428,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,1000,20000,0.02,12,7,7,0,100.00,0.49,22132,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,1000,20000,0.02,12,7,7,0,100.00,0.47,21167,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,1000,20000,0.02,12,7,7,0,100.00,0.49,20998,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,1000,20000,0.02,12,7,7,0,100.00,0.48,20896,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,1000,20000,0.02,12,7,7,0,100.00,0.49,21148,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,2000,1000,0.00,12,4,4,0,100.00,0.08,90,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,2000,1000,0.00,12,4,4,0,100.00,0.08,85,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,2000,1000,0.00,12,3,3,0,100.00,0.12,67,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,2000,1000,0.00,12,4,4,0,100.00,0.08,90,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,2000,1000,0.00,12,3,3,0,100.00,0.12,69,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,2000,2000,0.00,12,4,4,0,100.00,0.16,268,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,2000,2000,0.00,12,4,4,0,100.00,0.16,247,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,2000,2000,0.00,12,4,4,0,100.00,0.15,273,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,2000,2000,0.00,12,4,4,0,100.00,0.17,256,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,2000,2000,0.00,12,5,5,0,100.00,0.11,323,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,2000,5000,0.00,12,6,6,0,100.00,0.23,1823,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,2000,5000,0.00,12,6,6,0,100.00,0.23,1873,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,2000,5000,0.00,12,6,6,0,100.00,0.23,1954,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,2000,5000,0.00,12,6,6,0,100.00,0.23,1825,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,2000,5000,0.00,12,6,6,0,100.00,0.21,1994,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,2000,10000,0.00,12,8,8,0,100.00,0.32,8117,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,2000,10000,0.00,12,9,9,0,100.00,0.25,8905,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,2000,10000,0.00,12,8,8,0,100.00,0.30,7900,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,2000,10000,0.00,12,9,9,0,100.00,0.27,8875,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,2000,10000,0.00,12,8,8,0,100.00,0.31,8445,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,2000,20000,0.00,12,12,12,0,100.00,0.38,38545,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,2000,20000,0.00,12,12,12,0,100.00,0.37,40882,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,2000,20000,0.00,12,13,13,0,100.00,0.33,41102,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,2000,20000,0.00,12,12,12,0,100.00,0.36,37713,10000,Max. coverage
+Random Comb.,None,Uniform,Soft,2000,20000,0.00,12,12,12,0,100.00,0.37,38302,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,100,1000,0.10,12,2,2,0,100.00,0.19,30,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,100,1000,0.10,12,2,2,0,100.00,0.17,30,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,100,1000,0.10,12,2,2,0,100.00,0.19,30,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,100,1000,0.10,12,2,2,0,100.00,0.20,30,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,100,1000,0.10,12,2,2,0,100.00,0.20,30,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,100,2000,0.20,12,3,3,0,100.00,0.26,162,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,100,2000,0.20,12,3,3,0,100.00,0.27,159,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,100,2000,0.20,12,3,3,0,100.00,0.28,159,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,100,2000,0.20,12,3,3,0,100.00,0.26,159,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,100,2000,0.20,12,3,3,0,100.00,0.26,159,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,100,5000,0.50,12,7,7,0,100.00,0.28,1980,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,100,5000,0.50,12,7,7,0,100.00,0.28,1989,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,100,5000,0.50,12,7,7,0,100.00,0.28,1968,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,100,5000,0.50,12,7,7,0,100.00,0.28,1987,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,100,5000,0.50,12,7,7,0,100.00,0.28,2019,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,100,10000,1.00,12,13,13,0,100.00,0.32,16664,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,100,10000,1.00,12,13,13,0,100.00,0.32,16754,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,100,10000,1.00,12,13,13,0,100.00,0.31,16597,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,100,10000,1.00,12,13,13,0,100.00,0.32,16461,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,100,10000,1.00,12,13,13,0,100.00,0.32,16332,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,100,20000,2.00,7,40,40,0,100.00,0.16,877089,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,100,20000,2.00,7,39,39,0,100.00,0.16,744113,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,100,20000,2.00,7,44,44,0,100.00,0.14,898530,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,100,20000,2.00,7,38,38,0,100.00,0.16,708964,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,100,20000,2.00,7,44,43,0,100.00,0.14,928398,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,100,20000,2.00,7,39,39,0,100.00,0.16,744488,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,100,20000,2.00,7,40,39,0,100.00,0.16,883781,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,100,20000,2.00,7,39,38,0,100.00,0.16,747470,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,100,20000,2.00,7,39,39,0,100.00,0.16,752547,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,1000,1000,0.00,12,83,9,0,100.00,0.00,7699,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,1000,1000,0.00,12,72,8,0,100.00,0.01,6521,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,100,20000,2.00,7,39,39,0,100.00,0.16,850861,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,1000,1000,0.00,12,83,9,0,100.00,0.01,7690,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,1000,1000,0.00,12,61,8,0,100.00,0.01,10379,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,1000,1000,0.00,12,77,10,0,100.00,0.01,6925,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,1000,1000,0.00,12,56,9,0,100.00,0.01,8688,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,1000,1000,0.00,12,86,10,0,100.00,0.00,7891,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,1000,1000,0.00,12,60,9,0,100.00,0.01,9945,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,1000,2000,0.00,12,79,9,0,100.00,0.01,14770,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,1000,1000,0.00,12,71,9,0,100.00,0.01,12633,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,1000,2000,0.00,12,84,9,0,100.00,0.01,15900,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,1000,1000,0.00,12,55,8,0,100.00,0.01,9090,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,1000,2000,0.00,12,82,9,0,100.00,0.01,15179,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,1000,2000,0.00,12,82,10,0,100.00,0.01,29956,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,1000,2000,0.00,12,95,10,0,100.00,0.01,17956,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,1000,2000,0.00,12,57,8,0,100.00,0.02,17641,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,1000,2000,0.00,12,86,10,0,100.00,0.01,15953,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,1000,2000,0.00,12,64,10,0,100.00,0.01,21312,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,1000,2000,0.00,12,55,9,0,100.00,0.02,17824,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,1000,2000,0.00,12,49,8,0,100.00,0.02,14710,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,1000,5000,0.00,12,100,13,0,100.00,0.02,53336,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,1000,5000,0.00,12,99,12,0,100.00,0.02,56662,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,1000,5000,0.00,12,73,9,0,100.00,0.03,76842,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,1000,5000,0.00,12,91,10,0,100.00,0.02,50998,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,1000,5000,0.00,12,54,9,0,100.00,0.04,46212,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,1000,5000,0.00,12,93,10,0,99.98,0.02,57658,10000,Max. iterations
+Springs (Discr.),None,Uniform,Hard,1000,5000,0.00,12,57,9,0,100.00,0.04,54627,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,1000,5000,0.00,12,93,9,0,100.00,0.02,53490,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,1000,5000,0.00,12,54,8,0,100.00,0.04,48048,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,1000,5000,0.00,12,51,9,0,100.00,0.05,44382,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,1000,10000,0.01,12,101,11,0,99.99,0.04,177230,10000,Max. iterations
+Springs (Discr.),None,Uniform,Hard,1000,10000,0.01,12,57,8,0,100.00,0.08,145611,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,1000,10000,0.01,12,47,7,0,100.00,0.10,112208,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,1000,10000,0.01,12,101,12,0,99.99,0.04,177653,10000,Max. iterations
+Springs (Discr.),None,Uniform,Hard,1000,10000,0.01,12,67,10,0,100.00,0.07,163208,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,1000,10000,0.01,12,101,9,0,99.99,0.04,177653,10000,Max. iterations
+Springs (Discr.),None,Uniform,Hard,1000,10000,0.01,12,41,7,0,100.00,0.12,85740,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,1000,10000,0.01,12,57,10,0,100.00,0.08,134955,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,1000,10000,0.01,12,96,12,0,99.97,0.04,178408,10000,Max. iterations
+Random Comb.,None,Uniform,Hard,1000,10000,0.01,12,100,10,0,100.00,0.04,175061,10000,Max. coverage
+Springs (Discr.),None,Uniform,Hard,1000,20000,0.02,12,92,11,0,100.00,0.09,733243,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,1000,20000,0.02,12,92,11,0,99.99,0.09,547535,10000,Max. iterations
+Springs (Discr.),None,Uniform,Hard,1000,20000,0.02,12,68,10,0,100.00,0.13,492504,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,1000,20000,0.02,12,97,10,0,99.99,0.08,537477,10000,Max. iterations
+Random Comb.,None,Uniform,Hard,1000,20000,0.02,12,101,10,0,99.96,0.08,538671,10000,Max. iterations
+Springs (Discr.),None,Uniform,Hard,1000,20000,0.02,12,87,10,0,100.00,0.10,643162,10000,Max. coverage
+Random Comb.,None,Uniform,Hard,1000,20000,0.02,12,97,12,0,99.96,0.08,533998,10000,Max. iterations
+Springs (Discr.),None,Uniform,Hard,1000,20000,0.02,12,96,11,0,100.00,0.08,895384,10000,Max. iterations
+Random Comb.,None,Uniform,Hard,1000,20000,0.02,12,98,10,0,99.99,0.08,517766,10000,Max. iterations
+Random Comb.,None,Uniform,Hard,2000,1000,0.00,12,99,9,0,89.30,0.00,21527,10000,Max. iterations
+Random Comb.,None,Uniform,Hard,2000,1000,0.00,12,101,8,0,89.70,0.00,21522,10000,Max. iterations
+Random Comb.,None,Uniform,Hard,2000,1000,0.00,12,98,8,0,89.50,0.00,21578,10000,Max. iterations
+Random Comb.,None,Uniform,Hard,2000,1000,0.00,12,92,8,0,88.90,0.01,22100,10000,Max. iterations
+Random Comb.,None,Uniform,Hard,2000,1000,0.00,12,101,8,0,90.10,0.00,21952,10000,Max. iterations
+Random Comb.,None,Uniform,Hard,2000,2000,0.00,12,100,8,0,88.20,0.01,47711,10000,Max. iterations
+Random Comb.,None,Uniform,Hard,2000,2000,0.00,12,101,9,0,88.25,0.01,44246,10000,Max. iterations
+Random Comb.,None,Uniform,Hard,2000,2000,0.00,12,101,9,0,88.30,0.01,44181,10000,Max. iterations
+Random Comb.,None,Uniform,Hard,2000,2000,0.00,12,101,9,0,88.85,0.01,43082,10000,Max. iterations
+Random Comb.,None,Uniform,Hard,2000,2000,0.00,12,101,9,0,88.35,0.01,44172,10000,Max. iterations
+Random Comb.,None,Uniform,Hard,2000,5000,0.00,12,98,9,0,87.76,0.02,127244,10000,Max. iterations
+Random Comb.,None,Uniform,Hard,2000,5000,0.00,12,97,10,0,87.24,0.02,125285,10000,Max. iterations
+Springs (Discr.),None,Uniform,Hard,1000,20000,0.02,12,79,11,0,99.92,0.11,708562,10000,Max. iterations
+Springs (Discr.),None,Uniform,Hard,2000,1000,0.00,12,101,9,0,84.60,0.00,41423,10000,Max. iterations
+Springs (Discr.),None,Uniform,Hard,2000,1000,0.00,12,101,9,0,85.00,0.00,42421,10000,Max. iterations
+Random Comb.,None,Uniform,Hard,2000,5000,0.00,12,96,8,0,88.18,0.02,120619,10000,Max. iterations
+Springs (Discr.),None,Uniform,Hard,2000,1000,0.00,12,101,9,0,87.20,0.00,39880,10000,Max. iterations
+Springs (Discr.),None,Uniform,Hard,2000,1000,0.00,12,100,9,0,86.90,0.00,39831,10000,Max. iterations
+Springs (Discr.),None,Uniform,Hard,2000,1000,0.00,12,101,8,0,86.80,0.00,39104,10000,Max. iterations
+Random Comb.,None,Uniform,Hard,2000,5000,0.00,12,100,8,0,87.92,0.02,117849,10000,Max. iterations
+Springs (Discr.),None,Uniform,Hard,2000,2000,0.00,12,100,9,0,86.55,0.01,81058,10000,Max. iterations
+Random Comb.,None,Uniform,Hard,2000,5000,0.00,12,98,10,0,87.24,0.02,119295,10000,Max. iterations
+Springs (Discr.),None,Uniform,Hard,2000,2000,0.00,12,101,10,0,82.60,0.01,84410,10000,Max. iterations
+Springs (Discr.),None,Uniform,Hard,2000,2000,0.00,12,100,10,0,86.05,0.01,81788,10000,Max. iterations
+Springs (Discr.),None,Uniform,Hard,2000,2000,0.00,12,100,10,0,86.25,0.01,80880,10000,Max. iterations
+Springs (Discr.),None,Uniform,Hard,2000,2000,0.00,12,101,9,0,84.95,0.01,83292,10000,Max. iterations
+Random Comb.,None,Uniform,Hard,2000,10000,0.00,12,101,11,0,87.78,0.05,339688,10000,Max. iterations
+Springs (Discr.),None,Uniform,Hard,2000,5000,0.00,12,101,10,0,86.44,0.02,220476,10000,Max. iterations
+Random Comb.,None,Uniform,Hard,2000,10000,0.00,12,101,10,0,86.97,0.04,359568,10000,Max. iterations
+Springs (Discr.),None,Uniform,Hard,2000,5000,0.00,12,98,12,0,82.88,0.02,235518,10000,Max. iterations
+Springs (Discr.),None,Uniform,Hard,2000,5000,0.00,12,101,11,0,85.78,0.02,225324,10000,Max. iterations
+Random Comb.,None,Uniform,Hard,2000,10000,0.00,12,99,11,0,88.21,0.05,357542,10000,Max. iterations
+Springs (Discr.),None,Uniform,Hard,2000,5000,0.00,12,101,10,0,84.44,0.02,227930,10000,Max. iterations
+Random Comb.,None,Uniform,Hard,2000,10000,0.00,12,101,11,0,87.86,0.05,356218,10000,Max. iterations
+Springs (Discr.),None,Uniform,Hard,2000,5000,0.00,12,100,11,0,83.62,0.02,229607,10000,Max. iterations
+Random Comb.,None,Uniform,Hard,2000,10000,0.00,12,101,8,0,87.25,0.05,387606,10000,Max. iterations
+Springs (Discr.),None,Uniform,Hard,2000,10000,0.00,12,101,10,0,85.48,0.04,590706,10000,Max. iterations
+Springs (Discr.),None,Uniform,Hard,2000,10000,0.00,12,101,12,0,83.86,0.04,592580,10000,Max. iterations
+Random Comb.,None,Uniform,Hard,2000,20000,0.00,12,100,10,0,87.85,0.09,1032607,10000,Max. iterations
+Springs (Discr.),None,Uniform,Hard,2000,10000,0.00,12,101,11,0,83.43,0.04,608373,10000,Max. iterations
+Springs (Discr.),None,Uniform,Hard,2000,10000,0.00,12,101,10,0,85.73,0.04,603106,10000,Max. iterations
+Random Comb.,None,Uniform,Hard,2000,20000,0.00,12,99,10,0,87.17,0.09,1030914,10000,Max. iterations
+Springs (Discr.),None,Uniform,Hard,2000,10000,0.00,12,101,12,0,83.00,0.04,589475,10000,Max. iterations
+Random Comb.,None,Uniform,Hard,2000,20000,0.00,12,101,10,0,86.82,0.09,1075529,10000,Max. iterations
+Springs (Discr.),None,Uniform,Hard,2000,20000,0.00,12,101,10,0,86.01,0.09,1489178,10000,Max. iterations
+Random Comb.,None,Uniform,Hard,2000,20000,0.00,12,98,10,0,87.36,0.09,1081422,10000,Max. iterations
+Random Comb.,None,Uniform,Hard,2000,20000,0.00,12,101,10,0,87.20,0.09,1088324,10000,Max. iterations
+Springs (Discr.),None,Uniform,Hard,2000,20000,0.00,12,101,12,0,84.78,0.09,1464861,10000,Max. iterations
+Springs (Discr.),None,Uniform,Hard,2000,20000,0.00,12,101,9,0,85.81,0.09,1214009,10000,Max. iterations
+Springs (Discr.),None,Uniform,Hard,2000,20000,0.00,12,101,14,0,84.12,0.09,1209507,10000,Max. iterations
+Springs (Discr.),None,Uniform,Hard,2000,20000,0.00,12,101,10,0,85.35,0.09,1230830,10000,Max. iterations
+Springs (Discr.),None,Uniform,Soft,100,1000,0.10,12,1,1,0,100.00,0.04,28,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,100,1000,0.10,12,1,1,0,100.00,0.05,30,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,100,1000,0.10,12,1,1,0,100.00,0.04,30,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,100,1000,0.10,12,1,1,0,100.00,0.04,28,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,100,1000,0.10,12,1,1,0,100.00,0.05,28,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,100,2000,0.20,12,1,1,0,100.00,0.08,116,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,100,2000,0.20,12,1,1,0,100.00,0.09,116,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,100,2000,0.20,12,1,1,0,100.00,0.09,116,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,100,2000,0.20,12,1,1,0,100.00,0.09,116,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,100,2000,0.20,12,1,1,0,100.00,0.10,116,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,100,5000,0.50,12,1,1,0,100.00,0.22,723,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,100,5000,0.50,12,1,1,0,100.00,0.23,744,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,100,5000,0.50,12,1,1,0,100.00,0.21,742,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,100,5000,0.50,12,1,1,0,100.00,0.21,742,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,100,5000,0.50,12,1,1,0,100.00,0.23,735,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,100,10000,1.00,12,1,1,0,100.00,0.65,2950,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,100,10000,1.00,12,1,1,0,100.00,0.66,2890,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,100,10000,1.00,12,1,1,0,100.00,0.69,2941,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,100,10000,1.00,12,1,1,0,100.00,0.74,2943,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,100,10000,1.00,12,1,1,0,100.00,0.71,2996,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,100,20000,2.00,12,2,2,0,100.00,0.66,11836,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,100,20000,2.00,12,2,2,0,100.00,0.67,11850,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,100,20000,2.00,12,2,2,0,100.00,0.67,11841,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,100,20000,2.00,12,2,2,0,100.00,0.70,11825,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,100,20000,2.00,12,2,2,0,100.00,0.66,11820,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,1000,1000,0.00,12,2,2,0,100.00,0.11,32,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,1000,1000,0.00,12,1,1,0,100.00,0.29,32,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,1000,1000,0.00,12,2,2,0,100.00,0.13,32,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,1000,1000,0.00,12,2,2,0,100.00,0.11,32,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,1000,1000,0.00,12,2,2,0,100.00,0.12,32,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,1000,2000,0.00,12,2,2,0,100.00,0.23,132,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,1000,2000,0.00,12,2,2,0,100.00,0.26,134,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,1000,2000,0.00,12,2,2,0,100.00,0.22,134,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,1000,2000,0.00,12,2,2,0,100.00,0.26,132,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,1000,2000,0.00,12,2,2,0,100.00,0.24,132,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,1000,5000,0.00,12,3,3,0,100.00,0.35,1009,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,1000,5000,0.00,12,3,3,0,100.00,0.35,1003,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,1000,5000,0.00,12,3,3,0,100.00,0.32,1012,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,1000,5000,0.00,12,3,3,0,100.00,0.35,1009,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,1000,5000,0.00,12,3,3,0,100.00,0.33,1009,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,1000,10000,0.01,12,4,4,0,100.00,0.48,4285,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,1000,10000,0.01,12,4,4,0,100.00,0.48,4241,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,1000,10000,0.01,12,4,4,0,100.00,0.47,4299,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,1000,10000,0.01,12,4,4,0,100.00,0.40,4271,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,1000,10000,0.01,12,4,4,0,100.00,0.46,4297,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,1000,20000,0.02,12,7,7,0,100.00,0.38,20430,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,1000,20000,0.02,12,7,7,0,100.00,0.49,20464,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,1000,20000,0.02,12,7,7,0,100.00,0.43,20471,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,1000,20000,0.02,12,7,7,0,100.00,0.40,20390,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,1000,20000,0.02,12,7,7,0,100.00,0.40,20480,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,2000,1000,0.00,12,3,3,0,100.00,0.11,69,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,2000,1000,0.00,12,3,3,0,100.00,0.11,65,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,2000,1000,0.00,12,3,3,0,100.00,0.12,62,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,2000,1000,0.00,12,3,3,0,100.00,0.12,67,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,2000,1000,0.00,12,3,3,0,100.00,0.12,74,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,2000,2000,0.00,12,4,4,0,100.00,0.16,277,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,2000,2000,0.00,12,4,4,0,100.00,0.16,273,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,2000,2000,0.00,12,4,4,0,100.00,0.16,273,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,2000,2000,0.00,12,5,5,0,100.00,0.12,358,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,2000,2000,0.00,12,4,4,0,100.00,0.17,273,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,2000,5000,0.00,12,5,5,0,100.00,0.29,1774,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,2000,5000,0.00,12,5,5,0,100.00,0.29,1559,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,2000,5000,0.00,12,5,5,0,100.00,0.29,1557,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,2000,5000,0.00,12,6,6,0,100.00,0.22,1799,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,2000,5000,0.00,12,5,5,0,100.00,0.28,1709,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,2000,10000,0.00,12,8,8,0,100.00,0.28,7836,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,2000,10000,0.00,12,8,8,0,100.00,0.31,7623,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,2000,10000,0.00,12,8,8,0,100.00,0.31,7635,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,2000,10000,0.00,12,7,7,0,100.00,0.37,6865,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,2000,10000,0.00,12,8,8,0,100.00,0.32,7718,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,2000,20000,0.00,12,11,11,0,100.00,0.40,32241,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,2000,20000,0.00,12,12,12,0,100.00,0.35,34551,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,2000,20000,0.00,12,11,11,0,100.00,0.40,32583,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,2000,20000,0.00,12,11,11,0,100.00,0.40,31723,10000,Max. coverage
+Springs (Discr.),None,Uniform,Soft,2000,20000,0.00,12,12,12,0,100.00,0.38,35080,10000,Max. coverage
+Greedy,None,Uniform,Hard,100,1000,0.10,12,2,2,0,100.00,0.19,118,0,Max. iterations
+Greedy,None,Uniform,Hard,100,1000,0.10,12,2,2,0,100.00,0.19,116,0,Max. iterations
+Greedy,None,Uniform,Hard,100,1000,0.10,12,2,2,0,100.00,0.19,118,0,Max. iterations
+Greedy,None,Uniform,Hard,100,1000,0.10,12,2,2,0,100.00,0.19,116,0,Max. iterations
+Greedy,None,Uniform,Hard,100,1000,0.10,12,2,2,0,100.00,0.19,120,0,Max. iterations
+Greedy,None,Uniform,Hard,100,2000,0.20,12,4,4,0,100.00,0.17,617,0,Max. iterations
+Greedy,None,Uniform,Hard,100,2000,0.20,12,3,3,0,100.00,0.26,536,0,Max. iterations
+Greedy,None,Uniform,Hard,100,2000,0.20,12,3,3,0,100.00,0.26,529,0,Max. iterations
+Greedy,None,Uniform,Hard,100,2000,0.20,12,3,3,0,100.00,0.26,536,0,Max. iterations
+Greedy,None,Uniform,Hard,100,2000,0.20,12,3,3,0,100.00,0.26,524,0,Max. iterations
+Greedy,None,Uniform,Hard,100,5000,0.50,12,7,7,0,100.00,0.28,5135,0,Max. iterations
+Greedy,None,Uniform,Hard,100,5000,0.50,12,7,7,0,100.00,0.28,5114,0,Max. iterations
+Greedy,None,Uniform,Hard,100,5000,0.50,12,7,7,0,100.00,0.28,5038,0,Max. iterations
+Greedy,None,Uniform,Hard,100,5000,0.50,12,7,7,0,100.00,0.28,5057,0,Max. iterations
+Greedy,None,Uniform,Hard,100,5000,0.50,12,7,7,0,100.00,0.28,5029,0,Max. iterations
+Greedy,None,Uniform,Hard,100,10000,1.00,12,13,13,0,100.00,0.31,29951,0,Max. iterations
+Greedy,None,Uniform,Hard,100,10000,1.00,12,13,13,0,100.00,0.32,29813,0,Max. iterations
+Greedy,None,Uniform,Hard,100,10000,1.00,12,14,14,0,100.00,0.28,29991,0,Max. iterations
+Greedy,None,Uniform,Hard,100,10000,1.00,12,13,13,0,100.00,0.32,30037,0,Max. iterations
+Greedy,None,Uniform,Hard,100,10000,1.00,12,13,13,0,100.00,0.31,30164,0,Max. iterations
+Greedy,None,Uniform,Hard,100,20000,2.00,7,41,40,0,99.82,0.15,1133080,0,Max. iterations
+Greedy,None,Uniform,Hard,100,20000,2.00,7,41,41,0,99.83,0.15,1275995,0,Max. iterations
+Greedy,None,Uniform,Hard,100,20000,2.00,7,40,40,0,99.95,0.16,1261214,0,Max. iterations
+Greedy,None,Uniform,Hard,100,20000,2.00,7,41,41,0,99.83,0.15,1251101,0,Max. iterations
+Greedy,None,Uniform,Hard,100,20000,2.00,7,41,41,0,99.96,0.15,1136481,0,Max. iterations
+Greedy,None,Uniform,Hard,1000,1000,0.00,12,42,6,0,100.00,0.01,612,0,Max. iterations
+Greedy,None,Uniform,Hard,1000,1000,0.00,12,42,6,0,100.00,0.01,608,0,Max. iterations
+Greedy,None,Uniform,Hard,1000,1000,0.00,12,45,6,0,100.00,0.01,619,0,Max. iterations
+Greedy,None,Uniform,Hard,1000,1000,0.00,12,45,6,0,100.00,0.01,631,0,Max. iterations
+Greedy,None,Uniform,Hard,1000,1000,0.00,12,45,6,0,100.00,0.01,624,0,Max. iterations
+Greedy,None,Uniform,Hard,1000,2000,0.00,12,52,6,0,100.00,0.02,2839,0,Max. iterations
+Greedy,None,Uniform,Hard,1000,2000,0.00,12,43,7,0,100.00,0.02,2379,0,Max. iterations
+Greedy,None,Uniform,Hard,1000,2000,0.00,12,51,7,0,100.00,0.02,2827,0,Max. iterations
+Greedy,None,Uniform,Hard,1000,2000,0.00,12,54,7,0,100.00,0.02,2948,0,Max. iterations
+Greedy,None,Uniform,Hard,1000,2000,0.00,12,51,6,0,100.00,0.02,2640,0,Max. iterations
+Greedy,None,Uniform,Hard,1000,5000,0.00,12,59,7,0,100.00,0.04,18806,0,Max. iterations
+Greedy,None,Uniform,Hard,1000,5000,0.00,12,59,8,0,100.00,0.04,18907,0,Max. iterations
+Greedy,None,Uniform,Hard,1000,5000,0.00,12,55,7,0,100.00,0.04,18191,0,Max. iterations
+Greedy,None,Uniform,Hard,1000,5000,0.00,12,58,7,0,100.00,0.04,18598,0,Max. iterations
+Greedy,None,Uniform,Hard,1000,5000,0.00,12,57,7,0,100.00,0.04,18134,0,Max. iterations
+Greedy,None,Uniform,Hard,1000,10000,0.01,12,64,8,0,100.00,0.07,81802,0,Max. iterations
+Greedy,None,Uniform,Hard,1000,10000,0.01,12,66,7,0,100.00,0.07,85791,0,Max. iterations
+Greedy,None,Uniform,Hard,1000,10000,0.01,12,63,9,0,100.00,0.07,80284,0,Max. iterations
+Greedy,None,Uniform,Hard,1000,10000,0.01,12,59,8,0,100.00,0.07,76341,0,Max. iterations
+Greedy,None,Uniform,Hard,1000,10000,0.01,12,65,8,0,99.96,0.07,82675,0,Max. iterations
+Greedy,None,Uniform,Hard,1000,20000,0.02,12,82,8,0,99.92,0.10,415229,0,Max. iterations
+Greedy,None,Uniform,Hard,1000,20000,0.02,12,81,9,0,100.00,0.10,417191,0,Max. iterations
+Greedy,None,Uniform,Hard,1000,20000,0.02,12,83,9,0,99.99,0.10,420191,0,Max. iterations
+Greedy,None,Uniform,Hard,1000,20000,0.02,12,80,8,0,99.97,0.10,404012,0,Max. iterations
+Greedy,None,Uniform,Hard,1000,20000,0.02,12,82,9,0,100.00,0.10,413273,0,Max. iterations
+Greedy,None,Uniform,Hard,2000,1000,0.00,12,132,7,0,100.00,0.00,1753,0,Max. iterations
+Greedy,None,Uniform,Hard,2000,1000,0.00,12,132,7,0,100.00,0.00,1760,0,Max. iterations
+Greedy,None,Uniform,Hard,2000,1000,0.00,12,129,6,0,100.00,0.00,1749,0,Max. iterations
+Greedy,None,Uniform,Hard,2000,1000,0.00,12,124,7,0,100.00,0.00,1712,0,Max. iterations
+Greedy,None,Uniform,Hard,2000,1000,0.00,12,124,7,0,100.00,0.00,1638,0,Max. iterations
+Greedy,None,Uniform,Hard,2000,2000,0.00,12,150,7,0,100.00,0.01,7547,0,Max. iterations
+Greedy,None,Uniform,Hard,2000,2000,0.00,12,155,7,0,100.00,0.01,7852,0,Max. iterations
+Greedy,None,Uniform,Hard,2000,2000,0.00,12,156,7,0,100.00,0.01,7953,0,Max. iterations
+Greedy,None,Uniform,Hard,2000,2000,0.00,12,153,7,0,100.00,0.01,7713,0,Max. iterations
+Greedy,None,Uniform,Hard,2000,2000,0.00,12,154,7,0,100.00,0.01,7782,0,Max. iterations
+Greedy,None,Uniform,Hard,2000,5000,0.00,12,178,8,0,100.00,0.01,54029,0,Max. iterations
+Greedy,None,Uniform,Hard,2000,5000,0.00,12,180,8,0,100.00,0.01,55121,0,Max. iterations
+Greedy,None,Uniform,Hard,2000,5000,0.00,12,183,8,0,100.00,0.01,56540,0,Max. iterations
+Greedy,None,Uniform,Hard,2000,5000,0.00,12,173,7,0,100.00,0.01,50601,0,Max. iterations
+Greedy,None,Uniform,Hard,2000,5000,0.00,12,177,8,0,100.00,0.01,53592,0,Max. iterations
+Greedy,None,Uniform,Hard,2000,10000,0.00,12,193,8,0,100.00,0.02,229877,0,Max. iterations
+Greedy,None,Uniform,Hard,2000,10000,0.00,12,197,8,0,100.00,0.02,234680,0,Max. iterations
+Greedy,None,Uniform,Hard,2000,10000,0.00,12,194,8,0,100.00,0.02,230351,0,Max. iterations
+Greedy,None,Uniform,Hard,2000,10000,0.00,12,199,8,0,100.00,0.02,240242,0,Max. iterations
+Greedy,None,Uniform,Hard,2000,10000,0.00,12,199,8,0,100.00,0.02,236184,0,Max. iterations
+Greedy,None,Uniform,Hard,2000,20000,0.00,12,210,8,0,100.00,0.04,991799,0,Max. iterations
+Greedy,None,Uniform,Hard,2000,20000,0.00,12,210,8,0,100.00,0.04,978735,0,Max. iterations
+Greedy,None,Uniform,Hard,2000,20000,0.00,12,212,9,0,100.00,0.04,978484,0,Max. iterations
+Greedy,None,Uniform,Hard,2000,20000,0.00,12,212,8,0,100.00,0.04,991290,0,Max. iterations
+Greedy,None,Uniform,Hard,2000,20000,0.00,12,222,8,0,100.00,0.04,1054413,0,Max. iterations
+Greedy,None,Uniform,Medium,100,1000,0.10,12,1,1,0,100.00,0.10,99,0,Max. iterations
+Greedy,None,Uniform,Medium,100,1000,0.10,12,1,1,0,100.00,0.10,104,0,Max. iterations
+Greedy,None,Uniform,Medium,100,1000,0.10,12,1,1,0,100.00,0.09,102,0,Max. iterations
+Greedy,None,Uniform,Medium,100,1000,0.10,12,1,1,0,100.00,0.09,104,0,Max. iterations
+Greedy,None,Uniform,Medium,100,1000,0.10,12,1,1,0,100.00,0.09,106,0,Max. iterations
+Greedy,None,Uniform,Medium,100,2000,0.20,12,1,1,0,100.00,0.19,413,0,Max. iterations
+Greedy,None,Uniform,Medium,100,2000,0.20,12,1,1,0,100.00,0.19,400,0,Max. iterations
+Greedy,None,Uniform,Medium,100,2000,0.20,12,1,1,0,100.00,0.19,407,0,Max. iterations
+Greedy,None,Uniform,Medium,100,2000,0.20,12,1,1,0,100.00,0.19,413,0,Max. iterations
+Greedy,None,Uniform,Medium,100,2000,0.20,12,1,1,0,100.00,0.19,430,0,Max. iterations
+Greedy,None,Uniform,Medium,100,5000,0.50,12,2,2,0,100.00,0.16,3100,0,Max. iterations
+Greedy,None,Uniform,Medium,100,5000,0.50,12,2,2,0,100.00,0.20,3125,0,Max. iterations
+Greedy,None,Uniform,Medium,100,5000,0.50,12,2,2,0,100.00,0.17,3098,0,Max. iterations
+Greedy,None,Uniform,Medium,100,5000,0.50,12,2,2,0,100.00,0.16,3058,0,Max. iterations
+Greedy,None,Uniform,Medium,100,5000,0.50,12,2,2,0,100.00,0.16,3040,0,Max. iterations
+Greedy,None,Uniform,Medium,100,10000,1.00,12,3,3,0,100.00,0.25,13650,0,Max. iterations
+Greedy,None,Uniform,Medium,100,10000,1.00,12,3,3,0,100.00,0.28,14280,0,Max. iterations
+Greedy,None,Uniform,Medium,100,10000,1.00,12,3,3,0,100.00,0.25,14112,0,Max. iterations
+Greedy,None,Uniform,Medium,100,10000,1.00,12,3,3,0,100.00,0.25,13837,0,Max. iterations
+Greedy,None,Uniform,Medium,100,10000,1.00,12,3,3,0,100.00,0.25,13987,0,Max. iterations
+Greedy,None,Uniform,Medium,100,20000,2.00,12,6,6,0,100.00,0.25,77454,0,Max. iterations
+Greedy,None,Uniform,Medium,100,20000,2.00,12,6,6,0,100.00,0.25,77932,0,Max. iterations
+Greedy,None,Uniform,Medium,100,20000,2.00,12,6,6,0,100.00,0.25,77794,0,Max. iterations
+Greedy,None,Uniform,Medium,100,20000,2.00,12,6,6,0,100.00,0.25,78230,0,Max. iterations
+Greedy,None,Uniform,Medium,100,20000,2.00,12,6,6,0,100.00,0.25,76583,0,Max. iterations
+Greedy,None,Uniform,Medium,1000,1000,0.00,12,6,6,0,100.00,0.05,162,0,Max. iterations
+Greedy,None,Uniform,Medium,1000,1000,0.00,12,5,5,0,100.00,0.06,159,0,Max. iterations
+Greedy,None,Uniform,Medium,1000,1000,0.00,12,5,5,0,100.00,0.06,155,0,Max. iterations
+Greedy,None,Uniform,Medium,1000,1000,0.00,12,5,5,0,100.00,0.06,155,0,Max. iterations
+Greedy,None,Uniform,Medium,1000,1000,0.00,12,5,5,0,100.00,0.06,155,0,Max. iterations
+Greedy,None,Uniform,Medium,1000,2000,0.00,12,7,7,0,100.00,0.07,705,0,Max. iterations
+Greedy,None,Uniform,Medium,1000,2000,0.00,12,7,7,0,100.00,0.07,705,0,Max. iterations
+Greedy,None,Uniform,Medium,1000,2000,0.00,12,7,7,0,100.00,0.07,702,0,Max. iterations
+Greedy,None,Uniform,Medium,1000,2000,0.00,12,7,7,0,100.00,0.07,767,0,Max. iterations
+Greedy,None,Uniform,Medium,1000,2000,0.00,12,7,7,0,100.00,0.07,765,0,Max. iterations
+Greedy,None,Uniform,Medium,1000,5000,0.00,12,10,10,0,100.00,0.11,5523,0,Max. iterations
+Greedy,None,Uniform,Medium,1000,5000,0.00,12,9,9,0,100.00,0.13,5135,0,Max. iterations
+Greedy,None,Uniform,Medium,1000,5000,0.00,12,11,11,0,100.00,0.10,5921,0,Max. iterations
+Greedy,None,Uniform,Medium,1000,5000,0.00,12,9,9,0,99.98,0.14,5449,0,Max. iterations
+Greedy,None,Uniform,Medium,1000,5000,0.00,12,11,11,0,100.00,0.10,5743,0,Max. iterations
+Greedy,None,Uniform,Medium,1000,10000,0.01,12,14,14,0,100.00,0.16,27953,0,Max. iterations
+Greedy,None,Uniform,Medium,1000,10000,0.01,12,11,11,0,100.00,0.20,22998,0,Max. iterations
+Greedy,None,Uniform,Medium,1000,10000,0.01,12,14,14,0,100.00,0.14,26498,0,Max. iterations
+Greedy,None,Uniform,Medium,1000,10000,0.01,12,13,13,0,100.00,0.16,25590,0,Max. iterations
+Greedy,None,Uniform,Medium,1000,10000,0.01,12,12,12,0,99.94,0.18,25135,0,Max. iterations
+Greedy,None,Uniform,Medium,1000,20000,0.02,12,19,10,0,100.00,0.18,131291,0,Max. iterations
+Greedy,None,Uniform,Medium,1000,20000,0.02,12,20,11,0,100.00,0.18,134153,0,Max. iterations
+Greedy,None,Uniform,Medium,1000,20000,0.02,12,19,9,0,100.00,0.18,131310,0,Max. iterations
+Greedy,None,Uniform,Medium,1000,20000,0.02,12,20,12,0,100.00,0.18,136995,0,Max. iterations
+Greedy,None,Uniform,Medium,1000,20000,0.02,12,20,11,0,100.00,0.17,135962,0,Max. iterations
+Greedy,None,Uniform,Medium,2000,1000,0.00,12,14,14,0,100.00,0.03,284,0,Max. iterations
+Greedy,None,Uniform,Medium,2000,1000,0.00,12,14,14,0,100.00,0.03,286,0,Max. iterations
+Greedy,None,Uniform,Medium,2000,1000,0.00,12,14,14,0,100.00,0.03,282,0,Max. iterations
+Greedy,None,Uniform,Medium,2000,1000,0.00,12,14,14,0,100.00,0.03,280,0,Max. iterations
+Greedy,None,Uniform,Medium,2000,1000,0.00,12,14,14,0,100.00,0.03,282,0,Max. iterations
+Greedy,None,Uniform,Medium,2000,2000,0.00,12,15,15,0,100.00,0.05,1118,0,Max. iterations
+Greedy,None,Uniform,Medium,2000,2000,0.00,12,18,5,0,100.00,0.03,1213,0,Max. iterations
+Greedy,None,Uniform,Medium,2000,2000,0.00,12,15,15,0,100.00,0.05,1081,0,Max. iterations
+Greedy,None,Uniform,Medium,2000,2000,0.00,12,15,15,0,100.00,0.05,1065,0,Max. iterations
+Greedy,None,Uniform,Medium,2000,2000,0.00,12,15,15,0,100.00,0.05,1086,0,Max. iterations
+Greedy,None,Uniform,Medium,2000,5000,0.00,12,18,8,0,99.80,0.08,8184,0,Max. iterations
+Greedy,None,Uniform,Medium,2000,5000,0.00,12,21,7,0,100.00,0.07,8845,0,Max. iterations
+Greedy,None,Uniform,Medium,2000,5000,0.00,12,21,7,0,100.00,0.07,8773,0,Max. iterations
+Greedy,None,Uniform,Medium,2000,5000,0.00,12,19,7,0,99.98,0.08,8429,0,Max. iterations
+Greedy,None,Uniform,Medium,2000,5000,0.00,12,23,6,0,100.00,0.06,9663,0,Max. iterations
+Greedy,None,Uniform,Medium,2000,10000,0.00,12,28,9,0,100.00,0.09,43779,0,Max. iterations
+Greedy,None,Uniform,Medium,2000,10000,0.00,12,28,8,0,100.00,0.09,44206,0,Max. iterations
+Greedy,None,Uniform,Medium,2000,10000,0.00,12,26,6,0,100.00,0.10,40804,0,Max. iterations
+Greedy,None,Uniform,Medium,2000,10000,0.00,12,23,9,0,99.83,0.12,37646,0,Max. iterations
+Greedy,None,Uniform,Medium,2000,10000,0.00,12,26,9,0,99.98,0.10,41049,0,Max. iterations
+Greedy,None,Uniform,Medium,2000,20000,0.00,12,32,11,0,99.99,0.15,198156,0,Max. iterations
+Greedy,None,Uniform,Medium,2000,20000,0.00,12,35,10,0,99.99,0.14,213548,0,Max. iterations
+Greedy,None,Uniform,Medium,2000,20000,0.00,12,32,10,0,100.00,0.15,194257,0,Max. iterations
+Greedy,None,Uniform,Medium,2000,20000,0.00,12,32,8,0,100.00,0.14,194497,0,Max. iterations
+Greedy,None,Uniform,Medium,2000,20000,0.00,12,35,10,0,100.00,0.13,206632,0,Max. iterations
+Greedy,None,Uniform,Soft,100,1000,0.10,12,1,1,0,100.00,0.03,97,0,Max. iterations
+Greedy,None,Uniform,Soft,100,1000,0.10,12,1,1,0,100.00,0.03,102,0,Max. iterations
+Greedy,None,Uniform,Soft,100,1000,0.10,12,1,1,0,100.00,0.03,99,0,Max. iterations
+Greedy,None,Uniform,Soft,100,1000,0.10,12,1,1,0,100.00,0.03,97,0,Max. iterations
+Greedy,None,Uniform,Soft,100,1000,0.10,12,1,1,0,100.00,0.03,97,0,Max. iterations
+Greedy,None,Uniform,Soft,100,2000,0.20,12,1,1,0,100.00,0.07,402,0,Max. iterations
+Greedy,None,Uniform,Soft,100,2000,0.20,12,1,1,0,100.00,0.07,395,0,Max. iterations
+Greedy,None,Uniform,Soft,100,2000,0.20,12,1,1,0,100.00,0.07,393,0,Max. iterations
+Greedy,None,Uniform,Soft,100,2000,0.20,12,1,1,0,100.00,0.08,393,0,Max. iterations
+Greedy,None,Uniform,Soft,100,2000,0.20,12,1,1,0,100.00,0.08,411,0,Max. iterations
+Greedy,None,Uniform,Soft,100,5000,0.50,12,1,1,0,100.00,0.20,2553,0,Max. iterations
+Greedy,None,Uniform,Soft,100,5000,0.50,12,1,1,0,100.00,0.24,2539,0,Max. iterations
+Greedy,None,Uniform,Soft,100,5000,0.50,12,1,1,0,100.00,0.20,2509,0,Max. iterations
+Greedy,None,Uniform,Soft,100,5000,0.50,12,1,1,0,100.00,0.19,2587,0,Max. iterations
+Greedy,None,Uniform,Soft,100,5000,0.50,12,1,1,0,100.00,0.20,2652,0,Max. iterations
+Greedy,None,Uniform,Soft,100,10000,1.00,12,2,2,0,100.00,0.19,12000,0,Max. iterations
+Greedy,None,Uniform,Soft,100,10000,1.00,12,2,2,0,100.00,0.19,11786,0,Max. iterations
+Greedy,None,Uniform,Soft,100,10000,1.00,12,2,2,0,100.00,0.18,11781,0,Max. iterations
+Greedy,None,Uniform,Soft,100,10000,1.00,12,2,2,0,100.00,0.16,12035,0,Max. iterations
+Greedy,None,Uniform,Soft,100,10000,1.00,12,2,2,0,100.00,0.17,11883,0,Max. iterations
+Greedy,None,Uniform,Soft,100,20000,2.00,12,3,3,0,100.00,0.25,54336,0,Max. iterations
+Greedy,None,Uniform,Soft,100,20000,2.00,12,3,3,0,100.00,0.26,54906,0,Max. iterations
+Greedy,None,Uniform,Soft,100,20000,2.00,12,3,3,0,100.00,0.28,54918,0,Max. iterations
+Greedy,None,Uniform,Soft,100,20000,2.00,12,3,3,0,100.00,0.25,54881,0,Max. iterations
+Greedy,None,Uniform,Soft,100,20000,2.00,12,3,3,0,100.00,0.25,55549,0,Max. iterations
+Greedy,None,Uniform,Soft,1000,1000,0.00,12,2,2,0,100.00,0.13,118,0,Max. iterations
+Greedy,None,Uniform,Soft,1000,1000,0.00,12,2,2,0,100.00,0.13,118,0,Max. iterations
+Greedy,None,Uniform,Soft,1000,1000,0.00,12,2,2,0,100.00,0.13,118,0,Max. iterations
+Greedy,None,Uniform,Soft,1000,1000,0.00,12,2,2,0,100.00,0.13,118,0,Max. iterations
+Greedy,None,Uniform,Soft,1000,1000,0.00,12,2,2,0,100.00,0.13,120,0,Max. iterations
+Greedy,None,Uniform,Soft,1000,2000,0.00,12,4,4,0,100.00,0.10,603,0,Max. iterations
+Greedy,None,Uniform,Soft,1000,2000,0.00,12,3,3,0,100.00,0.14,524,0,Max. iterations
+Greedy,None,Uniform,Soft,1000,2000,0.00,12,3,3,0,100.00,0.14,517,0,Max. iterations
+Greedy,None,Uniform,Soft,1000,2000,0.00,12,3,3,0,100.00,0.14,515,0,Max. iterations
+Greedy,None,Uniform,Soft,1000,2000,0.00,12,3,3,0,100.00,0.14,524,0,Max. iterations
+Greedy,None,Uniform,Soft,1000,5000,0.00,12,4,4,0,100.00,0.21,3555,0,Max. iterations
+Greedy,None,Uniform,Soft,1000,5000,0.00,12,5,5,0,100.00,0.16,4024,0,Max. iterations
+Greedy,None,Uniform,Soft,1000,5000,0.00,12,5,5,0,100.00,0.16,3855,0,Max. iterations
+Greedy,None,Uniform,Soft,1000,5000,0.00,12,5,5,0,100.00,0.18,3869,0,Max. iterations
+Greedy,None,Uniform,Soft,1000,5000,0.00,12,6,6,0,100.00,0.14,5040,0,Max. iterations
+Greedy,None,Uniform,Soft,1000,10000,0.01,12,6,6,0,100.00,0.23,17531,0,Max. iterations
+Greedy,None,Uniform,Soft,1000,10000,0.01,12,6,6,0,100.00,0.23,18140,0,Max. iterations
+Greedy,None,Uniform,Soft,1000,10000,0.01,12,7,7,0,100.00,0.19,18921,0,Max. iterations
+Greedy,None,Uniform,Soft,1000,10000,0.01,12,8,8,0,100.00,0.19,19843,0,Max. iterations
+Greedy,None,Uniform,Soft,1000,10000,0.01,12,7,7,0,100.00,0.20,18030,0,Max. iterations
+Greedy,None,Uniform,Soft,1000,20000,0.02,12,10,10,0,100.00,0.23,85082,0,Max. iterations
+Greedy,None,Uniform,Soft,1000,20000,0.02,12,11,11,0,100.00,0.22,99524,0,Max. iterations
+Greedy,None,Uniform,Soft,1000,20000,0.02,12,10,10,0,100.00,0.22,86248,0,Max. iterations
+Greedy,None,Uniform,Soft,1000,20000,0.02,12,10,10,0,100.00,0.21,96496,0,Max. iterations
+Greedy,None,Uniform,Soft,1000,20000,0.02,12,9,9,0,100.00,0.25,81968,0,Max. iterations
+Greedy,None,Uniform,Soft,2000,1000,0.00,12,6,6,0,100.00,0.05,164,0,Max. iterations
+Greedy,None,Uniform,Soft,2000,1000,0.00,12,6,6,0,100.00,0.05,164,0,Max. iterations
+Greedy,None,Uniform,Soft,2000,1000,0.00,12,6,6,0,100.00,0.05,164,0,Max. iterations
+Greedy,None,Uniform,Soft,2000,1000,0.00,12,6,6,0,100.00,0.05,164,0,Max. iterations
+Greedy,None,Uniform,Soft,2000,1000,0.00,12,6,6,0,100.00,0.05,169,0,Max. iterations
+Greedy,None,Uniform,Soft,2000,2000,0.00,12,8,8,0,100.00,0.07,744,0,Max. iterations
+Greedy,None,Uniform,Soft,2000,2000,0.00,12,7,7,0,99.95,0.08,702,0,Max. iterations
+Greedy,None,Uniform,Soft,2000,2000,0.00,12,7,7,0,99.95,0.08,700,0,Max. iterations
+Greedy,None,Uniform,Soft,2000,2000,0.00,12,7,7,0,99.95,0.08,695,0,Max. iterations
+Greedy,None,Uniform,Soft,2000,2000,0.00,12,7,7,0,99.95,0.08,714,0,Max. iterations
+Greedy,None,Uniform,Soft,2000,5000,0.00,12,10,10,0,100.00,0.12,5514,0,Max. iterations
+Greedy,None,Uniform,Soft,2000,5000,0.00,12,10,10,0,100.00,0.11,5634,0,Max. iterations
+Greedy,None,Uniform,Soft,2000,5000,0.00,12,11,11,0,100.00,0.09,5623,0,Max. iterations
+Greedy,None,Uniform,Soft,2000,5000,0.00,12,11,11,0,100.00,0.09,5641,0,Max. iterations
+Greedy,None,Uniform,Soft,2000,5000,0.00,12,10,10,0,100.00,0.11,5726,0,Max. iterations
+Greedy,None,Uniform,Soft,2000,10000,0.00,12,14,14,0,100.00,0.14,26322,0,Max. iterations
+Greedy,None,Uniform,Soft,2000,10000,0.00,12,13,13,0,100.00,0.16,25452,0,Max. iterations
+Greedy,None,Uniform,Soft,2000,10000,0.00,12,13,13,0,100.00,0.15,25482,0,Max. iterations
+Greedy,None,Uniform,Soft,2000,10000,0.00,12,15,15,0,99.99,0.14,27611,0,Max. iterations
+Greedy,None,Uniform,Soft,2000,10000,0.00,12,13,13,0,100.00,0.16,25200,0,Max. iterations
+Greedy,None,Uniform,Soft,2000,20000,0.00,12,17,13,0,100.00,0.23,124391,0,Max. iterations
+Greedy,None,Uniform,Soft,2000,20000,0.00,12,18,10,0,100.00,0.20,127027,0,Max. iterations
+Greedy,None,Uniform,Soft,2000,20000,0.00,12,20,14,0,100.00,0.17,136505,0,Max. iterations
+Greedy,None,Uniform,Soft,2000,20000,0.00,12,19,12,0,100.00,0.18,133033,0,Max. iterations
+Greedy,None,Uniform,Soft,2000,20000,0.00,12,18,11,0,100.00,0.19,127856,0,Max. iterations
+,,,,,,,,,,,,,,,
