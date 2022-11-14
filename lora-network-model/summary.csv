@@ -18,3 +18,9 @@ GA Opt.,None,Uniform,Medium,1000,10000,0.01,12,9,9,0,100.00,0.28,4417,630,Max. i
 Springs,EDF,Uniform,Medium,1000,10000,0.01,12,7,7,0,100.00,0.36,756,110,Max. coverage
 Springs (Cont.),EDF,Uniform,Medium,1000,10000,0.01,12,8,8,0,100.00,0.31,780,111,Max. coverage
 Springs (Cont.),EDF,Uniform,Medium,1000,10000,0.01,12,8,8,0,100.00,0.34,825,118,Max. coverage
+GA Opt.,None,Uniform,Medium,1000,20000,0.02,12,13,13,0,100.00,0.35,22318,3360,Max. iterations
+Springs (Discr.),None,Uniform,Medium,1000,20000,0.02,12,11,11,0,100.00,0.39,14548,1000,Max. coverage
+Springs (Cont.),EDF,Uniform,Medium,1000,20000,0.02,12,11,11,0,100.00,0.41,3059,166,Max. coverage
+Springs (Cont.),EDF,Uniform,Medium,2000,40000,0.01,10,30,11,0,100.00,0.33,93484,381,Max. coverage
+Springs (Discr.),None,Uniform,Medium,2000,40000,0.01,12,11,11,0,51.28,0.72,65705,1000,Max. iterations
+Springs (Discr.),None,Uniform,Medium,2000,40000,0.01,10,30,13,0,98.67,0.35,234119,1000,Max. iterations

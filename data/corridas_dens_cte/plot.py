@@ -5,7 +5,7 @@ import numpy as np
 plt = mpl.pyplot
 
 data = pd.read_csv("summary.csv")
-SAVEFIGS = False
+SAVEFIGS = True
 
 # Column names
 ALGO = 'GW Pos. Heuristic'
@@ -30,14 +30,16 @@ mpl.rcParams['font.family'] = 'STIXGeneral'
 mpl.rcParams['font.size'] = 12
 
 
-fig, ax = plt.subplots(figsize=(10, 15))
-#ax.set_yscale("log") 
-#nonzero = data[data[ELAPSED] > 0] 
-sns.scatterplot(x = MAP, y = GW, hue = ALGO, data = data)
-#plt.title(ALGO + ' vs ' + ELAPSED)
+fig, ax = plt.subplots(2, 1, figsize=(10, 15))
+sns.lineplot(x = MAP, y = GW, hue = ALGO, data = data, ax=ax[0])
+sns.lineplot(x = MAP, y = ELAPSED, hue = ALGO, data = data, ax=ax[1])
+ax[0].title.set_text(MAP + ' vs ' + GW)
+ax[1].title.set_text(MAP + ' vs ' + ELAPSED)
+ax[0].set_ylabel(GW)
+ax[1].set_ylabel(ELAPSED)
 plt.xlabel(MAP)
-plt.ylabel(GW)
-plt.grid()
+ax[0].grid()
+ax[1].grid()
 if SAVEFIGS:
-    plt.savefig('GWvsMAP.png')
+    plt.savefig('Figura.png')
 plt.show()

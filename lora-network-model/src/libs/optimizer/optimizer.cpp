@@ -307,7 +307,7 @@ void Optimizer::exportFullResults(char *filename) {
     fclose(file);
 }
 
-void Optimizer::appendToLog(char *filename) {
+void Optimizer::appendToLog(const char *filename) {
 
     FILE *file = fopen(filename, "r");
     bool printHeader = file == NULL;

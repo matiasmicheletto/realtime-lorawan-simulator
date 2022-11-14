@@ -44,7 +44,7 @@ class Optimizer {
         // Display results 
         void printResults();
         void exportFullResults(char *filename);
-        void appendToLog(char *filename);
+        void appendToLog(const char *filename);
         static string getExitCodeName(EXIT_CODE exitCode);
         string getExitCodeName();
         static string getStepMethodName(STEP_METHOD stepMethod);

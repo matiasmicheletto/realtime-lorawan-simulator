@@ -1137,7 +1137,8 @@ void springs2() {
         
     optimizer->run(); // Run with configured params
 
-    optimizer->appendToLog("summary.csv");
+    const string fname = string("summary.csv");
+    optimizer->appendToLog(fname.c_str());
 
     delete optimizer;
     delete network;
