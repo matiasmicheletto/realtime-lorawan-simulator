@@ -92,7 +92,8 @@ unsigned char** _minSFMatrix;
 steady_clock::time_point _begin;
 bool* _bestSol;
 unsigned int _minGWs;
-unsigned int _currentIter;
+unsigned int _currentIter = 0;
+unsigned int _feval = 0;
 unsigned char _exitCond;
 unsigned char _channels;
 float _coverage;
@@ -510,6 +511,8 @@ void moFunction(const bool *sol, bool *connected, unsigned int &connectedCount, 
         return;
     }
 
+    _feval++;
+
     for(unsigned char sf = 7; sf <= _sfmax; sf++){ // For each SF (7..12)
         for(unsigned int i = 0; i < _enddevices; i++){ // For each ED
             if(!connected[i]){ // If node is not connected                
@@ -628,7 +631,8 @@ void printSummary() {
         _coverage,
         _gwAvgUf,
         getElapsed(),
-        _currentIter,
+        //_currentIter,
+        _feval,
         getExitConditionName(_exitCond).c_str()
     );
 
@@ -712,7 +716,8 @@ void optimizeRandomHeuristic() {
             break;
         }
     }
-    _currentIter = _itermax;
+    if(_exitCond == 0)
+        _currentIter = _itermax;
     
     printf("Min. GW num is %d (cost=%d)\n", _minGWs, minCost);    
 
@@ -1100,7 +1105,8 @@ void springs() {
         // Update GW positions (sol will change after this step)
         improveGWPos(sol, connected);
     }
-    _currentIter = _itermax; // It resets when loop ends?
+    if(_exitCond == 0)
+        _currentIter = _itermax;
     
     printf("Min. GW num is %d (cost=%d)\n", _minGWs, minCost);    
 
