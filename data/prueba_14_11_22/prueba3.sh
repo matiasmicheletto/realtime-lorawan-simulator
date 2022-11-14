@@ -1,0 +1,1 @@
+./randomMedium.sh & ./springDiscMedium.sh

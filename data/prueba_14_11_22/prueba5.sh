@@ -1,0 +1,1 @@
+./geneticoMedium.sh
