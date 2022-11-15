@@ -25,6 +25,8 @@
 
 #define MAX_CHANNELS 16 // Max allowed number of channels for gws
 
+//#define PARETO_ANALYSIS 1 // Log data to perform pareto analysis
+
 using namespace std;
 using namespace std::chrono;
 
@@ -86,6 +88,16 @@ struct Chromosome {
 struct MiddleCost {
 	unsigned int cost;	
 };
+
+#ifdef PARETO_ANALYSIS
+    struct PSol { // A single point in the pareto space (?)
+        unsigned char algo;
+        unsigned int gw;
+        unsigned int nced;
+        bool opt;
+    };
+    vector<PSol> _eval_data; // List of evaluated sols
+#endif
 
 vector<SNode> *_network;
 unsigned char** _minSFMatrix;
@@ -534,6 +546,11 @@ void moFunction(const bool *sol, bool *connected, unsigned int &connectedCount, 
         }
     }
 
+    #ifdef PARETO_ANALYSIS
+        _eval_data.push_back({_algo, gwCount, _enddevices-connectedCount, false});
+    #endif
+
+
     if(stats){ // Expensive block
         // Compute network coverage %
         _coverage = (float)connectedCount / (float) _enddevices * 100.0;
@@ -591,9 +608,13 @@ void moFunction(const bool *sol, bool *connected, unsigned int &connectedCount, 
         }else{ // If GW count < 16, assume 1 channel for each gw
             _channels = gwCount;
         }
+
+        #ifdef PARETO_ANALYSIS
+            _eval_data.push_back({_algo, gwCount, _enddevices-connectedCount, true});
+        #endif
     }
 
-    // Free used memory    
+    // Free used memory
     gateways->clear();
     delete gateways;
 }
@@ -1316,6 +1337,19 @@ int main(int argc, char **argv) {
         _network->clear();
         delete _network;    
     }
+
+    #ifdef PARETO_ANALYSIS
+        FILE *logfile = fopen("paretolog.csv", "a");
+        if(logfile == NULL){
+            printf("Error opening log file.\n");
+            return 1;
+        }
+        //fprintf(logfile, "Alg.Code,GW,NCED,Is opt?\n");
+        for(unsigned int i = 0; i < _eval_data.size(); i++)
+            fprintf(logfile, "%d,%d,%d,%d\n", _eval_data.at(i).algo, _eval_data.at(i).gw, _eval_data.at(i).nced, _eval_data.at(i).opt);
+        _eval_data.clear();
+        fclose(logfile);
+    #endif
 
     return 0;
 }
