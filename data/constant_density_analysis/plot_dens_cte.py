@@ -5,7 +5,7 @@ import numpy as np
 plt = mpl.pyplot
 
 data = pd.read_csv("summary.csv")
-SAVEFIGS = True
+SAVEFIGS = False
 
 # Column names
 ALGO = 'GW Pos. Heuristic'
@@ -29,7 +29,7 @@ mpl.rcParams['mathtext.fontset'] = 'stix'
 mpl.rcParams['font.family'] = 'STIXGeneral'
 mpl.rcParams['font.size'] = 12
 
-
+data = data[data[PERIOD]=="Soft"] # Soft
 fig, ax = plt.subplots(2, 1, figsize=(10, 15))
 sns.lineplot(x = MAP, y = GW, hue = ALGO, data = data, ax=ax[0])
 sns.lineplot(x = MAP, y = ELAPSED, hue = ALGO, data = data, ax=ax[1])
@@ -41,5 +41,5 @@ plt.xlabel(MAP)
 ax[0].grid()
 ax[1].grid()
 if SAVEFIGS:
-    plt.savefig('Figura.png')
+    plt.savefig('Fig_dens_cte.png')
 plt.show()

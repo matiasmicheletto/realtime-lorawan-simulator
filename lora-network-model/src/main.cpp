@@ -221,7 +221,7 @@ string getAlgorithmName(unsigned char algo) {
     case 0:
         return "GA Opt.";
     case 1:
-        return "Random Comb.";
+        return "Random (Discr.)";
     case 2:
         return "Greedy";
     case 3:
