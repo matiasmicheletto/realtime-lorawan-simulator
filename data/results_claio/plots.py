@@ -8,8 +8,8 @@ import numpy as np
 
 plt = mpl.pyplot
 
-name = "Clouds" 
-#name = "Uniform"
+#name = "Clouds" 
+name = "Uniform"
 data = pd.read_csv("Summary_Heuristicas.csv")
 SAVEFIGS = True
 
@@ -58,7 +58,7 @@ def getElapsedAvg(alg, per, mapsize):
     return sample.groupby(ED).mean()[ELAPSED]
 
 
-plt.figure(figsize=(15, 20))
+plt.figure(figsize=(20, 10))
 for m, mapsize in enumerate([100, 1000, 2000]):
     for a, algo in enumerate(["Random Comb.", "Springs (Discr.)", "Greedy", "GA Opt."]):    
         index = a + 4*m + 1
@@ -73,7 +73,6 @@ for m, mapsize in enumerate([100, 1000, 2000]):
         plt.ylabel('Elapsed time [ms]')
         plt.legend()
         
-        
 top=0.94
 bottom=0.07
 left=0.125
@@ -84,7 +83,6 @@ plt.subplots_adjust(top=top, bottom=bottom, left=left, right=right, hspace=hspac
 if SAVEFIGS:
     plt.savefig(name+' Elapsed Time.png')
 plt.show()
-
 
 
 def getEDvsGWAvg(alg, per, mapsize):
