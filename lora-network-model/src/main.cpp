@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <ios>
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -11,6 +12,7 @@
 #include <math.h>
 #include <string.h>
 #include <stdio.h>
+#include <unistd.h>
 
 #include "libs/network/network.h"
 #include "libs/optimizer/optimizer.h"
@@ -116,6 +118,7 @@ unsigned char _exitCond;
 unsigned char _channels;
 float _coverage;
 float _gwAvgUf;
+double _memUsage;
 
 // Greedy
 vector<vector<int>> _adj_matrix;
@@ -180,6 +183,29 @@ inline int gcd(int a, int b) {return b == 0 ? a : gcd(b, a % b);}
 inline int lcm(int a, int b){return a * b / gcd(a, b);}
 inline unsigned long int getElapsed() {
     return (unsigned long int) duration_cast<milliseconds>(steady_clock::now() - _begin).count();
+}
+
+double get_process_mem_usage() {
+    // https://stackoverflow.com/questions/669438/how-to-get-memory-usage-at-runtime-using-c
+    ifstream stat_stream("/proc/self/stat",ios_base::in);
+
+    string pid, comm, state, ppid, pgrp, session, tty_nr;
+    string tpgid, flags, minflt, cminflt, majflt, cmajflt;
+    string utime, stime, cutime, cstime, priority, nice;
+    string O, itrealvalue, starttime;
+
+    unsigned long vsize;
+    long rss;
+
+    stat_stream >> pid >> comm >> state >> ppid >> pgrp >> session >> tty_nr
+                >> tpgid >> flags >> minflt >> cminflt >> majflt >> cmajflt
+                >> utime >> stime >> cutime >> cstime >> priority >> nice
+                >> O >> itrealvalue >> starttime >> vsize >> rss; // don't care about the rest
+
+    stat_stream.close();
+
+    //long page_size_kb = sysconf(_SC_PAGE_SIZE) / 1024;
+    return vsize / 1024.0;   
 }
 
 unsigned char getMaxSF(const unsigned int period) {
@@ -669,9 +695,9 @@ void printSummary() {
     }
 
     if(printHeader)        
-        fprintf(logfile, "GW Pos. Heuristic,ED Sched. Method,Position distr.,Periods distr.,Map size,ED Number,ED Dens. (1/m^2),Max. SF,GW Number, SF Obj, Sol. Cost ,Channels used,ED Unfeas. Instances,Coverage %%,GW Avg. UF,Elapsed,Iterations,Exit condition\n");
+        fprintf(logfile, "GW Pos. Heuristic,ED Sched. Method,Position distr.,Periods distr.,Map size,ED Number,ED Dens. (1/m^2),Max. SF,GW Number, SF Obj, Sol. Cost ,Channels used,ED Unfeas. Instances,Coverage %%,GW Avg. UF,Elapsed,Mem. Usage (kb),Iterations,Exit condition\n");
 
-    fprintf(logfile, "%s,None,%s,%s,%d,%d,%.2f,%d,%d,%f,%f,%d,0,%.2f,%.2f,%ld,%d,%s\n",         
+    fprintf(logfile, "%s,None,%s,%s,%d,%d,%.2f,%d,%d,%f,%f,%d,0,%.2f,%.2f,%ld,%.2f,%d,%s\n",
         getAlgorithmName(_algo).c_str(),
         getPosDistName(_posdist).c_str(),
         getPeriodDistName(_perioddist).c_str(),
@@ -686,6 +712,7 @@ void printSummary() {
         _coverage,
         _gwAvgUf,
         getElapsed(),
+        _memUsage,
         //_currentIter,
         _feval,
         getExitConditionName(_exitCond).c_str()
@@ -783,6 +810,8 @@ void optimizeRandomHeuristic() {
         _currentIter = _itermax;
     
     printf("Min. GW num is %d (cost=%f)\n", _minGWs, minCost);    
+
+    _memUsage = get_process_mem_usage();
 
     // Check number of channels and restart optimization if it is greater than 16
     moFunction(_bestSol, connected, cn, _minGWs, _sfObj, true); // Run fc. obj. computing channels and UF avg.
@@ -897,6 +926,9 @@ void optimizeGA() {
 
     // Number of iterations (approx.)
     _currentIter = ga_obj.generation_step * _pop_size;
+
+    // Update memory usage
+    _memUsage = get_process_mem_usage();
 
     /*
     printf("Last generation:\n");
@@ -1052,6 +1084,8 @@ void greedy(){
     cout << endl;
     */
 
+    _memUsage = get_process_mem_usage();
+
     destroyMinSFMatrixGreedy(); // Release some memory
     buildMinSFMatrix();
     // Compute solution stats (coverage, channels, GW count, etc)
@@ -1157,6 +1191,7 @@ void springs() {
         if(cost < minCost){
             minCost = cost;
             _minGWs = gws;
+            feasibleCounter = 0;
             copySol(sol, _bestSol);
             printf("New min. found %d gw (cost=%f) on iter %d (%d connected)\n", _minGWs, minCost, _currentIter, cn);
         }
@@ -1191,6 +1226,8 @@ void springs() {
     
     printf("Min. GW num is %d (cost=%f)\n", _minGWs, minCost);    
 
+    _memUsage = get_process_mem_usage();
+
     // Check number of channels and restart optimization if it is greater than 16
     moFunction(_bestSol, connected, cn, _minGWs, _sfObj, true); // Run fc. obj. computing channels and UF avg.
     _cost = evalCost(cn, _minGWs, _sfObj);
@@ -1224,6 +1261,8 @@ void springs2() {
     Optimizer* optimizer = new Optimizer(optimizerBuilder.build());
         
     optimizer->run(); // Run with configured params
+
+    _memUsage = get_process_mem_usage();
 
     const string fname = string("summary.csv");
     optimizer->appendToLog(fname.c_str());
@@ -1430,7 +1469,46 @@ int main(int argc, char **argv) {
         _eval_data.clear();
         fclose(logfile);
     #endif
-
+    
     return 0;
 }
 
+
+
+
+
+/*
+mem usage test
+
+
+const unsigned int size = 10000;
+
+cout << "Current memory usage: " << get_process_mem_usage() << endl;
+cin.get();
+
+double **ptr1 = (double**) malloc(sizeof(double)*size);
+for(unsigned int i = 0; i < size; i++){
+    ptr1[i] = (double*) malloc(sizeof(double)*size);
+    for(unsigned int j = 0; j < size; j++){
+        ptr1[i][j] = (double)rand() / (double)RAND_MAX;
+    }
+}
+
+cout << "Current memory usage: " << get_process_mem_usage() << endl;
+cin.get();
+
+double *ptr2 = (double*) malloc(sizeof(double)*size*size);
+for(unsigned int i = 0; i < size*size; i++)
+    ptr2[i] = (double)rand() / (double)RAND_MAX;
+
+cout << "Current memory usage: " << get_process_mem_usage() << endl;
+cin.get();
+
+for(unsigned int i = 0; i < size; i++)
+    free(ptr1[i]);
+free(ptr1);
+free(ptr2);    
+
+cout << "Current memory usage: " << get_process_mem_usage() << endl;
+
+*/
