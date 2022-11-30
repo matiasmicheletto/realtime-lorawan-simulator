@@ -1,5 +1,4 @@
-GW Pos. Heuristic,ED Sched. Method,Position distr.,Periods distr.,Map size,ED Number,ED Dens. (1/m^2),Max. SF,GW Number, SF Obj, Sol. Cost ,Channels used,ED Unfeas. Instances,Coverage %,GW Avg. UF,Elapsed,Mem. Usage,Iterations,Exit condition
-GA Opt.,None,Uniform,Medium,1000,10000,0.01,12,11,3.312000,1103.312012,11,0,100.00,0.19,6796,1136980.000000,851,Max. iterations
-Random (Discr.),None,Uniform,Medium,1000,10000,0.01,12,8,4.062600,804.062622,8,0,100.00,0.32,11163,55620.000000,1113,Max. coverage
-Greedy,None,Uniform,Medium,1000,10000,0.01,12,12,3.293988,340282346638528859811704183484516925440.000000,12,0,99.97,0.17,13246,398136.000000,1,Max. iterations
-Springs (Discr.),None,Uniform,Medium,1000,10000,0.01,12,12,3.782800,1203.782837,12,0,100.00,0.20,9312,55620.000000,803,Max. coverage
+GW Pos. Heuristic,ED Sched. Method,Position distr.,Periods distr.,Map size,ED Number,ED Dens. (1/m^2),Max. SF,GW Number, Sol. Cost ,Channels used,ED Unfeas. Instances,Coverage %,GW Avg. UF,Elapsed,Mem. Usage (kb),Iterations,Exit condition
+Random (Discr.),None,Uniform,Medium,1000,10000,0.01,12,8,8.000000,8,0,100.00,0.32,6561,55620.00,1001,Max. iterations
+GA Opt.,None,Uniform,Medium,1000,10000,0.01,12,9,9.000000,9,0,100.00,0.28,3859,612692.00,263,Max. iterations
+Springs (Discr.),None,Uniform,Medium,1000,10000,0.01,12,10,10.000000,10,0,100.00,0.23,3905,55620.00,504,Max. coverage
