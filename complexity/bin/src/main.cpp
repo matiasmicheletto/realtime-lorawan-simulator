@@ -37,6 +37,7 @@ int main(int argc, char **argv) {
         l->printRawData();
         cout << endl;
         cout << "GW Count: " << l->getGWCount() << endl;
+        cout << "ED Count: " << l->getEDCount() << endl;
         delete l;
         l = 0;
     }else{

@@ -4,7 +4,7 @@ OPT 	= -Wall
 TARGET 	= binary
 LIBSDIR = ./src/lib
 OBJSDIR = ./obj
-OBJ 	= main.o instance.o
+OBJ 	= main.o instance.o objective.o
 RM 		= rm -f
 
 .PHONY: all all-before all-after clean clean-custom
@@ -21,3 +21,5 @@ main.o: src/main.cpp
 	$(CPP) $(OPT) -c ./src/main.cpp -o $(OBJSDIR)/main.o 
 instance.o: src/lib/instance.cpp
 	$(CPP) $(OPT) -c $(LIBSDIR)/instance.cpp -o $(OBJSDIR)/instance.o
+objective.o: src/lib/objective.cpp
+	$(CPP) $(OPT) -c $(LIBSDIR)/objective.cpp -o $(OBJSDIR)/objective.o

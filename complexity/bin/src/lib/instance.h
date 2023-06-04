@@ -1,4 +1,3 @@
-
 #ifndef INSTANCE_H
 #define INSTANCE_H
 
@@ -11,7 +10,6 @@
 using namespace std;
 
 
-
 class Instance {
     public:
 
@@ -20,12 +18,14 @@ class Instance {
         
         void printRawData();
         
-        inline int getGWCount(){return this->gwCount;}
-        inline int getEDCount(){return this->edCount;}
+        inline unsigned int getGWCount(){return this->gwCount;}
+        inline unsigned int getEDCount(){return this->edCount;}
+        unsigned int getSF(int ed, int gw);
 
     private:
-        int gwCount, edCount;
         vector<vector<int>> raw;
+        void parseRawData();
+        unsigned int gwCount, edCount;
 };
 
 #endif // INSTANCE_H
