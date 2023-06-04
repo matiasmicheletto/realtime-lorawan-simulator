@@ -1,0 +1,47 @@
+#!/bin/bash
+
+# Argumento "-h" es para la ayuda
+if [ "$1" = "-h" ]; then
+  echo "Uso: ./script.sh step"
+  echo "step: avance. Por defecto, step=0.25"
+  echo "Ejemplo: ./script.sh 0.25"
+  exit
+else # Usar valor por defecto de paso para params de ajuste
+  if [ -z "$1" ]; then 
+    step=0.25 
+  else
+    step="$1"
+  fi
+fi
+
+
+
+echo "alfa beta gamma gateways energia tiempo exec vbles constr nodes gap" > salida.txt
+
+for alfa in $(seq 0 $step 1);
+do
+  for beta in $(seq 0 $step 1);
+  do
+    for gama in $(seq 0 $step 1);
+    do
+      
+      zimpl -D alfa=$alfa -D beta=$beta -D gama=$gama gpp.zpl > zimpl.log
+      scip -f gpp.lp > temp.txt
+
+      params="$alfa $beta $gama"
+      gateways=$(grep "gateways" temp.txt | grep -Eo '[0-9]+' | head -n 1)
+      energia=$(grep "energia" temp.txt | grep -Eo '[0-9]+' | head -n 1)
+      tiempo=$(grep "tiempo" temp.txt | grep -Eo '[0-9.]+' | head -n 1)
+      exec=$(grep "Total Time         :" temp.txt | grep -Eo '[0-9.]+' | head -n 1)
+      vbles=$(grep "Variables        :" temp.txt | grep -Eo '[0-9.]+' | head -n 1)
+      constr=$(grep "Constraints      :" temp.txt | grep -Eo '[0-9.]+' | head -n 1)
+      nodes=$(grep "nodes            :" temp.txt | grep -Eo '[0-9.]+' | head -n 1)
+      gap=$(grep "Gap              :" temp.txt | grep -Eo '[0-9.]+' | head -n 1)
+      
+      results=$(sed 's/,/\./g' <<< "$params $gateways $energia $tiempo $exec $vbles $constr $nodes $gap")
+      echo $results >> salida.txt
+    done
+  done
+done
+
+rm temp.txt
