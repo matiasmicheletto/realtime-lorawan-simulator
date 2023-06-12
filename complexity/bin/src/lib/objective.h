@@ -23,7 +23,6 @@ class Objective {
         double eval(unsigned int** x);
         double params[3];
     private:
-        bool feasible(unsigned int** x);
         Instance* instance;
 };
 

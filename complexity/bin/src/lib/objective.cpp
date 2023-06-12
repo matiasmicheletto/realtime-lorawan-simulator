@@ -13,29 +13,36 @@ Objective::~Objective() {
 
 }
 
-bool Objective::feasible(unsigned int** x) {
-    const unsigned int ed = this->instance->getEDCount();
-    for(unsigned int i = 0; i < ed; i++){ // For each ED
+double Objective::eval(unsigned int** x) {
+    bool usedGW[this->instance->getGWCount()];
+    for(unsigned int j = 0; j < this->instance->getGWCount(); j++)
+        usedGW[j] = false;
+    
+    for(unsigned int i = 0; i < this->instance->getEDCount(); i++){ // For each ED
+        
         // Determine allowed SFs
         unsigned int minSF = this->instance->getSF(i, x[i][GW]);
-        unsigned int period = this->instance->getPeriod(i);
-        unsigned int maxSF = this->instance->getMaxSF(period);
-        if(x[i][SF] > maxSF || x[i][SF] < minSF){ // Check if using valid SF
-            cout << "ED: " << i << ", SF: " << x[i][SF] << ", period: " << period << ",  (" << minSF << "," << maxSF << ")" << endl;
-            return false;
-        }
+        unsigned int maxSF = this->instance->getMaxSF(this->instance->getPeriod(i));
+        if(x[i][SF] > maxSF || x[i][SF] < minSF) // Check if using valid SF
+            //cout << "ED: " << i << ", SF: " << x[i][SF] << ", period: " << period << ",  (" << minSF << "," << maxSF << ")" << endl;
+            return 0.0;
+
+        // Mark used GW 
+        usedGW[x[i][GW]] = true;
     }
-    return true;
-}
 
-double Objective::eval(unsigned int** x) {
-    if(!feasible(x))
-        return 0.0;
+    // Count number of gw used
+    unsigned int gwCount = 0;
+    for(unsigned int j = 0; j < this->instance->getGWCount(); j++)
+        if(usedGW[j]) gwCount++;
 
+    // Compute energy cost
     double energy = 0.0;
-    const unsigned int ed = this->instance->getEDCount();
-    for(unsigned int i = 0; i < ed; i++) // For each ED
+    for(unsigned int i = 0; i < this->instance->getEDCount(); i++) // For each ED
         energy += pow(2, x[i][SF] - 7);
 
-    return this->params[BETA] * energy;
+    cout << "Used GW: " << gwCount << ", energy:" << energy << endl;
+
+    return this->params[ALPHA] * (double)gwCount + this->params[BETA] * (double)energy;
 }
+
