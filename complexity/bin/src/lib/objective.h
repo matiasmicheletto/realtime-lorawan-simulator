@@ -23,8 +23,9 @@ class Objective {
         Objective(Instance* instance);
         ~Objective();
         
-        double eval(unsigned int** x);
+        double eval(unsigned int** x, unsigned int &gwCount, double &energy, double &totalUF);
         double params[3];
+        void printSolution(unsigned int** x);
     private:
         Instance* instance;
 };
