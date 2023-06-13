@@ -12,6 +12,9 @@
 #include <math.h>
 #include "instance.h"
 
+// UF value for a GW to count it as used
+#define UFTHRES 1e-6
+
 enum VINDEX {GW, SF};
 enum T_PARAMS {ALPHA, BETA, GAMMA};
 

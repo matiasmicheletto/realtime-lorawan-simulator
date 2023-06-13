@@ -1,5 +1,7 @@
 #include "instance.h"
 
+using namespace std;
+
 Instance::Instance(char* filename) {
     ifstream file(filename);
     if (!file) {

@@ -10,8 +10,6 @@
 #include <vector>
 #include <sstream>
 
-using namespace std;
-
 
 class Instance {
     public:
@@ -28,7 +26,7 @@ class Instance {
         unsigned int getPeriod(int ed);
 
     private:
-        vector<vector<int>> raw;
+        std::vector<std::vector<int>> raw;
         void parseRawData();
         unsigned int gwCount, edCount;
 };
