@@ -29,7 +29,7 @@ double Objective::eval(unsigned int** x, unsigned int &gwCount, double &energy, 
         unsigned int maxSF = this->instance->getMaxSF(edPeriod);
         if(x[i][SF] > maxSF || x[i][SF] < minSF) // Unfeasibility condition 1
             //std::cout << "ED: " << i << ", SF: " << x[i][SF] << ", period: " << period << ",  (" << minSF << "," << maxSF << ")" << std::endl;
-            return 0.0;
+            return __DBL_MAX__;
 
         // Compute GW UF
         double pw = pow(2, x[i][SF]-7); 
@@ -37,7 +37,7 @@ double Objective::eval(unsigned int** x, unsigned int &gwCount, double &energy, 
         totalUF += GWUF[x[i][GW]];
         if(GWUF[x[i][GW]] > 1.0) // Unfeasibility condition 2
             //std::cout << "ED: " << i << ", GW: " << x[i][GW] << ", UF: " << GWUF[x[i][GW]] << std::endl;
-            return 0.0;
+            return __DBL_MAX__;
     }
 
     // Count number of gw used

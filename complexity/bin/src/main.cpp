@@ -100,7 +100,7 @@ int main(int argc, char **argv) {
     Uniform gwGenerator = Uniform(0, l->getGWCount());
     Uniform sfGenerator = Uniform(7, 12);
 
-    double bestQ = 0.0;
+    double bestQ = __DBL_MAX__;
 
     std::cout << "Running " << maxIters << " iterations..." << std::endl << std::endl;
 
@@ -117,7 +117,7 @@ int main(int argc, char **argv) {
         double energy, totalUF;
         const double q = o->eval(x, gwCount, energy, totalUF);
 
-        if(q > bestQ){
+        if(q < bestQ){
             bestQ = q;
             arrayCopy(x, best, l->getEDCount(), 2);
             std::cout << "Iteration:" << k << " -- New best found:" << std::endl;
