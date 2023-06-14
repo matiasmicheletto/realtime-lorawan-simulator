@@ -13,7 +13,6 @@
 
 class Instance {
     public:
-
         Instance(char* filename);
         ~Instance();
         
@@ -21,9 +20,10 @@ class Instance {
         
         inline unsigned int getGWCount(){return this->gwCount;}
         inline unsigned int getEDCount(){return this->edCount;}
-        unsigned int getSF(int ed, int gw);
+        unsigned int getMinSF(unsigned int ed, unsigned int gw);
         unsigned int getMaxSF(unsigned int period);
         unsigned int getPeriod(int ed);
+        std::vector<unsigned int> getGWList(unsigned int ed);
 
     private:
         std::vector<std::vector<int>> raw;

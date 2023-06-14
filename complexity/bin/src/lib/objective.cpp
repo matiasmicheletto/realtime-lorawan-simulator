@@ -25,7 +25,7 @@ double Objective::eval(unsigned int** x, unsigned int &gwCount, double &energy, 
         unsigned int edPeriod = this->instance->getPeriod(i);
         
         // Check if feasible SF
-        unsigned int minSF = this->instance->getSF(i, x[i][GW]);
+        unsigned int minSF = this->instance->getMinSF(i, x[i][GW]);
         unsigned int maxSF = this->instance->getMaxSF(edPeriod);
         if(x[i][SF] > maxSF || x[i][SF] < minSF) // Unfeasibility condition 1
             //std::cout << "ED: " << i << ", SF: " << x[i][SF] << ", period: " << period << ",  (" << minSF << "," << maxSF << ")" << std::endl;

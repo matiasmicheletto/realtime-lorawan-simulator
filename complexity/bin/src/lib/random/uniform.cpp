@@ -12,11 +12,11 @@ Uniform::Uniform(int min, int max) : Random() {
 }
 
 double Uniform::random() {
-    return (double)rand() / (double)RAND_MAX * (max - min) + min;
+    return (double)rand() / (double)RAND_MAX * (this->max - this->min) + this->min;
 }
 
 int Uniform::randomInt() {
-    return rand() % (int)(max - min + 1) + min;
+    return rand() % (int)(this->max - this->min + 1) + this->min;
 }
 
 void Uniform::setRandom(double &x, double &y) {

@@ -40,12 +40,8 @@ void Instance::parseRawData() {
     this->gwCount = (unsigned int) this->raw[0][1];
 }
 
-unsigned int Instance::getSF(int ed, int gw){
+unsigned int Instance::getMinSF(unsigned int ed, unsigned int gw){
     return this->raw[ed+1][gw];
-}
-
-unsigned int Instance::getPeriod(int ed){
-    return this->raw[ed+1][this->gwCount];
 }
 
 unsigned int Instance::getMaxSF(unsigned int period) {
@@ -65,4 +61,16 @@ unsigned int Instance::getMaxSF(unsigned int period) {
         return 7;
     else // No SF for this period
         return 0;
+}
+
+unsigned int Instance::getPeriod(int ed){
+    return this->raw[ed+1][this->gwCount];
+}
+
+std::vector<unsigned int> Instance::getGWList(unsigned int ed){
+    std::vector<unsigned int> gwList;
+    for(unsigned int gw = 0; gw < this->gwCount; gw++)
+        if(this->getMinSF(ed, gw) <= 12) // If sf > 12 -> GW is out of range for this ed
+            gwList.push_back(gw);
+    return gwList;
 }
