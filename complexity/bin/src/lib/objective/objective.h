@@ -10,13 +10,17 @@
 */
 
 #include <math.h>
-#include "instance.h"
+#include "../instance/instance.h"
 
-// UF value for a GW to count it as used
-#define UFTHRES 1e-6
+// UF value for a GW to be considered as "used"
+#define UFTHRES .0000001
 
-enum VINDEX {GW, SF};
-enum T_PARAMS {ALPHA, BETA, GAMMA};
+// Indexes of optimization variable
+enum VINDEX {GW, SF}; 
+
+// Tunning parameter names (indexes of params)
+enum T_PARAMS {ALPHA, BETA, GAMMA, T_PARAMS_LEN}; 
+
 
 class Objective {
     public:
@@ -24,7 +28,7 @@ class Objective {
         ~Objective();
         
         double eval(unsigned int** x, unsigned int &gwCount, double &energy, double &totalUF);
-        double params[3];
+        double params[T_PARAMS_LEN];
         void printSolution(unsigned int** x);
     private:
         Instance* instance;

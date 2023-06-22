@@ -1,37 +1,24 @@
-CPP 	= g++
-CC 		= gcc
-OPT 	= -Wall
-TARGET 	= gpprs
-LIBSDIR = ./src/lib
-OBJSDIR = ./obj
-OBJ 	= main.o util.o random.o uniform.o normal.o custom.o clouds.o instance.o objective.o
-RM 		= rm -f
+CPP      = g++
+CFLAGS   = -std=c++11 -Wall
+SRCDIR   = src
+OBJDIR   = obj
+LIBDIR   = $(SRCDIR)/lib
 
-.PHONY: all all-before all-after clean clean-custom
+SOURCES  = $(wildcard $(SRCDIR)/*.cpp) $(wildcard $(LIBDIR)/**/*.cpp)
+HEADERS  = $(wildcard $(LIBDIR)/**/*.h)
+OBJECTS  = $(patsubst $(SRCDIR)/%.cpp,$(OBJDIR)/%.o,$(SOURCES))
+TARGET   = gpprs
 
-all: all-before $(TARGET) all-after
+INCLUDES = -I$(LIBDIR) -I$(LIBDIR)/util -I$(LIBDIR)/instance -I$(LIBDIR)/objective -I$(LIBDIR)/optimization
 
-clean: clean-custom
-	${RM} $(OBJ) $(TARGET)
+$(TARGET): $(OBJECTS)
+	$(CPP) $(CFLAGS) $(INCLUDES) $^ -o $@
 
-$(TARGET): $(OBJ)
-	$(CPP) $(patsubst %.o, $(OBJSDIR)/%.o, $(OBJ)) -o $(TARGET) -lpthread
+$(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(HEADERS)
+	@mkdir -p $(@D)
+	$(CPP) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
-main.o: src/main.cpp
-	$(CPP) $(OPT) -c ./src/main.cpp -o $(OBJSDIR)/main.o 
-util.o: src/lib/util.cpp
-	$(CPP) $(OPT) -c $(LIBSDIR)/util.cpp -o $(OBJSDIR)/util.o
-instance.o: src/lib/instance.cpp
-	$(CPP) $(OPT) -c $(LIBSDIR)/instance.cpp -o $(OBJSDIR)/instance.o
-objective.o: src/lib/objective.cpp
-	$(CPP) $(OPT) -c $(LIBSDIR)/objective.cpp -o $(OBJSDIR)/objective.o
-random.o: src/lib/random/random.cpp	
-	$(CPP) $(OPT) -c $(LIBSDIR)/random/random.cpp -o $(OBJSDIR)/random.o
-uniform.o: src/lib/random/uniform.cpp	
-	$(CPP) $(OPT) -c $(LIBSDIR)/random/uniform.cpp -o $(OBJSDIR)/uniform.o
-normal.o: src/lib/random/normal.cpp	
-	$(CPP) $(OPT) -c $(LIBSDIR)/random/normal.cpp -o $(OBJSDIR)/normal.o
-custom.o: src/lib/random/custom.cpp	
-	$(CPP) $(OPT) -c $(LIBSDIR)/random/custom.cpp -o $(OBJSDIR)/custom.o
-clouds.o: src/lib/random/clouds.cpp	
-	$(CPP) $(OPT) -c $(LIBSDIR)/random/clouds.cpp -o $(OBJSDIR)/clouds.o
+clean:
+	rm -rf $(OBJDIR)
+
+.PHONY: clean
