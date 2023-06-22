@@ -29,7 +29,7 @@ class Objective {
         
         double eval(unsigned int** x, unsigned int &gwCount, double &energy, double &totalUF);
         double params[T_PARAMS_LEN];
-        void printSolution(unsigned int** x);
+        void printSolution(unsigned int** x, bool highlight = false);
     private:
         Instance* instance;
 };

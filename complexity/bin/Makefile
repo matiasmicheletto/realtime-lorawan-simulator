@@ -1,5 +1,5 @@
 CPP      = g++
-CFLAGS   = -std=c++11 -Wall
+CFLAGS   = -std=c++11 -Wall -lpthread
 SRCDIR   = src
 OBJDIR   = obj
 LIBDIR   = $(SRCDIR)/lib

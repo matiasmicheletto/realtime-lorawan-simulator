@@ -55,13 +55,16 @@ double Objective::eval(unsigned int** x, unsigned int &gwCount, double &energy, 
         this->params[GAMMA] * totalUF;
 }
 
-void Objective::printSolution(unsigned int** x){
+void Objective::printSolution(unsigned int** x, bool highlight){
     unsigned int gwCount;
     double energy;
     double totalUF;
 
     const double result = this->eval(x, gwCount, energy, totalUF);
     
+
+    if(highlight) std::cout << "\033[1;31m";
+
     std::cout << "Objective: " << result << std::endl;
     std::cout   << "Used GW: " << gwCount 
                 << ", Energy: " << energy 
@@ -71,4 +74,6 @@ void Objective::printSolution(unsigned int** x){
     for(unsigned int i = 0; i < this->instance->getEDCount(); i++) // For each ED    
         std::cout << x[i][GW] << "[" << x[i][SF] << "]\t";
     std::cout << std::endl;
+    
+    if(highlight) std::cout << "\033[0m\n";
 }

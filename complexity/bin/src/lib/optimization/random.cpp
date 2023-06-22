@@ -15,6 +15,7 @@ void randomSearch(Instance* l, Objective* o, unsigned long maxIters){
     Uniform sfGenerator = Uniform(7, 12);
 
     double bestQ = __DBL_MAX__; // Cost minimization
+    bool found = false;
 
     std::cout << "Running " << maxIters << " iterations..." << std::endl << std::endl;
 
@@ -33,10 +34,11 @@ void randomSearch(Instance* l, Objective* o, unsigned long maxIters){
 
         if(q < bestQ){ // New optimum
             bestQ = q;
+            found = true;
             arrayCopy(x, best, l->getEDCount(), 2);
             std::cout << "Iteration:" << k << " -- New best found:" << std::endl;
             o->printSolution(best);
-            std::cout << "-------------------" << std::endl << std::endl;
+            std::cout << std::endl << std::endl;
         }
     }
 
@@ -44,7 +46,12 @@ void randomSearch(Instance* l, Objective* o, unsigned long maxIters){
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
     std::cout << "Random search finished, " << maxIters << " iterations performed." << std::endl;
     std::cout << "Execution time: " << duration << " milliseconds" << std::endl;
-    std::cout << "Minimum objective: " << bestQ << std::endl;
+    if(found){
+        std::cout << "Best:" << std::endl;
+        o->printSolution(best, true);
+    }else{
+        std::cout << "Couldn't find a feasible solution for this problem." << std::endl;
+    }
 
     // Release memory
     for(unsigned int i = 0; i < l->getEDCount(); i++){
@@ -68,6 +75,7 @@ void improvedRandomSearch(Instance* l, Objective* o, unsigned long maxIters) {
     Uniform uniform = Uniform(0.0, 1.0);
 
     double bestQ = __DBL_MAX__; // Cost minimization
+    bool found = false;
 
     std::cout << "Running " << maxIters << " iterations..." << std::endl << std::endl;
 
@@ -92,10 +100,11 @@ void improvedRandomSearch(Instance* l, Objective* o, unsigned long maxIters) {
 
         if(q < bestQ){ // New optimum
             bestQ = q;
+            found = true;
             arrayCopy(x, best, l->getEDCount(), 2);
             std::cout << "Iteration:" << k << " -- New best found:" << std::endl;
             o->printSolution(best);
-            std::cout << "-------------------" << std::endl << std::endl;
+            std::cout << std::endl << std::endl;
         }
     }
 
@@ -103,7 +112,12 @@ void improvedRandomSearch(Instance* l, Objective* o, unsigned long maxIters) {
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
     std::cout << "Improved random search finished, " << maxIters << " iterations performed." << std::endl;
     std::cout << "Execution time: " << duration << " milliseconds" << std::endl;
-    std::cout << "Minimum objective: " << bestQ << std::endl;
+    if(found){
+        std::cout << "Best:" << std::endl;
+        o->printSolution(best, true);
+    }else{
+        std::cout << "Couldn't find a feasible solution for this problem." << std::endl;
+    }
 
     // Release memory
     for(unsigned int i = 0; i < l->getEDCount(); i++){
