@@ -69,8 +69,10 @@ unsigned int Instance::getPeriod(int ed){
 
 std::vector<unsigned int> Instance::getGWList(unsigned int ed){
     std::vector<unsigned int> gwList;
+    const unsigned int maxSF = getMaxSF(getPeriod(ed));
     for(unsigned int gw = 0; gw < this->gwCount; gw++)
-        if(this->getMinSF(ed, gw) <= 12) // If sf > 12 -> GW is out of range for this ed
+        // If SF >= maxSF -> GW is out of range for this ed
+        if(this->getMinSF(ed, gw) <= maxSF) 
             gwList.push_back(gw);
     return gwList;
 }

@@ -14,7 +14,7 @@ int main(int argc, char **argv) {
     
     Instance *l = 0;
     double alpha = 1.0, beta = 1.0, gamma = 1.0;
-    unsigned long maxIters = 1e6;
+    unsigned long maxIters = 1e5;
     
     srand(time(NULL));
 
@@ -80,8 +80,8 @@ int main(int argc, char **argv) {
     std::cout << std::endl << "-------------- IRS ---------------" << std::endl << std::endl;
     improvedRandomSearch(l, o, maxIters);
     
-    std::cout << std::endl << "------------- Greedy -------------" << std::endl << std::endl;
-    greedy(l, o);
+    //std::cout << std::endl << "------------- Greedy -------------" << std::endl << std::endl;
+    //greedy(l, o);
 
     std::cout << std::endl << "--------------- GA ---------------" << std::endl << std::endl;
     ga(l, o);

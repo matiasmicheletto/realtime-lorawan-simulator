@@ -89,8 +89,6 @@ void improvedRandomSearch(Instance* l, Objective* o, unsigned long maxIters) {
             // Pick random SF from valid range
             const unsigned int minSF = l->getMinSF(i, x[i][VINDEX::GW]);
             const unsigned int maxSF = l->getMaxSF(l->getPeriod(i));
-            if(minSF > maxSF) // Do not csontinue generating this solution (gw is not valid)
-                break;
             x[i][VINDEX::SF] = uniform.random()*(maxSF - minSF) + minSF;
         }
         // Test generated solution
