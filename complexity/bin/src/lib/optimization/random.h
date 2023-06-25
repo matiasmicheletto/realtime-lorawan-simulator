@@ -3,6 +3,7 @@
 
 #include <chrono>
 #include <vector>
+#include <math.h>
 #include "../util/util.h"
 #include "../random/uniform.h"
 #include "../instance/instance.h"

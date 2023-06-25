@@ -19,3 +19,8 @@ void arrayCopy(unsigned int **from, unsigned int **to, int xDim, int yDim){
         for(int j = 0; j < yDim; j++)
             to[i][j] = from[i][j];
 }
+
+unsigned int sf2e(unsigned int sf){
+    static const unsigned int arr[6] = {1, 2, 4, 8, 16, 32};
+    return arr[sf-7];
+}

@@ -1,10 +1,13 @@
 #include <cstring>
 
 #include "lib/util/util.h"
+
 #include "lib/instance/instance.h"
 #include "lib/objective/objective.h"
+
 #include "lib/optimization/random.h"
 #include "lib/optimization/greedy.h"
+#include "lib/optimization/ga.h"
 
 
 int main(int argc, char **argv) {
@@ -79,6 +82,9 @@ int main(int argc, char **argv) {
     
     std::cout << std::endl << "------------- Greedy -------------" << std::endl << std::endl;
     greedy(l, o);
+
+    std::cout << std::endl << "--------------- GA ---------------" << std::endl << std::endl;
+    ga(l, o);
     
     delete o;
     delete l;

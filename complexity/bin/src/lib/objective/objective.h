@@ -9,7 +9,7 @@
         -- x[i][1]: SF used by ED i.
 */
 
-#include <math.h>
+#include "../util/util.h"
 #include "../instance/instance.h"
 
 // UF value for a GW to be considered as "used"
@@ -27,7 +27,7 @@ class Objective {
         Objective(Instance* instance);
         ~Objective();
         
-        double eval(unsigned int** x, unsigned int &gwCount, double &energy, double &totalUF);
+        double eval(unsigned int** x, unsigned int &gwCount, unsigned int &energy, double &totalUF);
         double params[T_PARAMS_LEN];
         void printSolution(unsigned int** x, bool highlight = false);
     private:

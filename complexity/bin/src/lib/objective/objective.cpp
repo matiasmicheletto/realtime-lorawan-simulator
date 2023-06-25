@@ -13,12 +13,12 @@ Objective::~Objective() {
 
 }
 
-double Objective::eval(unsigned int** x, unsigned int &gwCount, double &energy, double &totalUF) {
+double Objective::eval(unsigned int** x, unsigned int &gwCount, unsigned int &energy, double &totalUF) {
     double GWUF[this->instance->getGWCount()];
     for(unsigned int j = 0; j < this->instance->getGWCount(); j++)
         GWUF[j] = 0.0;
     gwCount = 0;
-    energy = 0.0;
+    energy = 0;
     totalUF = 0.0;
 
     for(unsigned int i = 0; i < this->instance->getEDCount(); i++){ // For each ED    
@@ -32,7 +32,7 @@ double Objective::eval(unsigned int** x, unsigned int &gwCount, double &energy, 
             return __DBL_MAX__;
 
         // Compute GW UF
-        double pw = pow(2, x[i][SF]-7); 
+        double pw = sf2e(x[i][SF]); // double pw = pow(2, x[i][SF]-7); 
         GWUF[x[i][GW]] += pw / ((double)edPeriod - pw);
         totalUF += GWUF[x[i][GW]];
         if(GWUF[x[i][GW]] > 1.0) // Unfeasibility condition 2
@@ -46,24 +46,24 @@ double Objective::eval(unsigned int** x, unsigned int &gwCount, double &energy, 
 
     // Compute energy cost
     for(unsigned int i = 0; i < this->instance->getEDCount(); i++) // For each ED
-        energy += pow(2, x[i][SF] - 7);
+        energy += sf2e(x[i][SF]);// energy += pow(2, x[i][SF] - 7);
 
 
     return // Fc obj
         this->params[ALPHA] * (double)gwCount + 
-        this->params[BETA] * energy + 
+        this->params[BETA] * (double) energy + 
         this->params[GAMMA] * totalUF;
 }
 
 void Objective::printSolution(unsigned int** x, bool highlight){
     unsigned int gwCount;
-    double energy;
+    unsigned int energy;
     double totalUF;
 
     const double result = this->eval(x, gwCount, energy, totalUF);
     
 
-    if(highlight) std::cout << "\033[1;31m";
+    if(highlight) std::cout << "\033[1;31m"; // Switch to red font
 
     std::cout << "Objective: " << result << std::endl;
     std::cout   << "Used GW: " << gwCount 
@@ -75,5 +75,5 @@ void Objective::printSolution(unsigned int** x, bool highlight){
         std::cout << x[i][GW] << "[" << x[i][SF] << "]\t";
     std::cout << std::endl;
     
-    if(highlight) std::cout << "\033[0m\n";
+    if(highlight) std::cout << "\033[0m\n"; // Switch to normal text font
 }

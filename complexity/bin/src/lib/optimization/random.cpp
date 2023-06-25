@@ -28,8 +28,8 @@ void randomSearch(Instance* l, Objective* o, unsigned long maxIters){
             x[i][VINDEX::SF] = sfGenerator.random();
         }
         // Test generated solution
-        unsigned int gwCount;
-        double energy, totalUF;
+        unsigned int gwCount, energy;
+        double totalUF;
         const double q = o->eval(x, gwCount, energy, totalUF);
 
         if(q < bestQ){ // New optimum
@@ -94,8 +94,8 @@ void improvedRandomSearch(Instance* l, Objective* o, unsigned long maxIters) {
             x[i][VINDEX::SF] = uniform.random()*(maxSF - minSF) + minSF;
         }
         // Test generated solution
-        unsigned int gwCount;
-        double energy, totalUF;
+        unsigned int gwCount, energy;
+        double totalUF;
         const double q = o->eval(x, gwCount, energy, totalUF);
 
         if(q < bestQ){ // New optimum
