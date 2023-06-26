@@ -80,8 +80,8 @@ int main(int argc, char **argv) {
     std::cout << std::endl << "-------------- IRS ---------------" << std::endl << std::endl;
     improvedRandomSearch(l, o, maxIters);
     
-    //std::cout << std::endl << "------------- Greedy -------------" << std::endl << std::endl;
-    //greedy(l, o);
+    std::cout << std::endl << "------------- Greedy -------------" << std::endl << std::endl;
+    greedy(l, o);
 
     std::cout << std::endl << "--------------- GA ---------------" << std::endl << std::endl;
     ga(l, o);
