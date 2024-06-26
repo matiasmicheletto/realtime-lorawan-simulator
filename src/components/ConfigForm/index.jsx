@@ -32,15 +32,15 @@ const ConfigForm = () => {
 
     const [inputs, setInputs] = useState({
         mapSize: "1000",
-        edNumber: "10000",
+        edNumber: "5000",
         initialGW: "1",
         maxSF: "10",
-        posDist: "0",
-        periodDist: "0",
+        posDist: "2",
+        periodDist: "1",
         maxIter: "1000",
         timeout: "360",
         algorithm: "0",
-        updateRate: "10"
+        updateRate: "1"
     });
 
     const {

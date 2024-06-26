@@ -75,7 +75,7 @@ const NetworkViewer = () => {
                         group === 2 && filters.gateways
                     ){
                         ctx.fillStyle = color;
-                        ctx.fillRect(x*scale, y*scale, 1, 1);
+                        ctx.fillRect(x*scale, y*scale, 2, 2);
                     }
                 }
                 i++;
